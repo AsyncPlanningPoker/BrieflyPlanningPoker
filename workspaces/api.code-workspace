@@ -1,0 +1,10 @@
+   
+{
+	"folders": [
+		{
+			"name": "api",
+			"path": "../packages/back/api"
+		},
+	],
+	"settings": {}
+}
