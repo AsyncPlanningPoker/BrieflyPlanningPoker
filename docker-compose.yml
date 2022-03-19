@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  api:
+    working_dir: /app
+    build: ./packages/back/api
+    ports:
+      - 8000:8000
+    command: yarn start
+    volumes:
+      - ./packages/back/api:/app
