@@ -1,4 +1,4 @@
-version: "3.5"
+version: '3.7'
 services:
   api:
     working_dir: /app
@@ -8,3 +8,16 @@ services:
     command: yarn start
     volumes:
       - ./packages/back/api:/app
+
+  front:
+    tty: true
+    stdin_open: true
+    build:
+      context: ./packages/front
+      dockerfile: Dockerfile.dev
+    working_dir: /front
+    command: make front-startup
+    ports:
+      - 8080:8080
+    volumes:
+      - ./packages/front:/front
