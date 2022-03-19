@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "concurrently -k \"tsc -b -w\" \"nodemon --inspect=9229 dist/src/index.js\"",
+    "start": "concurrently -k \"tsc -b -w\" \"nodemon -L dist/src/index.js\"",
     "build": "tsc -b",
     "lint": "eslint --fix ./src/",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "docker:test": "docker-compose run api yarn test"
   },
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
@@ -23,6 +24,7 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
+    "dotenv": "^16.0.0",
     "express": "^4.17.3"
   }
 }
