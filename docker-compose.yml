@@ -14,7 +14,7 @@ services:
     stdin_open: true
     build:
       context: ./packages/front
-      dockerfile: Dockerfile.dev
+      dockerfile: dockerfile
     working_dir: /front
     command: make front-startup
     ports:
