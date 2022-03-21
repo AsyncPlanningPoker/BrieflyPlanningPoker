@@ -57,7 +57,7 @@
             <br />
         </td>
         <td align="center">
-            <a href="https://github.com/lineconquista">
+            <a href="https://github.com/lulcca">
                 <img src="https://i.scdn.co/image/ab6775700000ee852c661ab795fa5551824e699b" width="100px;" alt="lulcca"><br />
             </a>
             <sub>Lucca Jacomassi</sub>
