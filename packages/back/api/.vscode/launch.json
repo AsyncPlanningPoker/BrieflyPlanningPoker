@@ -12,6 +12,7 @@
         "outFiles": [
           "${workspaceFolder}/dist/**/*.js",
         ],
+        "remoteRoot": "/app",
         "skipFiles": [
           "<node_internals>/**"
         ]

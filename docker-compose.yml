@@ -1,13 +1,14 @@
 version: '3.7'
 services:
   api:
-    working_dir: /app
+    working_dir: /api
     build: ./packages/back/api
     ports:
       - 8000:8000
+      - 9229:9229
     command: yarn start
     volumes:
-      - ./packages/back/api:/app
+      - ./packages/back/api:/api
 
   front:
     build: ./packages/front
