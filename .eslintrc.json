@@ -29,10 +29,6 @@
        "camelcase": "error",
        "no-var": "error",
        "key-spacing": ["error", { "beforeColon": false }],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
         "quotes": [
             "error",
             "single"
