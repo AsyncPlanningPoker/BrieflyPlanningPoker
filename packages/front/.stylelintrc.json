@@ -1,0 +1,11 @@
+{
+    "extends": ["stylelint-config-recommended-scss"],
+    "rules": {
+        "indentation": 4,
+        "string-quotes": "single",
+        "no-duplicate-selectors": true,
+        "color-named": "never",
+        "property-no-unknown": true,
+        "selector-pseudo-class-no-unknown": true
+    }
+}
