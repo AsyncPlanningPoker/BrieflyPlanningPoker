@@ -10,11 +10,7 @@ services:
       - ./packages/back/api:/app
 
   front:
-    tty: true
-    stdin_open: true
-    build:
-      context: ./packages/front
-      dockerfile: dockerfile
+    build: ./packages/front
     working_dir: /front
     command: make front-startup
     ports:

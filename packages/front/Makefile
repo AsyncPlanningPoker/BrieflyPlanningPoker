@@ -1,3 +1,3 @@
 front-startup:
 	yarn install
-	yarn serve
+	yarn start
