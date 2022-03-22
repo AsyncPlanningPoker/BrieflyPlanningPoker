@@ -6,7 +6,8 @@
     "start": "vite",
     "build": "vite build",
     "test:unit": "jest --env jsdom",
-    "test": "jest --env jsdom --coverage"
+    "test": "jest --env jsdom --coverage",
+    "docker:test": "docker-compose run front yarn test"
   },
   "dependencies": {
     "core-js": "^3.8.3",
