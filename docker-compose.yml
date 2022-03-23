@@ -1,14 +1,9 @@
 version: '3.7'
+
+volumes:
+  data:
+
 services:
-  api:
-    working_dir: /api
-    build: ./packages/back/api
-    ports:
-      - 8000:8000
-      - 9229:9229
-    command: yarn start
-    volumes:
-      - ./packages/back/api:/api
 
   front:
     build: ./packages/front
@@ -18,3 +13,29 @@ services:
       - 8080:8080
     volumes:
       - ./packages/front:/front
+    depends_on:
+      - api
+
+  api:
+    working_dir: /api
+    build: ./packages/back/api
+    ports:
+      - 8000:8000
+      - 9229:9229
+    command: yarn start
+    volumes:
+      - ./packages/back/api:/api
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_USER=${POSTGRES_USER}   
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}   
+    - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+    - ./packages/data:/var/lib/postgresql/data
