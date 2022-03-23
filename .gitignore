@@ -2,7 +2,7 @@ node_modules
 .env
 dist
 .DS_Store
-data
+database
 coverage
 .idea
 *.suo
