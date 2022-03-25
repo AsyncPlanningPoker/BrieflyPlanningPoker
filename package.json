@@ -1,6 +1,7 @@
 {
   "name": "BrieflyPlanningPoker",
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
+  "license": "GPL-3.0 License",
   "version": "1.0.0",
   "private": true,
   "scripts": {
