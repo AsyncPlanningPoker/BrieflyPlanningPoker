@@ -1,32 +1,13 @@
 {
     "compilerOptions": {
-      "lib": ["esnext"],
-      "target": "esnext",                                 
-      "module": "commonjs",        
-      "moduleResolution": "node",     
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "sourceMap": true,    
+      "target": "esnext",                                  
+      "module": "commonjs",                              
+      "esModuleInterop": true,                     
+      "strict": true,                                  
+      "skipLibCheck": true,
       "outDir": "./dist",
-      "rootDir": "./src",
-      "strictPropertyInitialization": false,
-      "strict": true,      
-
-    
-    
-      // "esModuleInterop": true, 
-      // "declaration": true,
-      // "declarationMap": true,      
-      // "types": ["node"],  
-      // "baseUrl": ".",       
-             
-  },
-  "include": [
-    "./src/**/*.ts",
-    "./test/**/*.ts"
-  ],
-  "exclude": [
-      "./node_modules/*",
-      "lib"
-  ]
+      "rootDir":"./",
+      "sourceMap": true,  
+      "moduleResolution": "node",      
+  }
 }
