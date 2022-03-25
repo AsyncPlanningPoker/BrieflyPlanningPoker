@@ -1,4 +1,4 @@
-import { UserDbStore } from './stores/user';
+import { UserDbStore } from './stores/users';
 import knex from 'knex';
 import knexfile from '../knexfile';
 
