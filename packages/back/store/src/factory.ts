@@ -6,10 +6,12 @@ interface FactoryStoreResult {
   userDbStore: UserDbStore;
 }
 
-async function createStores(): Promise<FactoryStoreResult> {
-  const client = knex(knexfile);
-  const userDbStore = new UserDbStore(client);
-  return { userDbStore };
+class FactoryStore {
+  protected client = knex(knexfile);
+
+  createStores(): FactoryStoreResult {
+    return { userDbStore: new UserDbStore(this.client) };
+  }
 }
 
-export { createStores };
+export { FactoryStore };
