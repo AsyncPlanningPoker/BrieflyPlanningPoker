@@ -1,16 +1,21 @@
 import { UserDbStore } from './stores/users';
-import knex from 'knex';
+import knex, { Knex } from 'knex';
 import knexfile from '../knexfile';
 
 interface FactoryStoreResult {
   userDbStore: UserDbStore;
+  close: () => Promise<void>;
 }
 
 class FactoryStore {
-  protected client = knex(knexfile);
+  protected client: Knex<any, unknown[]> = knex(knexfile);
 
-  createStores(): FactoryStoreResult {
-    return { userDbStore: new UserDbStore(this.client) };
+  async createStores(): Promise<FactoryStoreResult> {
+    const close = () => {
+      return this.client.destroy();
+    };
+
+    return { userDbStore: new UserDbStore(this.client), close };
   }
 }
 
