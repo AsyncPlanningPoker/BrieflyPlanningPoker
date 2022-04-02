@@ -1,6 +1,6 @@
 {
-  "name": "front",
-  "version": "0.1.0",
+  "name": "@briefly/front",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "vite",
