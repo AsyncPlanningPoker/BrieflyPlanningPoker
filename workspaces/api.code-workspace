@@ -5,6 +5,10 @@
 			"name": "api",
 			"path": "../packages/back/api"
 		},
+		{
+			"name": "store",
+			"path": "../packages/back/store"
+		},
 	],
 	"settings": {}
 }
