@@ -1,6 +1,6 @@
 import { UserDbStore } from './stores/users';
 import knex, { Knex } from 'knex';
-import knexfile from '../knexfile';
+import knexfile from './knexfile';
 
 interface FactoryStoreResult {
   userDbStore: UserDbStore;

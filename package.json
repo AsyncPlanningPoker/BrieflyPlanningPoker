@@ -1,13 +1,13 @@
 {
-  "name": "BrieflyPlanningPoker",
+  "name": "briefly",
+  "version": "1.0.0",
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
-  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "tsc --build"
   },
-  "workspaces": ["packages/*/**"],
+  "workspaces": ["packages/*"],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",

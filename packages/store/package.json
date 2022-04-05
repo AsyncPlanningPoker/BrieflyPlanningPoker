@@ -4,11 +4,15 @@
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,
+  "packageManager": "yarn@3.2.0",
+  "main": "dist/index",
+  "types": "dist/index",
   "scripts": {
     "start": "concurrently -k \"tsc -b -w\" \"nodemon -L dist/src/index.js\"",
     "migration:up": "npx knex migrate:up",
     "migration:down": "npx knex migrate:down",
-    "seed:up": "npx knex seed:run"
+    "seed:up": "npx knex seed:run",
+    "build": "tsc -b"
   },
   "dependencies": {
     "@types/node": "^17.0.22",
