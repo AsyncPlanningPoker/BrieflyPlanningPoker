@@ -9,7 +9,11 @@ class UserDbStore implements IStoreUser {
   }
 
   async create(user: CreateUserType): Promise<void> {
-    await this.#client('users').insert(user);
+    await this.#client('users')
+      .insert(user)
+      .catch(() => {
+        throw new Error();
+      });
   }
 
   async find(ids: FindUserType[]): Promise<LoadedUserType[]> {
@@ -17,9 +21,8 @@ class UserDbStore implements IStoreUser {
   }
 
   async findByCredentials(user: findByCredentialsType): Promise<LoadedUserType | undefined> {
-    const res = await this.#client.select('id', 'name', 'email').from('users').where({
+    const res = await this.#client.select('id', 'name', 'email', 'password').from('users').where({
       email: user.email,
-      password: user.password,
     });
 
     if (res.length > 0) {
@@ -27,6 +30,7 @@ class UserDbStore implements IStoreUser {
         id: res[0].id,
         name: res[0].name,
         email: res[0].name,
+        password: res[0].password,
       };
 
       return user;

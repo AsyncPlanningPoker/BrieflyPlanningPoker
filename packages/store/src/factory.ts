@@ -4,13 +4,13 @@ import knexfile from './knexfile';
 
 interface FactoryStoreResult {
   userDbStore: UserDbStore;
-  close: () => Promise<void>;
+  close: () => void;
 }
 
 class FactoryStore {
   protected client: Knex<any, unknown[]> = knex(knexfile);
 
-  async createStores(): Promise<FactoryStoreResult> {
+  createStores(): FactoryStoreResult {
     const close = () => {
       return this.client.destroy();
     };

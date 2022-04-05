@@ -16,7 +16,6 @@ type FindUserType = string;
 
 type findByCredentialsType = {
   email: string;
-  password: string;
 };
 
 type UpdateUserType = {
@@ -30,6 +29,7 @@ type LoadedUserType = {
   id: string;
   name: string;
   email: string;
+  password?: string;
 };
 
 export { IStoreUser };

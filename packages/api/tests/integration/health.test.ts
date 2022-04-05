@@ -1,9 +1,9 @@
 import supertest from 'supertest';
-import { server } from '../src/index';
+import app from '../../src/index';
 
 describe('HealthRoute', () => {
   test('Should response with 200 status code', async () => {
-    const response = await supertest(server).get('/health');
+    const response = await supertest(app).get('/health');
     expect(response.statusCode).toEqual(200);
   });
 });
