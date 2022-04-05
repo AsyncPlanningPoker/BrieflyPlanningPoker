@@ -4,7 +4,6 @@
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,
-  "packageManager": "yarn@3.2.0",
   "main": "dist/index",
   "types": "dist/index",
   "scripts": {
