@@ -15,13 +15,13 @@ services:
 
   api:
     working_dir: /api
-    build: ./packages/back/api
+    build: ./packages/api
     ports:
       - 8000:8000
       - 9229:9229
     command: yarn start
     volumes:
-      - ./packages/back/api:/api
+      - ./packages/api:/api
     depends_on:
       - db
 

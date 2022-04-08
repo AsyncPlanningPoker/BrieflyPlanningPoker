@@ -1,0 +1,13 @@
+{
+  "references": [
+    { "path": "./packages/api" },
+    { "path": "./packages/store" },
+    { "path": "./packages/front" },
+  ],
+  "files": [],
+  "include": [],
+  "exclude": [
+    "**/node_modules",
+    "**/lib"
+  ]
+}

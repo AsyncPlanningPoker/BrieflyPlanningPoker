@@ -3,11 +3,11 @@
 	"folders": [
 		{
 			"name": "api",
-			"path": "../packages/back/api"
+			"path": "../packages/api"
 		},
 		{
 			"name": "store",
-			"path": "../packages/back/store"
+			"path": "../packages/store"
 		},
 	],
 	"settings": {}
