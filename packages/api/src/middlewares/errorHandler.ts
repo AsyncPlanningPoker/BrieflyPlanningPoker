@@ -1,14 +1,18 @@
-import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
+import { Response } from 'express';
+import { CustomError } from '../utils/error';
 
-function schemaError(req: Request, res: Response, next: any) {
-  const schemaErros = validationResult(req);
-
-  if (!schemaErros.isEmpty()) {
-    return res.status(400).json({ errors: schemaErros.array() });
+function errorHandler(error: CustomError | Error, res: Response) {
+  if (error instanceof CustomError) {
+    return res.status(error.getCode()).json({
+      status: 'error',
+      message: error.message,
+    });
   }
 
-  next();
+  return res.status(500).json({
+    status: 'error',
+    message: error.message,
+  });
 }
 
-export { schemaError };
+export { errorHandler };

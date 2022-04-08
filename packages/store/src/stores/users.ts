@@ -11,8 +11,8 @@ class UserDbStore implements IStoreUser {
   async create(user: CreateUserType): Promise<void> {
     await this.#client('users')
       .insert(user)
-      .catch(() => {
-        throw new Error();
+      .catch((error) => {
+        throw new Error(error.detail);
       });
   }
 

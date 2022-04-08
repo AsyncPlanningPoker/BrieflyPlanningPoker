@@ -1,7 +1,9 @@
+import express, { NextFunction, Request, Response } from 'express';
+import { errorHandler } from './middlewares/errorHandler';
 import { FactoryStore } from '@briefly/store';
+import { CustomError } from './utils/error';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
-import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
@@ -44,6 +46,9 @@ function setMiddlewares() {
 
   app.use(express.json());
   app.use(routes);
+  app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, res);
+  });
 }
 
 const app = express();
