@@ -1,4 +1,4 @@
-import * as auth from '../../src/utils/authorization';
+import * as auth from '../../src/middlewares/authorization/authorization';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
