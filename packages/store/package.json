@@ -7,7 +7,7 @@
   "main": "dist/index",
   "types": "dist/index",
   "scripts": {
-    "start": "concurrently -k \"tsc -b -w\" \"nodemon -L dist/src/index.js\"",
+    "db:up": "yarn migration:up && yarn seed:up",
     "migration:up": "npx knex migrate:up",
     "migration:down": "npx knex migrate:down",
     "seed:up": "npx knex seed:run",

@@ -1,9 +1,10 @@
 import express, { NextFunction, Request, Response } from 'express';
+import { CustomError } from './middlewares/error/error';
 import * as error from './middlewares/error/handler';
 import { FactoryStore } from '@briefly/store';
-import { CustomError } from './middlewares/error/error';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
+import * as dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 
@@ -51,6 +52,7 @@ function setMiddlewares() {
   });
 }
 
+dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
 const close = setDb();

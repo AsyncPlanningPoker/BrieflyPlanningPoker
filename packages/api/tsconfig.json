@@ -3,7 +3,20 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "typeRoots" : ["../../node_modules/@types", "./src/@types"]
+    "typeRoots" : ["../../node_modules/@types", "./src/@types"],
+    "baseUrl": ".",
+    "composite": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["esnext"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": [
     "./src/**/*.ts",

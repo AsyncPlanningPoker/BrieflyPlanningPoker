@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '../../.env' });
 
 const config = {
   client: 'pg',
@@ -7,6 +7,7 @@ const config = {
     database: process.env.POSTGRES_DB,
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
+    host: process.env.POSTGRES_HOST,
   },
   pool: {
     min: 2,
