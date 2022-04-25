@@ -2,7 +2,6 @@ node_modules
 .env
 dist
 .DS_Store
-database
 coverage
 .idea
 *.suo
@@ -10,3 +9,8 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+/.yarn/*
+!/.yarn/releases
+!/.yarn/plugins
+!/.yarn/sdks
