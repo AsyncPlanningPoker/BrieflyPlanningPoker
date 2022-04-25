@@ -1,27 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="aaaaaaaaaaaaaaadkkkkkkkkkkkkshjgfjhgkjaO!"/>
+  <SignIn/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-console.log('diskjfgsk');
+import SignIn from './pages/sign-in.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    SignIn,
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  @import './styles/global.scss';
+
+  body{
+    margin: 0;
+    font-family: 'Hammersmith One', sans-serif;
+  }
+  
 </style>
