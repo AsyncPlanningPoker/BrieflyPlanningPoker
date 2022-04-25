@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'Hammersmith One';
+  font-display: auto;
+  font-style: normal;
+  font-weight: 400;
+  unicode-range: U+000-5FF;
+  src: local('Hammersmith One'), url(./fonts/HammersmithOne-Regular.ttf) format('truetype');
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+:root {
+  //font
+  font-family: 'Hammersmith One', sans-serif;
+  font-size: var(--unit-0400);
+
+  //color pallete
+  --color-primary: #BFA8BB;
+  --color-accent:  #E6CAE0;
+  --color-white:   #F2F2F2;
+  --color-gray:    #333333;
+  --color-black:   #0D0D0D;
+  --color-link:    #58A6FF;
+  --color-error:   #D64A5E;
+
+  //units
+  --unit-0000:  0px;
+  --unit-0025:  1px;
+  --unit-0050:  2px;
+  --unit-0100:  4px;
+  --unit-0200:  8px;
+  --unit-0300: 12px;
+  --unit-0400: 16px;
+  --unit-0500: 20px;
+  --unit-0600: 24px;
+  --unit-0700: 28px;
+  --unit-0800: 32px;
+  --unit-0900: 36px;
+  --unit-1000: 40px;
+}
