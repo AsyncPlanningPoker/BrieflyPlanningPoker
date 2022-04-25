@@ -1,4 +1,4 @@
-import * as error from '../../src/utils/error';
+import * as error from '../../src/middlewares/error/error';
 
 describe('Error', () => {
   test('Should create a new BadRequest instance', async () => {

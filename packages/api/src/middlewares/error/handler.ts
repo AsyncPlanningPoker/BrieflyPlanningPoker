@@ -1,11 +1,11 @@
+import { CustomError } from './error';
 import { Response } from 'express';
-import { CustomError } from '../utils/error';
 
-function errorHandler(error: CustomError | Error, res: Response) {
+function handler(error: CustomError | Error, res: Response) {
   if (error instanceof CustomError) {
     return res.status(error.getCode()).json({
       status: 'error',
-      message: error.message,
+      message: error.json ?? error.message,
     });
   }
 
@@ -15,4 +15,4 @@ function errorHandler(error: CustomError | Error, res: Response) {
   });
 }
 
-export { errorHandler };
+export { handler };

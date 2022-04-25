@@ -1,8 +1,14 @@
+import { ValidationError } from 'express-validator';
+
 class CustomError extends Error {
-  public message: string;
-  constructor(message: string) {
+  public message = 'Internal Several Error';
+  public json?: ValidationError[];
+
+  constructor(message?: string, json?: ValidationError[]) {
     super();
-    this.message = message;
+
+    this.message = message ?? this.message;
+    this.json = json ?? this.json;
   }
 
   getCode() {

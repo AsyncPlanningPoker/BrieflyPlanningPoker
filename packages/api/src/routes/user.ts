@@ -1,6 +1,6 @@
+import { CustomError, Unauthorized } from '../middlewares/error/error';
+import * as auth from '../middlewares/authorization/authorization';
 import { NextFunction, Request, Response } from 'express';
-import * as auth from '../utils/authorization';
-import { CustomError, Unauthorized } from '../utils/error';
 import * as crypt from '../utils/crypt';
 import { randomUUID } from 'crypto';
 
