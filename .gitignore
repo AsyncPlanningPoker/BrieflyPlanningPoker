@@ -10,3 +10,4 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+packages/front/yarn-error.log
