@@ -1,0 +1,23 @@
+{
+  "name": "@briefly/email-service",
+  "version": "1.0.0",
+  "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
+  "license": "GPL-3.0 License",
+  "private": true,
+  "main": "dist/src/index",
+  "types": "dist/src/index",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@types/node": "^17.0.22",
+    "dotenv": "^16.0.0",
+    "nodemailer": "^6.7.3",
+    "nodemon": "^2.0.15"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  }
+}
