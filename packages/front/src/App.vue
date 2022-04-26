@@ -1,5 +1,5 @@
 <template>
-  <SignIn/>
+  <router-view/>
 </template>
 
 <script>

@@ -12,10 +12,11 @@
           <span> {{ hasError }} </span>
         </div>
         <div class="pass-recovery-one__buttons-container">
-          <BButton 
-            type="submit" 
-            value="return"
-          />
+          <a href="/signin">
+            <BButton
+              value="return"
+            />
+          </a>
           <BButton 
             type="submit" 
             value="send"

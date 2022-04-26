@@ -30,10 +30,11 @@
           <span> {{ hasError }} </span>
         </div>
         <div class="sign-up__buttons-container">
-          <BButton 
-            type="submit" 
-            value="return"
-          />
+          <a href="/signin">
+            <BButton
+              value="return"
+            />
+          </a>
           <BButton 
             type="submit" 
             value="create"

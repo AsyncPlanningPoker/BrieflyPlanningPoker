@@ -2,7 +2,7 @@
   <div class="sign-in">
 
     <BContainer>
-      <form class="sign-in__form" action="/login" method="post">
+      <form class="sign-in__form" action="/" method="post">
         <BInput
           class="sign-in__label"
           id="form-email"
@@ -14,7 +14,7 @@
           class="sign-in__label"
           id="form-password"
           label="Password"
-          link="/password-reset"
+          link="/password_reset"
           link-label="forgot password?"
           type="password"
         />
@@ -32,7 +32,7 @@
     </BContainer>
     
     <BContainer>
-      <a class="registry-button" href="/registry" target="_blank" width="inherit">
+      <a class="registry-button" href="/signup">
         <BButton
           size="small"
           value="create an account"
