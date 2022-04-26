@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '../router/index';
 
 const signInStore = {
   state: {
@@ -38,6 +39,7 @@ const signInStore = {
           commit('updateUserToken', token);
           commit('updateIsAuth', true);
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+          router.push('/');
         })
         .catch((err) => {
           commit('updateErrorMessage', err.response.data.message);

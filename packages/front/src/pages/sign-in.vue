@@ -4,7 +4,6 @@
     <BContainer>
       <form class="sign-in__form">
         <BInput
-          :value="email" 
           class="sign-in__label"
           id="form-email"
           label="E-mail"
@@ -13,7 +12,6 @@
         />
 
         <BInput
-          :value="password" 
           class="sign-in__label"
           id="form-password"
           label="Password"
@@ -71,19 +69,29 @@ export default {
   methods: {
     updateEmail (e) {
       this.$store.commit('updateEmail', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
     },
     updatePassword (e) {
       this.$store.commit('updatePassword', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
     },
-    login(e){
-      if(!this.$store.state.signIn.email){
-        this.$store.commit('updateErrorMessage', "Email empty")
+    login(){
+
+      const email = this.$store.state.signIn.email
+      const password = this.$store.state.signIn.password
+      
+      if(!email){
+        this.$store.commit('updateErrorMessage', "email is required")
       } 
-      else if(!this.$store.state.signIn.password){
-        this.$store.commit('updateErrorMessage', "Password empty")
+      else if(!new RegExp('[a-z0-9]+(([.]|[-]|[_])[a-z0-9]+)?@[a-z]+([.][a-z]{2,3})+').test(email)){
+        this.$store.commit('updateErrorMessage', "email is invalid")
+      }
+      else if(!password){
+        this.$store.commit('updateErrorMessage', "password is required")
       } 
-      //mudar mensagens
-      //validar tamanho max e min, formato?
+      else if(password.length < 6){
+        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
+      } 
       else {
         this.$store.dispatch('login')
       }
@@ -112,7 +120,9 @@ export default {
 
 .error {
   color: var(--color-error);
-  justify-self: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--unit-0200);
   min-height: var(--unit-0500);
 }
 
