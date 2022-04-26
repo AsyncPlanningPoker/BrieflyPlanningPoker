@@ -10,7 +10,9 @@
     "docker:test": "docker-compose run front yarn test"
   },
   "dependencies": {
+    "axios": "^0.27.1",
     "core-js": "^3.8.3",
+    "dotenv": "^16.0.0",
     "vue": "^3.2.13",
     "vue-prop-validation-helper": "^3.0.0",
     "vue-router": "^4.0.14",

@@ -2,30 +2,36 @@
   <div class="sign-in">
 
     <BContainer>
-      <form class="sign-in__form" action="/" method="post">
+      <form class="sign-in__form">
         <BInput
+          :value="email" 
           class="sign-in__label"
           id="form-email"
           label="E-mail"
           type="email"
+          @input="updateEmail"
         />
 
         <BInput
+          :value="password" 
           class="sign-in__label"
           id="form-password"
           label="Password"
           link="/password_reset"
           link-label="forgot password?"
           type="password"
+          @input="updatePassword"
+          @keyup.enter="login"
         />
 
         <div class="sign-in__label error">
-          <span> {{ hasError }} </span>
+          <span> {{ this.$store.state.signIn.errorMessage }} </span>
         </div>
 
         <BButton 
-          type="submit" 
+          type="button" 
           value="login"
+          @click="login"
         />
 
       </form>
@@ -55,16 +61,37 @@ export default {
     BContainer,
     BInput,
   },
+
   props: {
     error: {
       type: String,
     },
   },
-  computed: {
-    hasError() {
-      return this.error;
+
+  computed: {},
+
+  methods: {
+    updateEmail (e) {
+      this.$store.commit('updateEmail', e.target.value)
+    },
+    updatePassword (e) {
+      this.$store.commit('updatePassword', e.target.value)
+    },
+    login(e){
+      if(!this.$store.state.signIn.email){
+        this.$store.commit('updateErrorMessage', "Email empty")
+      } 
+      else if(!this.$store.state.signIn.password){
+        this.$store.commit('updateErrorMessage', "Password empty")
+      } 
+      //mudar mensagens
+      //validar tamanho max e min, formato?
+      else {
+        this.$store.dispatch('login')
+      } 
+      
     }
-  },
+  }
 }
 </script>
 

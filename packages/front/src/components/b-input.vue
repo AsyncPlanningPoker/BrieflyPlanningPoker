@@ -15,7 +15,7 @@
         :id="id"
         :placeholder="placeholder"
         :type="type"
-      >
+      > 
     </div>
   </div>
 </template>
