@@ -1,5 +1,5 @@
 <template>
-  <div class='sign-in'>
+  <div class="sign-in">
 
     <BContainer>
       <form class="sign-in__form" action="/login" method="post">
@@ -7,7 +7,6 @@
           class="sign-in__label"
           id="form-email"
           label="E-mail"
-          placeholder="example@briefly.com"
           type="email"
         />
 
@@ -17,7 +16,6 @@
           label="Password"
           link="/password-reset"
           link-label="forgot password?"
-          placeholder="pass"
           type="password"
         />
 
