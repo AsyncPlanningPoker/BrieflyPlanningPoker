@@ -37,17 +37,15 @@ async function login(req: Request, res: Response, next: NextFunction): Promise<R
   try {
     const user = await db.findByCredentials(credentials);
 
-    if (!user) {
-      throw new Unauthorized('The email provided is not connected to an account');
-    } else {
+    if (user) {
       const passwordMatch = await crypt.compare(req.body.password, user.password);
 
       if (passwordMatch) {
         return res.status(200).json({ token: auth.create(db.id) });
-      } else {
-        throw new Unauthorized('Wrong password');
       }
     }
+
+    throw new Unauthorized('invalid credentials');
   } catch (error: any) {
     next(error);
   }
