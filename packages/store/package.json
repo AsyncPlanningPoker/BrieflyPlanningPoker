@@ -4,8 +4,8 @@
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,
-  "main": "dist/index",
-  "types": "dist/index",
+  "main": "dist/src/index",
+  "types": "dist/src/index",
   "scripts": {
     "db:up": "yarn migration:up && yarn seed:up",
     "migration:up": "npx knex migrate:up",

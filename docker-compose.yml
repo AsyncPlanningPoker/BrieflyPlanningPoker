@@ -3,17 +3,19 @@ version: '3.7'
 services:
 
   front:
-    build: ./packages/front
+    container_name: front
+    image: node:16 
     working_dir: /front
     command: make front-startup
     ports:
       - 8080:8080
     volumes:
-      - ./packages/front:/front
+      - .:/front
     depends_on:
       - api
 
   api:
+    container_name: api
     image: node:16 
     working_dir: /app
     command: make api-startup
