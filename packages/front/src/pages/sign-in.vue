@@ -67,9 +67,7 @@ export default {
       type: String,
     },
   },
-
-  computed: {},
-
+  
   methods: {
     updateEmail (e) {
       this.$store.commit('updateEmail', e.target.value)
@@ -88,10 +86,9 @@ export default {
       //validar tamanho max e min, formato?
       else {
         this.$store.dispatch('login')
-      } 
-      
-    }
-  }
+      }
+    },
+  },
 }
 </script>
 
