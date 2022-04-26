@@ -1,8 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import SignIn from ;
-// import SignUp from '../pages/sign-up.vue';
-// import SignUp from '../pages/sign-up.vue';
-// import SignUp from '../pages/sign-up.vue';
 
 const routes = [
   {
