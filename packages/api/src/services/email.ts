@@ -1,7 +1,10 @@
-import { Email } from './types/email';
 import nodemailer from 'nodemailer';
-import * as dotenv from 'dotenv';
-dotenv.config();
+
+interface Email {
+  to: string;
+  subject: string;
+  message: string;
+}
 
 export default async function send(email: Email) {
   const transporter = nodemailer.createTransport({
@@ -19,10 +22,7 @@ export default async function send(email: Email) {
     text: email.message,
   };
 
-  await transporter
-    .sendMail(options)
-    .then()
-    .catch((err) => {
-      throw new Error(err.message);
-    });
+  transporter.sendMail(options).catch((err) => {
+    throw new Error(err.message);
+  });
 }
