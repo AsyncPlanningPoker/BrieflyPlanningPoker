@@ -16,17 +16,17 @@ const signInStore = {
     updateEmail(state, email) {
       state.email = email;
     },
-    updatePassword(state, password) {
-      state.password = password;
-    },
     updateErrorMessage(state, errorMessage) {
       state.errorMessage = errorMessage;
     },
-    updateUserToken(state, userToken) {
-      state.userToken = userToken;
-    },
     updateIsAuth(state, isAuth) {
       state.isAuth = isAuth;
+    },
+    updatePassword(state, password) {
+      state.password = password;
+    },
+    updateUserToken(state, userToken) {
+      state.userToken = userToken;
     },
   },
 

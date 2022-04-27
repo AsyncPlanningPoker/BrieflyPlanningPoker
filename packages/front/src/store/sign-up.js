@@ -3,10 +3,11 @@ import router from '../router/index';
 
 const signUpStore = {
   state: {
-    name: '',
+    confirmPassword: '',
     email: '',
     errorMessage: '',
     isAuth: false,
+    name: '',
     password: '',
     userToken: '',
   },
@@ -14,23 +15,26 @@ const signUpStore = {
   getters: {},
 
   mutations: {
-    updateName(state, name) {
-      state.name = name;
-    },
     updateEmail(state, email) {
       state.email = email;
-    },
-    updatePassword(state, password) {
-      state.password = password;
     },
     updateErrorMessage(state, errorMessage) {
       state.errorMessage = errorMessage;
     },
-    updateUserToken(state, userToken) {
-      state.userToken = userToken;
-    },
     updateIsAuth(state, isAuth) {
       state.isAuth = isAuth;
+    },
+    updateName(state, name) {
+      state.name = name;
+    },
+    updatePassword(state, password) {
+      state.password = password;
+    },
+    updateConfirmPassword(state, confirmPassword) {
+      state.confirmPassword = confirmPassword;
+    },
+    updateUserToken(state, userToken) {
+      state.userToken = userToken;
     },
   },
 

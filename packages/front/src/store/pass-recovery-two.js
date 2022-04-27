@@ -3,25 +3,25 @@ import router from '../router/index';
 
 const passRecoveryTwoStore = {
   state: {
-    newPassword: '',
     confirmPassword: '',
     errorMessage: '',
+    newPassword: '',
   },
 
   getters: {},
 
   mutations: {
-    updateNewPassword(state, newPassword) {
-      state.newPassword = newPassword;
-    },
     updateConfirmPassword(state, confirmPassword) {
       state.confirmPassword = confirmPassword;
     },
-    updateToken(state, token) {
-      state.token = token;
-    },
     updateErrorMessage(state, errorMessage) {
       state.errorMessage = errorMessage;
+    },
+    updateNewPassword(state, newPassword) {
+      state.newPassword = newPassword;
+    },
+    updateToken(state, token) {
+      state.token = token;
     },
   },
 

@@ -28,6 +28,7 @@
           id="form-password-confirmation"
           label="Confirm password"
           type="password"
+          @input="updateConfirmPassword"
           @keyup.enter="registry"
         />
         <div class="sign-up__label error">
@@ -85,10 +86,15 @@ export default {
       this.$store.commit('updatePassword', e.target.value)
       this.$store.commit('updateErrorMessage', '')
     },
+    updateConfirmPassword (e) {
+      this.$store.commit('updateConfirmPassword', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
+    },
     registry(e){
       const name = this.$store.state.signUp.name
       const email = this.$store.state.signUp.email
       const password = this.$store.state.signUp.password
+      const confirmPassword = this.$store.state.signUp.confirmPassword
 
       if(!name){
         this.$store.commit('updateErrorMessage', "name is required")
@@ -104,6 +110,9 @@ export default {
       }
       else if(password.length < 6){
         this.$store.commit('updateErrorMessage', "password is too small")
+      }
+      else if(password !== confirmPassword ){
+        this.$store.commit('updateErrorMessage', "password not match")
       }
       else {
         this.$store.dispatch('registry')
