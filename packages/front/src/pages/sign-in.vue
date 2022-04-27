@@ -118,14 +118,6 @@ export default {
   margin-top: var(--unit-0600);
 }
 
-.error {
-  color: var(--color-error);
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--unit-0200);
-  min-height: var(--unit-0500);
-}
-
 .registry-button {
   margin-top: var(--unit-1000);
   width: 240px;

@@ -4,22 +4,33 @@ const routes = [
   {
     path: '/signin',
     name: 'SignIn',
-    component: () => import('../pages/sign-in.vue')
+    component: () => {
+      return import('../pages/sign-in.vue');
+    },
   },
   {
     path: '/signup',
     name: 'SignUp',
-    component: () => import('../pages/sign-up.vue')
+    component: () => {
+      return import('../pages/sign-up.vue');
+    },
   },
   {
     path: '/password_reset',
     name: 'pass-recovery-one',
-    component: () => import('../pages/pass-recovery-one.vue')
+    component: () => {
+      return import('../pages/pass-recovery-one.vue');
+    },
   },
   {
     path: '/confirm_reset',
     name: 'pass-recovery-two',
-    component: () => import('../pages/pass-recovery-two.vue')
+    component: () => {
+      return import('../pages/pass-recovery-two.vue');
+    },
+    props: (route) => {
+      return { token: route.query.token };
+    },
   },
 ];
 

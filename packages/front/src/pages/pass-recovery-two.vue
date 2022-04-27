@@ -1,25 +1,29 @@
 <template>
   <div class="pass-recovery-two">
     <BContainer>
-      <form class="pass-recovery-two__form" action="/" method="post">
+      <form class="pass-recovery-two__form">
         <BInput
           class="pass-recovery-two__label"
           id="form-password"
           label="New password"
           type="password"
+          @input="updateNewPassword"
         />
         <BInput
           class="pass-recovery-two__label"
           id="form-password-confirmation"
           label="Confirm new password"
           type="password"
+          @keyup.enter="update"
+          @input="updateConfirmPassword"
         />
         <div class="pass-recovery-two__label error">
-          <span> {{ hasError }} </span>
+          <span>  {{ this.$store.state.passRecoveryTwo.errorMessage }} </span>
         </div>
         <BButton 
-          type="submit" 
+          type="button" 
           value="update"
+          @click="update"
         />
       </form>
     </BContainer>
@@ -39,13 +43,41 @@ export default {
     BInput,
   },
   props: {
-    error: {
+    token:{
       type: String,
-    },
+    }
   },
-  computed: {
-    hasError() {
-      return this.error;
+  computed: {},
+
+  methods: {
+    updateNewPassword (e) {
+      this.$store.commit('updateNewPassword', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
+    },
+    updateConfirmPassword (e) {
+      this.$store.commit('updateConfirmPassword', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
+    },
+    update(){
+
+      const newPassword = this.$store.state.passRecoveryTwo.newPassword
+      const confirmPassword = this.$store.state.passRecoveryTwo.confirmPassword
+
+      if(!newPassword){
+        this.$store.commit('updateErrorMessage', "password is required")
+      } 
+      else if(newPassword.length < 6){
+        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
+      } 
+      else if(!confirmPassword){
+        this.$store.commit('updateErrorMessage', "password2 is required")
+      } 
+      else if(newPassword !== confirmPassword ){
+        this.$store.commit('updateErrorMessage', "password not match")
+      } 
+      else {
+        this.$store.dispatch('update', this.token)
+      } 
     }
   },
 }
