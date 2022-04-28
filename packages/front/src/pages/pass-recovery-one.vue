@@ -1,5 +1,6 @@
 <template>
   <div class="pass-recovery-one">
+    <BBrand/>
     <BContainer>
       <form class="pass-recovery-one__form">
         <BInput
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
@@ -39,6 +41,7 @@ export default {
   name: 'PassRecoveryOne',
   components: {
     BButton,
+    BBrand,
     BContainer,
     BInput,
   },
@@ -75,6 +78,7 @@ export default {
   display: grid;
   justify-items: center;
   height:100vh;
+  row-gap: var(--unit-1000);
 }
 
 .pass-recovery-one__form {

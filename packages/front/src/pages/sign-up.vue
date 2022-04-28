@@ -1,5 +1,6 @@
 <template>
   <div class="sign-up">
+    <BBrand/>
     <BContainer>
       <form class="sign-up__form">
         <BInput
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
@@ -62,6 +64,7 @@ import BInput from './../components/b-input.vue';
 export default {
   name: 'SignUp',
   components: {
+    BBrand,
     BButton,
     BContainer,
     BInput,
@@ -108,7 +111,7 @@ export default {
         this.$store.commit('updateErrorMessage', "password is too small")
       }
       else if(password !== confirmPassword ){
-        this.$store.commit('updateErrorMessage', "password not match")
+        this.$store.commit('updateErrorMessage', "passwords do not match")
       }
       else {
         this.$store.dispatch('registry')
@@ -125,6 +128,7 @@ export default {
   display: grid;
   justify-items: center;
   height:100vh;
+  row-gap: var(--unit-1000);
 }
 
 .sign-up__form {

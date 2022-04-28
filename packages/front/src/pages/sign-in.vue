@@ -1,6 +1,6 @@
 <template>
   <div class="sign-in">
-
+    <BBrand/>
     <BContainer>
       <form class="sign-in__form">
         <BInput
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
@@ -55,6 +56,7 @@ import BInput from './../components/b-input.vue';
 export default {
   name: 'SignIn',
   components: {
+    BBrand,
     BButton,
     BContainer,
     BInput,

@@ -1,5 +1,6 @@
 <template>
   <div class="pass-recovery-two">
+    <BBrand/>
     <BContainer>
       <form class="pass-recovery-two__form">
         <BInput
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
@@ -38,6 +40,7 @@ import BInput from './../components/b-input.vue';
 export default {
   name: 'PassRecoveryTwo',
   components: {
+    BBrand,
     BButton,
     BContainer,
     BInput,
@@ -70,7 +73,7 @@ export default {
         this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
       } 
       else if(newPassword !== confirmPassword ){
-        this.$store.commit('updateErrorMessage', "password not match")
+        this.$store.commit('updateErrorMessage', "passwords do not match")
       } 
       else {
         this.$store.dispatch('update', this.token)
@@ -87,6 +90,7 @@ export default {
   display: grid;
   justify-items: center;
   height:100vh;
+  row-gap: var(--unit-1000);
 }
 
 .pass-recovery-two__form {
