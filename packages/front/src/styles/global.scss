@@ -13,6 +13,10 @@ a {
     width: inherit;
 }
 
+body{
+    margin: 0;
+}
+
 .error {
     color: var(--color-error);
     display: flex;
@@ -49,4 +53,8 @@ a {
     --unit-0800: 32px;
     --unit-0900: 36px;
     --unit-1000: 40px;
+}
+
+::selection {
+    background: var(--color-primary);
 }
