@@ -42,11 +42,7 @@ export default {
     BContainer,
     BInput,
   },
-  props: {
-    error: {
-      type: String,
-    },
-  },
+  props: {},
   computed: {},
   
   methods: {

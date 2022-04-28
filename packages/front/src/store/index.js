@@ -5,9 +5,16 @@ import { passRecoveryOneStore } from './pass-recovery-one';
 import { passRecoveryTwoStore } from './pass-recovery-two';
 
 export default createStore({
-  state: {},
+  state: { userToken: '', isAuth: false },
   getters: {},
-  mutations: {},
+  mutations: {
+    updateUserToken(state, userToken) {
+      state.userToken = userToken;
+    },
+    updateIsAuth(state, isAuth) {
+      state.isAuth = isAuth;
+    },
+  },
   actions: {},
   modules: { signIn: signInStore, signUp: signUpStore, passRecoveryOne: passRecoveryOneStore, passRecoveryTwo: passRecoveryTwoStore },
 });

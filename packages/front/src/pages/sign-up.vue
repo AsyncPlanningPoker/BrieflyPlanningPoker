@@ -67,11 +67,7 @@ export default {
     BInput,
   },
 
-  props: {
-    error: {
-      type: String,
-    },
-  },
+  props: {},
 
   methods: {
     updateName (e) {
@@ -90,7 +86,7 @@ export default {
       this.$store.commit('updateConfirmPassword', e.target.value)
       this.$store.commit('updateErrorMessage', '')
     },
-    registry(e){
+    registry(){
       const name = this.$store.state.signUp.name
       const email = this.$store.state.signUp.email
       const password = this.$store.state.signUp.password

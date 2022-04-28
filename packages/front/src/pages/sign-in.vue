@@ -60,11 +60,7 @@ export default {
     BInput,
   },
 
-  props: {
-    error: {
-      type: String,
-    },
-  },
+  props: {},
   
   methods: {
     updateEmail (e) {

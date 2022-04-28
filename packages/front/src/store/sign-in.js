@@ -5,9 +5,7 @@ const signInStore = {
   state: {
     email: '',
     errorMessage: '',
-    isAuth: false,
     password: '',
-    userToken: '',
   },
 
   getters: {},
@@ -24,9 +22,6 @@ const signInStore = {
     },
     updatePassword(state, password) {
       state.password = password;
-    },
-    updateUserToken(state, userToken) {
-      state.userToken = userToken;
     },
   },
 

@@ -6,10 +6,8 @@ const signUpStore = {
     confirmPassword: '',
     email: '',
     errorMessage: '',
-    isAuth: false,
     name: '',
     password: '',
-    userToken: '',
   },
 
   getters: {},
@@ -21,9 +19,6 @@ const signUpStore = {
     updateErrorMessage(state, errorMessage) {
       state.errorMessage = errorMessage;
     },
-    updateIsAuth(state, isAuth) {
-      state.isAuth = isAuth;
-    },
     updateName(state, name) {
       state.name = name;
     },
@@ -32,9 +27,6 @@ const signUpStore = {
     },
     updateConfirmPassword(state, confirmPassword) {
       state.confirmPassword = confirmPassword;
-    },
-    updateUserToken(state, userToken) {
-      state.userToken = userToken;
     },
   },
 

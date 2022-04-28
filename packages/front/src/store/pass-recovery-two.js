@@ -20,9 +20,6 @@ const passRecoveryTwoStore = {
     updateNewPassword(state, newPassword) {
       state.newPassword = newPassword;
     },
-    updateToken(state, token) {
-      state.token = token;
-    },
   },
 
   actions: {
