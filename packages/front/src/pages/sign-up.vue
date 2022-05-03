@@ -5,38 +5,34 @@
       <form class="sign-up__form">
         <BInput
           class="sign-up__label"
-          id="form-name"
           label="Name"
           type="text"
           @input="updateName"
         />
         <BInput
           class="sign-up__label"
-          id="form-email"
           label="E-mail"
           type="email"
           @input="updateEmail"
         />
         <BInput
           class="sign-up__label"
-          id="form-password"
           label="Password"
           type="password"
           @input="updatePassword"
         />
         <BInput
           class="sign-up__label"
-          id="form-password-confirmation"
           label="Confirm password"
           type="password"
           @input="updateConfirmPassword"
           @keyup.enter="registry"
         />
         <div class="sign-up__label error">
-          <span> {{ this.$store.state.signUp.errorMessage }} </span>
+          {{ this.$store.state.signUp.errorMessage }}
         </div>
         <div class="sign-up__buttons-container">
-          <a href="/signUp">
+          <a href="/signin">
             <BButton
               value="return"
             />
@@ -69,9 +65,6 @@ export default {
     BContainer,
     BInput,
   },
-
-  props: {},
-
   methods: {
     updateName (e) {
       this.$store.commit('updateName', e.target.value)

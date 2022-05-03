@@ -5,7 +5,6 @@
       <form class="sign-in__form">
         <BInput
           class="sign-in__label"
-          id="form-email"
           label="E-mail"
           type="email"
           @input="updateEmail"
@@ -13,7 +12,6 @@
 
         <BInput
           class="sign-in__label"
-          id="form-password"
           label="Password"
           link="/password_reset"
           link-label="forgot password?"
@@ -23,7 +21,7 @@
         />
 
         <div class="sign-in__label error">
-          <span> {{ this.$store.state.signIn.errorMessage }} </span>
+          {{ this.$store.state.signIn.errorMessage }}
         </div>
 
         <BButton 
@@ -61,9 +59,6 @@ export default {
     BContainer,
     BInput,
   },
-
-  props: {},
-  
   methods: {
     updateEmail (e) {
       this.$store.commit('updateEmail', e.target.value)

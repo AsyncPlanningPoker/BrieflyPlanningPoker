@@ -5,21 +5,19 @@
       <form class="pass-recovery-two__form">
         <BInput
           class="pass-recovery-two__label"
-          id="form-password"
           label="New password"
           type="password"
           @input="updateNewPassword"
         />
         <BInput
           class="pass-recovery-two__label"
-          id="form-password-confirmation"
           label="Confirm new password"
           type="password"
           @keyup.enter="update"
           @input="updateConfirmPassword"
         />
         <div class="pass-recovery-two__label error">
-          <span>  {{ this.$store.state.passRecoveryTwo.errorMessage }} </span>
+          {{ this.$store.state.passRecoveryTwo.errorMessage }}
         </div>
         <BButton 
           type="button" 
@@ -50,8 +48,6 @@ export default {
       type: String,
     }
   },
-  computed: {},
-
   methods: {
     updateNewPassword (e) {
       this.$store.commit('updateNewPassword', e.target.value)

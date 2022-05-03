@@ -5,14 +5,13 @@
       <form class="pass-recovery-one__form">
         <BInput
           class="pass-recovery-one__label"
-          id="form-email"
           label="Enter your e-mail address and we will send you a password reset link"
           type="email"
           @keyup.enter="recovery"
           @input="updateEmail"
         />
         <div class="pass-recovery-one__label error">
-           <span> {{ this.$store.state.passRecoveryOne.errorMessage }} </span>
+          {{ this.$store.state.passRecoveryOne.errorMessage }}
         </div>
         <div class="pass-recovery-one__buttons-container">
           <a href="/signin">
@@ -45,9 +44,6 @@ export default {
     BContainer,
     BInput,
   },
-  props: {},
-  computed: {},
-  
   methods: {
     updateEmail (e) {
       this.$store.commit('updateEmail', e.target.value)
