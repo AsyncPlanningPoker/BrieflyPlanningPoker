@@ -1,8 +1,7 @@
 interface IStoreUser {
   create(user: CreateUserType): Promise<void>;
-  find(ids: FindUserType[]): Promise<LoadedUserType[]>;
-  findByCredentials(user: findByCredentialsType): Promise<LoadedUserType | undefined>;
-  updateById(id: FindUserType, user: UpdateUserType): Promise<void>;
+  findByEmail(user: FindByEmailType): Promise<LoadedUserType | undefined>;
+  updatePassByEmail(email: FindByEmailType, user: UpdateUserType): Promise<void>;
 }
 
 type CreateUserType = {
@@ -12,15 +11,10 @@ type CreateUserType = {
   password: string;
 };
 
-type FindUserType = string;
-
-type findByCredentialsType = {
-  email: string;
-};
+type FindByEmailType = string;
 
 type UpdateUserType = {
   name?: string;
-  email?: string;
   password?: string;
   updatedAt: Date;
 };
@@ -33,4 +27,4 @@ type LoadedUserType = {
 };
 
 export { IStoreUser };
-export type { CreateUserType, FindUserType, findByCredentialsType, UpdateUserType, LoadedUserType };
+export type { CreateUserType, FindByEmailType, UpdateUserType, LoadedUserType };

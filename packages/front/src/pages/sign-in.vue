@@ -1,31 +1,33 @@
 <template>
   <div class="sign-in">
-
+    <BBrand/>
     <BContainer>
-      <form class="sign-in__form" action="/" method="post">
+      <form class="sign-in__form">
         <BInput
           class="sign-in__label"
-          id="form-email"
           label="E-mail"
           type="email"
+          @input="updateEmail"
         />
 
         <BInput
           class="sign-in__label"
-          id="form-password"
           label="Password"
           link="/password_reset"
           link-label="forgot password?"
           type="password"
+          @input="updatePassword"
+          @keyup.enter="login"
         />
 
         <div class="sign-in__label error">
-          <span> {{ hasError }} </span>
+          {{ this.$store.state.signIn.errorMessage }}
         </div>
 
         <BButton 
-          type="submit" 
+          type="button" 
           value="login"
+          @click="login"
         />
 
       </form>
@@ -44,6 +46,7 @@
 </template>
 
 <script>
+import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
@@ -51,19 +54,41 @@ import BInput from './../components/b-input.vue';
 export default {
   name: 'SignIn',
   components: {
+    BBrand,
     BButton,
     BContainer,
     BInput,
   },
-  props: {
-    error: {
-      type: String,
+  methods: {
+    updateEmail (e) {
+      this.$store.commit('updateEmail', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
     },
-  },
-  computed: {
-    hasError() {
-      return this.error;
-    }
+    updatePassword (e) {
+      this.$store.commit('updatePassword', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
+    },
+    login(){
+
+      const email = this.$store.state.signIn.email
+      const password = this.$store.state.signIn.password
+      
+      if(!email){
+        this.$store.commit('updateErrorMessage', "email is required")
+      } 
+      else if(!new RegExp('[a-z0-9]+(([.]|[-]|[_])[a-z0-9]+)?@[a-z]+([.][a-z]{2,3})+').test(email)){
+        this.$store.commit('updateErrorMessage', "email is invalid")
+      }
+      else if(!password){
+        this.$store.commit('updateErrorMessage', "password is required")
+      } 
+      else if(password.length < 6){
+        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
+      } 
+      else {
+        this.$store.dispatch('login')
+      }
+    },
   },
 }
 </script>
@@ -84,12 +109,6 @@ export default {
 
 .sign-in__label {
   margin-top: var(--unit-0600);
-}
-
-.error {
-  color: var(--color-error);
-  justify-self: center;
-  min-height: var(--unit-0500);
 }
 
 .registry-button {

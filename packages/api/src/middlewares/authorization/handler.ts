@@ -7,7 +7,7 @@ function handler(req: Request, res: Response, next: any) {
   const isValid = token?.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : false;
 
   try {
-    if (isValid) {
+    if (isValid?.role === 'login') {
       next();
     } else {
       throw new Unauthorized('Invalid token');

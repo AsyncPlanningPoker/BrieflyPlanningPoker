@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import { CreateUserType, findByCredentialsType, FindUserType, IStoreUser, LoadedUserType, UpdateUserType } from '../types/users';
+import { CreateUserType, FindByEmailType, IStoreUser, LoadedUserType, UpdateUserType } from '../types/users';
 
 class UserDbStore implements IStoreUser {
   #client: Knex<any, unknown[]>;
@@ -16,13 +16,9 @@ class UserDbStore implements IStoreUser {
       });
   }
 
-  async find(ids: FindUserType[]): Promise<LoadedUserType[]> {
-    return this.#client.select('id', 'name', 'email').from('users').whereIn('id', ids);
-  }
-
-  async findByCredentials(user: findByCredentialsType): Promise<LoadedUserType | undefined> {
+  async findByEmail(email: FindByEmailType): Promise<LoadedUserType | undefined> {
     const res = await this.#client.select('id', 'name', 'email', 'password').from('users').where({
-      email: user.email,
+      email: email,
     });
 
     if (res.length > 0) {
@@ -37,9 +33,9 @@ class UserDbStore implements IStoreUser {
     }
   }
 
-  async updateById(id: FindUserType, user: UpdateUserType): Promise<void> {
-    await this.#client('users').where('id', id).update({
-      name: user.name,
+  async updatePassByEmail(email: FindByEmailType, user: UpdateUserType): Promise<void> {
+    await this.#client('users').where('email', email).update({
+      password: user.password,
       updatedAt: user.updatedAt,
     });
   }

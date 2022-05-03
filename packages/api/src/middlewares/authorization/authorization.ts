@@ -1,15 +1,15 @@
 import jwt from 'jsonwebtoken';
 
-function create(id: string) {
-  return jwt.sign({ id: id }, process.env.SECRET!, {
-    expiresIn: 300,
+function create(user: string, role: string, expiresIn = 3600) {
+  return jwt.sign({ user: user, role: role }, process.env.SECRET!, {
+    expiresIn: expiresIn,
   });
 }
 
-function verify(token: string) {
+function verify(token: string): any {
   return jwt.verify(token, process.env.SECRET!, (err: any, decoded: any) => {
     if (decoded) {
-      return { id: decoded.id };
+      return { user: decoded.user, role: decoded.role };
     }
   });
 }

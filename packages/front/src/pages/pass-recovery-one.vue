@@ -1,15 +1,17 @@
 <template>
   <div class="pass-recovery-one">
+    <BBrand/>
     <BContainer>
-      <form class="pass-recovery-one__form" action="/" method="post">
+      <form class="pass-recovery-one__form">
         <BInput
           class="pass-recovery-one__label"
-          id="form-email"
           label="Enter your e-mail address and we will send you a password reset link"
           type="email"
+          @keyup.enter="recovery"
+          @input="updateEmail"
         />
         <div class="pass-recovery-one__label error">
-          <span> {{ hasError }} </span>
+          {{ this.$store.state.passRecoveryOne.errorMessage }}
         </div>
         <div class="pass-recovery-one__buttons-container">
           <a href="/signin">
@@ -18,8 +20,9 @@
             />
           </a>
           <BButton 
-            type="submit" 
+            type="button" 
             value="send"
+            @click="recovery"
           />
         </div>
       </form>
@@ -28,6 +31,7 @@
 </template>
 
 <script>
+import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
@@ -36,19 +40,30 @@ export default {
   name: 'PassRecoveryOne',
   components: {
     BButton,
+    BBrand,
     BContainer,
     BInput,
   },
-  props: {
-    error: {
-      type: String,
+  methods: {
+    updateEmail (e) {
+      this.$store.commit('updateEmail', e.target.value)
+      this.$store.commit('updateErrorMessage', '')
     },
-  },
-  computed: {
-    hasError() {
-      return this.error;
+    recovery(){
+
+      const email = this.$store.state.passRecoveryOne.email
+      
+      if(!email){
+        this.$store.commit('updateErrorMessage', "email is required")
+      } 
+      else if(!new RegExp('[a-z0-9]+(([.]|[-]|[_])[a-z0-9]+)?@[a-z]+([.][a-z]{2,3})+').test(email)){
+        this.$store.commit('updateErrorMessage', "email is invalid")
+      }
+      else {
+        this.$store.dispatch('recovery')
+      } 
     }
-  },
+  }
 }
 </script>
 
@@ -59,6 +74,7 @@ export default {
   display: grid;
   justify-items: center;
   height:100vh;
+  row-gap: var(--unit-1000);
 }
 
 .pass-recovery-one__form {
@@ -75,9 +91,4 @@ export default {
   width: 100%;
 }
 
-.error {
-  color: var(--color-error);
-  justify-self: center;
-  min-height: var(--unit-0500);
-}
 </style>
