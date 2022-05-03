@@ -101,7 +101,7 @@ export default {
         this.$store.commit('updateErrorMessage', "password is required")
       }
       else if(password.length < 6){
-        this.$store.commit('updateErrorMessage', "password is too small")
+        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
       }
       else if(password !== confirmPassword ){
         this.$store.commit('updateErrorMessage', "passwords do not match")
