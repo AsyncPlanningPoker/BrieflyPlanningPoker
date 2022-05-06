@@ -28,6 +28,9 @@ const routes = [
     component: () => {
       return import('../pages/pass-recovery-two.vue');
     },
+    beforeEnter: (route) => {
+      if(!route.query.token) return false
+    },
     props: (route) => {
       return { token: route.query.token };
     },
