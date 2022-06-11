@@ -5,5 +5,5 @@ api-startup:
 	cd packages/api && yarn start
 
 front-startup:
-	cd packages/front && yarn start
+	cd packages/front && yarn install && yarn start
 	

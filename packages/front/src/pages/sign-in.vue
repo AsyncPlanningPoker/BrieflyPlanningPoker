@@ -2,35 +2,39 @@
   <div class="sign-in">
     <BBrand/>
     <BContainer>
-      <form class="sign-in__form">
+      <Form
+        class="sign-in__form"
+        @submit="onSubmit"
+        :validation-schema="schema"
+        @invalid-submit="onInvalidSubmit"
+      >
         <BInput
           class="sign-in__label"
           label="E-mail"
+          name="email"
           type="email"
-          @input="updateEmail"
+          placeholder="email address"
+          success-message="got it"
         />
 
         <BInput
           class="sign-in__label"
           label="Password"
+          name="password"
           link="/password_reset"
           link-label="forgot password?"
           type="password"
-          @input="updatePassword"
+          success-message="got it"
           @keyup.enter="login"
         />
 
-        <div class="sign-in__label error">
-          {{ this.$store.state.signIn.errorMessage }}
-        </div>
-
         <BButton 
-          type="button" 
+          type="submit" 
           value="login"
           @click="login"
         />
 
-      </form>
+      </Form>
     </BContainer>
     
     <BContainer>
@@ -46,10 +50,12 @@
 </template>
 
 <script>
-import BBrand from './../components/b-brand.vue'
-import BButton from './../components/b-button.vue'
-import BContainer from './../components/b-container.vue'
-import BInput from './../components/b-input.vue';
+import { Form } from "vee-validate";
+import * as Yup from "yup";
+import BBrand from '../components/b-brand.vue'
+import BButton from '../components/b-button.vue'
+import BContainer from '../components/b-container.vue'
+import BInput from '../components/b-input.vue';
 
 export default {
   name: 'SignIn',
@@ -58,39 +64,33 @@ export default {
     BButton,
     BContainer,
     BInput,
+    Form,
   },
-  methods: {
-    updateEmail (e) {
-      this.$store.commit('updateEmail', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    updatePassword (e) {
-      this.$store.commit('updatePassword', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    login(){
+  setup() {
+    function onSubmit() {
+      this.$store.dispatch('login');
+    }
 
-      const email = this.$store.state.signIn.email
-      const password = this.$store.state.signIn.password
-      
-      if(!email){
-        this.$store.commit('updateErrorMessage', "email is required")
-      } 
-      else if(!new RegExp('[a-z0-9]+(([.]|[-]|[_])[a-z0-9]+)?@[a-z]+([.][a-z]{2,3})+').test(email)){
-        this.$store.commit('updateErrorMessage', "email is invalid")
-      }
-      else if(!password){
-        this.$store.commit('updateErrorMessage', "password is required")
-      } 
-      else if(password.length < 6){
-        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
-      } 
-      else {
-        this.$store.dispatch('login')
-      }
-    },
+    function onInvalidSubmit() {
+      const submitBtn = document.querySelector(".submit-btn");
+      submitBtn.classList.add("invalid");
+      setTimeout(() => {
+        submitBtn.classList.remove("invalid");
+      }, 1000);
+    }
+
+    const schema = Yup.object().shape({
+      email: Yup.string().email().required(),
+      password: Yup.string().min(6).required(),
+    });
+
+    return {
+      onSubmit,
+      schema,
+      onInvalidSubmit,
+    };
   },
-}
+};
 </script>
 
 <style scoped lang="scss">

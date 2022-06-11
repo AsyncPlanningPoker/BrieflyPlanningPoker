@@ -1,33 +1,45 @@
 <template>
   <div class="b-input">
+
     <div class="b-input__label">
-      <label :for="id"> 
-        {{ this.label }} 
+      <label :for="name">
+        {{ label }}
       </label>
-      <a v-if="hasLink" :href="this.link">
-        {{ this.linkLabel }}
+
+      <a v-if="hasLink" :href="link">
+        {{ linkLabel }}
       </a>
     </div>
-    
+
     <div class="b-input__container">
-      <input
-        class="b-input__field"
-        :id="id"
+      <input class="b-input__field"
+        :name="name"
+        :id="name"
         :placeholder="placeholder"
         :type="type"
+        :value="inputValue"
+        @input="handleChange"
+        @blur="handleBlur"
       >
     </div>
+
+    <p v-if="errorMessage" class="error">
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
 <script>
+import { toRef } from "vue";
+import { useField } from "vee-validate";
 import { shouldBeOneOf } from 'vue-prop-validation-helper';
 
 export default {
   name: 'BInput',
   props: {
-    id: {
+    name: {
       type: String,
+      required: true,
     },
     label: {
       type: String,
@@ -46,7 +58,31 @@ export default {
     },
     placeholder: {
       type: String,
+      default: "",
     },
+    successMessage: {
+      type: String,
+      default: "",
+    }
+  },
+  setup(props) {
+    const name = toRef(props, "name");
+
+    const {
+      value: inputValue,
+      errorMessage,
+      handleBlur,
+      handleChange,
+    } = useField(name, undefined, {
+      initialValue: props.value,
+    });
+
+    return {
+      inputValue,
+      errorMessage,
+      handleBlur,
+      handleChange,
+    };
   },
   computed: {
     hasLink() {
@@ -83,8 +119,6 @@ export default {
 
 .b-input__label {
   display: flex;
-  font-family: inherit;
-  font-size: inherit;
   justify-content: space-between;
 }
 </style>
