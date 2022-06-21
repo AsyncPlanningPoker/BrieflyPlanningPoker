@@ -19,5 +19,4 @@ export default {
   justify-content: center;
   padding: var(--unit-0000) var(--unit-1000) var(--unit-1000);
 }
-
 </style>

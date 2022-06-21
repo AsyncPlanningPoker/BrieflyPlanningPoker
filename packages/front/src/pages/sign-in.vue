@@ -4,27 +4,24 @@
     <BContainer>
       <Form
         class="sign-in__form"
-        @submit="onSubmit"
         :validation-schema="schema"
+        @submit="onSubmit"
         @invalid-submit="onInvalidSubmit"
       >
-        <BInput
+        <BInputField
           class="sign-in__label"
           label="E-mail"
           name="email"
           type="email"
-          placeholder="email address"
-          success-message="got it"
         />
 
-        <BInput
+        <BInputField
           class="sign-in__label"
           label="Password"
           name="password"
           link="/password_reset"
           link-label="forgot password?"
           type="password"
-          success-message="got it"
           @keyup.enter="login"
         />
 
@@ -55,7 +52,7 @@ import * as Yup from "yup";
 import BBrand from '../components/b-brand.vue'
 import BButton from '../components/b-button.vue'
 import BContainer from '../components/b-container.vue'
-import BInput from '../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
 
 export default {
   name: 'SignIn',
@@ -63,7 +60,7 @@ export default {
     BBrand,
     BButton,
     BContainer,
-    BInput,
+    BInputField,
     Form,
   },
   setup() {
@@ -71,12 +68,12 @@ export default {
       this.$store.dispatch('login');
     }
 
-    function onInvalidSubmit() {
-      const submitBtn = document.querySelector(".submit-btn");
-      submitBtn.classList.add("invalid");
-      setTimeout(() => {
-        submitBtn.classList.remove("invalid");
-      }, 1000);
+    function onInvalidSubmit() {      
+      // const submitBtn = document.querySelector(".submit-btn");
+      // submitBtn.classList.add("invalid");
+      // setTimeout(() => {
+      //   submitBtn.classList.remove("invalid");
+      // }, 1000);
     }
 
     const schema = Yup.object().shape({

@@ -17,19 +17,13 @@ body{
   margin: 0;
 }
 
-.error {
-  color: var(--color-error);
-  display: flex;
-  font-size: var(--unit-0350);
-  justify-content: center;
-  margin-bottom: var(--unit-0200);
-  min-height: var(--unit-0500);
-}
-
 :root {
   //font
-  font-family: 'Hammersmith One', sans-serif;
-  font-size: var(--unit-0400);
+  --font-family: 'Hammersmith One', sans-serif;
+  --font-size-small: 0.75rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.25rem;
+  --font-size-giant: 1.5rem;
 
   //color pallete
   --color-primary: #BFA8BB;
