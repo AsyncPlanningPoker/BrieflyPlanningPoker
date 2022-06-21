@@ -1,18 +1,20 @@
 <template>
   <div class="b-input">
-
     <div class="b-input__label">
-      <label :for="name">
+      <BText 
+        :for="name"
+        tag="label"
+      >
         {{ label }}
-      </label>
+      </BText>
 
-      <a v-if="hasLink" :href="link">
+      <a v-if="link" :href="link">
         {{ linkLabel }}
       </a>
     </div>
 
     <BInput
-      :id="name"
+      :error="errorMessage"
       :name="name"
       :type="type"
       :value="inputValue"
@@ -20,10 +22,10 @@
       @blur="handleBlur"
     />
 
-    <BText 
-      class="b-input__error" 
+    <BText
+      class="b-input__error"
       size="small"
-      type="span"
+      tag="div"
     >
       {{ errorMessage }}
     </BText>
@@ -63,10 +65,6 @@ export default {
       default: 'text',
       validator: shouldBeOneOf(['text','email','password']),
     },
-    placeholder: {
-      type: String,
-      default: "",
-    },
   },
   setup(props) {
     const name = toRef(props, "name");
@@ -87,37 +85,15 @@ export default {
       handleChange,
     };
   },
-  computed: {
-    hasLink() {
-      return this.link;
-    }
-  },
 };
 </script>
 
 <style scoped lang="scss">
 .b-input {
+  display: grid;
   font-family: 'Hammersmith One', sans-serif;
   font-size: var(--unit-0400);
-}
-
-.b-input__container {
-  align-items: center;
-  background-color: var(--color-white);
-  border-radius: var(--unit-0100);
-  display: flex;
-  height: var(--unit-1000);
-  justify-content: start;
-  margin-top: var(--unit-0200);
-}
-
-.b-input__field {
-  background-color: transparent;
-  border: none;
-  font-family: inherit;
-  font-size: inherit;
-  padding: var(--unit-0200);
-  width: 100%;
+  row-gap: var(--unit-0200);
 }
 
 .b-input__label {
@@ -127,7 +103,6 @@ export default {
 
 .b-input__error {
   color: var(--color-error);
-  margin-bottom: var(--unit-0200);
-  min-height: var(--unit-0500);
+  min-height: var(--unit-0400);
 }
 </style>

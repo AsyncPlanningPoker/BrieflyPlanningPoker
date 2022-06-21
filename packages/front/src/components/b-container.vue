@@ -17,6 +17,6 @@ export default {
   color: var(--color-white);
   display: grid;
   justify-content: center;
-  padding: var(--unit-0000) var(--unit-1000) var(--unit-1000);
+  padding: var(--unit-1000);
 }
 </style>

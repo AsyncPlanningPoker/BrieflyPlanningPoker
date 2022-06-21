@@ -1,10 +1,13 @@
 <template>
-  <div class="b-input__wrapper">
-    <input class="b-input"
+  <div 
+    class="b-input__wrapper"
+    :class="{'b-input--error': error}"
+  >
+    <input 
+      class="b-input"
       :id="name"
       :name="name"
       :type="type"
-      :placeholder="placeholder"
     >
   </div>
 </template>
@@ -15,6 +18,10 @@ import { shouldBeOneOf } from 'vue-prop-validation-helper';
 export default {
   name: 'BInput',
   props: {
+    error: {
+      type: String,
+      default: '',
+    },
     name: {
       type: String,
       required: true,
@@ -23,10 +30,6 @@ export default {
       type: String,
       default: 'text',
       validator: shouldBeOneOf(['text','email','password']),
-    },
-    placeholder: {
-      type: String,
-      default: "",
     },
   },
 };
@@ -49,6 +52,9 @@ export default {
   display: flex;
   height: var(--unit-1000);
   justify-content: start;
-  margin-top: var(--unit-0200);
+}
+
+.b-input--error {
+  box-shadow: var(--unit-0000) var(--unit-0000) var(--unit-0000) var(--unit-0050) var(--color-error);
 }
 </style>

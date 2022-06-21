@@ -20,10 +20,17 @@ body{
 :root {
   //font
   --font-family: 'Hammersmith One', sans-serif;
+  
   --font-size-small: 0.75rem;
   --font-size-medium: 1rem;
   --font-size-large: 1.25rem;
   --font-size-giant: 1.5rem;
+  
+  --line-height-small: 0.75rem;
+  --line-height-medium: 1rem;
+  --line-height-large: 1.25rem;
+  --line-height-giant: 1.5rem;
+
 
   //color pallete
   --color-primary: #BFA8BB;

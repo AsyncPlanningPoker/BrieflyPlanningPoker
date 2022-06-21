@@ -9,38 +9,37 @@
         @invalid-submit="onInvalidSubmit"
       >
         <BInputField
-          class="sign-in__label"
           label="E-mail"
           name="email"
           type="email"
         />
 
         <BInputField
-          class="sign-in__label"
           label="Password"
-          name="password"
           link="/password_reset"
           link-label="forgot password?"
+          name="password"
           type="password"
           @keyup.enter="login"
         />
 
-        <BButton 
-          type="submit" 
+        <BButton
+          class="sign-in__login-button"
+          type="submit"
+          text="login"
           value="login"
           @click="login"
         />
-
       </Form>
     </BContainer>
     
     <BContainer>
-      <a class="registry-button" href="/signup">
-        <BButton
-          size="small"
-          value="create an account"
-        />
-      </a>
+      <BButton
+        class="sign-in__registry-button" 
+        size="small"
+        value="create an account"
+        @click="$router.push('signup')"
+      />
     </BContainer>
   
   </div>
@@ -65,23 +64,20 @@ export default {
   },
   setup() {
     function onSubmit() {
-      this.$store.dispatch('login');
-    }
+      this.$store.dispatch("login");
+    };
 
-    function onInvalidSubmit() {      
-      // const submitBtn = document.querySelector(".submit-btn");
-      // submitBtn.classList.add("invalid");
-      // setTimeout(() => {
-      //   submitBtn.classList.remove("invalid");
-      // }, 1000);
-    }
+    function onInvalidSubmit() {};
 
     const schema = Yup.object().shape({
       email: Yup.string().email().required(),
       password: Yup.string().min(6).required(),
     });
 
+    const login = 'login'
+
     return {
+      login,
       onSubmit,
       schema,
       onInvalidSubmit,
@@ -101,15 +97,17 @@ export default {
 }
 
 .sign-in__form {
+  display: grid;
+  margin-top: calc(var(--unit-0200) * -1);
+  row-gap: var(--unit-0200);
   width: 280px;
 }
 
-.sign-in__label {
-  margin-top: var(--unit-0600);
+.sign-in__login-button {
+  margin-top: var(--unit-0500);
 }
 
-.registry-button {
-  margin-top: var(--unit-1000);
+.sign-in__registry-button {
   width: 240px;
 }
 </style>
