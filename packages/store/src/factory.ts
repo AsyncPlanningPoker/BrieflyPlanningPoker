@@ -1,9 +1,10 @@
-import { UserDbStore } from './stores/users';
+import { UserDbStore, SquadDbStore } from './stores/users';
 import knex, { Knex } from 'knex';
 import knexfile from '../knexfile';
 
 interface FactoryStoreResult {
   userDbStore: UserDbStore;
+  squadDbStore: SquadDbStore;
   close: () => void;
 }
 
@@ -15,7 +16,7 @@ class FactoryStore {
       return this.client.destroy();
     };
 
-    return { userDbStore: new UserDbStore(this.client), close };
+    return { userDbStore: new UserDbStore(this.client), squadDbStore: new SquadDbStore(this.client), close };
   }
 }
 
