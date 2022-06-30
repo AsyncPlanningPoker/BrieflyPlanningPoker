@@ -7,9 +7,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   const squad = {
     id: randomUUID(),
     name: req.body.name,
-    members: req.body.users.map((res: any) => {
-      return { squadsUsersId: randomUUID(), id: res.id };
-    }),
+    members: req.body.users,
     currentMaxRounds: req.body.currentMaxRounds,
     currentPercentual: req.body.currentPercentual,
   };
@@ -98,12 +96,7 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
 
 async function addMembers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
-  const members = req.body.users.map((user: any) => {
-    return {
-      id: user.id,
-      squadsUsersId: randomUUID(),
-    };
-  });
+  const members = req.body.users;
 
   const db = req.app.get('squadDbStore');
 

@@ -1,6 +1,7 @@
 import { AddSquadMembersType, CreateSquadType, DelSquadMembersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squads';
 import { fromSquadDb } from '../mapping';
 import { Knex } from 'knex';
+import { randomUUID } from 'crypto';
 
 class SquadDbStore implements IStoreSquad {
   #client: Knex<any, unknown[]>;
@@ -9,20 +10,45 @@ class SquadDbStore implements IStoreSquad {
     this.#client = client;
   }
 
-  async addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<void> {
-    for (const user of users) {
-      await this.#client('squads-users')
-        .insert({ id: user.squadsUsersId, user: user.id, squad: squadId })
+  async addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<{ squad: any[]; users: any[] }> {
+    const [usersDb, squadDb] = await Promise.all([
+      this.#client('users')
+        .select('name', 'id', 'email')
+        .whereIn(
+          'email',
+          users.map((user) => {
+            return user.email;
+          })
+        )
+        .where({ enabled: true })
         .catch((error) => {
           throw new Error(error.detail);
-        });
+        }),
+      this.#client('squad')
+        .select('name', 'id')
+        .where({ enabled: true })
+        .catch((error) => {
+          throw new Error(error.detail);
+        }),
+    ]);
+
+    if (usersDb.length !== 0 && squadDb.length !== 0) {
+      for (const user of usersDb) {
+        await this.#client('squads-users')
+          .insert({ id: randomUUID(), user: user.id, squad: squadId, enabled: false })
+          .catch((error) => {
+            throw new Error(error.detail);
+          });
+      }
     }
+
+    return { squad: squadDb, users: usersDb };
   }
 
   async delSquadMembersById(squadId: string, users: DelSquadMembersType[]): Promise<void> {
     for (const user of users) {
       await this.#client('squads-users')
-        .where({ squad: squadId, user: user.userId, enabled: true })
+        .where({ squad: squadId, user: user.id, enabled: true })
         .update({
           enabled: false,
           updatedAt: new Date(),
@@ -91,9 +117,7 @@ class SquadDbStore implements IStoreSquad {
         throw new Error(error.detail);
       })
       .then(async () => {
-        for (const member of squad.members) {
-          await this.#client('squads-users').insert({ id: member.squadsUsersId, user: member.id, squad: squad.id, enabled: false });
-        }
+        await this.addSquadMembersById(squad.id, squad.members);
       })
       .catch((error) => {
         throw new Error(error.detail);

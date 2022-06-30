@@ -3,7 +3,7 @@ interface IStoreSquad {
   list(userId: string): Promise<LoadedSquadsByUserIdType[]>;
   del(squadId: string): Promise<void>;
   updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
-  addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<void>;
+  addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<{ squad: any[]; users: any[] }>;
   delSquadMembersById(squadId: string, users: DelSquadMembersType[]): Promise<void>;
 }
 
@@ -37,14 +37,11 @@ type UpdateSquadType = {
 };
 
 type AddSquadMembersType = {
-  id: string;
-  name?: string;
-  email?: string;
-  squadsUsersId: string;
+  email: string;
 };
 
 type DelSquadMembersType = {
-  userId: string;
+  id: string;
 };
 
 export { IStoreSquad };
