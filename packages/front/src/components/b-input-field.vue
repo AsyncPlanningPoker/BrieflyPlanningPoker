@@ -13,14 +13,14 @@
       </a>
     </div>
 
-    <BInput
+    <div
       :error="errorMessage"
-      :name="name"
-      :type="type"
       :value="inputValue"
       @input="handleChange"
       @blur="handleBlur"
-    />
+    >
+      <slot/>
+    </div>
 
     <BText
       class="b-input__error"

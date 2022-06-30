@@ -5,13 +5,17 @@
         "type": "firefox",
         "request": "launch",
         "name": "vuejs: firefox",
-        "url": "http://localhost:8080",
+        "url": "http://localhost:8080/",
         "webRoot": "${workspaceFolder}/src",
         "pathMappings": [
           {
-            "url": "http://localhost:8080/src/App.vue",
-            "path": "${workspaceFolder}/src/App.vue"
+            "url": "http://localhost:8080/src/pages",
+            "path": "${workspaceFolder}/src/pages"
           },
+          {
+            "url": "http://localhost:8080/",
+            "path": "${workspaceFolder}/src/App.vue"
+          }
         ]
       }
     ]
