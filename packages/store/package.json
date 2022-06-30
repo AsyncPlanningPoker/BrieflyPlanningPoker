@@ -8,7 +8,7 @@
   "types": "dist/src/index",
   "scripts": {
     "db:up": "yarn migration:up && yarn seed:up",
-    "migration:up": "npx knex migrate:up",
+    "migration:latest": "npx knex migrate:latest",
     "migration:down": "npx knex migrate:down",
     "seed:up": "npx knex seed:run",
     "build": "tsc -b"
