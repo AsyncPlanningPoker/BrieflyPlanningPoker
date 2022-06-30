@@ -1,5 +1,15 @@
-import { LoadedSquadsByUserIdType, LoadedSquadsDb } from './types/squads';
+import { LoadedSquadsByUserIdType } from './types/squads';
 import { LoadedUserType } from './types/users';
+
+type LoadedSquadsDb = {
+  squadId: string;
+  squad: string;
+  currentMaxRounds: number;
+  currentPercentual: number;
+  userId: string;
+  user: string;
+  updatedAt: Date;
+};
 
 function fromSquadDb(squadsDb: LoadedSquadsDb[]): LoadedSquadsByUserIdType[] {
   const loadedSquads: LoadedSquadsByUserIdType[] = [];
@@ -24,8 +34,8 @@ function fromSquadDb(squadsDb: LoadedSquadsDb[]): LoadedSquadsByUserIdType[] {
     loadedSquads.push({
       id: resDb[0].squadId,
       squad: resDb[0].squad,
-      users: resDb.map((res: any) => {
-        return { id: res.userId, name: res.user };
+      members: resDb.map((res: any) => {
+        return { id: res.userId, name: res.user, email: res.email };
       }),
       currentMaxRounds: resDb[0].currentMaxRounds,
       currentPercentual: resDb[0].currentPercentual,

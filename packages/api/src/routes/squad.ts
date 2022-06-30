@@ -1,13 +1,13 @@
 import { CustomError } from '../middlewares/error/error';
 import { NextFunction, Request, Response } from 'express';
-import { randomUUID } from 'crypto';
 import send from '../services/email';
+import { randomUUID } from 'crypto';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squad = {
     id: randomUUID(),
     name: req.body.name,
-    users: req.body.users.map((res: any) => {
+    members: req.body.users.map((res: any) => {
       return { squadsUsersId: randomUUID(), id: res.id };
     }),
     currentMaxRounds: req.body.currentMaxRounds,
@@ -19,14 +19,14 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   try {
     await db
       .create(squad)
-      .then(async (result: any) => {
-        for (const user of result.users) {
+      .then(async () => {
+        for (const user of req.body.users) {
           await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
             return next(error);
           });
         }
 
-        return res.status(201).json({ id: result.id });
+        return res.status(201).json({ id: squad.id });
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -44,7 +44,7 @@ async function list(req: Request, res: Response, next: NextFunction): Promise<Re
     await db
       .list(userId)
       .then(async (result: any) => {
-        return res.status(201).json(result);
+        return res.status(200).json(result);
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -60,9 +60,9 @@ async function del(req: Request, res: Response, next: NextFunction): Promise<Res
 
   try {
     await db
-      .delete(squadId, { updatedAt: new Date() })
+      .del(squadId)
       .then(() => {
-        return res.status(201);
+        return res.sendStatus(200);
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -78,7 +78,6 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
     name: req.body.name,
     currentMaxRounds: req.body.currentMaxRounds,
     currentPercentual: req.body.currentPercentual,
-    updateAt: new Date(),
   };
 
   const db = req.app.get('squadDbStore');
@@ -87,7 +86,7 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
     await db
       .updateById(squadId, squad)
       .then(() => {
-        return res.status(201);
+        return res.sendStatus(200);
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -101,9 +100,8 @@ async function addMembers(req: Request, res: Response, next: NextFunction): Prom
   const squadId = req.params.squadId;
   const members = req.body.users.map((user: any) => {
     return {
-      userId: user.id,
+      id: user.id,
       squadsUsersId: randomUUID(),
-      updateAt: new Date(),
     };
   });
 
@@ -111,9 +109,9 @@ async function addMembers(req: Request, res: Response, next: NextFunction): Prom
 
   try {
     await db
-      .createSquadsUsersById(squadId, members)
-      .then(async (result: any) => {
-        for (const user of result.users) {
+      .addSquadMembersById(squadId, members)
+      .then(async () => {
+        for (const user of req.body.users) {
           await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
             return next(error);
           });
@@ -128,12 +126,11 @@ async function addMembers(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
-async function deleteMembers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+async function delMembers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
   const members = req.body.users.map((user: any) => {
     return {
       userId: user.id,
-      updateAt: new Date(),
     };
   });
 
@@ -143,7 +140,7 @@ async function deleteMembers(req: Request, res: Response, next: NextFunction): P
     await db
       .deleteSquadUsersById(squadId, members)
       .then(() => {
-        return res.status(201);
+        return res.status(200);
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -153,4 +150,4 @@ async function deleteMembers(req: Request, res: Response, next: NextFunction): P
   }
 }
 
-export { create, list, del, update, addMembers, deleteMembers };
+export { create, list, del, update, addMembers, delMembers };
