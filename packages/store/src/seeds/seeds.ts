@@ -37,18 +37,13 @@ export async function seed(knex: Knex): Promise<void> {
   ];
 
   await knex('squads-users').del();
-  await knex('squads').del();
-  await knex('users').del();
+  await Promise.all([knex('squads').del(), knex('users').del()]);
+  await Promise.all([insertData(squads, 'squads', knex), insertData(users, 'users', knex)]);
+  await insertData(squadsUsers, 'squads-users', knex);
+}
 
-  for (const squad of squads) {
-    await knex('squads').insert(squad);
-  }
-
-  for (const user of users) {
-    await knex('users').insert(user);
-  }
-
-  for (const squadUser of squadsUsers) {
-    await knex('squads-users').insert(squadUser);
+async function insertData(data: any, table: string, knex: Knex) {
+  for (const d of data) {
+    await knex(table).insert(d);
   }
 }
