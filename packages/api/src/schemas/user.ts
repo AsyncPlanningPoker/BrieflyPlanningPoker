@@ -1,6 +1,6 @@
 import { Schema } from 'express-validator';
 
-const create: Schema = {
+const createUser: Schema = {
   name: {
     isString: {
       errorMessage: 'Name must be a string',
@@ -70,4 +70,4 @@ const passUpdate: Schema = {
   },
 };
 
-export { create, login, passRecovery, passUpdate };
+export { createUser, login, passRecovery, passUpdate };

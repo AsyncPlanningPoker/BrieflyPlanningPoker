@@ -1,4 +1,5 @@
-import { UserDbStore, SquadDbStore } from './stores/users';
+import { UserDbStore } from './stores/users';
+import { SquadDbStore } from './stores/squads';
 import knex, { Knex } from 'knex';
 import knexfile from '../knexfile';
 
