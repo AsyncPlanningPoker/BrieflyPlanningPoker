@@ -1,33 +1,62 @@
 interface IStoreSquad {
-  create(user: CreateSquadType): Promise<CreatedSquadType | undefined>;
-  list(user: FindSquadByIdType[]): Promise<CreatedSquadType[]>;
-  delete(id: FindSquadByIdType): Promise<void>;
-  updateById(id: FindSquadByIdType, squad: UpdateSquadType): Promise<void>;
+  create(squad: CreateSquadType): Promise<CreatedSquadType | undefined>;
+  list(userId: string): Promise<LoadedSquadsByUserIdType[]>;
+  delete(squadId: string, squad: UpdateSquadType): Promise<void>;
+  updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
+  createSquadsUsersById(squadId: string, users: UpdateSquadsUsersType[]): Promise<SquadMembers[]>;
+  deleteSquadUsersById(squadId: string, users: UpdateSquadsUsersType[]): Promise<void>;
 }
 
 type CreateSquadType = {
   id: string;
   name: string;
-  users: { id: string }[];
+  users: { squadsUsersId: string; id: string }[];
   currentMaxRounds: number;
   currentPercentual: number;
 };
 
-type CreatedSquadType = {
+type SquadMembers = {
   id: string;
   name: string;
-  users: { id: string; name: string }[];
+  email: string;
 };
 
-type FindSquadByIdType = {
+type CreatedSquadType = {
   id: string;
+  users: SquadMembers[];
+};
+
+type LoadedSquadsByUserIdType = {
+  id: string;
+  squad: string;
+  users: { id: string; name: string }[];
+  currentMaxRounds: number;
+  currentPercentual: number;
+  updatedAt: Date;
+};
+
+type LoadedSquadsDb = {
+  squadId: string;
+  squad: string;
+  currentMaxRounds: number;
+  currentPercentual: number;
+  userId: string;
+  user: string;
+  updatedAt: Date;
 };
 
 type UpdateSquadType = {
   name?: string;
-  users?: { id: string }[];
+  currentMaxRounds?: number;
+  currentPercentual?: number;
+  updatedAt: Date;
+};
+
+type UpdateSquadsUsersType = {
+  userId: string;
+  squadsUsersId?: string;
   updatedAt: Date;
 };
 
 export { IStoreSquad };
-export type { CreateSquadType, CreatedSquadType, FindSquadByIdType, UpdateSquadType };
+export type { CreateSquadType, CreatedSquadType, LoadedSquadsDb, LoadedSquadsByUserIdType, UpdateSquadType, UpdateSquadsUsersType, SquadMembers };
