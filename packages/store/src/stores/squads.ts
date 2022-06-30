@@ -1,4 +1,4 @@
-import { CreatedSquadType, CreateSquadType, IStoreSquad, LoadedSquadsByUserIdType, SquadMembers, UpdateSquadsUsersType, UpdateSquadType } from '../types/squads';
+import { AddSquadMembersType, CreateSquadType, DelSquadMembersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squads';
 import { fromSquadDb } from '../mapping';
 import { Knex } from 'knex';
 
@@ -9,29 +9,23 @@ class SquadDbStore implements IStoreSquad {
     this.#client = client;
   }
 
-  async createSquadsUsersById(squadId: string, users: UpdateSquadsUsersType[]): Promise<SquadMembers[]> {
-    const res: { id: string; name: any; email: any }[] = [];
+  async addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<void> {
     for (const user of users) {
       await this.#client('squads-users')
-        .insert({ id: user.squadsUsersId, user: user.userId, squad: squadId })
-        .then(async () => {
-          const userDb = await this.#client('users').select('email', 'name').where({ id: user.userId });
-          res.push({ id: user.userId, name: userDb[0].name, email: userDb[0].email });
-        })
+        .insert({ id: user.squadsUsersId, user: user.id, squad: squadId })
         .catch((error) => {
           throw new Error(error.detail);
         });
     }
-    return res;
   }
 
-  async deleteSquadUsersById(squadId: string, users: UpdateSquadsUsersType[]): Promise<void> {
+  async delSquadMembersById(squadId: string, users: DelSquadMembersType[]): Promise<void> {
     for (const user of users) {
       await this.#client('squads-users')
-        .where({ squad: squadId, enabled: true })
+        .where({ squad: squadId, user: user.userId, enabled: true })
         .update({
           enabled: false,
-          updatedAt: user.updatedAt,
+          updatedAt: new Date(),
         })
         .catch((error) => {
           throw new Error(error.detail);
@@ -42,31 +36,32 @@ class SquadDbStore implements IStoreSquad {
   async updateById(squadId: string, squad: UpdateSquadType): Promise<void> {
     await this.#client('squads')
       .where({ id: squadId, enabled: true })
-      .update(squad)
+      .update({ ...squad, updatedAt: new Date() })
       .catch((error) => {
         throw new Error(error.detail);
       });
   }
 
-  async delete(squadId: string, squad: UpdateSquadType): Promise<void> {
+  async del(squadId: string): Promise<void> {
+    const date = new Date();
+
     await Promise.all([
       this.#client('squads').where({ id: squadId, enabled: true }).update({
         enabled: false,
-        updatedAt: squad.updatedAt,
+        updatedAt: date,
       }),
       this.#client('squads-users').where({ squad: squadId, enabled: true }).update({
         enabled: false,
-        updatedAt: squad.updatedAt,
+        updatedAt: date,
       }),
     ]).catch((error) => {
-      console.log(error);
       throw new Error(error.detail);
     });
   }
 
   async list(userId: string): Promise<LoadedSquadsByUserIdType[]> {
     const res = await this.#client
-      .select('squads.id as squadId', 'squads.name as squad', 'currentMaxRounds', 'currentPercentual', 'users.id as userId', 'users.name as user', 'squads.updatedAt')
+      .select('squads.id as squadId', 'squads.name as squad', 'currentMaxRounds', 'currentPercentual', 'users.id as userId', 'users.name as user', 'users.email as email', 'squads.updatedAt')
       .from('squads-users')
       .join(
         this.#client
@@ -89,23 +84,20 @@ class SquadDbStore implements IStoreSquad {
     return fromSquadDb(res);
   }
 
-  async create(squad: CreateSquadType): Promise<CreatedSquadType> {
-    const users: { id: string; name: any; email: any }[] = [];
+  async create(squad: CreateSquadType): Promise<void> {
     await this.#client('squads')
       .insert({ id: squad.id, name: squad.name, currentMaxRounds: squad.currentMaxRounds, currentPercentual: squad.currentPercentual })
       .catch((error) => {
         throw new Error(error.detail);
       })
       .then(async () => {
-        for (const user of squad.users) {
-          const [, userDb] = await Promise.all([this.#client('squads-users').insert({ id: user.squadsUsersId, user: user.id, squad: squad.id, enabled: false }), this.#client('users').select('email', 'name').where({ id: user.id })]);
-          users.push({ id: user.id, name: userDb[0].name, email: userDb[0].email });
+        for (const member of squad.members) {
+          await this.#client('squads-users').insert({ id: member.squadsUsersId, user: member.id, squad: squad.id, enabled: false });
         }
       })
       .catch((error) => {
         throw new Error(error.detail);
       });
-    return { id: squad.id, users };
   }
 }
 
