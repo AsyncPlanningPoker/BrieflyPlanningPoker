@@ -63,6 +63,7 @@ import BButton from '../components/b-button.vue'
 import BContainer from '../components/b-container.vue'
 import BInputField from '../components/b-input-field.vue';
 import BInput from '../components/b-input.vue';
+import SignIn from '../store'
 
 export default {
   name: 'SignIn',
@@ -75,10 +76,17 @@ export default {
     Form,
   },
   setup() {
-
     function onSubmit() {
-      this.$store.dispatch('login');
-    };
+      SignIn.dispatch('login');
+    }
+
+    function updateEmail(e) {
+      SignIn.commit('updateEmail', e.target.value);
+    }
+
+    function updatePassword(e) {
+      SignIn.commit('updatePassword', e.target.value);
+    }
 
     function onInvalidSubmit() {
       console.log('aksjkasf');
@@ -91,18 +99,12 @@ export default {
 
     return {
       onSubmit,
-      schema,
       onInvalidSubmit,
+      updateEmail,
+      updatePassword,
+      schema,
     };
   },
-  methods: {
-    updateEmail (e) {
-      this.$store.commit('updateEmail', e.target.value)
-    },
-    updatePassword (e) {
-      this.$store.commit('updatePassword', e.target.value)
-    },
-  }
 };
 </script>
 
