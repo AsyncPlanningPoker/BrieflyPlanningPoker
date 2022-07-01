@@ -3,19 +3,19 @@ interface IStoreSquad {
   list(userId: string): Promise<LoadedSquadsByUserIdType[]>;
   del(squadId: string): Promise<void>;
   updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
-  addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<{ squad: any[]; users: any[] }>;
-  delSquadMembersById(squadId: string, users: DelSquadMembersType[]): Promise<void>;
+  addSquadUsersById(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void>;
+  delSquadUsersById(squadId: string, users: DelSquadUsersType[]): Promise<void>;
 }
 
 type CreateSquadType = {
   id: string;
   name: string;
-  members: AddSquadMembersType[];
+  users: AddSquadUsersType[];
   currentMaxRounds: number;
   currentPercentual: number;
 };
 
-type SquadMembers = {
+type SquadUsersType = {
   id: string;
   name: string;
   email: string;
@@ -24,10 +24,10 @@ type SquadMembers = {
 type LoadedSquadsByUserIdType = {
   id: string;
   squad: string;
-  members: SquadMembers[];
-  currentMaxRounds: number;
-  currentPercentual: number;
-  updatedAt: Date;
+  users: SquadUsersType[];
+  currentMaxRounds?: number;
+  currentPercentual?: number;
+  updatedAt?: Date;
 };
 
 type UpdateSquadType = {
@@ -36,13 +36,13 @@ type UpdateSquadType = {
   currentPercentual?: number;
 };
 
-type AddSquadMembersType = {
+type AddSquadUsersType = {
   email: string;
 };
 
-type DelSquadMembersType = {
+type DelSquadUsersType = {
   id: string;
 };
 
 export { IStoreSquad };
-export type { CreateSquadType, LoadedSquadsByUserIdType, UpdateSquadType, DelSquadMembersType, AddSquadMembersType, SquadMembers };
+export type { CreateSquadType, LoadedSquadsByUserIdType, UpdateSquadType, DelSquadUsersType, AddSquadUsersType, SquadUsersType };

@@ -1,6 +1,6 @@
 interface IStoreUser {
   create(user: CreateUserType): Promise<void>;
-  findByEmail(user: string): Promise<LoadedUserType | undefined>;
+  findByEmail(email: string): Promise<LoadedUserType | undefined>;
   updatePassByEmail(email: string, user: UpdateUserPassType): Promise<void>;
 }
 

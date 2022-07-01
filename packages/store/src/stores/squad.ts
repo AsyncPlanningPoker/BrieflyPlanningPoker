@@ -1,5 +1,5 @@
-import { AddSquadMembersType, CreateSquadType, DelSquadMembersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squads';
-import { fromSquadDb } from '../mapping';
+import { AddSquadUsersType, CreateSquadType, DelSquadUsersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squads';
+import { fromSquadDb, fromSquadUsersDb } from '../mapping';
 import { Knex } from 'knex';
 import { randomUUID } from 'crypto';
 
@@ -10,7 +10,7 @@ class SquadDbStore implements IStoreSquad {
     this.#client = client;
   }
 
-  async addSquadMembersById(squadId: string, users: AddSquadMembersType[]): Promise<{ squad: any[]; users: any[] }> {
+  async addSquadUsersById(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void> {
     const [usersDb, squadDb] = await Promise.all([
       this.#client('users')
         .select('name', 'id', 'email')
@@ -40,12 +40,11 @@ class SquadDbStore implements IStoreSquad {
             throw new Error(error.detail);
           });
       }
+      return fromSquadUsersDb(squadDb[0], usersDb);
     }
-
-    return { squad: squadDb, users: usersDb };
   }
 
-  async delSquadMembersById(squadId: string, users: DelSquadMembersType[]): Promise<void> {
+  async delSquadUsersById(squadId: string, users: DelSquadUsersType[]): Promise<void> {
     for (const user of users) {
       await this.#client('squads-users')
         .where({ squad: squadId, user: user.id, enabled: true })
@@ -117,7 +116,7 @@ class SquadDbStore implements IStoreSquad {
         throw new Error(error.detail);
       })
       .then(async () => {
-        await this.addSquadMembersById(squad.id, squad.members);
+        await this.addSquadUsersById(squad.id, squad.users);
       })
       .catch((error) => {
         throw new Error(error.detail);
