@@ -7,7 +7,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   const squad = {
     id: randomUUID(),
     name: req.body.name,
-    members: req.body.users,
+    Users: req.body.users,
     currentMaxRounds: req.body.currentMaxRounds,
     currentPercentual: req.body.currentPercentual,
   };
@@ -94,15 +94,15 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
   }
 }
 
-async function addMembers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
-  const members = req.body.users;
+  const users = req.body.users;
 
   const db = req.app.get('squadDbStore');
 
   try {
     await db
-      .addSquadMembersById(squadId, members)
+      .addSquadUsersById(squadId, users)
       .then(async () => {
         for (const user of req.body.users) {
           await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
@@ -119,9 +119,9 @@ async function addMembers(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
-async function delMembers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+async function delUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
-  const members = req.body.users.map((user: any) => {
+  const users = req.body.users.map((user: any) => {
     return {
       userId: user.id,
     };
@@ -131,7 +131,7 @@ async function delMembers(req: Request, res: Response, next: NextFunction): Prom
 
   try {
     await db
-      .deleteSquadUsersById(squadId, members)
+      .deleteSquadUsersById(squadId, users)
       .then(() => {
         return res.status(200);
       })
@@ -143,4 +143,4 @@ async function delMembers(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
-export { create, list, del, update, addMembers, delMembers };
+export { create, list, del, update, addUsers, delUsers };

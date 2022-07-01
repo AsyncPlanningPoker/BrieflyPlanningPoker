@@ -1,5 +1,5 @@
-import { LoadedSquadsByUserIdType } from './types/squads';
-import { LoadedUserType } from './types/users';
+import { LoadedSquadsByUserIdType, SquadUsersType } from './types/squad';
+import { LoadedUserType } from './types/user';
 
 type LoadedSquadsDb = {
   squadId: string;
@@ -34,7 +34,7 @@ function fromSquadDb(squadsDb: LoadedSquadsDb[]): LoadedSquadsByUserIdType[] {
     loadedSquads.push({
       id: resDb[0].squadId,
       squad: resDb[0].squad,
-      members: resDb.map((res: any) => {
+      users: resDb.map((res: any) => {
         return { id: res.userId, name: res.user, email: res.email };
       }),
       currentMaxRounds: resDb[0].currentMaxRounds,
@@ -46,6 +46,16 @@ function fromSquadDb(squadsDb: LoadedSquadsDb[]): LoadedSquadsByUserIdType[] {
   return loadedSquads;
 }
 
+function fromSquadUsersDb(squad: { id: string; name: string }, user: SquadUsersType[]): LoadedSquadsByUserIdType {
+  return {
+    id: squad.id,
+    squad: squad.name,
+    users: user.map((user) => {
+      return { id: user.id, name: user.name, email: user.email };
+    }),
+  };
+}
+
 function fromUserDb(res: LoadedUserType): LoadedUserType {
   return {
     id: res.id,
@@ -54,4 +64,4 @@ function fromUserDb(res: LoadedUserType): LoadedUserType {
     password: res.password,
   };
 }
-export { fromSquadDb, fromUserDb };
+export { fromSquadDb, fromSquadUsersDb, fromUserDb };
