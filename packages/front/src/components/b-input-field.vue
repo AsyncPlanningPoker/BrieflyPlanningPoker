@@ -40,7 +40,6 @@
 <script>
 import { toRef } from "vue";
 import { useField } from "vee-validate";
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
 import BText from './b-text.vue';
 import BInput from './b-input.vue';
 
@@ -66,11 +65,6 @@ export default {
     },
     linkLabel: {
       type: String,
-    },
-    type: {
-      type: String,
-      default: 'text',
-      validator: shouldBeOneOf(['text','email','password']),
     },
   },
   
