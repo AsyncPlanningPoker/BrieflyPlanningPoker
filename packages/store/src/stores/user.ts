@@ -1,4 +1,4 @@
-import { CreateUserType, IStoreUser, LoadedUserType, UpdateUserPassType } from '../types/users';
+import { CreateUserType, IStoreUser, LoadedUserType, UpdateUserPassType } from '../types/user';
 import { fromUserDb } from '../mapping';
 import { Knex } from 'knex';
 

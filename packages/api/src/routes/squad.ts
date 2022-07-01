@@ -7,7 +7,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   const squad = {
     id: randomUUID(),
     name: req.body.name,
-    Users: req.body.users,
+    users: req.body.users,
     currentMaxRounds: req.body.currentMaxRounds,
     currentPercentual: req.body.currentPercentual,
   };
@@ -17,13 +17,14 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   try {
     await db
       .create(squad)
-      .then(async () => {
-        for (const user of req.body.users) {
-          await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
-            return next(error);
-          });
+      .then(async (created: any) => {
+        if (created) {
+          for (const user of created.users) {
+            await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
+              return next(error);
+            });
+          }
         }
-
         return res.status(201).json({ id: squad.id });
       })
       .catch(({ message }: any) => {
@@ -103,13 +104,15 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
   try {
     await db
       .addSquadUsersById(squadId, users)
-      .then(async () => {
-        for (const user of req.body.users) {
-          await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
-            return next(error);
-          });
+      .then(async (created: any) => {
+        if (created) {
+          for (const user of created.users) {
+            await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
+              return next(error);
+            });
+          }
         }
-        return res.status(201);
+        return res.sendStatus(201);
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -123,7 +126,7 @@ async function delUsers(req: Request, res: Response, next: NextFunction): Promis
   const squadId = req.params.squadId;
   const users = req.body.users.map((user: any) => {
     return {
-      userId: user.id,
+      id: user.id,
     };
   });
 
@@ -131,9 +134,9 @@ async function delUsers(req: Request, res: Response, next: NextFunction): Promis
 
   try {
     await db
-      .deleteSquadUsersById(squadId, users)
+      .delSquadUsersById(squadId, users)
       .then(() => {
-        return res.status(200);
+        return res.sendStatus(200);
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);

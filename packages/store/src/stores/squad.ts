@@ -1,4 +1,4 @@
-import { AddSquadUsersType, CreateSquadType, DelSquadUsersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squads';
+import { AddSquadUsersType, CreateSquadType, DelSquadUsersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squad';
 import { fromSquadDb, fromSquadUsersDb } from '../mapping';
 import { Knex } from 'knex';
 import { randomUUID } from 'crypto';
@@ -24,9 +24,9 @@ class SquadDbStore implements IStoreSquad {
         .catch((error) => {
           throw new Error(error.detail);
         }),
-      this.#client('squad')
+      this.#client('squads')
         .select('name', 'id')
-        .where({ enabled: true })
+        .where({ id: squadId, enabled: true })
         .catch((error) => {
           throw new Error(error.detail);
         }),
@@ -109,14 +109,14 @@ class SquadDbStore implements IStoreSquad {
     return fromSquadDb(res);
   }
 
-  async create(squad: CreateSquadType): Promise<void> {
-    await this.#client('squads')
+  async create(squad: CreateSquadType): Promise<LoadedSquadsByUserIdType | void> {
+    return this.#client('squads')
       .insert({ id: squad.id, name: squad.name, currentMaxRounds: squad.currentMaxRounds, currentPercentual: squad.currentPercentual })
       .catch((error) => {
         throw new Error(error.detail);
       })
       .then(async () => {
-        await this.addSquadUsersById(squad.id, squad.users);
+        return this.addSquadUsersById(squad.id, squad.users);
       })
       .catch((error) => {
         throw new Error(error.detail);

@@ -14,24 +14,6 @@ const createSquad: Schema = {
       bail: true,
     },
   },
-  'users.*.id': {
-    isString: {
-      errorMessage: 'User id must be a string',
-    },
-    isLength: {
-      errorMessage: 'User id is required',
-      options: { min: 1 },
-    },
-  },
-  'users.*.name': {
-    isString: {
-      errorMessage: 'User name must be a string',
-    },
-    isLength: {
-      errorMessage: 'User name is required',
-      options: { min: 1 },
-    },
-  },
   'users.*.email': {
     isEmail: {
       bail: true,
@@ -84,24 +66,6 @@ const addMembers: Schema = {
   users: {
     isArray: {
       bail: true,
-    },
-  },
-  'users.*.id': {
-    isString: {
-      errorMessage: 'User id must be a string',
-    },
-    isLength: {
-      errorMessage: 'User id is required',
-      options: { min: 1 },
-    },
-  },
-  'users.*.name': {
-    isString: {
-      errorMessage: 'User name must be a string',
-    },
-    isLength: {
-      errorMessage: 'User name is required',
-      options: { min: 1 },
     },
   },
   'users.*.email': {
