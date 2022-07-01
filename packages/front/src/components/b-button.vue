@@ -1,7 +1,10 @@
 <template>
   <button
     class="b-button"
-    :class="{'b-button--small': size === 'small'}"
+    :class="{
+      'b-button--small': size === 'small',
+      'b-button--transparent': transparent
+    }"
     :type="type"
   >
     {{ this.value.toUpperCase() }}
@@ -19,6 +22,10 @@ export default {
       type: String,
       default: 'medium',
       validator: shouldBeOneOf(['small', 'medium']),
+    },
+    transparent: {
+      type: Boolean,
+      default: false,
     },
     type: {
       type: String,
@@ -45,7 +52,8 @@ export default {
   padding: var(--unit-0100);
   width: inherit;
 
-  &:hover{
+  &:hover,
+  &:focus {
     background-color: var(--color-accent);
     cursor: pointer;
   }
@@ -53,6 +61,18 @@ export default {
 
 .b-button--small {
   font-size: var(--unit-0400);
+}
+
+.b-button--transparent {
+  background-color: transparent;
+  border: var(--unit-0050) solid var(--color-white);
+
+  &:hover,
+  &:focus {
+    background-color: transparent;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
 }
 
 .invalid {
