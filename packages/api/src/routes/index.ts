@@ -18,8 +18,8 @@ routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, sq
 routes.get('/squad/:userId', auth.handler, squad.list);
 routes.delete('/squad/:squadId', auth.handler, squad.del);
 routes.put('/squad/:squadId', checkSchema(updateSquad), schema.handler, auth.handler, squad.update);
-routes.post('/squad/:squadId', checkSchema(addMembers), schema.handler, auth.handler, squad.addMembers);
-routes.delete('/squad/:squadId', checkSchema(delMembers), schema.handler, auth.handler, squad.delMembers);
+routes.post('/squad/:squadId', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
+routes.delete('/squad/:squadId/users', checkSchema(delMembers), schema.handler, auth.handler, squad.delUsers);
 
 routes.get('/health', (req, res) => {
   res.sendStatus(200);

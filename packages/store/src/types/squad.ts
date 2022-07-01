@@ -1,5 +1,5 @@
 interface IStoreSquad {
-  create(squad: CreateSquadType): Promise<void>;
+  create(squad: CreateSquadType): Promise<LoadedSquadsByUserIdType | void>;
   list(userId: string): Promise<LoadedSquadsByUserIdType[]>;
   del(squadId: string): Promise<void>;
   updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
