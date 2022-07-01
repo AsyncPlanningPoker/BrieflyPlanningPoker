@@ -1,6 +1,7 @@
 <template>
   <div class="sign-in">
     <BBrand/>
+
     <BContainer>
       <Form
         class="sign-in__form"
@@ -11,7 +12,6 @@
         <BInputField
           label="E-mail"
           name="email"
-          type="email"
         >
           <BInput
             name="email"
@@ -25,7 +25,6 @@
           link="/password_reset"
           link-label="forgot password?"
           name="password"
-          type="password"
         >
           <BInput
             name="password"
@@ -41,25 +40,23 @@
         >
           {{ this.$store.state.signIn.errorMessage }}
         </BText>
-        
+
         <BButton
           class="sign-in__login-button"
           type="submit"
-          text="login"
           value="login"
         />
       </Form>
     </BContainer>
-    
+
     <BContainer>
       <BButton
-        class="sign-in__registry-button" 
+        class="sign-in__registry-button"
         size="small"
         value="create an account"
         @click="$router.push('signup')"
       />
     </BContainer>
-  
   </div>
 </template>
 
