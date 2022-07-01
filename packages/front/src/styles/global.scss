@@ -58,6 +58,11 @@ body{
   --unit-1000: 40px;
 }
 
+.error {
+  color: var(--color-error);
+  min-height: var(--unit-0400);
+}
+
 ::selection {
   background: var(--color-primary);
 }

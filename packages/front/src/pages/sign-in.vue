@@ -34,6 +34,14 @@
           />
         </BInputField>
 
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
+          {{ this.$store.state.signIn.errorMessage }}
+        </BText>
+        
         <BButton
           class="sign-in__login-button"
           type="submit"
@@ -63,33 +71,40 @@ import BButton from '../components/b-button.vue'
 import BContainer from '../components/b-container.vue'
 import BInputField from '../components/b-input-field.vue';
 import BInput from '../components/b-input.vue';
-import SignIn from '../store'
+import BText from '../components/b-text.vue';
+import SignIn from '../store';
 
 export default {
   name: 'SignIn',
+
   components: {
     BBrand,
     BButton,
     BContainer,
     BInput,
     BInputField,
+    BText,
     Form,
   },
+
   setup() {
     function onSubmit() {
       SignIn.dispatch('login');
-    }
+    };
+
+    function onInvalidSubmit() {
+      const submitButton = document.querySelector(".sign-in__login-button");
+
+      submitButton.classList.add("invalid");
+      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
+    };
 
     function updateEmail(e) {
       SignIn.commit('updateEmail', e.target.value);
-    }
+    };
 
     function updatePassword(e) {
       SignIn.commit('updatePassword', e.target.value);
-    }
-
-    function onInvalidSubmit() {
-      console.log('aksjkasf');
     };
 
     const schema = Yup.object().shape({
@@ -97,13 +112,7 @@ export default {
       password: Yup.string().min(6).required(),
     });
 
-    return {
-      onSubmit,
-      onInvalidSubmit,
-      updateEmail,
-      updatePassword,
-      schema,
-    };
+    return { onSubmit, onInvalidSubmit, updateEmail, updatePassword, schema };
   },
 };
 </script>
@@ -123,10 +132,6 @@ export default {
   margin-top: calc(var(--unit-0200) * -1);
   row-gap: var(--unit-0200);
   width: 280px;
-}
-
-.sign-in__login-button {
-  margin-top: var(--unit-0500);
 }
 
 .sign-in__registry-button {

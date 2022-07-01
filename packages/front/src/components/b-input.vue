@@ -1,8 +1,5 @@
 <template>
-  <div 
-    class="b-input__wrapper"
-    :class="{'b-input--error': error}"
-  >
+  <div class="b-input__wrapper">
     <input 
       class="b-input"
       :id="name"
@@ -17,6 +14,7 @@ import { shouldBeOneOf } from 'vue-prop-validation-helper';
 
 export default {
   name: 'BInput',
+
   props: {
     error: {
       type: String,
@@ -52,9 +50,5 @@ export default {
   display: flex;
   height: var(--unit-1000);
   justify-content: start;
-}
-
-.b-input--error {
-  box-shadow: var(--unit-0000) var(--unit-0000) var(--unit-0000) var(--unit-0050) var(--color-error);
 }
 </style>

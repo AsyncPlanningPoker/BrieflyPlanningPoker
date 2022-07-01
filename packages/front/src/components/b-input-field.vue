@@ -8,9 +8,14 @@
         {{ label }}
       </BText>
 
-      <a v-if="link" :href="link">
+      <BText
+        :href="link"
+        tabindex="-1"
+        tag="a"
+        v-if="link"
+      >
         {{ linkLabel }}
-      </a>
+      </BText>
     </div>
 
     <div
@@ -23,7 +28,7 @@
     </div>
 
     <BText
-      class="b-input__error"
+      class="error"
       size="small"
       tag="div"
     >
@@ -41,10 +46,12 @@ import BInput from './b-input.vue';
 
 export default {
   name: 'BInputField',
+
   components: {
     BText,
     BInput,
   },
+
   props: {
     name: {
       type: String,
@@ -66,6 +73,7 @@ export default {
       validator: shouldBeOneOf(['text','email','password']),
     },
   },
+  
   setup(props) {
     const name = toRef(props, "name");
 
@@ -78,12 +86,7 @@ export default {
       initialValue: props.value,
     });
 
-    return {
-      inputValue,
-      errorMessage,
-      handleBlur,
-      handleChange,
-    };
+    return { inputValue, errorMessage, handleBlur, handleChange };
   },
 };
 </script>
@@ -99,10 +102,5 @@ export default {
 .b-input__label {
   display: flex;
   justify-content: space-between;
-}
-
-.b-input__error {
-  color: var(--color-error);
-  min-height: var(--unit-0400);
 }
 </style>
