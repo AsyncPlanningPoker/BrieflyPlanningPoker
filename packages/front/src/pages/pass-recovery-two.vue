@@ -1,81 +1,111 @@
 <template>
   <div class="pass-recovery-two">
     <BBrand/>
+
     <BContainer>
-      <form class="pass-recovery-two__form">
-        <BInput
-          class="pass-recovery-two__label"
+      <Form
+        class="pass-recovery-two__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
           label="New password"
-          type="password"
-          @input="updateNewPassword"
-        />
-        <BInput
-          class="pass-recovery-two__label"
+          name="password"
+        >
+          <BInput
+            name="password"
+            type="password"
+            @input="updateNewPassword"
+          />
+        </BInputField>
+
+        <BInputField
           label="Confirm new password"
-          type="password"
-          @keyup.enter="update"
-          @input="updateConfirmPassword"
-        />
-        <div class="pass-recovery-two__label error">
+          name="confirmPassword"
+        >
+          <BInput
+            name="confirmPassword"
+            type="password"
+            @input="updateConfirmPassword"
+          />
+        </BInputField>
+
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
           {{ this.$store.state.passRecoveryTwo.errorMessage }}
-        </div>
-        <BButton 
-          type="button" 
+        </BText>
+
+        <BButton
+          class="pass-recovery-two__submit-button"
+          type="submit"
           value="update"
-          @click="update"
         />
-      </form>
+      </Form>
     </BContainer>
   </div>
 </template>
 
 <script>
+import { Form } from "vee-validate";
+import * as Yup from "yup";
 import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
+import BText from '../components/b-text.vue';
+import PassRecoveryTwo from '../store';
 
 export default {
   name: 'PassRecoveryTwo',
+
   components: {
     BBrand,
     BButton,
     BContainer,
     BInput,
+    BInputField,
+    BText,
+    Form,
   },
+
   props: {
     token:{
       type: String,
       required: true,
     }
   },
-  methods: {
-    updateNewPassword (e) {
-      this.$store.commit('updateNewPassword', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    updateConfirmPassword (e) {
-      this.$store.commit('updateConfirmPassword', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    update(){
 
-      const newPassword = this.$store.state.passRecoveryTwo.newPassword
-      const confirmPassword = this.$store.state.passRecoveryTwo.confirmPassword
+  setup(props) {
+    function onSubmit() {
+      PassRecoveryTwo.dispatch('update', props.token)
+    };
 
-      if(!newPassword){
-        this.$store.commit('updateErrorMessage', "password is required")
-      } 
-      else if(newPassword.length < 6){
-        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
-      } 
-      else if(newPassword !== confirmPassword ){
-        this.$store.commit('updateErrorMessage', "passwords do not match")
-      } 
-      else {
-        this.$store.dispatch('update', this.token)
-      } 
-    }
+    function onInvalidSubmit() {
+      const submitButton = document.querySelector(".pass-recovery-two__submit-button");
+
+      submitButton.classList.add("invalid");
+      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
+    };
+
+    function updateNewPassword(e) {
+      PassRecoveryTwo.commit('updateNewPassword', e.target.value);
+    };
+
+    function updateConfirmPassword (e) {
+      PassRecoveryTwo.commit('updateConfirmPassword', e.target.value);
+    };
+
+    const schema = Yup.object().shape({
+      password: Yup.string().min(6).required(),
+      confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match"),
+    });
+
+    return { onSubmit, onInvalidSubmit, updateNewPassword, updateConfirmPassword, schema };
   },
 }
 </script>
@@ -91,16 +121,9 @@ export default {
 }
 
 .pass-recovery-two__form {
+  display: grid;
+  margin-top: calc(var(--unit-0200) * -1);
+  row-gap: var(--unit-0200);
   width: 280px;
-}
-
-.pass-recovery-two__label {
-  margin-top: var(--unit-0600);
-}
-
-.error {
-  color: var(--color-error);
-  justify-self: center;
-  min-height: var(--unit-0500);
 }
 </style>

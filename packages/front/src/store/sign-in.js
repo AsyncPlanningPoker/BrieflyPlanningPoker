@@ -37,7 +37,6 @@ const signInStore = {
           router.push('/');
         })
         .catch((err) => {
-          console.log('aaaaaaaaaaaa')
           commit('updateErrorMessage', err.response.data.message);
         });
     },

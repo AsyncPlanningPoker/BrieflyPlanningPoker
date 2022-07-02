@@ -93,8 +93,8 @@ import * as Yup from "yup";
 import BBrand from '../components/b-brand.vue'
 import BButton from '../components/b-button.vue'
 import BContainer from '../components/b-container.vue'
-import BInputField from '../components/b-input-field.vue';
 import BInput from '../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
 import SignUp from '../store';
 
@@ -143,7 +143,7 @@ export default {
       name: Yup.string().required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).required(),
-      confirmPassword: Yup.string().oneOf([Yup.ref("password")], "Passwords do not match"),
+      confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match"),
     });
 
     return { onSubmit, onInvalidSubmit, updateName, updateEmail, updatePassword, updateConfirmPassword, schema };
