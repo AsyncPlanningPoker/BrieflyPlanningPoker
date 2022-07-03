@@ -73,6 +73,7 @@ async function passUpdate(req: Request, res: Response, next: NextFunction): Prom
   try {
     if (verify?.role === 'pass-recovery') {
       await db.updatePassByEmail(verify.user, { password: password, updatedAt: new Date() });
+      return res.sendStatus(200);
     } else {
       throw new Unauthorized('your link is invalid or has expired');
     }
