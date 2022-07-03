@@ -1,96 +1,117 @@
 <template>
   <div class="sign-in">
     <BBrand/>
-    <BContainer>
-      <form class="sign-in__form">
-        <BInput
-          class="sign-in__label"
-          label="E-mail"
-          type="email"
-          @input="updateEmail"
-        />
 
-        <BInput
-          class="sign-in__label"
+    <BContainer>
+      <Form
+        class="sign-in__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
+          label="E-mail"
+          name="email"
+        >
+          <BInput
+            name="email"
+            type="email"
+            @input="updateEmail"
+          />
+        </BInputField>
+
+        <BInputField
           label="Password"
           link="/password_reset"
           link-label="forgot password?"
-          type="password"
-          @input="updatePassword"
-          @keyup.enter="login"
-        />
+          name="password"
+        >
+          <BInput
+            name="password"
+            type="password"
+            @input="updatePassword"
+          />
+        </BInputField>
 
-        <div class="sign-in__label error">
-          {{ this.$store.state.signIn.errorMessage }}
-        </div>
-
-        <BButton 
-          type="button" 
-          value="login"
-          @click="login"
-        />
-
-      </form>
-    </BContainer>
-    
-    <BContainer>
-      <a class="registry-button" href="/signup">
-        <BButton
+        <BText
+          class="error"
           size="small"
-          value="create an account"
+          tag="div"
+        >
+          {{ this.$store.state.signIn.errorMessage }}
+        </BText>
+
+        <BButton
+          class="sign-in__login-button"
+          type="submit"
+          value="login"
         />
-      </a>
+      </Form>
     </BContainer>
-  
+
+    <BContainer>
+      <BButton
+        class="sign-in__registry-button"
+        size="small"
+        value="create an account"
+        @click="$router.push('signup')"
+      />
+    </BContainer>
   </div>
 </template>
 
 <script>
-import BBrand from './../components/b-brand.vue'
-import BButton from './../components/b-button.vue'
-import BContainer from './../components/b-container.vue'
-import BInput from './../components/b-input.vue';
+import { Form } from "vee-validate";
+import * as Yup from "yup";
+import BBrand from '../components/b-brand.vue'
+import BButton from '../components/b-button.vue'
+import BContainer from '../components/b-container.vue'
+import BInput from '../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
+import BText from '../components/b-text.vue';
+import SignIn from '../store';
 
 export default {
   name: 'SignIn',
+
   components: {
     BBrand,
     BButton,
     BContainer,
     BInput,
+    BInputField,
+    BText,
+    Form,
   },
-  methods: {
-    updateEmail (e) {
-      this.$store.commit('updateEmail', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    updatePassword (e) {
-      this.$store.commit('updatePassword', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    login(){
 
-      const email = this.$store.state.signIn.email
-      const password = this.$store.state.signIn.password
-      
-      if(!email){
-        this.$store.commit('updateErrorMessage', "email is required")
-      } 
-      else if(!new RegExp('[a-z0-9]+(([.]|[-]|[_])[a-z0-9]+)?@[a-z]+([.][a-z]{2,3})+').test(email)){
-        this.$store.commit('updateErrorMessage', "email is invalid")
-      }
-      else if(!password){
-        this.$store.commit('updateErrorMessage', "password is required")
-      } 
-      else if(password.length < 6){
-        this.$store.commit('updateErrorMessage', "password must have at least 6 characters")
-      } 
-      else {
-        this.$store.dispatch('login')
-      }
-    },
+  setup() {
+    function onSubmit() {
+      SignIn.dispatch('login');
+    };
+
+    function onInvalidSubmit() {
+      const submitButton = document.querySelector(".sign-in__login-button");
+
+      submitButton.classList.add("invalid");
+      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
+    };
+
+    function updateEmail(e) {
+      SignIn.commit('updateEmail', e.target.value);
+    };
+
+    function updatePassword(e) {
+      SignIn.commit('updatePassword', e.target.value);
+    };
+
+    const schema = Yup.object().shape({
+      email: Yup.string().email().required(),
+      password: Yup.string().min(6).required(),
+    });
+
+    return { onSubmit, onInvalidSubmit, updateEmail, updatePassword, schema };
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -104,15 +125,13 @@ export default {
 }
 
 .sign-in__form {
+  display: grid;
+  margin-top: calc(var(--unit-0200) * -1);
+  row-gap: var(--unit-0200);
   width: 280px;
 }
 
-.sign-in__label {
-  margin-top: var(--unit-0600);
-}
-
-.registry-button {
-  margin-top: var(--unit-1000);
+.sign-in__registry-button {
   width: 240px;
 }
 </style>

@@ -1,69 +1,97 @@
 <template>
   <div class="pass-recovery-one">
     <BBrand/>
+
     <BContainer>
-      <form class="pass-recovery-one__form">
-        <BInput
-          class="pass-recovery-one__label"
+      <Form
+        class="pass-recovery-one__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
           label="Enter your e-mail address and we will send you a password reset link"
-          type="email"
-          @keyup.enter="recovery"
-          @input="updateEmail"
-        />
-        <div class="pass-recovery-one__label error">
+          name="email"
+        >
+          <BInput
+            name="email"
+            type="email"
+            @input="updateEmail"
+          />
+        </BInputField>
+
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
           {{ this.$store.state.passRecoveryOne.errorMessage }}
-        </div>
+        </BText>
+
         <div class="pass-recovery-one__buttons-container">
-          <a href="/signin">
-            <BButton
-              value="return"
-            />
-          </a>
-          <BButton 
-            type="button" 
+          <BButton
+            :transparent="true"
+            value="return"
+            @click="$router.push('signin')"
+          />
+          
+          <BButton
+            class="pass-recovery-one__send-button"
+            type="submit"
             value="send"
-            @click="recovery"
           />
         </div>
-      </form>
+      </Form>
     </BContainer>
   </div>
 </template>
 
 <script>
+import { Form } from "vee-validate";
+import * as Yup from "yup";
 import BBrand from './../components/b-brand.vue'
 import BButton from './../components/b-button.vue'
 import BContainer from './../components/b-container.vue'
 import BInput from './../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
+import BText from '../components/b-text.vue';
+import PassRecoveryOne from '../store';
 
 export default {
   name: 'PassRecoveryOne',
+
   components: {
-    BButton,
     BBrand,
+    BButton,
     BContainer,
     BInput,
+    BInputField,
+    BText,
+    Form,
   },
-  methods: {
-    updateEmail (e) {
-      this.$store.commit('updateEmail', e.target.value)
-      this.$store.commit('updateErrorMessage', '')
-    },
-    recovery(){
 
-      const email = this.$store.state.passRecoveryOne.email
-      
-      if(!email){
-        this.$store.commit('updateErrorMessage', "email is required")
-      } 
-      else if(!new RegExp('[a-z0-9]+(([.]|[-]|[_])[a-z0-9]+)?@[a-z]+([.][a-z]{2,3})+').test(email)){
-        this.$store.commit('updateErrorMessage', "email is invalid")
-      }
-      else {
-        this.$store.dispatch('recovery')
-      } 
-    }
-  }
+  setup() {
+    function onSubmit() {
+      PassRecoveryOne.dispatch('recovery');
+    };
+
+    function onInvalidSubmit() {
+      const submitButton = document.querySelector(".pass-recovery-one__send-button");
+
+      submitButton.classList.add("invalid");
+      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
+    };
+
+    function updateEmail(e) {
+      PassRecoveryOne.commit('updateEmail', e.target.value);
+    };
+
+    const schema = Yup.object().shape({
+      email: Yup.string().email().required(),
+    });
+
+    return { onSubmit, onInvalidSubmit, updateEmail, schema };
+  },
 }
 </script>
 
@@ -78,11 +106,10 @@ export default {
 }
 
 .pass-recovery-one__form {
+  display: grid;
+  margin-top: calc(var(--unit-0200) * -1);
+  row-gap: var(--unit-0200);
   width: 280px;
-}
-
-.pass-recovery-one__label {
-  margin-top: var(--unit-0600);
 }
 
 .pass-recovery-one__buttons-container {
