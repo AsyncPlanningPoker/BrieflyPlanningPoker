@@ -27,7 +27,7 @@ export default {
     type: {
       type: String,
       default: 'text',
-      validator: shouldBeOneOf(['text','email','password']),
+      validator: shouldBeOneOf(['email','number','password','text']),
     },
   },
 };

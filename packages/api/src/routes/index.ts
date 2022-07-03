@@ -14,8 +14,13 @@ routes.post('/user/login', checkSchema(login), schema.handler, user.login);
 routes.post('/user/pass-recovery', checkSchema(passRecovery), schema.handler, user.passRecovery);
 routes.patch('/user/pass-recovery', checkSchema(passUpdate), schema.handler, user.passUpdate);
 
-routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, squad.create);
-routes.get('/squad/:userId', auth.handler, squad.list);
+// routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, squad.create);
+routes.post('/squad', checkSchema(createSquad), schema.handler, squad.create);
+
+// routes.get('/squad/:userId', auth.handler, squad.list);
+routes.get('/squad/:userId', squad.list);
+
+
 routes.delete('/squad/:squadId', auth.handler, squad.del);
 routes.put('/squad/:squadId', checkSchema(updateSquad), schema.handler, auth.handler, squad.update);
 routes.post('/squad/:squadId', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
