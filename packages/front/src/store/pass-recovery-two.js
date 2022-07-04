@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../services/api';
 import router from '../router/index';
 
 const passRecoveryTwoStore = {
@@ -24,8 +24,8 @@ const passRecoveryTwoStore = {
 
   actions: {
     update({ commit }, token) {
-      axios
-        .patch('http://localhost:8000/user/pass-recovery', { password: this.state.passRecoveryTwo.newPassword, token })
+      api
+        .patch('user/pass-recovery', { password: this.state.passRecoveryTwo.newPassword, token })
         .then(() => {
           router.push('/signin');
         })

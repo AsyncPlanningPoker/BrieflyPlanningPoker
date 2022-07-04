@@ -50,7 +50,7 @@
 <script>
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
-import axios from 'axios';
+import {api} from '../services/api';
 
 import BButton from './b-button.vue'
 import BInput from './b-input.vue';
@@ -74,8 +74,8 @@ export default {
         currentMaxRounds: values.maxRounds,
         currentPercentual: values.percentual
       }
-      axios
-        .post('http://localhost:8000/squad/', newSquad)
+      api
+        .post('squad/', newSquad)
         .then((res) => console.log('sucesso: ' + res.id))
         .catch((error) => {error = error.data.message})
     };

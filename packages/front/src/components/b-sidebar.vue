@@ -49,7 +49,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
+import {api} from '../services/api';
 import BButton from './b-button.vue'
 import BModal from './b-modal.vue'
 import BSidebarModal from './b-sidebar-modal.vue'
@@ -60,8 +60,7 @@ const isOpen = ref(false);
 const squads = ref(null);
 onMounted(async () => {
   try {
-    squads.value = (await axios.get('http://localhost:8000/squad/7e13d8f9-159e-4bfb-b67f-1f9cd3084813')).data;
-
+    squads.value = (await api.get('squad/7e13d8f9-159e-4bfb-b67f-1f9cd3084813')).data;
     return { squads };
   } catch(err) {
     error({ statusCode: 500, message: 'Failed to fetch squad content' });

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../services/api';
 import router from '../router/index';
 
 const passRecoveryOneStore = {
@@ -20,8 +20,8 @@ const passRecoveryOneStore = {
 
   actions: {
     recovery({ commit }) {
-      axios
-        .post('http://localhost:8000/user/pass-recovery', { email: this.state.passRecoveryOne.email, url: 'http://localhost:8080/confirm_reset?token=' })
+      api
+        .post('user/pass-recovery', { email: this.state.passRecoveryOne.email, url: 'http://localhost:8080/confirm_reset?token=' })
         .then(() => {
           router.push('/');
         })
