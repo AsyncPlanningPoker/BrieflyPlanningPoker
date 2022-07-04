@@ -1,6 +1,6 @@
 
 import router from '../router/index';
-import {api, setTokenHeader} from '../services/api';
+import {api, setToken} from '../services/api';
 
 
 const signInStore = {
