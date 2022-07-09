@@ -36,7 +36,11 @@
     </BInputField>
 
     <div class="b-sidebar-modal__buttons-container">
-      <slot />
+      <BButton
+        :transparent="true"
+        value="cancel"
+        @click="$emit('close')"
+      />
       
       <BButton
         class="b-sidebar-modal__create-button"
@@ -57,7 +61,7 @@ import BInput from './b-input.vue';
 import BInputField from './b-input-field.vue';
 
 export default {
-  name: 'BSidebarModal',
+  name: 'BSidebarForm',
 
   components: {
     BButton,
@@ -70,7 +74,7 @@ export default {
     function onSubmit(values) {
       const newSquad = {
         name: values.squadName,
-        users: [],
+        users: [{email: "lucca.jacomassi@hotmail.com"}],
         currentMaxRounds: values.maxRounds,
         currentPercentual: values.percentual
       }

@@ -9,7 +9,7 @@
     </div>
 
     <div class="b-sidebar__toggle-wrapper">
-      <button class="b-sidebar__toggle" @click="isExpanded = !isExpanded">
+      <button class="b-sidebar__toggle" @click="toggleSideBar">
         {{ ">.<" }}
       </button>
     </div>
@@ -18,16 +18,10 @@
       <BButton
         size="small"
         :value="`${isExpanded ? 'new squad' : '+'}`"
-        @click="isOpen = true"
+        @click="toggleModal"
       />
-        <BModal :open="isOpen">
-          <BSidebarModal>
-            <BButton
-              :transparent="true"
-              value="cancel"
-              @click="isOpen = !isOpen"
-            />
-          </BSidebarModal>
+        <BModal :open="showModal">
+          <BSidebarForm @close="toggleModal" />
         </BModal>
     </div>
 
@@ -50,22 +44,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import {api} from '../services/api';
-import BButton from './b-button.vue'
-import BModal from './b-modal.vue'
-import BSidebarModal from './b-sidebar-modal.vue'
+import BButton from './b-button.vue';
+import BModal from './b-modal.vue';
+import BSidebarForm from './b-sidebar-form.vue';
 
 const isExpanded = ref(false);
-const isOpen = ref(false);
+const toggleSideBar = () => { isExpanded.value = !isExpanded.value };
+
+const showModal = ref(false);
+const toggleModal = () => { showModal.value = !showModal.value };
 
 const squads = ref(null);
 onMounted(async () => {
-  try {
     squads.value = (await api.get('squad/7e13d8f9-159e-4bfb-b67f-1f9cd3084813')).data;
-    return { squads };
-  } catch(err) {
-    error({ statusCode: 500, message: 'Failed to fetch squad content' });
-    throw err;
-  }
 });
 </script>
 

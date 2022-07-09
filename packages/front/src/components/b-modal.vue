@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import BContainer from './b-container.vue'
+import BContainer from './b-container.vue';
 
 export default {
   name: 'BModal',
