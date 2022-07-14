@@ -35,6 +35,7 @@
           size="small"
           :transparent="true"
           :value="`${ isExpanded ? squad.squad : (index+1) }`"
+          @click="bar(); $router.push({ name: 'Home', params: {squad: squad.squad}})"
         />
       </div>
     </div>
@@ -55,9 +56,13 @@ const showModal = ref(false);
 const toggleModal = () => { showModal.value = !showModal.value };
 
 const squads = ref(null);
-onMounted(async () => {
-    squads.value = (await api.get('squad/7e13d8f9-159e-4bfb-b67f-1f9cd3084813')).data;
-});
+async function bar(){
+  console.log('sim.');
+  squads.value = (await api.get('squad/7e13d8f9-159e-4bfb-b67f-1f9cd3084813')).data;
+  console.log(squads.value);
+} 
+
+onMounted(bar);
 </script>
 
 <style lang="scss" scoped>

@@ -3,8 +3,12 @@
     <input 
       class="b-input"
       :id="name"
+      :max="max"
+      :min="min"
       :name="name"
+      :placeholder="placeholder"
       :type="type"
+      :step="step"
     >
   </div>
 </template>
@@ -20,9 +24,21 @@ export default {
       type: String,
       default: '',
     },
+    max: {
+      type: Number,
+    },
+    min: {
+      type: Number,
+    },
     name: {
       type: String,
       required: true,
+    },
+    placeholder: {
+      type: String,
+    },
+    step: {
+      type: Number,
     },
     type: {
       type: String,

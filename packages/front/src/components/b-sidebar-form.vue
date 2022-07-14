@@ -31,6 +31,10 @@
     >
       <BInput
         name="percentual"
+        :max=1
+        :min=0
+        placeholder="0.25"
+        :step=0.10
         type="number"
       />
     </BInputField>
@@ -92,8 +96,8 @@ export default {
 
     const schema = Yup.object().shape({
       squadName: Yup.string().required(),
-      maxRounds: Yup.number().required().positive().integer(),
-      percentual: Yup.number().required().positive().integer(),
+      maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
+      percentual: Yup.number().typeError('percentual must be a number').required().positive().min(0).max(1).test((number) => Number.isInteger(number * (10 ** 2))),
     });
 
     return { onSubmit, onInvalidSubmit, schema };

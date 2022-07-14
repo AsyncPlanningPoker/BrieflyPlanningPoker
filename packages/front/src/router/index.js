@@ -5,6 +5,7 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: () => import('../pages/home.vue'),
+    props: true,
   },
   {
     path: '/signin',
