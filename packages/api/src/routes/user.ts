@@ -18,7 +18,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
     await db
       .create(user)
       .then(() => {
-        return res.status(201).json({ token: auth.create(db.id, 'login') });
+        return res.status(201).json({ token: auth.create(user.email, 'login') });
       })
       .catch(({ message }: any) => {
         throw new CustomError(message);
@@ -39,7 +39,7 @@ async function login(req: Request, res: Response, next: NextFunction): Promise<R
       const passwordMatch = await crypt.compare(req.body.password, user.password);
 
       if (passwordMatch) {
-        return res.status(200).json({ token: auth.create(db.id, 'login') });
+        return res.status(200).json({ token: auth.create(email, 'login') });
       }
     }
 

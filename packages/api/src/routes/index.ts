@@ -15,10 +15,10 @@ routes.post('/user/pass-recovery', checkSchema(passRecovery), schema.handler, us
 routes.patch('/user/pass-recovery', checkSchema(passUpdate), schema.handler, user.passUpdate);
 
 routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, squad.create);
-routes.get('/squad/:userId', auth.handler, squad.list);
+routes.get('/squad/', auth.handler, squad.list);
 routes.delete('/squad/:squadId', auth.handler, squad.del);
 routes.put('/squad/:squadId', checkSchema(updateSquad), schema.handler, auth.handler, squad.update);
-routes.post('/squad/:squadId', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
+routes.post('/squad/:squadId/users', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
 routes.delete('/squad/:squadId/users', checkSchema(delMembers), schema.handler, auth.handler, squad.delUsers);
 
 routes.get('/health', (req, res) => {

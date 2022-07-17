@@ -9,20 +9,6 @@ const createSquad: Schema = {
       options: { min: 1 },
     },
   },
-  users: {
-    isArray: {
-      bail: true,
-    },
-  },
-  'users.*.email': {
-    isEmail: {
-      bail: true,
-    },
-    isLength: {
-      errorMessage: 'User email is required',
-      options: { min: 1 },
-    },
-  },
   currentMaxRounds: {
     isNumeric: {
       errorMessage: 'currentMaxRounds must hve a numeric value',
@@ -85,12 +71,12 @@ const delMembers: Schema = {
       bail: true,
     },
   },
-  'users.*.id': {
-    isString: {
-      errorMessage: 'User id must be a string',
+  'users.*.email': {
+    isEmail: {
+      bail: true,
     },
     isLength: {
-      errorMessage: 'User id is required',
+      errorMessage: 'User email is required',
       options: { min: 1 },
     },
   },

@@ -1,10 +1,10 @@
 interface IStoreSquad {
   create(squad: CreateSquadType): Promise<LoadedSquadsByUserIdType | void>;
   list(userId: string): Promise<LoadedSquadsByUserIdType[]>;
-  del(squadId: string): Promise<void>;
+  delById(squadId: string): Promise<void>;
   updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
-  addSquadUsersById(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void>;
-  delSquadUsersById(squadId: string, users: DelSquadUsersType[]): Promise<void>;
+  addSquadUsersByEmail(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void>;
+  delSquadUsersByEmail(squadId: string, users: DelSquadUsersType[]): Promise<void>;
 }
 
 type CreateSquadType = {
@@ -41,7 +41,7 @@ type AddSquadUsersType = {
 };
 
 type DelSquadUsersType = {
-  id: string;
+  email: string;
 };
 
 export { IStoreSquad };

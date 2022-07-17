@@ -10,16 +10,11 @@ class SquadDbStore implements IStoreSquad {
     this.#client = client;
   }
 
-  async addSquadUsersById(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void> {
+  async addSquadUsersByEmail(squadId: string, users: AddSquadUsersType[], isOwner = false): Promise<LoadedSquadsByUserIdType | void> {
     const [usersDb, squadDb] = await Promise.all([
       this.#client('users')
         .select('name', 'id', 'email')
-        .whereIn(
-          'email',
-          users.map((user) => {
-            return user.email;
-          })
-        )
+        .whereIn('email', users.map((res)=> res.email))
         .where({ enabled: true })
         .catch((error) => {
           throw new Error(error.detail);
@@ -35,7 +30,7 @@ class SquadDbStore implements IStoreSquad {
     if (usersDb.length !== 0 && squadDb.length !== 0) {
       for (const user of usersDb) {
         await this.#client('squads-users')
-          .insert({ id: randomUUID(), user: user.id, squad: squadId, enabled: false })
+          .insert({ id: randomUUID(), user: user.id, squad: squadId, enabled: isOwner })
           .catch((error) => {
             throw new Error(error.detail);
           });
@@ -44,10 +39,10 @@ class SquadDbStore implements IStoreSquad {
     }
   }
 
-  async delSquadUsersById(squadId: string, users: DelSquadUsersType[]): Promise<void> {
+  async delSquadUsersByEmail(squadId: string, users: DelSquadUsersType[]): Promise<void> {
     for (const user of users) {
       await this.#client('squads-users')
-        .where({ squad: squadId, user: user.id, enabled: true })
+        .where({ squad: squadId, user: this.#client('users').select('id').whereIn('email', users.map((user) => user.email)), enabled: true })
         .update({
           enabled: false,
           updatedAt: new Date(),
@@ -67,7 +62,7 @@ class SquadDbStore implements IStoreSquad {
       });
   }
 
-  async del(squadId: string): Promise<void> {
+  async delById(squadId: string): Promise<void> {
     const date = new Date();
 
     await Promise.all([
@@ -84,7 +79,7 @@ class SquadDbStore implements IStoreSquad {
     });
   }
 
-  async list(userId: string): Promise<LoadedSquadsByUserIdType[]> {
+  async list(email: string): Promise<LoadedSquadsByUserIdType[]> {
     const res = await this.#client
       .select('squads.id as squadId', 'squads.name as squad', 'currentMaxRounds', 'currentPercentual', 'users.id as userId', 'users.name as user', 'users.email as email', 'squads.updatedAt')
       .from('squads-users')
@@ -93,7 +88,7 @@ class SquadDbStore implements IStoreSquad {
           .select('squad')
           .from('squads-users')
           .where({
-            user: userId,
+            user:  this.#client('users').select('id').where({email}),
           })
           .as('squadsUsers'),
         'squadsUsers.squad',
@@ -116,7 +111,7 @@ class SquadDbStore implements IStoreSquad {
         throw new Error(error.detail);
       })
       .then(async () => {
-        return this.addSquadUsersById(squad.id, squad.users);
+        return this.addSquadUsersByEmail(squad.id, squad.users, true);
       })
       .catch((error) => {
         throw new Error(error.detail);

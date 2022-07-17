@@ -4,10 +4,11 @@ import send from '../services/email';
 import { randomUUID } from 'crypto';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const email = { email: req.query.email };
   const squad = {
     id: randomUUID(),
     name: req.body.name,
-    users: req.body.users,
+    users: [email],
     currentMaxRounds: req.body.currentMaxRounds,
     currentPercentual: req.body.currentPercentual,
   };
@@ -17,14 +18,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   try {
     await db
       .create(squad)
-      .then(async (created: any) => {
-        if (created) {
-          for (const user of created.users) {
-            await send({ to: user.email, subject: 'invite', message: `oii ${user.name}` }).catch((error: any) => {
-              return next(error);
-            });
-          }
-        }
+      .then(() => {
         return res.status(201).json({ id: squad.id });
       })
       .catch(({ message }: any) => {
@@ -36,12 +30,12 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 }
 
 async function list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const userId = req.params.userId;
+  const email = req.query.email;
   const db = req.app.get('squadDbStore');
 
   try {
     await db
-      .list(userId)
+      .list(email)
       .then(async (result: any) => {
         return res.status(200).json(result);
       })
@@ -103,7 +97,7 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
 
   try {
     await db
-      .addSquadUsersById(squadId, users)
+      .addSquadUsersByEmail(squadId, users)
       .then(async (created: any) => {
         if (created) {
           for (const user of created.users) {
@@ -124,17 +118,13 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
 
 async function delUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
-  const users = req.body.users.map((user: any) => {
-    return {
-      id: user.id,
-    };
-  });
+  const users = req.body.users;
 
   const db = req.app.get('squadDbStore');
 
   try {
     await db
-      .delSquadUsersById(squadId, users)
+      .delSquadUsersByEmail(squadId, users)
       .then(() => {
         return res.sendStatus(200);
       })
