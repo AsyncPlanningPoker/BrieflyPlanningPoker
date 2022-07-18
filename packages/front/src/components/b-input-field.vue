@@ -1,6 +1,6 @@
 <template>
-  <div class="b-input">
-    <div class="b-input__label">
+  <div class="b-input-field">
+    <div class="b-input-field__label">
       <BText 
         :for="name"
         tag="label"
@@ -86,14 +86,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.b-input {
+.b-input-field {
   display: grid;
   font-family: 'Hammersmith One', sans-serif;
   font-size: var(--unit-0400);
   row-gap: var(--unit-0200);
 }
 
-.b-input__label {
+.b-input-field__label {
   display: flex;
   justify-content: space-between;
 }

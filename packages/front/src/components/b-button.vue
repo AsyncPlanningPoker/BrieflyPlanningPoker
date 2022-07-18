@@ -52,8 +52,7 @@ export default {
   padding: var(--unit-0100);
   width: inherit;
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: var(--color-accent);
     cursor: pointer;
   }
@@ -67,8 +66,7 @@ export default {
   background-color: transparent;
   border: var(--unit-0050) solid var(--color-white);
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: transparent;
     border-color: var(--color-accent);
     color: var(--color-accent);

@@ -3,6 +3,7 @@ import { signInStore } from './sign-in';
 import { signUpStore } from './sign-up';
 import { passRecoveryOneStore } from './pass-recovery-one';
 import { passRecoveryTwoStore } from './pass-recovery-two';
+import squads from './squads'
 
 export default createStore({
   state: { userToken: '', isAuth: false },
@@ -16,5 +17,5 @@ export default createStore({
     },
   },
   actions: {},
-  modules: { signIn: signInStore, signUp: signUpStore, passRecoveryOne: passRecoveryOneStore, passRecoveryTwo: passRecoveryTwoStore },
+  modules: { signIn: signInStore, signUp: signUpStore, passRecoveryOne: passRecoveryOneStore, passRecoveryTwo: passRecoveryTwoStore, squads },
 });

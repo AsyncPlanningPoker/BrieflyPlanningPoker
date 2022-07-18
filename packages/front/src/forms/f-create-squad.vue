@@ -1,6 +1,6 @@
 <template>
   <Form
-    class="b-sidebar-modal__form"
+    class="f-create-squad"
     :validation-schema="schema"
     @submit="onSubmit"
     @invalid-submit="onInvalidSubmit"
@@ -12,6 +12,7 @@
       <BInput
         name="squadName"
         type="text"
+        :value="update ? squad.squad : ''"
       />
     </BInputField>
 
@@ -22,6 +23,7 @@
       <BInput
         name="maxRounds"
         type="number"
+        :value="update ? squad.currentMaxRounds : ''"
       />
     </BInputField>
 
@@ -36,10 +38,11 @@
         placeholder="0.25"
         :step=0.10
         type="number"
+        :value="update ? squad.currentPercentual : ''"
       />
     </BInputField>
 
-    <div class="b-sidebar-modal__buttons-container">
+    <div class="f-create-squad__buttons-container">
       <BButton
         :transparent="true"
         value="cancel"
@@ -47,7 +50,7 @@
       />
       
       <BButton
-        class="b-sidebar-modal__create-button"
+        class="f-create-squad__create-button"
         type="submit"
         value="create"
       />
@@ -56,22 +59,31 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
-import * as Yup from 'yup';
 import {api} from '../services/api';
+import * as Yup from 'yup';
 
-import BButton from './b-button.vue'
-import BInput from './b-input.vue';
-import BInputField from './b-input-field.vue';
+import BButton from '../components/b-button.vue'
+import BInput from '../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
 
 export default {
-  name: 'BSidebarForm',
+  name: 'FCreateSquad',
 
   components: {
     BButton,
     BInput,
     BInputField,
     Form,
+  },
+
+  props: {
+    update: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup() {
@@ -89,7 +101,7 @@ export default {
     };
 
     function onInvalidSubmit() {
-      const submitButton = document.querySelector(".b-sidebar-modal__create-button");
+      const submitButton = document.querySelector(".f-create-squad__create-button");
       submitButton.classList.add("invalid");
       setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
     };
@@ -105,15 +117,20 @@ export default {
 };
 </script>
 
+<script setup>
+const store = useStore();
+const squad = computed(() => store.getters.getSquadActive);
+</script>
+
 <style lang="scss" scoped>
-.b-sidebar-modal__form {
+.f-create-squad {
   display: grid;
   margin-top: calc(var(--unit-0200) * -1);
   row-gap: var(--unit-0200);
   width: 280px;
 }
 
-.b-sidebar-modal__buttons-container {
+.f-create-squad__buttons-container {
   display: flex;
   gap: var(--unit-1000);
   width: 100%;

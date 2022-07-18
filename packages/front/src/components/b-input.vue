@@ -7,8 +7,9 @@
       :min="min"
       :name="name"
       :placeholder="placeholder"
-      :type="type"
       :step="step"
+      :type="type"
+      :value="value"
     >
   </div>
 </template>
@@ -20,10 +21,6 @@ export default {
   name: 'BInput',
 
   props: {
-    error: {
-      type: String,
-      default: '',
-    },
     max: {
       type: Number,
     },
@@ -45,6 +42,7 @@ export default {
       default: 'text',
       validator: shouldBeOneOf(['email','number','password','text']),
     },
+    value: {},
   },
 };
 </script>

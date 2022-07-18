@@ -157,7 +157,7 @@ export default {
   background-color: var(--color-black);
   display: grid;
   justify-items: center;
-  height:100vh;
+  min-height:100vh;
   row-gap: var(--unit-1000);
 }
 
