@@ -13,7 +13,9 @@ a {
   width: inherit;
 }
 
-body{
+* {
+  font-family: var(--font-family);
+  padding: 0;
   margin: 0;
 }
 
@@ -42,11 +44,11 @@ body{
   --color-error:   #D64A5E;
 
   //units
-  --unit-0000:  0px;
-  --unit-0025:  1px;
-  --unit-0050:  2px;
-  --unit-0100:  4px;
-  --unit-0200:  8px;
+  --unit-0000: 0px;
+  --unit-0025: 1px;
+  --unit-0050: 2px;
+  --unit-0100: 4px;
+  --unit-0200: 8px;
   --unit-0300: 12px;
   --unit-0350: 14px;
   --unit-0400: 16px;
@@ -56,12 +58,28 @@ body{
   --unit-0800: 32px;
   --unit-0900: 36px;
   --unit-1000: 40px;
+  --unit-1100: 44px;
+  --unit-1200: 48px;
+  --unit-1300: 52px;
+  --unit-1400: 56px;
+  --unit-1500: 60px;
+  --unit-1600: 64px;
+  --unit-1700: 68px;
+  --unit-1800: 72px;
+  --unit-1900: 76px;
+  --unit-2000: 80px;
+  --unit-2500: 100px;
+  --unit-3000: 120px;
+  --unit-3500: 140px;
+  --unit-4000: 160px;
+  --unit-4500: 180px;
+  --unit-5000: 200px;
 }
 
 .error {
   color: var(--color-error);
   min-height: var(--unit-0400);
-  text-align: center !important;
+  // text-align: center !important;
 }
 
 ::selection {

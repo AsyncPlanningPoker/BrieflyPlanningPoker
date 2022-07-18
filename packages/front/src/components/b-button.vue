@@ -48,12 +48,11 @@ export default {
   color: var(--color-white);
   font-family: 'Hammersmith One', sans-serif;
   font-size: var(--unit-0500);
-  height: var(--unit-1000);
+  min-height: var(--unit-1000);
   padding: var(--unit-0100);
   width: inherit;
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: var(--color-accent);
     cursor: pointer;
   }
@@ -67,8 +66,7 @@ export default {
   background-color: transparent;
   border: var(--unit-0050) solid var(--color-white);
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: transparent;
     border-color: var(--color-accent);
     color: var(--color-accent);
