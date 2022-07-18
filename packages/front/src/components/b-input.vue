@@ -3,8 +3,13 @@
     <input 
       class="b-input"
       :id="name"
+      :max="max"
+      :min="min"
       :name="name"
+      :placeholder="placeholder"
+      :step="step"
       :type="type"
+      :value="value"
     >
   </div>
 </template>
@@ -16,19 +21,28 @@ export default {
   name: 'BInput',
 
   props: {
-    error: {
-      type: String,
-      default: '',
+    max: {
+      type: Number,
+    },
+    min: {
+      type: Number,
     },
     name: {
       type: String,
       required: true,
     },
+    placeholder: {
+      type: String,
+    },
+    step: {
+      type: Number,
+    },
     type: {
       type: String,
       default: 'text',
-      validator: shouldBeOneOf(['text','email','password']),
+      validator: shouldBeOneOf(['email','number','password','text']),
     },
+    value: {},
   },
 };
 </script>

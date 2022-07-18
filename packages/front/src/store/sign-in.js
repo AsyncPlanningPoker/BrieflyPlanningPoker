@@ -1,5 +1,7 @@
-import axios from 'axios';
+
 import router from '../router/index';
+import {api, setToken} from '../services/api';
+
 
 const signInStore = {
   state: {
@@ -27,14 +29,13 @@ const signInStore = {
 
   actions: {
     login({ commit }) {
-      axios
-        .post('http://localhost:8000/user/login', { email: this.state.signIn.email, password: this.state.signIn.password })
+      api.post('user/login', { email: this.state.signIn.email, password: this.state.signIn.password })
         .then((res) => {
           const token = res.data.token;
           commit('updateUserToken', token);
           commit('updateIsAuth', true);
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-          router.push('/');
+          setToken(token)
+          router.push('/home');
         })
         .catch((err) => {
           commit('updateErrorMessage', err.response.data.message);

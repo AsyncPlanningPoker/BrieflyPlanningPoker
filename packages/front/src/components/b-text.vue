@@ -4,7 +4,8 @@
     class="b-text"
     :class="{
       [`b-text--${align}`]: align,
-      [`b-text--${size}`]: size,
+      [`b-text--${color}`]: color, 
+      [`b-text--${size}`]: size,     
     }"
   >
     <slot />
@@ -18,19 +19,23 @@ export default {
   name: 'BText',
 
   props: {
-    tag: {
-      type: String,
-      default: 'span',
-    },
     align: {
       type: String,
       default: '',
       validator: shouldBeOneOf(['','left','center','right']),
     },
+    color: {
+      type: String,
+      validator: shouldBeOneOf(['primary','accent','white','gray','black'])
+    },
     size: {
       type: String,
       default: 'medium',
-      validator: shouldBeOneOf(['small','medium','large']),
+      validator: shouldBeOneOf(['small','medium','large', 'giant']),
+    },
+    tag: {
+      type: String,
+      default: 'span',
     },
   }
 }
@@ -51,7 +56,13 @@ export default {
   }
 }
 
-@each $size in ('small','medium','large') {
+@each $color in ('primary','accent','white','gray','black') {
+  .b-text--#{$color} {
+    color: var(--color-#{$color});
+  }
+}
+
+@each $size in ('small','medium','large', 'giant') {
   .b-text--#{$size} {
     font-size: var(--font-size-#{$size});
     line-height: var(--line-height-#{$size});
