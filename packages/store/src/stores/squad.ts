@@ -15,25 +15,16 @@ class SquadDbStore implements IStoreSquad {
       this.#client('users')
         .select('name', 'id', 'email')
         .whereIn('email', users.map((res)=> res.email))
-        .where({ enabled: true })
-        .catch((error) => {
-          throw new Error(error.detail);
-        }),
+        .where({ enabled: true }),
       this.#client('squads')
         .select('name', 'id')
         .where({ id: squadId, enabled: true })
-        .catch((error) => {
-          throw new Error(error.detail);
-        }),
     ]);
 
     if (usersDb.length !== 0 && squadDb.length !== 0) {
       for (const user of usersDb) {
         await this.#client('squads-users')
           .insert({ id: randomUUID(), user: user.id, squad: squadId, enabled: isOwner })
-          .catch((error) => {
-            throw new Error(error.detail);
-          });
       }
       return fromSquadUsersDb(squadDb[0], usersDb);
     }
@@ -46,18 +37,12 @@ class SquadDbStore implements IStoreSquad {
           enabled: false,
           updatedAt: new Date(),
         })
-        .catch((error) => {
-          throw new Error(error.detail);
-        });
   }
 
   async updateById(squadId: string, squad: UpdateSquadType): Promise<void> {
     await this.#client('squads')
       .where({ id: squadId, enabled: true })
       .update({ ...squad, updatedAt: new Date() })
-      .catch((error) => {
-        throw new Error(error.detail);
-      });
   }
 
   async delById(squadId: string): Promise<void> {
@@ -72,9 +57,7 @@ class SquadDbStore implements IStoreSquad {
         enabled: false,
         updatedAt: date,
       }),
-    ]).catch((error) => {
-      throw new Error(error.detail);
-    });
+    ])
   }
 
   async list(email: string): Promise<LoadedSquadsByUserIdType[]> {
@@ -86,9 +69,6 @@ class SquadDbStore implements IStoreSquad {
       .leftJoin('users', 'users.id', '=', 'squads-users.user')
       .leftJoin('squads', 'squads.id', '=', 'squads-users.squad')
       .where({ 'squads.enabled': true, 'users.enabled': true, 'squads-users.enabled': true })
-      .catch((error) => {
-        throw new Error(error.detail);
-      });
 
     return fromSquadDb(res);
   }
