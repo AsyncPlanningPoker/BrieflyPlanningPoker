@@ -1,4 +1,4 @@
-import { AddSquadUsersType, CreateSquadType, DelSquadUsersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squad';
+import { AddSquadUsersType, CreateSquadType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squad';
 import { fromSquadDb, fromSquadUsersDb } from '../mapping';
 import { Knex } from 'knex';
 import { randomUUID } from 'crypto';
@@ -30,9 +30,9 @@ class SquadDbStore implements IStoreSquad {
     }
   }
 
-  async delSquadUsersByEmail(squadId: string, users: DelSquadUsersType[]): Promise<void> {
+  async delSquadUserByEmail(squadId: string, email: string): Promise<void> {
       await this.#client('squads-users')
-        .where({ squad: squadId, user: this.#client('users').select('id').whereIn('email', users.map((user) => user.email)), enabled: true })
+        .where({ squad: squadId, user: (await this.#client('users').select('id').where({email, enabled: true}))[0].id, enabled: true})
         .update({
           enabled: false,
           updatedAt: new Date(),
@@ -61,20 +61,11 @@ class SquadDbStore implements IStoreSquad {
   }
 
   async list(email: string): Promise<LoadedSquadsByUserIdType[]> {
+    const userId = (await this.#client('users').select('id').where({enabled:true,email}))[0].id
     const res = await this.#client
       .select('squads.id as squadId', 'squads.name as squad', 'currentMaxRounds', 'currentPercentual', 'users.id as userId', 'users.name as user', 'users.email as email', 'squads.updatedAt')
       .from('squads-users')
-      .join(
-        this.#client
-          .select('squad')
-          .from('squads-users')
-          .where({
-            user:  this.#client('users').select('id').where({email}),
-          })
-          .as('squadsUsers'),
-        'squadsUsers.squad',
-        'squads-users.squad'
-      )
+      .where({user:userId})
       .leftJoin('users', 'users.id', '=', 'squads-users.user')
       .leftJoin('squads', 'squads.id', '=', 'squads-users.squad')
       .where({ 'squads.enabled': true, 'users.enabled': true, 'squads-users.enabled': true })

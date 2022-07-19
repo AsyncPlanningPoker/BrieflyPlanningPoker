@@ -4,7 +4,7 @@ interface IStoreSquad {
   delById(squadId: string): Promise<void>;
   updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
   addSquadUsersByEmail(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void>;
-  delSquadUsersByEmail(squadId: string, users: DelSquadUsersType[]): Promise<void>;
+  delSquadUserByEmail(squadId: string, email: string): Promise<void>;
 }
 
 type CreateSquadType = {
@@ -40,9 +40,5 @@ type AddSquadUsersType = {
   email: string;
 };
 
-type DelSquadUsersType = {
-  email: string;
-};
-
 export { IStoreSquad };
-export type { CreateSquadType, LoadedSquadsByUserIdType, UpdateSquadType, DelSquadUsersType, AddSquadUsersType, SquadUsersType };
+export type { CreateSquadType, LoadedSquadsByUserIdType, UpdateSquadType, AddSquadUsersType, SquadUsersType };

@@ -118,13 +118,13 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
 
 async function delUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
-  const users = req.body.users;
+  const email = req.params.email;
 
   const db = req.app.get('squadDbStore');
 
   try {
     await db
-      .delSquadUsersByEmail(squadId, users)
+      .delSquadUserByEmail(squadId, email)
       .then(() => {
         return res.sendStatus(200);
       })

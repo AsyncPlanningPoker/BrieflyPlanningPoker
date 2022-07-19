@@ -65,21 +65,4 @@ const addMembers: Schema = {
   },
 };
 
-const delMembers: Schema = {
-  users: {
-    isArray: {
-      bail: true,
-    },
-  },
-  'users.*.email': {
-    isEmail: {
-      bail: true,
-    },
-    isLength: {
-      errorMessage: 'User email is required',
-      options: { min: 1 },
-    },
-  },
-};
-
-export { createSquad, updateSquad, addMembers, delMembers };
+export { createSquad, updateSquad, addMembers };
