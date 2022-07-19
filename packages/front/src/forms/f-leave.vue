@@ -42,10 +42,10 @@ export default {
 <script setup>
 const emit = defineEmits(['close'])
 const store = useStore();
-// const userEmail = computed(() => store.getters.getUserEmail);
+const userEmail = computed(() => store.getters.getUserEmail);
 
 function yes() {
-  const user = {"email":"lulcca@briefly.com"}
+  const user = {"email": userEmail.value}
   store.dispatch('leaveSquad', user);
   emit('close');
 };

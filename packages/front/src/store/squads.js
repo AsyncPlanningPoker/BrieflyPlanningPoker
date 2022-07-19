@@ -55,19 +55,16 @@ export default {
 
     async addUser({commit, dispatch, getters}, payload) {
       const id = getters.getActiveId;
-      console.log(id);
-      const aa = {"users":[payload]}
-      console.log(aa)
-      await api.post(`squad/${id}/users`, aa).catch((error) => {error = error.data.message});
+      await api.post(`squad/${id}/users`, {"users":[payload]}).catch((error) => {error = error.data.message});
       await dispatch('addSquadList');
       commit('UPDATE_SQUAD_ACTIVE', id);
     },
 
-    async leaveSquad({commit, dispatch, getters}, payload) {
+    async leaveSquad({dispatch, getters}, payload) {
       const id = getters.getSquadActive.id;
       await api.delete(`squad/${id}/users/${payload.email}`).catch((error) => {error = error.data.message});
       await dispatch('addSquadList');
-      commit('UPDATE_SQUAD_ACTIVE', id);
+      dispatch('addSquadActive', {});
     },
 
     async updateSquad({commit, dispatch, getters}, payload) {

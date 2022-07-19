@@ -78,20 +78,11 @@ class SquadDbStore implements IStoreSquad {
   }
 
   async list(email: string): Promise<LoadedSquadsByUserIdType[]> {
+    const userId = (await this.#client('users').select('id').where({enabled:true,email}))[0].id
     const res = await this.#client
       .select('squads.id as squadId', 'squads.name as squad', 'currentMaxRounds', 'currentPercentual', 'users.id as userId', 'users.name as user', 'users.email as email', 'squads.updatedAt')
       .from('squads-users')
-      .join(
-        this.#client
-          .select('squad')
-          .from('squads-users')
-          .where({
-            user:  this.#client('users').select('id').where({email}),
-          })
-          .as('squadsUsers'),
-        'squadsUsers.squad',
-        'squads-users.squad'
-      )
+      .where({user:userId})
       .leftJoin('users', 'users.id', '=', 'squads-users.user')
       .leftJoin('squads', 'squads.id', '=', 'squads-users.squad')
       .where({ 'squads.enabled': true, 'users.enabled': true, 'squads-users.enabled': true })
