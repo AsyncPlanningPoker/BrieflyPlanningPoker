@@ -1,4 +1,4 @@
-import { CreateUserType, IStoreUser, LoadedUserType, UpdateUserPassType } from '../types/user';
+import { CreateUserType, DeleteUserType, IStoreUser, LoadedUserType, UpdateUserPassType } from '../types/user';
 import { fromUserDb } from '../mapping';
 import { Knex } from 'knex';
 
@@ -34,6 +34,14 @@ class UserDbStore implements IStoreUser {
       updatedAt: user.updatedAt,
     });
   }
+
+  async deleteByEmail(email: string, user: DeleteUserType): Promise<void> {
+    await this.#client('users').where({ email: email, enabled: true }).update({
+      enabled: false,
+      updatedAt: user.updatedAt,
+    });
+  }
+  
 }
 
 export { UserDbStore };
