@@ -1,4 +1,4 @@
-import { AddSquadUsersType, CreateSquadType, DelSquadUsersType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squad';
+import { AddSquadUsersType, CreateSquadType, IStoreSquad, LoadedSquadsByUserIdType, UpdateSquadType } from '../types/squad';
 import { fromSquadDb, fromSquadUsersDb } from '../mapping';
 import { Knex } from 'knex';
 import { randomUUID } from 'crypto';
@@ -39,10 +39,9 @@ class SquadDbStore implements IStoreSquad {
     }
   }
 
-  async delSquadUsersByEmail(squadId: string, users: DelSquadUsersType[]): Promise<void> {
-    for (const user of users) {
+  async delSquadUserByEmail(squadId: string, email: string): Promise<void> {
       await this.#client('squads-users')
-        .where({ squad: squadId, user: this.#client('users').select('id').whereIn('email', users.map((user) => user.email)), enabled: true })
+        .where({ squad: squadId, user: (await this.#client('users').select('id').where({email, enabled: true}))[0].id, enabled: true})
         .update({
           enabled: false,
           updatedAt: new Date(),
@@ -50,7 +49,6 @@ class SquadDbStore implements IStoreSquad {
         .catch((error) => {
           throw new Error(error.detail);
         });
-    }
   }
 
   async updateById(squadId: string, squad: UpdateSquadType): Promise<void> {

@@ -1,5 +1,5 @@
 import { createUser, login, passRecovery, passUpdate } from '../schemas/user';
-import { createSquad, updateSquad, addMembers, delMembers } from '../schemas/squad';
+import { createSquad, updateSquad, addMembers } from '../schemas/squad';
 import * as auth from '../middlewares/authorization/handler';
 import * as schema from '../middlewares/schema/schema';
 import { checkSchema } from 'express-validator';
@@ -19,7 +19,7 @@ routes.get('/squad/', auth.handler, squad.list);
 routes.delete('/squad/:squadId', auth.handler, squad.del);
 routes.put('/squad/:squadId', checkSchema(updateSquad), schema.handler, auth.handler, squad.update);
 routes.post('/squad/:squadId/users', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
-routes.delete('/squad/:squadId/users', checkSchema(delMembers), schema.handler, auth.handler, squad.delUsers);
+routes.delete('/squad/:squadId/users/:email', auth.handler, squad.delUsers);
 
 routes.get('/health', (req, res) => {
   res.sendStatus(200);

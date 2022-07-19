@@ -64,13 +64,10 @@ export default {
     },
 
     async leaveSquad({commit, dispatch, getters}, payload) {
-      // const id = getters.getActiveId;
-      const id = "adcbbac8-15a2-4d7f-b058-ea70bfd7f23b";
-      console.log(id);
-      // const aa = {"users":[payload]}
-      const aa = {"users":[{"email":"lulcca@briefly.com"}]}
-      console.log(aa)
-      await api.delete(`squad/${id}/users`, aa).catch((error) => {error = error.data.message});
+      const id = getters.getSquadActive.id;
+      await api.delete(`squad/${id}/users/${payload.email}`).catch((error) => {error = error.data.message});
+      await dispatch('addSquadList');
+      commit('UPDATE_SQUAD_ACTIVE', id);
     },
 
     async updateSquad({commit, dispatch, getters}, payload) {
