@@ -12,7 +12,7 @@
     "migration:down": "npx knex migrate:down",
     "seed:up": "npx knex seed:run",
     "build": "tsc -b",
-    "test": "bash -c 'docker-compose --env-file ../../.env.test up -d db' && yarn install && NODE_ENV=.test && yarn migration:latest && jest --coverage && docker-compose down"
+    "test": "bash -c 'docker-compose --env-file ../../.env.test up -d db' && yarn install && NODE_ENV=.test && yarn migration:latest && bash -c 'docker-compose down'"
   },
   "dependencies": {
     "@types/node": "^17.0.22",
