@@ -23,7 +23,7 @@
       <BInput
         name="maxRounds"
         type="number"
-        :value="update ? squad.currentMaxRounds : ''"
+        :value="props.update ? squad.currentMaxRounds : ''"
       />
     </BInputField>
 
@@ -38,7 +38,7 @@
         placeholder="0.25"
         :step=0.10
         type="number"
-        :value="update ? squad.currentPercentual : ''"
+        :value="props.update ? squad.currentPercentual : ''"
       />
     </BInputField>
 
@@ -62,7 +62,6 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
-import {api} from '../services/api';
 import * as Yup from 'yup';
 
 import BButton from '../components/b-button.vue'
@@ -78,48 +77,48 @@ export default {
     BInputField,
     Form,
   },
-
-  props: {
-    update: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
-  setup() {
-    function onSubmit(values) {
-      const newSquad = {
-        name: values.squadName,
-        users: [{email: "lucca.jacomassi@hotmail.com"}],
-        currentMaxRounds: values.maxRounds,
-        currentPercentual: values.percentual
-      }
-      api
-        .post('squad/', newSquad)
-        .then((res) => console.log('sucesso: ' + res.id))
-        .catch((error) => {error = error.data.message})
-    };
-
-    function onInvalidSubmit() {
-      const submitButton = document.querySelector(".f-create-squad__create-button");
-      submitButton.classList.add("invalid");
-      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-    };
-
-    const schema = Yup.object().shape({
-      squadName: Yup.string().required(),
-      maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
-      percentual: Yup.number().typeError('percentual must be a number').required().positive().min(0).max(1).test((number) => Number.isInteger(number * (10 ** 2))),
-    });
-
-    return { onSubmit, onInvalidSubmit, schema };
-  },
 };
 </script>
 
 <script setup>
+const props = defineProps({
+  update: {
+      type: Boolean,
+      default: false,
+    },
+})
+
+const emit = defineEmits(['close'])
 const store = useStore();
 const squad = computed(() => store.getters.getSquadActive);
+
+function onSubmit(values) {
+  const newSquad = {
+    name: values.squadName,
+    currentMaxRounds: values.maxRounds,
+    currentPercentual: values.percentual
+  }
+
+  if(!props.update) {
+    store.dispatch('addSquad', newSquad);
+  }
+  else {
+    store.dispatch('updateSquad', newSquad);
+  }
+  emit('close');
+};
+
+function onInvalidSubmit() {
+  const submitButton = document.querySelector(".f-create-squad__create-button");
+  submitButton.classList.add("invalid");
+  setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
+};
+
+const schema = Yup.object().shape({
+  squadName: Yup.string().required(),
+  maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
+  percentual: Yup.number().typeError('percentual must be a number').required().positive().min(0).max(1).test((number) => Number.isInteger(number * (10 ** 2))),
+});
 </script>
 
 <style lang="scss" scoped>

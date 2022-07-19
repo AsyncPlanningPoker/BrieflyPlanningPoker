@@ -31,7 +31,7 @@ export default {
     size: {
       type: String,
       default: 'medium',
-      validator: shouldBeOneOf(['small','medium','large', 'giant']),
+      validator: shouldBeOneOf(['small','medium','large','giant']),
     },
     tag: {
       type: String,

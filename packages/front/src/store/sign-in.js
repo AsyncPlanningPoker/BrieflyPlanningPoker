@@ -10,7 +10,11 @@ const signInStore = {
     password: '',
   },
 
-  getters: {},
+  getters: {
+    getUserEmail(state) {
+      return state.email;
+    },
+  },
 
   mutations: {
     updateEmail(state, email) {
