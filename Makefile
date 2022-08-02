@@ -1,7 +1,6 @@
 api-startup:
 	yarn install
-	yarn migration:latest
-	yarn seed:up
+	yarn db:up
 	cd packages/api && yarn start
 
 front-startup:
