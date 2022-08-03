@@ -7,12 +7,12 @@
   "main": "dist/src/index",
   "types": "dist/src/index",
   "scripts": {
-    "db:up": "yarn migration:up && yarn seed:up",
+    "db:up": "yarn migration:latest && yarn seed:up",
     "migration:latest": "npx knex migrate:latest",
     "migration:down": "npx knex migrate:down",
     "seed:up": "npx knex seed:run",
     "build": "tsc -b",
-    "test": "bash -c 'docker-compose --env-file ../../.env.test up -d db' && yarn install && NODE_ENV=.test && yarn migration:latest && jest --coverage && docker-compose down"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@types/node": "^17.0.22",
