@@ -49,20 +49,27 @@ const updateSquad: Schema = {
 };
 
 const addMembers: Schema = {
-  users: {
-    isArray: {
-      bail: true,
+  email: {
+    isString: {
+      errorMessage: 'Email must be a string',
     },
-  },
-  'users.*.email': {
+    isLength: {
+      errorMessage: 'Email is required',
+      options: { min: 1 },
+    },
     isEmail: {
       bail: true,
     },
+  },
+  owner:{
+    isBoolean:{
+      errorMessage: 'Owner must be a boolean',
+    },
     isLength: {
-      errorMessage: 'User email is required',
+      errorMessage: 'Owner is required',
       options: { min: 1 },
     },
-  },
+  }
 };
 
 export { createSquad, updateSquad, addMembers };

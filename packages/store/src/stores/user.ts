@@ -1,5 +1,4 @@
 import { CreateUserType, DeleteUserType, IStoreUser, LoadedUserType, UpdateUserPassType } from '../types/user';
-import { fromUserDb } from '../mapping';
 import { Knex } from 'knex';
 
 class UserDbStore implements IStoreUser {
@@ -24,7 +23,7 @@ class UserDbStore implements IStoreUser {
     });
 
     if (res.length > 0) {
-      return fromUserDb(res[0]);
+      return res[0];
     }
   }
 

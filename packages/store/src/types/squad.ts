@@ -1,16 +1,15 @@
 interface IStoreSquad {
   create(squad: CreateSquadType): Promise<LoadedSquadsByUserIdType | void>;
   list(userId: string): Promise<LoadedSquadsByUserIdType[]>;
-  delById(squadId: string): Promise<void>;
+  listUsers(squadId: string): Promise<LoadedUsersBySquadIdType[]>;
   updateById(squadId: string, squad: UpdateSquadType): Promise<void>;
-  addSquadUsersByEmail(squadId: string, users: AddSquadUsersType[]): Promise<LoadedSquadsByUserIdType | void>;
+  addSquadUsersByEmail(squadId: string, users: string, owner: boolean): Promise<SquadUsersType | void>;
   delSquadUserByEmail(squadId: string, email: string): Promise<void>;
 }
 
 type CreateSquadType = {
   id: string;
   name: string;
-  users: AddSquadUsersType[];
   currentMaxRounds: number;
   currentPercentual: number;
 };
@@ -24,10 +23,13 @@ type SquadUsersType = {
 type LoadedSquadsByUserIdType = {
   id: string;
   squad: string;
-  users: SquadUsersType[];
   currentMaxRounds?: number;
   currentPercentual?: number;
   updatedAt?: Date;
+};
+
+type LoadedUsersBySquadIdType = {
+  users: SquadUsersType[];
 };
 
 type UpdateSquadType = {
@@ -36,9 +38,5 @@ type UpdateSquadType = {
   currentPercentual?: number;
 };
 
-type AddSquadUsersType = {
-  email: string;
-};
-
 export { IStoreSquad };
-export type { CreateSquadType, LoadedSquadsByUserIdType, UpdateSquadType, AddSquadUsersType, SquadUsersType };
+export type { CreateSquadType, LoadedSquadsByUserIdType, LoadedUsersBySquadIdType, UpdateSquadType, SquadUsersType };
