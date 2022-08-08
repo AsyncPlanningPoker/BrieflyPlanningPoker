@@ -1,0 +1,117 @@
+<template>
+  <div class="b-sidebar">
+    <div class="b-sidebar__logo-wrapper">
+      <a @click="store.dispatch('addSquadActive', {})">
+        <img class="b-sidebar__image" src="../assets/square-logo-80.png" alt="brand-logo">
+      </a>
+    </div>
+
+    <BDivisor />
+
+    <div class="b-sidebar__new-squad-wrapper">
+      <BButton
+        size="small"
+        value="+"
+        @click="toggleModal"
+      />
+
+      <BModal :open="showModal">
+        <FSquad @close="toggleModal" />
+      </BModal>
+    </div>
+
+    <BDivisor />
+
+    <div class="b-sidebar__squad-wrapper">
+      <div
+        v-for="(squad, index) in squads"
+        :key="index"
+        class="b-sidebar__squad"
+      >
+        <BButton
+          size="small"
+          :transparent="true"
+          :value="`${ index + 1 }`"
+          @click="store.dispatch('addSquadActive', squad)"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+
+import BButton from '../components/b-button.vue';
+import BDivisor from '../components/b-divisor.vue';
+import BModal from '../components/b-modal.vue';
+import FSquad from '../forms/f-squad.vue';
+
+export default {
+  name: 'BSidebar',
+
+  components: {
+    BButton,
+    BDivisor,
+    BModal,
+    FSquad,
+  },
+};
+</script>
+
+<script setup>
+const store = useStore();
+const squads = computed(() => store.getters.getSquadList);
+
+const showModal = ref(false);
+const toggleModal = () => { showModal.value = !showModal.value };
+</script>
+
+<style lang="scss" scoped>
+.b-sidebar {
+  align-content: start;
+  background-color: var(--color-black);
+  display: grid;
+  height: calc(100vh - var(--unit-0800));
+  justify-items: center;
+  padding: var(--unit-0400);
+  row-gap: var(--unit-0800);
+
+  @media (max-width: 768px) {
+    height: calc(100vh - var(--unit-0600));
+    padding: var(--unit-0300);
+    row-gap: var(--unit-0600);
+  }
+}
+
+.b-sidebar__logo-wrapper {
+  cursor: pointer;
+  height: calc(12 * var(--unit-0100));
+  width: calc(12 * var(--unit-0100));
+
+  @media (max-width: 768px) {
+    height: calc(11 * var(--unit-0100));
+    width: calc(11 * var(--unit-0100));
+  }
+
+  & .b-sidebar__image {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.b-sidebar__new-squad-wrapper,
+.b-sidebar__squad-wrapper {
+  width: var(--unit-1000);
+}
+
+.b-sidebar__squad-wrapper {
+  display: grid;
+  row-gap: var(--unit-0500);
+
+  .b-sidebar__squad {
+    width: 100%;
+  }
+}
+</style>

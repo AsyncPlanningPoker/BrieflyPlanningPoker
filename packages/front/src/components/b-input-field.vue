@@ -24,7 +24,7 @@
       @input="handleChange"
       @blur="handleBlur"
     >
-      <slot/>
+      <slot />
     </div>
 
     <BText
@@ -56,6 +56,7 @@ export default {
       type: String,
       required: true,
     },
+    initial: {},
     label: {
       type: String,
       required: true,
@@ -77,7 +78,7 @@ export default {
       handleBlur,
       handleChange,
     } = useField(name, undefined, {
-      initialValue: props.value,
+      initialValue: props.initial,
     });
 
     return { inputValue, errorMessage, handleBlur, handleChange };

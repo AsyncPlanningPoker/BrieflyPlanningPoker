@@ -42,6 +42,7 @@ a {
   --color-black:   #0D0D0D;
   --color-link:    #58A6FF;
   --color-error:   #D64A5E;
+  --color-success: #4BD667;
 
   //units
   --unit-0000: 0px;
@@ -50,7 +51,6 @@ a {
   --unit-0100: 4px;
   --unit-0200: 8px;
   --unit-0300: 12px;
-  --unit-0350: 14px;
   --unit-0400: 16px;
   --unit-0500: 20px;
   --unit-0600: 24px;
@@ -79,7 +79,6 @@ a {
 .error {
   color: var(--color-error);
   min-height: var(--unit-0400);
-  // text-align: center !important;
 }
 
 ::selection {

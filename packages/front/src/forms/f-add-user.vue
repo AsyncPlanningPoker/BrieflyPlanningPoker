@@ -20,7 +20,7 @@
     
     <div class="f-add-user__button-wrapper">
       <BButton
-        class="f-add-user__create-button"
+        class="f-add-user__button"
         size="small"
         type="submit"
         value="send"
@@ -55,10 +55,13 @@ const store = useStore();
 
 function onSubmit(values) {
   store.dispatch('addUser', values);
+  const submitButton = document.querySelector(".f-add-user__button");
+  submitButton.classList.add("valid");
+  setTimeout(() => { submitButton.classList.remove("valid"); }, 1000);
 };
 
 function onInvalidSubmit() {
-  const submitButton = document.querySelector(".f-create-squad__create-button");
+  const submitButton = document.querySelector(".f-add-user__button");
   submitButton.classList.add("invalid");
   setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
 };
@@ -75,11 +78,10 @@ const schema = Yup.object().shape({
   display: grid;
   grid-template-areas: 'email button';
   grid-template-columns: 1fr auto;
-  margin-top: var(--unit-0200);
   width: 100%;
 }
 
-.f-add-user__create-button {
+.f-add-user__button {
   align-items: flex-end;
   margin-left: var(--unit-0500);
   width: var(--unit-2000);
