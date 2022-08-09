@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import BButton from '../components/b-button.vue'
@@ -42,11 +41,12 @@ export default {
 <script setup>
 const emit = defineEmits(['close'])
 const store = useStore();
-const userEmail = computed(() => store.getters.getUserEmail);
+// const userEmail = computed(() => store.getters.getUserEmail);
 
 function yes() {
-  const user = {"email": userEmail.value}
-  store.dispatch('leaveSquad', user);
+  // const user = {"email": userEmail.value}
+  // store.dispatch('leaveSquad', user);
+  store.dispatch('leaveSquad');
   emit('close');
 };
 </script>

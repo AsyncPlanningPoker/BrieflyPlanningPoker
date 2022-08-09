@@ -59,12 +59,12 @@
       </div>
     </div>
 
-    <div v-if="users">
+    <div v-if="moreInfo">
       <FAddUser />
 
       <div class="b-squad__users-container">
         <BBadge 
-          v-for="(user, index) in squad.users"
+          v-for="(user, index) in users"
           :key="index"
           @action="toggleLeaveModal"
         >
@@ -77,7 +77,7 @@
       v-if="squad.squad"
       :button="true"
       color="primary"
-      @action="toggleUsers"
+      @action="toggleInfo"
     />
 
     <BModal :open="updateModal">
@@ -119,9 +119,10 @@ export default {
 <script setup>
 const store = useStore();
 const squad = computed(() => store.getters.getSquadActive);
+const users = computed(() => store.getters.getUsers);
 
-const users = ref(false);
-const toggleUsers = () => { users.value = !users.value };
+const moreInfo = ref(false);
+const toggleInfo = () => { moreInfo.value = !moreInfo.value };
 
 const updateModal = ref(false);
 const toggleUpdateModal = () => { updateModal.value = !updateModal.value };

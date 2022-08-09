@@ -36,7 +36,7 @@ export default {
 // PLEASE, INSTALL VOLAR IF THAT IS THE CASE
 
 const store = useStore();
-onMounted(store.dispatch('addSquadList'))
+onMounted(store.dispatch('gatherSquadList'))
 </script>
 
 <style lang="scss" scoped>
