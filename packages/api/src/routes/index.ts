@@ -15,9 +15,9 @@ routes.post('/user/pass-recovery', checkSchema(passRecovery), schema.handler, us
 routes.patch('/user/pass-recovery', checkSchema(passUpdate), schema.handler, user.passUpdate);
 
 routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, squad.create);
-routes.get('/squad/', auth.handler, squad.list);
+routes.get('/squad/', auth.handler, squad.findAll);
 routes.put('/squad/:squadId', checkSchema(updateSquad), schema.handler, auth.handler, squad.update);
-routes.get('/squad/:squadId/users', auth.handler, squad.listUsers);
+routes.get('/squad/:squadId', auth.handler, squad.find);
 routes.post('/squad/:squadId/users', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
 routes.delete('/squad/:squadId/users', auth.handler, squad.delUsers);
 

@@ -27,13 +27,13 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   }
 }
 
-async function list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const email = req.query.email;
+async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const {squadId} = req.params;
   const db = req.app.get('squadDbStore');
 
   try {
     await db
-      .list(email)
+      .find(squadId)
       .then(async (result: any) => {
         return res.status(200).json(result);
       })
@@ -45,13 +45,13 @@ async function list(req: Request, res: Response, next: NextFunction): Promise<Re
   }
 }
 
-async function listUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
+async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('squadDbStore');
+  const {email} = req.query
 
   try {
     await db
-      .listUsers(squadId)
+      .findAll(email)
       .then(async (result: any) => {
         return res.status(200).json(result);
       })
@@ -134,4 +134,4 @@ async function delUsers(req: Request, res: Response, next: NextFunction): Promis
   }
 }
 
-export { create, list, listUsers, update, addUsers, delUsers };
+export { create, find, findAll, update, addUsers, delUsers };
