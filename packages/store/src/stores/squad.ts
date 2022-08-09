@@ -48,7 +48,6 @@ class SquadDbStore implements IStoreSquad {
       .select('squads-users.squad as id')
       .from('squads-users')
       .where({user: (await this.#client('users').select('id').where({enabled:true, email}))[0].id, 'squads-users.enabled': true })
-      .orderBy('squads-users.squad', 'desc')
       
     return res;
   }
@@ -62,8 +61,7 @@ class SquadDbStore implements IStoreSquad {
       .leftJoin('users', 'users.id', '=', 'squads-users.user')
       .leftJoin('squads', 'squads.id', '=', 'squads-users.squad')
       .where({ 'users.enabled': true, 'squads-users.enabled': true })
-      .orderBy('squads.updatedAt', 'desc')
-  
+
     if(res.length > 0){
       return {
         id: res[0].squad,

@@ -8,7 +8,7 @@ function handler(req: Request, res: Response, next: any) {
 
   try {
     if (isValid?.role === 'login') {
-      req.query.email = isValid.email;
+      req.query.user = isValid.user;
       next();
     } else {
       throw new Unauthorized('Invalid token');
