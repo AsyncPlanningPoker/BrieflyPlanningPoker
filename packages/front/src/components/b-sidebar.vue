@@ -32,7 +32,7 @@
           size="small"
           :transparent="true"
           :value="`${ index + 1 }`"
-          @click="store.dispatch('addSquadActive', squad)"
+          @click="store.dispatch('addSquadActive', squad.id)"
         />
       </div>
     </div>
