@@ -21,10 +21,6 @@ export default {
     getActiveId(state) {
       return state.squadActive.id;
     },
-
-    getUsers(state) {
-      return state.users;
-    },
   },
 
   mutations: {
@@ -34,15 +30,6 @@ export default {
 
     ADD_SQUAD_ACTIVE(state, payload) {
       state.squadActive = payload;
-    },
-
-    UPDATE_SQUAD_ACTIVE(state, payload) {
-      const updatedSquad = state.squadList.find((x) => x.id === payload);
-      state.squadActive = updatedSquad;
-    },
-
-    ADD_USERS(state, payload) {
-      state.squadActive.users = payload;
     },
   },
 
