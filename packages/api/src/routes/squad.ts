@@ -47,11 +47,11 @@ async function find(req: Request, res: Response, next: NextFunction): Promise<Re
 
 async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('squadDbStore');
-  const {email} = req.query
+  const {user} = req.query
 
   try {
     await db
-      .findAll(email)
+      .findAll(user)
       .then(async (result: any) => {
         return res.status(200).json(result);
       })
