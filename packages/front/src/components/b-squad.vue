@@ -1,9 +1,9 @@
 <template>
-  <div class="b-squad">
-    <div 
-      v-if="!squad.squad" 
-      class="b-squad__container"
-    >
+  <div 
+    v-if="!squad.squad" 
+    class="b-squad"
+  >
+    <div class="b-squad__container">
       <div class="b-squad__name">   
         <BText
           color="white"
@@ -13,11 +13,13 @@
         </BText>
       </div>
     </div>
+  </div>
 
-    <div 
-      v-else 
-      class="b-squad__container"
-    >
+  <div
+    v-else
+    class="b-squad"
+  >
+    <div class="b-squad__container">
       <div class="b-squad__name">
         <BText
           class="b-squad__title"
@@ -56,6 +58,9 @@
             {{ squad.currentPercentual }}
           </BText>
         </div>
+        <div class="b-squad__leave">
+          <font-awesome-icon class="b-squad__icon b-squad__icon--clickable" icon="fa-solid fa-right-from-bracket" @click="toggleLeaveModal('')"/>
+        </div>
       </div>
     </div>
 
@@ -64,7 +69,7 @@
 
       <div class="b-squad__users-container">
         <BBadge 
-          v-for="(user, index) in squad.users"
+          v-for="(user, index) in squad.users.filter((x) => x.email !== actualUser)"
           :key="index"
           @action="toggleLeaveModal(user.email)"
         >
@@ -79,15 +84,15 @@
       color="primary"
       @action="toggleInfo"
     />
-
-    <BModal :open="updateModal">
-      <FSquad :update="true" @close="toggleUpdateModal" />
-    </BModal>
-
-    <BModal :open="leaveModal">
-      <FLeave :email="email" @close="toggleLeaveModal" />
-    </BModal>
   </div>
+    
+  <BModal :open="updateModal">
+    <FSquad :update="true" @close="toggleUpdateModal" />
+  </BModal>
+
+  <BModal :open="leaveModal">
+    <FLeave :email="email" @close="toggleLeaveModal('')" />
+  </BModal>
 </template>
 
 <script>
@@ -119,7 +124,7 @@ export default {
 <script setup>
 const store = useStore();
 const squad = computed(() => store.getters.getSquadActive);
-const email = ref(String);
+const actualUser = computed(() => store.getters.getUserEmail);
 
 const moreInfo = ref(false);
 const toggleInfo = () => { moreInfo.value = !moreInfo.value };
@@ -127,6 +132,7 @@ const toggleInfo = () => { moreInfo.value = !moreInfo.value };
 const updateModal = ref(false);
 const toggleUpdateModal = () => { updateModal.value = !updateModal.value };
 
+const email = ref(String);
 const leaveModal = ref(false);
 const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !leaveModal.value };
 </script>
@@ -158,7 +164,8 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 .b-squad__name,
 .b-squad__info,
 .b-squad__max-rounds,
-.b-squad__percentual {
+.b-squad__percentual,
+.b-squad__leave {
   align-items: center;
   display: flex;
 }
@@ -181,9 +188,10 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 }
 
 .b-squad__info {
+  column-gap: var(--unit-0800);
+  cursor: default;
   grid-area: info;
   height: 48px;
-  column-gap: var(--unit-0800);
 
   @media (max-width: 768px) {
     height: 40px;
@@ -191,7 +199,8 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 
 }
 
-.b-squad__title {
+.b-squad__title,
+.b-squad__icon--clickable {
   cursor: pointer;
 
   &:hover {
@@ -200,7 +209,8 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 }
 
 .b-squad__max-rounds,
-.b-squad__percentual {
+.b-squad__percentual,
+.b-squad__leave {
   column-gap: var(--unit-0200);
 }
 

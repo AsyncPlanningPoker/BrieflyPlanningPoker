@@ -1,11 +1,20 @@
 <template>
   <div class="f-leave">
     <BText
+      v-if="this.email"
       align="left"
       type="p"
       size="large"
     >
       Are you sure you want to remove {{ this.email }} from the squad?
+    </BText>
+    <BText
+      v-else
+      align="left"
+      type="p"
+      size="large"
+    >
+      Are you sure you want to leave the squad?
     </BText>
     <div class="f-leave__buttons-container">
       <BButton
@@ -46,7 +55,13 @@ const props = defineProps({
 });
 
 function confirm() {
-  store.dispatch('delUser', props.email);
+  if(props.email) {
+    store.dispatch('delUser', props.email);
+  }
+  else {
+    store.dispatch('delYourself');
+  }
+
   emit('close');
 };
 </script>
