@@ -6,7 +6,6 @@ export default {
     squadList: [],
 
     squadActive: {
-      users: {},
     },
   },
 
@@ -29,10 +28,6 @@ export default {
   },
 
   mutations: {
-    // ADD_SQUAD(state, payload) {
-    //   state.squadList = [...state.squadList, payload];
-    // },
-
     ADD_SQUAD_LIST(state, payload) {
       state.squadList = payload;
     },
@@ -64,18 +59,10 @@ export default {
       commit('ADD_SQUAD_ACTIVE', reqdata);
     },
 
-    // async gatherUsers({commit}, id) {
-    //   const req = await api.get(`squad/${id}/users`);
-    //   const reqdata = req.data;
-    //   commit('ADD_USERS', reqdata);
-    // },
-
     async addUser({dispatch, getters}, payload) {
       const id = getters.getActiveId;
       await api.post(`squad/${id}/users`, {"email":payload, "owner":false}).catch((error) => {error = error.data.message});
-      // await dispatch('gatherSquadList');
       await dispatch('gatherSquad', id);
-      // commit('UPDATE_SQUAD_ACTIVE', id);
     },
 
     async addYourself({dispatch, getters}, id) {
@@ -88,8 +75,6 @@ export default {
       const id = getters.getActiveId;
       await api.delete(`squad/${id}/users?email=${payload}`).catch((error) => {error = error.data.message});
       await dispatch('gatherSquad', id);
-      // await dispatch('gatherSquadList');
-      // commit('UPDATE_SQUAD_ACTIVE', {});
     },
 
     async delYourself({dispatch, getters}) {
@@ -98,8 +83,6 @@ export default {
       await api.delete(`squad/${id}/users?email=${email}`).catch((error) => {error = error.data.message});
       await dispatch('gatherSquadList');
       await dispatch('addSquadActive', {});
-      // await dispatch('gatherSquadList');
-      // commit('UPDATE_SQUAD_ACTIVE', {});
     },
 
     async addSquad({dispatch}, payload) {
@@ -109,17 +92,14 @@ export default {
       await dispatch('gatherSquadList');
     },
 
-    async updateSquad({commit, dispatch, getters}, payload) {
+    async updateSquad({dispatch, getters}, payload) {
       const id = getters.getSquadActive.id;
       await api.put(`squad/${id}`, payload).catch((error) => {error = error.data.message});
       await dispatch('gatherSquad', id);
-      // await dispatch('gatherSquadList');
-      // commit('UPDATE_SQUAD_ACTIVE', id);
     },
 
     async addSquadActive({commit}, payload) {
       commit('ADD_SQUAD_ACTIVE', payload);
-      // await dispatch('gatherUsers', payload.id);
     },
   },
 }

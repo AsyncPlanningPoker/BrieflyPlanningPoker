@@ -24,7 +24,7 @@
 
     <div class="b-sidebar__squad-wrapper">
       <div
-        v-for="(squad, index) in squads"
+        v-for="(squad, index) in squads.slice().reverse()"
         :key="index"
         class="b-sidebar__squad"
       >
@@ -32,7 +32,7 @@
           size="small"
           :transparent="true"
           :value="`${ index + 1 }`"
-          @click="store.dispatch('addSquadActive', squad.id)"
+          @click="store.dispatch('gatherSquad', squad.id)"
         />
       </div>
     </div>

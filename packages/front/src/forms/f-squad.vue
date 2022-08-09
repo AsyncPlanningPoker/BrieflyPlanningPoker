@@ -145,9 +145,9 @@ const props = defineProps({
       type: Boolean,
       default: false,
     },
-})
+});
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 const store = useStore();
 const squad = computed(() => store.getters.getSquadActive);
 

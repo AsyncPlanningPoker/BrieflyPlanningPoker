@@ -5,7 +5,7 @@
       type="p"
       size="large"
     >
-      Are you sure you want to leave this squad?
+      Are you sure you want to remove {{ this.email }} from the squad?
     </BText>
     <div class="f-leave__buttons-container">
       <BButton
@@ -16,7 +16,7 @@
       
       <BButton
         value="yes"
-        @click="yes"
+        @click="confirm"
       />
     </div>
   </div>
@@ -41,12 +41,12 @@ export default {
 <script setup>
 const emit = defineEmits(['close'])
 const store = useStore();
-// const userEmail = computed(() => store.getters.getUserEmail);
+const props = defineProps({
+  email: String,
+});
 
-function yes() {
-  // const user = {"email": userEmail.value}
-  // store.dispatch('leaveSquad', user);
-  store.dispatch('leaveSquad');
+function confirm() {
+  store.dispatch('delUser', props.email);
   emit('close');
 };
 </script>

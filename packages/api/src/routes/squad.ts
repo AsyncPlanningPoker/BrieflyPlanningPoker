@@ -97,13 +97,13 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
     await db
       .addSquadUsersByEmail(squadId, email, owner)
       .then(async (created: any) => {
-        if (created) {
-            if(!owner){
-              await send({ to: created.email, subject: 'invite', message: `oii ${created.name}` }).catch((error: any) => {
-                return next(error);
-              });
-            }
-          }
+        // if (created) {
+        //     if(!owner){
+        //       await send({ to: created.email, subject: 'invite', message: `oii ${created.name}` }).catch((error: any) => {
+        //         return next(error);
+        //       });
+        //     }
+        //   }
         return res.sendStatus(201);
       })
       .catch(({ message }: any) => {

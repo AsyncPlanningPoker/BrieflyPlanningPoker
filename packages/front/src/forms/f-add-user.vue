@@ -54,7 +54,7 @@ export default {
 const store = useStore();
 
 function onSubmit(values) {
-  store.dispatch('addUser', values);
+  store.dispatch('addUser', values.email);
   const submitButton = document.querySelector(".f-add-user__button");
   submitButton.classList.add("valid");
   setTimeout(() => { submitButton.classList.remove("valid"); }, 1000);

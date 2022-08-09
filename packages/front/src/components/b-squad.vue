@@ -64,9 +64,9 @@
 
       <div class="b-squad__users-container">
         <BBadge 
-          v-for="(user, index) in users"
+          v-for="(user, index) in squad.users"
           :key="index"
-          @action="toggleLeaveModal"
+          @action="toggleLeaveModal(user.email)"
         >
           {{ user.email }}
         </BBadge>
@@ -85,7 +85,7 @@
     </BModal>
 
     <BModal :open="leaveModal">
-      <FLeave @close="toggleLeaveModal" />
+      <FLeave :email="email" @close="toggleLeaveModal" />
     </BModal>
   </div>
 </template>
@@ -119,7 +119,7 @@ export default {
 <script setup>
 const store = useStore();
 const squad = computed(() => store.getters.getSquadActive);
-const users = computed(() => store.getters.getUsers);
+const email = ref(String);
 
 const moreInfo = ref(false);
 const toggleInfo = () => { moreInfo.value = !moreInfo.value };
@@ -128,7 +128,7 @@ const updateModal = ref(false);
 const toggleUpdateModal = () => { updateModal.value = !updateModal.value };
 
 const leaveModal = ref(false);
-const toggleLeaveModal = () => { leaveModal.value = !leaveModal.value };
+const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !leaveModal.value };
 </script>
 
 <style lang="scss" scoped>
