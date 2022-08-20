@@ -1,11 +1,20 @@
 <template>
   <div class="f-leave">
     <BText
+      v-if="this.email"
       align="left"
       type="p"
       size="large"
     >
-      Are you sure you want to leave this squad?
+      Are you sure you want to remove {{ this.email }} from the squad?
+    </BText>
+    <BText
+      v-else
+      align="left"
+      type="p"
+      size="large"
+    >
+      Are you sure you want to leave the squad?
     </BText>
     <div class="f-leave__buttons-container">
       <BButton
@@ -16,14 +25,13 @@
       
       <BButton
         value="yes"
-        @click="yes"
+        @click="confirm"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import BButton from '../components/b-button.vue'
@@ -42,11 +50,18 @@ export default {
 <script setup>
 const emit = defineEmits(['close'])
 const store = useStore();
-const userEmail = computed(() => store.getters.getUserEmail);
+const props = defineProps({
+  email: String,
+});
 
-function yes() {
-  const user = {"email": userEmail.value}
-  store.dispatch('leaveSquad', user);
+function confirm() {
+  if(props.email) {
+    store.dispatch('delUser', props.email);
+  }
+  else {
+    store.dispatch('delYourself');
+  }
+
   emit('close');
 };
 </script>

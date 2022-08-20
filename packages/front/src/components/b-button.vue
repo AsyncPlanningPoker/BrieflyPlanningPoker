@@ -73,6 +73,11 @@ export default {
   }
 }
 
+.valid {
+  background-color: var(--color-success);
+  color: var(--color-success);
+}
+
 .invalid {
   animation: shake 0.5s;
   animation-iteration-count: infinite;

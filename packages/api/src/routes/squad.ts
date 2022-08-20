@@ -27,13 +27,13 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   }
 }
 
-async function list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const email = req.query.email;
+async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const {squadId} = req.params;
   const db = req.app.get('squadDbStore');
 
   try {
     await db
-      .list(email)
+      .find(squadId)
       .then(async (result: any) => {
         return res.status(200).json(result);
       })
@@ -45,13 +45,13 @@ async function list(req: Request, res: Response, next: NextFunction): Promise<Re
   }
 }
 
-async function listUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
+async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('squadDbStore');
+  const {user} = req.query
 
   try {
     await db
-      .listUsers(squadId)
+      .findAll(user)
       .then(async (result: any) => {
         return res.status(200).json(result);
       })
@@ -97,13 +97,13 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
     await db
       .addSquadUsersByEmail(squadId, email, owner)
       .then(async (created: any) => {
-        if (created) {
-            if(!owner){
-              await send({ to: created.email, subject: 'invite', message: `oii ${created.name}` }).catch((error: any) => {
-                return next(error);
-              });
-            }
-          }
+        // if (created) {
+        //     if(!owner){
+        //       await send({ to: created.email, subject: 'invite', message: `oii ${created.name}` }).catch((error: any) => {
+        //         return next(error);
+        //       });
+        //     }
+        //   }
         return res.sendStatus(201);
       })
       .catch(({ message }: any) => {
@@ -134,4 +134,4 @@ async function delUsers(req: Request, res: Response, next: NextFunction): Promis
   }
 }
 
-export { create, list, listUsers, update, addUsers, delUsers };
+export { create, find, findAll, update, addUsers, delUsers };

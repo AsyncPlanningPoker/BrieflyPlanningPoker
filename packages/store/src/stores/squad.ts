@@ -1,4 +1,4 @@
-import { CreateSquadType, IStoreSquad, LoadedSquadsByUserIdType, LoadedUsersBySquadIdType, SquadUsersType, UpdateSquadType } from '../types/squad';
+import { CreateSquadType, IStoreSquad, LoadedSquadsByUserIdType, LoadedSquadsType, SquadUsersType, UpdateSquadType } from '../types/squad';
 
 import { Knex } from 'knex';
 import { randomUUID } from 'crypto';
@@ -43,36 +43,51 @@ class SquadDbStore implements IStoreSquad {
       .update({ ...squad, updatedAt: new Date() })
   }
 
-  async list(email: string): Promise<LoadedSquadsByUserIdType[]> {
+  async findAll(email: string): Promise<LoadedSquadsType[]> {
     const res = await this.#client
-      .select('squads.id as id', 'squads.name as squad', 'currentMaxRounds', 'currentPercentual', 'squads.updatedAt')
+      .select('squads-users.squad as id')
       .from('squads-users')
-      .where({user: (await this.#client('users').select('id').where({enabled:true, email}))[0].id})
-      .leftJoin('squads', 'squads.id', '=', 'squads-users.squad')
-      .where({ 'squads.enabled': true, 'squads-users.enabled': true })
-      .orderBy('squads.updatedAt', 'desc')
+      .where({user: (await this.#client('users').select('id').where({enabled:true, email}))[0].id, 'squads-users.enabled': true })
+      
     return res;
   }
 
-  async listUsers(squadId: string): Promise<LoadedUsersBySquadIdType[]> {
+  async find(squadId: string): Promise<LoadedSquadsByUserIdType|void> {
+    
     const res = await this.#client
-      .select('users.id as id', 'users.name as name', 'users.email as email')
+      .select('squads.id as squad', 'squads.name as squadName', 'squads.currentMaxRounds', 'squads.currentPercentual', 'squads.updatedAt', 'users.id as user', 'users.name as userName', 'users.email as email')
       .where({squad:squadId})
       .from('squads-users')
       .leftJoin('users', 'users.id', '=', 'squads-users.user')
+      .leftJoin('squads', 'squads.id', '=', 'squads-users.squad')
       .where({ 'users.enabled': true, 'squads-users.enabled': true })
 
-    return res;
+    if(res.length > 0){
+      return {
+        id: res[0].squad,
+        squad: res[0].squadName,
+        currentMaxRounds: res[0].currentMaxRounds,
+        currentPercentual:  res[0].currentPercentual,
+        updatedAt: res[0].updatedAt,
+        users: res.map((r)=> {
+          return {
+            id: r.user,
+            name: r.userName,
+            email: r.email
+          }
+        })
+      }
+    }
   }
 
-  async create(squad: CreateSquadType): Promise<LoadedSquadsByUserIdType | void> {
-    return await this.#client('squads')
+  async create(squad: CreateSquadType): Promise<LoadedSquadsType | void> {
+    await this.#client('squads')
       .insert({ id: squad.id, name: squad.name, currentMaxRounds: squad.currentMaxRounds, currentPercentual: squad.currentPercentual })
       .catch((error) => {
         throw new Error(error.detail);
       })
       .then(() => {
-        return {id: squad.id, squad: squad.name}
+        return {id: squad.id}
       })
   }
 }
