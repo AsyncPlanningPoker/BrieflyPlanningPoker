@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     column.uuid('id').primary();
     column.uuid('user').notNullable().references('id').inTable('users');
     column.uuid('squad').notNullable().references('id').inTable('squads');
-    column.boolean('enabled').defaultTo('enabled', knex.raw(true));
+    column.boolean('enabled').defaultTo(true);
     column.dateTime('updatedAt', { useTz: 'boolean' }).defaultTo(knex.fn.now());
     column.dateTime('createdAt', { useTz: 'boolean' }).defaultTo(knex.fn.now());
   });

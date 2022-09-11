@@ -20,6 +20,15 @@ type ISquadUserSeed = {
   squad: string;
 };
 
+type ITaskSeed = {
+  id: string;
+  squad: string;
+  name: string;
+  description?: string;
+  maxRounds: number;
+  percentual: number;
+};
+
 export async function seed(knex: Knex): Promise<void> {
   const users: IUserSeed[] = [
     { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', name: 'Line Conquista', email: 'line@briefly.com', password: '$2a$10$IrVhCnXDAxEhVknwQlI/IONAJZwDXRSSzRt5Yb.n46CXVxj27jFSq' },
@@ -36,10 +45,15 @@ export async function seed(knex: Knex): Promise<void> {
     { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084855', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', user: '7e13d8f9-159e-4bfb-b67f-1f9cd3084813' },
   ];
 
+  const tasks: ITaskSeed[] = [
+    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 1', description: "Description 1",  maxRounds: 3, percentual: 0.9 },
+    { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084811', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 2', description: "Description 2", maxRounds: 3, percentual: 0.9 },
+  ];
+
   await knex('squads-users').del();
   await Promise.all([knex('squads').del(), knex('users').del()]);
   await Promise.all([insertData(squads, 'squads', knex), insertData(users, 'users', knex)]);
-  await insertData(squadsUsers, 'squads-users', knex);
+  await Promise.all([insertData(squadsUsers, 'squads-users', knex), insertData(tasks, 'tasks', knex)]);
 }
 
 async function insertData(data: any, table: string, knex: Knex) {
