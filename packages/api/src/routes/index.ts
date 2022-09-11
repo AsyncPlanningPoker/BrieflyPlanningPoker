@@ -1,10 +1,12 @@
 import { createUser, login, passRecovery, passUpdate } from '../schemas/user';
 import { createSquad, updateSquad, addMembers } from '../schemas/squad';
+import { createTask } from '../schemas/task';
 import * as auth from '../middlewares/authorization/handler';
 import * as schema from '../middlewares/schema/schema';
 import { checkSchema } from 'express-validator';
 import { Router } from 'express';
 import * as squad from './squad';
+import * as task from './task';
 import * as user from './user';
 
 const routes = Router();
@@ -20,6 +22,13 @@ routes.put('/squad/:squadId', checkSchema(updateSquad), schema.handler, auth.han
 routes.get('/squad/:squadId', auth.handler, squad.find);
 routes.post('/squad/:squadId/users', checkSchema(addMembers), schema.handler, auth.handler, squad.addUsers);
 routes.delete('/squad/:squadId/users', auth.handler, squad.delUsers);
+
+routes.post('/squad/:squadId/task', checkSchema(createTask), schema.handler, auth.handler, task.create);
+routes.put('/squad/:squadId/task/:taskId/deactive', auth.handler, task.deactive);
+routes.delete('/squad/:squadId/task/:taskId', auth.handler, task.deleteTask);
+routes.get('/squad/:squadId/task', auth.handler, task.findAll)
+// routes.get('/squad/:squadId/task', auth.handler, task.findAll);
+// routes.get('/squad/:squadId/task/:taskId', auth.handler, task.find);
 
 routes.get('/health', (req, res) => {
   res.sendStatus(200);
