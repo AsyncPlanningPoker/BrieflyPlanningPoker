@@ -1,11 +1,15 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('squads', function (column: any) {
+  return knex.schema.createTable('tasks', function (column: any) {
     column.uuid('id').primary();
+    column.uuid('squad').notNullable().references('id').inTable('squads');
     column.string('name').notNullable();
-    column.integer('currentMaxRounds').notNullable();
-    column.decimal('currentPercentual', 14, 2).notNullable();
+    column.string('description');
+    column.integer('maxRounds').notNullable();
+    column.decimal('percentual', 14, 2).notNullable();
+    column.boolean('finished').defaultTo(false);
+    column.boolean('active').defaultTo(true);
     column.boolean('enabled').defaultTo(true);
     column.dateTime('updatedAt', { useTz: 'boolean' }).defaultTo(knex.fn.now());
     column.dateTime('createdAt', { useTz: 'boolean' }).defaultTo(knex.fn.now());
@@ -13,5 +17,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable('squads');
+  return knex.schema.dropTable('tasks');
 }
