@@ -44,12 +44,10 @@ class SquadDbStore implements IStoreSquad {
   }
 
   async findAll(email: string): Promise<LoadedSquadsType[]> {
-    const res = await this.#client
+    return await this.#client
       .select('squads-users.squad as id')
       .from('squads-users')
       .where({user: (await this.#client('users').select('id').where({enabled:true, email}))[0].id, 'squads-users.enabled': true })
-      
-    return res;
   }
 
   async find(squadId: string): Promise<LoadedSquadsByUserIdType|void> {
