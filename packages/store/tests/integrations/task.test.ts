@@ -6,16 +6,22 @@ describe('Task', () => {
     const factory = new FactoryStore();
     const { close, taskDbStore, squadDbStore } = factory.createStores();
 
-    const squad = {
+    const squads = [{
       id: randomUUID(),
       name: 'squad test 1',
       currentMaxRounds: 3,
       currentPercentual: 0.3,
-    }
+    },
+    {
+      id: randomUUID(),
+      name: 'squad test 2',
+      currentMaxRounds: 4,
+      currentPercentual: 0.4,
+    }]
 
     const task = {
       id: randomUUID(),
-      squad: squad.id,
+      squad: squads[0].id,
       name: 'task test 1',
     }
 
@@ -24,7 +30,7 @@ describe('Task', () => {
     })
 
     beforeAll(async ()=>{
-      await squadDbStore.create(squad)
+      await Promise.all([squadDbStore.create(squads[0]), squadDbStore.create(squads[1])])
       await taskDbStore.create(task)
     })
 
@@ -32,7 +38,7 @@ describe('Task', () => {
      
       const task =  {
         id: randomUUID(),
-        squad: squad.id,
+        squad: squads[0].id,
         name: 'task test 2',
         description: 'description test 2'
       }
@@ -45,49 +51,49 @@ describe('Task', () => {
       expect(res).toStrictEqual(expected)
     });
 
-    // it('Should delete a task', async () => {
+    it('Should list all tasks by squad id', async () => {
+
+      const tasks =  [{
+        id: randomUUID(),
+        squad: squads[1].id,
+        name: 'task test 3',
+        description: 'description test 3'
+      },
+      {
+        id: randomUUID(),
+        squad: squads[1].id,
+        name: 'task test 4',
+        description: 'description test 4'
+      }]
+
+      const expected = [{
+        id: tasks[0].id,
+        name: tasks[0].name,
+        maxRounds: squads[1].currentMaxRounds,
+        active: true,
+        finished: false
+      },
+      {
+        id: tasks[1].id,
+        name: tasks[1].name,
+        maxRounds: squads[1].currentMaxRounds,
+        active: true,
+        finished: false
+      }]
+
+      for(const task of tasks){
+        await taskDbStore.create(task)
+      }
      
-    //   const task =  {
-    //     id: randomUUID(),
-    //     squad: squad.id,
-    //     name: 'task test 2',
-    //     description: 'description test 2'
-    //   }
-
-    //   await taskDbStore.create(task)
-    //   await taskDbStore.delete({id: task.id, squad: task.squad})
-      
-    //   expect(res).toStrictEqual(expected)
-    //   expect(updatedSquad?.currentMaxRounds).toBe(1)
-    //   expect(updatedSquad?.currentPercentual).toBe('1.00')
-    //   expect(updatedSquad?.squad).toBe('squad test update')
-
-    // });
-
-    // it('Should active a task', async () => {
-     
-    //   const squad =  {
-    //     id: randomUUID(),
-    //     name: 'squad test 6',
-    //     users: [],
-    //     currentMaxRounds: 20,
-    //     currentPercentual: 0.1,
-    //   }
-
-    //   await squadDbStore.create(squad)
-    //   await squadDbStore.addSquadUsersByEmail(squad.id, 'squadtest1@briefly.com', true)
-    //   await squadDbStore.addSquadUsersByEmail(squad.id,'squadtest2@briefly.com', false)
-    //   const res = await squadDbStore.list('squadtest1@briefly.com')
-    //   const findSquad = res.find((squad) => squad.squad === 'squad test 6')
-    //   expect(findSquad).not.toBe(undefined)
-
-    // });
+      const res = await taskDbStore.findAll({squad: squads[1].id})
+      expect(res).toStrictEqual(expected)
+    });
 
     it('Should throw an error after trying to create a task with duplicate id', async () => {
 
       const task =  {
         id: randomUUID(),
-        squad: squad.id,
+        squad: squads[0].id,
         name: 'task test 2',
         description: 'description test 2'
       }
