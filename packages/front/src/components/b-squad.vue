@@ -1,24 +1,5 @@
 <template>
-  <div 
-    v-if="!squad.squad" 
-    class="b-squad"
-  >
-    <div class="b-squad__container">
-      <div class="b-squad__name">   
-        <BText
-          color="white"
-          size="giant"
-        >
-          Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻
-        </BText>
-      </div>
-    </div>
-  </div>
-
-  <div
-    v-else
-    class="b-squad"
-  >
+  <div class="b-squad">
     <div class="b-squad__container">
       <div class="b-squad__name">
         <BText
@@ -27,7 +8,7 @@
           size="giant"
           @click="toggleUpdateModal"
         >
-          {{ squad.squad }}
+           {{ squad.squad }}
         </BText>
       </div>
 
@@ -58,8 +39,15 @@
             {{ squad.currentPercentual }}
           </BText>
         </div>
-        <div class="b-squad__leave">
-          <font-awesome-icon class="b-squad__icon b-squad__icon--clickable" icon="fa-solid fa-right-from-bracket" @click="toggleLeaveModal('')"/>
+        <div class="b-squad__leave"  @click="toggleLeaveModal('')" >
+          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-right-from-bracket" />
+        
+          <BText
+            color="white"
+            size="giant"
+          >
+            Sair
+          </BText>
         </div>
       </div>
     </div>
@@ -86,11 +74,11 @@
     />
   </div>
     
-  <BModal :open="updateModal">
+  <BModal color="gray-30" :open="updateModal">
     <FSquad :update="true" @close="toggleUpdateModal" />
   </BModal>
 
-  <BModal :open="leaveModal">
+  <BModal color="gray-30" :open="leaveModal">
     <FLeave :email="email" @close="toggleLeaveModal('')" />
   </BModal>
 </template>
@@ -106,8 +94,8 @@ import BModal from '../components/b-modal.vue';
 import BText from '../components/b-text.vue';
 
 import FAddUser from '../forms/f-add-user.vue';
-import FSquad from '../forms/f-squad.vue';
 import FLeave from '../forms/f-leave.vue';
+import FSquad from '../forms/f-squad.vue';
 
 export default {
   name: 'BSquad',
@@ -116,14 +104,25 @@ export default {
     BBadge,
     BDivisor,
     BInput,
+    BModal,
     BText,
+    FAddUser,
+    FLeave,
+    FSquad,
   },
+
+  props: {
+    squad: {
+      type: Object,
+      required: true,
+    }
+  }
 }
 </script>
 
 <script setup>
 const store = useStore();
-const squad = computed(() => store.getters.getSquadActive);
+// const squad = computed(() => store.getters.getSquadActive);
 const actualUser = computed(() => store.getters.getUserEmail);
 
 const moreInfo = ref(false);
@@ -140,11 +139,9 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 <style lang="scss" scoped>
 .b-squad {
   display: grid;
-  padding: var(--unit-0400) var(--unit-1000);
-  row-gap: var(--unit-0800);
+  row-gap: var(--unit-0900);
 
   @media (max-width: 768px) {
-    padding: var(--unit-0300);
     row-gap: var(--unit-0600);
   }  
 }
@@ -179,6 +176,19 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
   }
 }
 
+.b-squad__title {
+  cursor: pointer;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+
+  &:hover {
+    color: var(--color-accent);
+  }
+}
+
 .b-squad__divisor {
   grid-area: divisor;
 
@@ -188,30 +198,38 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 }
 
 .b-squad__info {
-  column-gap: var(--unit-0800);
   cursor: default;
   grid-area: info;
-  height: 48px;
+  height: var(--unit-1000);
+  justify-content: space-between;
 
-  @media (max-width: 768px) {
-    height: 40px;
-  }
-
-}
-
-.b-squad__title,
-.b-squad__icon--clickable {
-  cursor: pointer;
-
-  &:hover {
-    color: var(--color-accent);
+  @media (min-width: 768px) {
+    width: 280px;
   }
 }
+
+// .b-squad__clickable {
+//   cursor: pointer;
+
+//   &:hover {
+//     color: var(--color-accent);
+//   }
+// }
 
 .b-squad__max-rounds,
 .b-squad__percentual,
 .b-squad__leave {
   column-gap: var(--unit-0200);
+}
+
+.b-squad__leave {
+  cursor: pointer;
+
+  &:hover {
+    & > svg, span {
+      color: var(--color-accent);
+    }
+  }
 }
 
 .b-squad__icon {

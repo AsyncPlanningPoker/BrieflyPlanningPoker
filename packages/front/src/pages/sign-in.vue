@@ -2,7 +2,7 @@
   <div class="sign-in">
     <BBrand/>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <Form
         class="sign-in__form"
         :validation-schema="schema"

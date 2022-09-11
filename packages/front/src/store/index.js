@@ -6,16 +6,25 @@ import { passRecoveryTwoStore } from './pass-recovery-two';
 import squads from './squads'
 
 export default createStore({
-  state: { userToken: '', isAuth: false },
+  state: { 
+    userToken: JSON.parse(localStorage.getItem('userToken')) || '',
+  },
+
   getters: {},
+
   mutations: {
-    updateUserToken(state, userToken) {
-      state.userToken = userToken;
-    },
-    updateIsAuth(state, isAuth) {
-      state.isAuth = isAuth;
+    UPDATE_USER_TOKEN(state, payload) {
+      state.userToken = payload;
+      localStorage.removeItem("userToken");
+      localStorage.setItem("userToken", JSON.stringify(state.userToken));
+    }
+  },
+
+  actions: {
+    updateUserToken({commit}, payload) {
+      commit('UPDATE_USER_TOKEN', payload);
     },
   },
-  actions: {},
+  
   modules: { signIn: signInStore, signUp: signUpStore, passRecoveryOne: passRecoveryOneStore, passRecoveryTwo: passRecoveryTwoStore, squads },
 });

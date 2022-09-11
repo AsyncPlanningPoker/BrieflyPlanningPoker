@@ -3,8 +3,9 @@
     class="b-button"
     :class="{
       'b-button--small': size === 'small',
-      'b-button--transparent': transparent
+      [`b-button--${variant}`]: variant,
     }"
+    :style="`height: ${height}px;`"
     :type="type"
   >
     {{ this.value.toUpperCase() }}
@@ -18,24 +19,29 @@ export default {
   name: 'BButton',
 
   props: {
+    height: {
+      type: Number,
+      required: false,
+    },
     size: {
       type: String,
       default: 'medium',
-      validator: shouldBeOneOf(['small', 'medium']),
-    },
-    transparent: {
-      type: Boolean,
-      default: false,
+      validator: shouldBeOneOf(['small','medium']),
     },
     type: {
       type: String,
       default: 'button',
-      validator: shouldBeOneOf(['button', 'reset', 'submit']),
+      validator: shouldBeOneOf(['button','reset','submit']),
     },
     value: {
       type: String,
       required: true,
     },
+    variant: {
+      type: String,
+      default: 'primary',
+      validator: shouldBeOneOf(['primary','transparent','inverted']),
+    }
   },
 };
 </script>
@@ -70,6 +76,17 @@ export default {
     background-color: transparent;
     border-color: var(--color-accent);
     color: var(--color-accent);
+  }
+}
+
+.b-button--inverted {
+  background-color: transparent;
+  border: none;
+  color: var(--color-black);
+
+  &:hover {
+    background-color: transparent;
+    border: var(--unit-0050) solid var(--color-black);
   }
 }
 

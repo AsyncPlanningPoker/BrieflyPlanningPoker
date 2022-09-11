@@ -18,7 +18,7 @@
     </BText>
     <div class="f-leave__buttons-container">
       <BButton
-        :transparent="true"
+        variant="transparent"
         value="no"
         @click="$emit('close')"
       />

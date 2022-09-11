@@ -42,7 +42,7 @@
 
     <div class="f-squad__buttons-container">
       <BButton
-        :transparent="true"
+        variant="transparent"
         value="cancel"
         @click="$emit('close')"
       />
@@ -103,7 +103,7 @@
 
     <div class="f-squad__buttons-container">
       <BButton
-        :transparent="true"
+        variant="transparent"
         value="cancel"
         @click="$emit('close')"
       />

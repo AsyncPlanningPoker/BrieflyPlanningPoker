@@ -19,6 +19,11 @@ a {
   margin: 0;
 }
 
+body {
+  background-color: var(--color-gray-30);
+  height: 100vh;
+}
+
 :root {
   //font
   --font-family: 'Hammersmith One', sans-serif;
@@ -28,20 +33,23 @@ a {
   --font-size-large: 1.25rem;
   --font-size-giant: 1.5rem;
   
-  --line-height-small: 0.75rem;
-  --line-height-medium: 1rem;
-  --line-height-large: 1.25rem;
-  --line-height-giant: 1.5rem;
+  --line-height-small: 1rem;
+  --line-height-medium: 1.25rem;
+  --line-height-large: 1.5rem;
+  --line-height-giant: 1.75rem;
 
 
   //color pallete
   --color-primary: #BFA8BB;
-  --color-accent:  #E6CAE0;
-  --color-white:   #F2F2F2;
-  --color-gray:    #333333;
-  --color-black:   #0D0D0D;
-  --color-link:    #58A6FF;
-  --color-error:   #D64A5E;
+  --color-accent: #E6CAE0;
+  --color-white: #F2F2F2;
+  --color-gray-10: #b9bfc7;
+  --color-gray-10: #c8c8c8;
+  --color-gray-20: #767676;
+  --color-gray-30: #333333;
+  --color-black: #0D0D0D;
+  --color-link: #58A6FF;
+  --color-error: #D64A5E;
   --color-success: #4BD667;
 
   //units
@@ -51,6 +59,7 @@ a {
   --unit-0100: 4px;
   --unit-0200: 8px;
   --unit-0300: 12px;
+  --unit-0350: 14px;
   --unit-0400: 16px;
   --unit-0500: 20px;
   --unit-0600: 24px;

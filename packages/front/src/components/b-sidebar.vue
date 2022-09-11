@@ -6,7 +6,7 @@
       </a>
     </div>
 
-    <BDivisor />
+    <BDivisor color="gray-30" />
 
     <div class="b-sidebar__new-squad-wrapper">
       <BButton
@@ -15,12 +15,12 @@
         @click="toggleModal"
       />
 
-      <BModal :open="showModal">
+      <BModal color="gray-30" :open="showModal">
         <FSquad @close="toggleModal" />
       </BModal>
     </div>
 
-    <BDivisor />
+    <BDivisor color="gray-30" />
 
     <div class="b-sidebar__squad-wrapper">
       <div
@@ -30,7 +30,7 @@
       >
         <BButton
           size="small"
-          :transparent="true"
+          variant="transparent"
           :value="`${ index + 1 }`"
           @click="store.dispatch('gatherSquad', squad.id)"
         />
@@ -73,13 +73,13 @@ const toggleModal = () => { showModal.value = !showModal.value };
   align-content: start;
   background-color: var(--color-black);
   display: grid;
-  height: calc(100vh - var(--unit-0800));
+  height: calc(100vh - (2 * var(--unit-0900)));
   justify-items: center;
-  padding: var(--unit-0400);
-  row-gap: var(--unit-0800);
+  padding: var(--unit-0900);
+  row-gap: var(--unit-0900);
 
   @media (max-width: 768px) {
-    height: calc(100vh - var(--unit-0600));
+    height: calc(100vh - (2 * var(--unit-0300)));
     padding: var(--unit-0300);
     row-gap: var(--unit-0600);
   }

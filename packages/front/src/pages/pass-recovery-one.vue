@@ -2,7 +2,7 @@
   <div class="pass-recovery-one">
     <BBrand/>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <Form
         class="pass-recovery-one__form"
         :validation-schema="schema"
@@ -30,7 +30,7 @@
 
         <div class="pass-recovery-one__buttons-container">
           <BButton
-            :transparent="true"
+            variant="transparent"
             value="return"
             @click="$router.push('signin')"
           />

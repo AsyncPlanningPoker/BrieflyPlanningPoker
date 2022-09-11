@@ -1,4 +1,5 @@
 import { api } from '../services/api';
+import router from '../router'
 
 export default {
 
@@ -35,9 +36,9 @@ export default {
 
   actions: {
     async gatherSquadList({commit}) {
-      const req = await api.get('squad');
-      const reqdata = req.data;
-      commit('ADD_SQUAD_LIST', reqdata);
+      await api.get('squad')
+        .then((res) => commit('ADD_SQUAD_LIST', res.data))
+        .catch((err) => router.push('signin'));
     },
 
     async gatherSquad({commit}, id) {

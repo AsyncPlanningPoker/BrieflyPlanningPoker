@@ -3,16 +3,18 @@
     <div class="b-input-field__label">
       <BText 
         :for="name"
+        :color="color"
         tag="label"
       >
         {{ label }}
       </BText>
 
       <BText
-        :href="link"
+        v-if="link"
+        color="link"
         tabindex="-1"
         tag="a"
-        v-if="link"
+        :href="link"
       >
         {{ linkLabel }}
       </BText>
@@ -55,6 +57,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    color: {
+      type: String,
+      default: 'white',
     },
     initial: {},
     label: {

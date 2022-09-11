@@ -1,4 +1,5 @@
-import { api, setToken } from '../services/api';
+import { api } from '../services/api';
+
 import router from '../router/index';
 
 const signUpStore = {
@@ -36,9 +37,7 @@ const signUpStore = {
         .post('user', { name: this.state.signUp.name, email: this.state.signUp.email, password: this.state.signUp.password })
         .then((res) => {
           const token = res.data.token;
-          commit('updateUserToken', token);
-          commit('updateIsAuth', true);
-          setToken(token);
+          dispatch('updateUserToken', token);
           router.push('/');
         })
         .catch((err) => {

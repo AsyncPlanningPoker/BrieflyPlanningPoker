@@ -1,0 +1,22 @@
+[
+  {
+    "name":"[DISCOVERY] descobrir como funciona o docker",
+    "description": "",
+    "votable": true
+  },
+  {
+    "name": "[DISCOVERY] testar outros planning pokers",
+    "description": "",
+    "votable": true
+  },
+  {
+    "name": "[FRONT] consertar a sidebar feia",
+    "description": "",
+    "votable": true
+  },
+  {
+    "name":"[BACK] fazer tests mtos tests",
+    "description": "",
+    "votable": true
+  }
+]

@@ -26,7 +26,7 @@ export default {
     },
     color: {
       type: String,
-      validator: shouldBeOneOf(['primary','accent','white','gray','black'])
+      validator: shouldBeOneOf(['primary','accent','white','gray-10','gray-20','gray-30','black','link'])
     },
     size: {
       type: String,
@@ -43,6 +43,7 @@ export default {
 
 <style scoped lang="scss">
 .b-text {
+  color: inherit;
   font-family: var(--font-family);
   letter-spacing: normal;
   text-align: inherit;
@@ -56,7 +57,7 @@ export default {
   }
 }
 
-@each $color in ('primary','accent','white','gray','black') {
+@each $color in ('primary','accent','white','gray-10','gray-20','gray-30','black','link') {
   .b-text--#{$color} {
     color: var(--color-#{$color});
   }

@@ -2,7 +2,7 @@
   <div class="sign-up">
     <BBrand/>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <Form
         class="sign-up__form"
         :validation-schema="schema"
@@ -63,7 +63,7 @@
 
         <div class="sign-up__buttons-container">
           <BButton
-            :transparent="true"
+            variant="transparent"
             value="return"
             @click="$router.push('signin')"
           />

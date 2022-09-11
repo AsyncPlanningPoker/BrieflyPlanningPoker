@@ -29,8 +29,8 @@ export default {
     },
     color: {
       type: String,
-      default: 'gray',
-      validator: shouldBeOneOf(['primary','white','gray','black']),
+      default: 'black',
+      validator: shouldBeOneOf(['primary','white','gray-10','gray-20','gray-30','black']),
     },
   },
 };
@@ -59,14 +59,14 @@ const toggle = () => {
   margin-top: calc(var(--unit-0100) + var(--unit-0050));
 }
 
-@each $color in ('primary','white','gray','black') {
+@each $color in ('primary','white','gray-10','gray-20','gray-30','black') {
   .b-divisor--#{$color} {
     border-bottom: var(--unit-0050) solid var(--color-#{$color});
   }
 
   .b-divisor__button--#{$color} {
     & > svg {
-      background-color: var(--color-gray);
+      background-color: var(--color-gray-30);
       color: var(--color-#{$color});
     }
   }

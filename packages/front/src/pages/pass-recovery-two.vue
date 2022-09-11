@@ -2,7 +2,7 @@
   <div class="pass-recovery-two">
     <BBrand/>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <Form
         class="pass-recovery-two__form"
         :validation-schema="schema"
