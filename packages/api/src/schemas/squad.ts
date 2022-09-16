@@ -11,7 +11,7 @@ const createSquad: Schema = {
   },
   currentMaxRounds: {
     isNumeric: {
-      errorMessage: 'currentMaxRounds must hve a numeric value',
+      errorMessage: 'currentMaxRounds must have a numeric value',
     },
     isLength: {
       errorMessage: 'currentMaxRounds is required',
@@ -19,7 +19,7 @@ const createSquad: Schema = {
   },
   currentPercentual: {
     isNumeric: {
-      errorMessage: 'currentPercentual must hve a numeric value',
+      errorMessage: 'currentPercentual must have a numeric value',
     },
     isLength: {
       errorMessage: 'currentPercentual is required',

@@ -18,10 +18,11 @@ function listen(): void {
 
 function setDb() {
   const factory = new FactoryStore();
-  const { close, userDbStore, squadDbStore, taskDbStore } = factory.createStores();
+  const { close, userDbStore, squadDbStore, taskDbStore, votingDbStore } = factory.createStores();
   app.set('userDbStore', userDbStore);
   app.set('squadDbStore', squadDbStore);
   app.set('taskDbStore', taskDbStore);
+  app.set('votingDbStore', votingDbStore);
   return close;
 }
 

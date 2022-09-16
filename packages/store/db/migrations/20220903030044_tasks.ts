@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
     column.string('description');
     column.integer('maxRounds').notNullable();
     column.decimal('percentual', 14, 2).notNullable();
+    column.integer('points');
     column.boolean('finished').defaultTo(false);
     column.boolean('active').defaultTo(true);
     column.boolean('enabled').defaultTo(true);

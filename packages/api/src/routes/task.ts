@@ -91,7 +91,4 @@ async function findAll(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
-
-
-
 export { create, deactive, deleteTask, findAll };

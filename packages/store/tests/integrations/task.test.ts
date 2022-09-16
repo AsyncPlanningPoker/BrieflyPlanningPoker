@@ -1,46 +1,56 @@
+import {FactoryStore} from '../../src/factory'
+import knexfile from '../../knexfile';
 import { randomUUID } from 'crypto';
-import { FactoryStore } from '../../src/factory'
+import knex from 'knex';
 
 describe('Task', () => {
-
+    const db = knex(knexfile)
     const factory = new FactoryStore();
-    const { close, taskDbStore, squadDbStore } = factory.createStores();
+    const { close, taskDbStore } = factory.createStores();
 
-    const squads = [{
+    const squad = {
       id: randomUUID(),
       name: 'squad test 1',
       currentMaxRounds: 3,
       currentPercentual: 0.3,
-    },
-    {
-      id: randomUUID(),
-      name: 'squad test 2',
-      currentMaxRounds: 4,
-      currentPercentual: 0.4,
-    }]
-
-    const task = {
-      id: randomUUID(),
-      squad: squads[0].id,
-      name: 'task test 1',
     }
 
     afterAll(()=>{
       close()
+      db.destroy()
     })
 
     beforeAll(async ()=>{
-      await Promise.all([squadDbStore.create(squads[0]), squadDbStore.create(squads[1])])
-      await taskDbStore.create(task)
+      await db('squads').insert(squad)
     })
 
-    it('Should create a task', async () => {
+    afterEach(async ()=>{
+      await db('tasks').del()
+    })
+
+    it('Should create a task with description', async () => {
      
       const task =  {
         id: randomUUID(),
-        squad: squads[0].id,
-        name: 'task test 2',
-        description: 'description test 2'
+        squad: squad.id,
+        name: 'task test 1',
+        description: 'description test 1'
+      }
+
+      const expected = {
+        id: task.id
+      }
+
+      const res = await taskDbStore.create(task)
+      expect(res).toStrictEqual(expected)
+    });
+
+    it('Should create a task without description', async () => {
+     
+      const task =  {
+        id: randomUUID(),
+        squad: squad.id,
+        name: 'task test 1',
       }
 
       const expected = {
@@ -55,37 +65,83 @@ describe('Task', () => {
 
       const tasks =  [{
         id: randomUUID(),
-        squad: squads[1].id,
-        name: 'task test 3',
-        description: 'description test 3'
+        squad: squad.id,
+        name: 'task test',
+        description: 'description test'
       },
       {
         id: randomUUID(),
-        squad: squads[1].id,
-        name: 'task test 4',
-        description: 'description test 4'
+        squad: squad.id,
+        name: 'task test 1',
+        description: 'description test 1',
       }]
 
-      const expected = [{
-        id: tasks[0].id,
-        name: tasks[0].name,
-        maxRounds: squads[1].currentMaxRounds,
-        active: true,
-        finished: false
-      },
-      {
-        id: tasks[1].id,
-        name: tasks[1].name,
-        maxRounds: squads[1].currentMaxRounds,
-        active: true,
-        finished: false
-      }]
+      const expected = {
+        active: [{
+          task: tasks[0].id,
+          name: tasks[0].name,
+          points: null,
+          currentRound: null,
+          maxRounds: squad.currentMaxRounds,
+          finished: false
+        },
+        {
+          task: tasks[1].id,
+          name: tasks[1].name,
+          points: null,
+          currentRound: null,
+          maxRounds: squad.currentMaxRounds,
+          finished: false
+        }],
+      deactive: []
+      }
 
-      for(const task of tasks){
-        await taskDbStore.create(task)
+      await taskDbStore.create(tasks[0])
+      await taskDbStore.create(tasks[1])
+     
+      const res = await taskDbStore.findAll({squad: squad.id})
+      expect(res).toStrictEqual(expected)
+    });
+
+    it('Should deactive a task', async () => {
+
+      const task = {
+        id: randomUUID(),
+        squad: squad.id,
+        name: 'task test',
+        description: 'description test'
+      }
+
+      await taskDbStore.create(task)
+      await taskDbStore.deactive({id: task.id, squad: task.squad})
+      const res = await taskDbStore.findAll({squad: task.id})
+
+      const expected = {
+        active: [],
+        deactive: []
       }
      
-      const res = await taskDbStore.findAll({squad: squads[1].id})
+      expect(res).toStrictEqual(expected)
+    });
+
+    it('Should delete a task', async () => {
+
+      const task = {
+        id: randomUUID(),
+        squad: squad.id,
+        name: 'task test',
+        description: 'description test'
+      }
+
+      await taskDbStore.create(task)
+      await taskDbStore.delete({id: task.id, squad: task.squad})
+      const res = await taskDbStore.findAll({squad: task.id})
+
+      const expected = {
+        active: [],
+        deactive: []
+      }
+     
       expect(res).toStrictEqual(expected)
     });
 
@@ -93,7 +149,7 @@ describe('Task', () => {
 
       const task =  {
         id: randomUUID(),
-        squad: squads[0].id,
+        squad: squad.id,
         name: 'task test 2',
         description: 'description test 2'
       }
