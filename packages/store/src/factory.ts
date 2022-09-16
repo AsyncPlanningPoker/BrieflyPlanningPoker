@@ -1,14 +1,15 @@
-import { UserDbStore } from './stores/user';
 import { SquadDbStore } from './stores/squad';
+import { UserDbStore } from './stores/user';
 import { TaskDbStore } from './stores/task';
-import knex, { Knex } from 'knex';
+import { VotingDbStore } from './stores/voting';
 import knexfile from '../knexfile';
-
+import knex, { Knex } from 'knex';
 
 interface FactoryStoreResult {
   userDbStore: UserDbStore;
   squadDbStore: SquadDbStore;
   taskDbStore: TaskDbStore;
+  votingDbStore: VotingDbStore;
   close: () => void;
 }
 
@@ -20,7 +21,13 @@ class FactoryStore {
       return this.client.destroy();
     };
 
-    return { userDbStore: new UserDbStore(this.client), squadDbStore: new SquadDbStore(this.client), taskDbStore: new TaskDbStore(this.client), close };
+    return { 
+        userDbStore: new UserDbStore(this.client), 
+        squadDbStore: new SquadDbStore(this.client), 
+        taskDbStore: new TaskDbStore(this.client), 
+        votingDbStore: new VotingDbStore(this.client), 
+        close 
+    };
   }
 }
 
