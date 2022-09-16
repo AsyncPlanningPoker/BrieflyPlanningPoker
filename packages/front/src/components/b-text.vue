@@ -63,7 +63,7 @@ export default {
   }
 }
 
-@each $size in ('small','medium','large', 'giant') {
+@each $size in ('small','medium','large','giant') {
   .b-text--#{$size} {
     font-size: var(--font-size-#{$size});
     line-height: var(--line-height-#{$size});

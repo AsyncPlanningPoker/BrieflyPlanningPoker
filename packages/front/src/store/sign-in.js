@@ -10,11 +10,7 @@ const signInStore = {
     password: '',
   },
 
-  getters: {
-    getUserEmail(state) {
-      return state.email;
-    },
-  },
+  getters: {},
 
   mutations: {
     updateEmail(state, email) {
@@ -30,10 +26,12 @@ const signInStore = {
 
   actions: {
     login({ dispatch, commit }) {
-      api.post('user/login', { email: this.state.signIn.email, password: this.state.signIn.password })
+      api
+        .post('user/login', { email: this.state.signIn.email, password: this.state.signIn.password })
         .then((res) => {
           const token = res.data.token;
           dispatch('updateUserToken', token);
+          dispatch('updateUserEmail', this.state.signIn.email);
           router.push('/');
         })
         .catch((err) => {

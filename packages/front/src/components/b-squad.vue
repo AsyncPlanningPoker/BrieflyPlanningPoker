@@ -122,7 +122,6 @@ export default {
 
 <script setup>
 const store = useStore();
-// const squad = computed(() => store.getters.getSquadActive);
 const actualUser = computed(() => store.getters.getUserEmail);
 
 const moreInfo = ref(false);

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-// import { useStore } from 'vuex';
+import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
 
@@ -64,14 +64,21 @@ export default {
 </script>
 
 <script setup>
-// const store = useStore();
+const emit = defineEmits(['close']);
+const store = useStore();
 
 function onSubmit(values) {
-  // do something
+  const newTask = {
+    name: values.taskTitle,
+    description: values.taskDescription,
+  }
+  store.dispatch('addTask', newTask);
+
+  emit('close');
 };
 
 function onInvalidSubmit() {
-  const submitButton = document.querySelector(".f-add-user__button");
+  const submitButton = document.querySelector(".f-task__button");
   submitButton.classList.add("invalid");
   setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
 };

@@ -38,6 +38,7 @@ const signUpStore = {
         .then((res) => {
           const token = res.data.token;
           dispatch('updateUserToken', token);
+          dispatch('updateUserEmail', token);
           router.push('/');
         })
         .catch((err) => {

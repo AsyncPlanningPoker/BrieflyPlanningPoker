@@ -49,7 +49,7 @@
       </Form>
     </BContainer>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <BButton
         class="sign-in__registry-button"
         size="small"

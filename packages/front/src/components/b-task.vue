@@ -2,32 +2,47 @@
   <div 
     class="b-task"
     :class="active ?  'b-task--active' : 'b-task--archived'"
-    @click="toggleModal"
   >
-    <BText
-      align="left"
-      class="b-task__name"
-      size="medium"
-      tag="strong"
-    >
-      {{ name }}
-    </BText>
-
-    <div class="b-task__round">
-      <font-awesome-icon class="b-task__round-icon" icon="fa-solid fa-arrow-rotate-right" />
-
+    <div class="b-task__name-wrapper">
       <BText
-        align="right"
+        align="left"
+        class="b-task__name"
         size="medium"
-        tag="span"
+        tag="strong"
+        @click="toggleModal"
       >
-        2/3
+        {{ task.name }}
       </BText>
     </div>
 
-    <font-awesome-icon class="b-task__archive-icon" icon="fa-solid fa-square-caret-down" />
+    <div class="b-task__info-wrapper">
+      <div class="b-task__round">
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
 
-    <font-awesome-icon class="b-task__delete-icon" icon="fa-solid fa-trash-can" />
+        <BText
+          align="right"
+          size="medium"
+          tag="span"
+        >
+          ?/{{ task.maxRounds }}
+        </BText>
+      </div>
+
+      <div class="b-task__buttons">
+        <font-awesome-icon
+          class="b-task__icon"
+          icon="fa-solid fa-square-caret-down"
+          @click="store.dispatch('disableTask', task.id)"
+        />
+
+        <font-awesome-icon
+          class="b-task__icon"
+          icon="fa-solid fa-trash-can"
+          @click="store.dispatch('deleteTask', task.id)"
+        />
+      </div>
+
+    </div>
   </div>
 
   <BModal color="gray-10" :open="showModal">
@@ -37,6 +52,7 @@
 
 <script>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 import BModal from '../components/b-modal.vue';
 import BTaskExpanded from '../components/b-task-expanded.vue';
@@ -52,8 +68,8 @@ export default {
   },
 
   props: {
-    name: {
-      type: String,
+    task: {
+      type: Object,
       required: true,
     },
     active: {
@@ -65,6 +81,8 @@ export default {
 </script>
 
 <script setup>
+const store = useStore();
+
 const showModal = ref(false);
 const toggleModal = () => { showModal.value = !showModal.value };
 </script>
@@ -75,65 +93,68 @@ const toggleModal = () => { showModal.value = !showModal.value };
   border: none;
   border-radius: var(--unit-0100);
   display: grid;
-  grid-template-areas: 'name round round' 'name archive delete';
-  grid-template-columns: auto min-content min-content;
-  grid-template-rows: min-content min-content;
-  grid-column-gap: var(--unit-0300);
-  grid-row-gap: 15px;
-  height: var(--unit-1600);
-  padding: var(--unit-0300);
+  grid-template-areas: 'name' 'info';
+  grid-row-gap: var(--unit-0300);
+  padding: var(--unit-0200);
+}
+
+.b-task__name-wrapper {
+  cursor: pointer;
+  grid-area: name;
+  padding: var(--unit-0200);
 }
 
 .b-task__name {
   display: -webkit-box;
-  grid-area: name;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
+.b-task__info-wrapper {
+  grid-area: info;
+}
+
+.b-task__buttons, 
+.b-task__info-wrapper,
 .b-task__round {
   align-items: center;
   display: flex;
-  grid-area: round;
-  height: var(--unit-0600);
   justify-content: space-between;
-  padding-left: var(--unit-0100);
 }
 
-.b-task__round-icon {
-  height: 16px;
-  width: 16px;
+.b-task__icon {
+  border-radius: var(--unit-5000);
+  color: var(--color-gray-30);
+  height: var(--unit-0600);
+  padding: var(--unit-0200);
+  width: var(--unit-0600); 
 }
 
-.b-task__archive-icon {
-  grid-area: archive;
-  height: 24px;
-  width: 24px;
-}
-
-.b-task__delete-icon {
-  grid-area: delete;
-  height: 22px; //this is intentional, the fa trash icon is larger than archive icon.
-  width: 24px;
-}
-
-.b-task--active {
+.b-task__buttons > .b-task__icon {
   cursor: pointer;
 
-  &:hover {
-    box-shadow: 0 0 0 var(--unit-0050) var(--color-accent);
+  &:hover,
+  &:focus {
+    background-color: var(--color-primary);
+    color: var(--color-white);
   }
 }
+
+// .b-task--active {
+//   cursor: pointer;
+
+//   &:hover {
+//     box-shadow: 0 0 0 var(--unit-0050) var(--color-accent);
+//   }
+// }
 
 .b-task--archived {
   background-color: var(--color-gray-20);
   color: var(--color-gray-30);
-  cursor: default;
-}
 
-.b-task__icon--large {
-  height: var(--unit-0600);
-  width: var(--unit-0600);
+  &:hover {
+    background-color: var(--color-gray-10);
+  }
 }
 </style>
