@@ -1,40 +1,46 @@
 interface IStoreTask {
   create(task: CreateTaskType): Promise<LoadedTaskType | void>;
+  deactive(task: IdentifierTaskType): Promise<void>;
+  delete(task: IdentifierTaskType): Promise<void>;
+  findAll(squad: FindTaskType): Promise<LoadedAllTask>
 }
 
-type CreateTaskType = {
-  id: string;
-  squad: string;
+type CreateTaskType = IdentifierTaskType & {
   name: string;
   description?: string
 };
 
-type deactiveTaskType = {
-  id: string;
+type FindTaskType = {
   squad: string;
 };
 
-type deleteTaskType = {
+type IdentifierTaskType = {
   id: string;
   squad: string;
-};
+}
 
-type findTaskType = {
-  squad: string;
+type LoadedAllTask = {
+  active: {
+    id: string;
+    name: string;
+    maxRounds: number;
+    currentRound: number;
+    points: number;
+    finished: boolean;
+  }[],
+  deactive: {
+    id: string;
+    name: string;
+    maxRounds: number;
+    currentRound: number;
+    points: number;
+    finished: boolean;
+  }[]
 };
 
 type LoadedTaskType = {
   id: string;
 };
 
-type LoadedAllTask = {
-  id: string;
-  name: string;
-  maxRounds: number;
-  active: boolean;
-  finished: boolean;
-};
-
-
 export { IStoreTask };
-export type { CreateTaskType, LoadedTaskType, deactiveTaskType, deleteTaskType, findTaskType, LoadedAllTask };
+export type { CreateTaskType, IdentifierTaskType, FindTaskType, LoadedAllTask, LoadedTaskType };

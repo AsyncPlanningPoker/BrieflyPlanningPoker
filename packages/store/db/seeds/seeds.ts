@@ -1,12 +1,5 @@
 import { Knex } from 'knex';
 
-type IUserSeed = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-};
-
 type ISquadSeed = {
   id: string;
   name: string;
@@ -20,6 +13,22 @@ type ISquadUserSeed = {
   squad: string;
 };
 
+type ITaskMessagesSeed = {
+  id: string;
+  task: string;
+  user: string;
+  currentRound: number;
+  message: string;
+}
+
+type ITaskPointsSeed = {
+  id: string;
+  task: string;
+  user: string;
+  points: number;
+  currentRound: number;
+}
+
 type ITaskSeed = {
   id: string;
   squad: string;
@@ -27,6 +36,13 @@ type ITaskSeed = {
   description?: string;
   maxRounds: number;
   percentual: number;
+};
+
+type IUserSeed = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
 };
 
 export async function seed(knex: Knex): Promise<void> {
@@ -50,10 +66,22 @@ export async function seed(knex: Knex): Promise<void> {
     { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084811', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 2', description: "Description 2", maxRounds: 3, percentual: 0.9 },
   ];
 
-  await knex('squads-users').del();
-  await Promise.all([knex('squads').del(), knex('users').del()]);
+  const tasksPoints: ITaskPointsSeed[] = [
+    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c47', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', points: 2, currentRound: 1 },
+  ];
+
+  const tasksMessages: ITaskMessagesSeed[] = [
+    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 2, message: "I think its a simple task" },
+  ];
+
+  //Delete all data from squads, squad-users, tasks, tasks-messages, tasks-messages and users table
+  await Promise.all([knex('squads-users').del(), knex('tasks-points').del()])
+  await Promise.all([knex('tasks').del(), knex('squads').del(), knex('users').del()]);
+
+  //Insert new data
   await Promise.all([insertData(squads, 'squads', knex), insertData(users, 'users', knex)]);
   await Promise.all([insertData(squadsUsers, 'squads-users', knex), insertData(tasks, 'tasks', knex)]);
+  await Promise.all([insertData(tasksPoints, 'tasks-points', knex), insertData(tasksMessages, 'tasks-messages', knex)]);
 }
 
 async function insertData(data: any, table: string, knex: Knex) {

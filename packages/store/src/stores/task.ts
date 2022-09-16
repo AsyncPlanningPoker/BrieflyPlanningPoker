@@ -1,4 +1,4 @@
-import { deactiveTaskType, CreateTaskType, deleteTaskType, IStoreTask, LoadedTaskType, LoadedAllTask, findTaskType } from '../types/task';
+import { CreateTaskType, IdentifierTaskType, IStoreTask, FindTaskType, LoadedTaskType, LoadedAllTask } from '../types/task';
 import { Knex } from 'knex';
 
 class TaskDbStore implements IStoreTask {
@@ -8,14 +8,16 @@ class TaskDbStore implements IStoreTask {
     this.#client = client;
   }
 
-  async create(task: CreateTaskType): Promise<LoadedTaskType | void> {
-    const currentConfig = (await this.#client('squads').select('currentMaxRounds', 'currentPercentual').where({enabled: true, id: task.squad}))[0]
-    await this.#client('tasks').insert({ id: task.id, squad: task.squad, name: task.name, description: task.description, maxRounds: currentConfig.currentMaxRounds, percentual: currentConfig.currentPercentual })
-    return {id: task.id}
+  //Create a new task for the give squad
+  async create({id, squad, name, description}: CreateTaskType): Promise<LoadedTaskType | void> {
+    const currentConfig = (await this.#client('squads').select('currentMaxRounds', 'currentPercentual').where({enabled: true, id: squad}))[0]
+    await this.#client('tasks').insert({ id, squad, name, description, maxRounds: currentConfig.currentMaxRounds, percentual: currentConfig.currentPercentual })
+    return {id}
   }
 
-  async deactive(task: deactiveTaskType): Promise<void> {
-    await this.#client('tasks').where({ squad: task.squad, id: task.id, enabled: true })
+  //Change the active field to false
+  async deactive({id, squad}: IdentifierTaskType): Promise<void> {
+    await this.#client('tasks').where({ squad, id, enabled: true })
       .update({
         active: false,
         finished: true,
@@ -23,19 +25,45 @@ class TaskDbStore implements IStoreTask {
       })
   }
 
-  async delete(task: deleteTaskType): Promise<void> {
-    await this.#client('tasks').where({ squad: task.squad, id: task.id, enabled: true })
+  //Delete the logical record
+  async delete({id, squad}: IdentifierTaskType): Promise<void> {
+    Promise.all([
+      this.#client('tasks').where({ squad, id, enabled: true })
+        .update({
+          enabled: false,
+          updatedAt: new Date(),
+        }),
+      this.#client('tasks-points').where({task: id, enabled: true })
+      .update({
+        enabled: false,
+        updatedAt: new Date(),
+      }),
+      this.#client('tasks-messages').where({task: id, enabled: true })
       .update({
         enabled: false,
         updatedAt: new Date(),
       })
+    ])
   }
 
-  async findAll(task: findTaskType): Promise<LoadedAllTask[]> {
-    return this.#client
-      .select('id', 'name', 'maxRounds', 'active', 'finished')
+  //Find all tasks and their corresponding informations for the given squad
+  async findAll({squad}: FindTaskType): Promise<LoadedAllTask> {
+      const tasks =  await this.#client
+      .select('tasks.id as task', 'tasks.name', 'tasks.maxRounds', this.#client.raw('max(??)  as "currentRound"', ['tasks-points.currentRound']),  'tasks.points', 'tasks.active', 'tasks.finished')
+      .where({squad, "tasks.enabled":true})
       .from('tasks')
-      .where({squad: task.squad, enabled:true})
+      .leftJoin('tasks-points', 'tasks-points.task', '=', 'tasks.id')
+      .groupBy('tasks.id', 'name', 'maxRounds', 'tasks.points', 'finished', 'active')
+
+      const res : LoadedAllTask =  {active: [], deactive: []}
+
+      tasks.forEach((task) => {
+        const status = task.active ? 'active' : 'deactive'
+        delete task.active
+        res[status].push(task) 
+      })
+
+      return res
   }
 }
 
