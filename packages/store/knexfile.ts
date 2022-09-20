@@ -16,12 +16,11 @@ const config = {
     max: 10,
   },
   seeds: {
-    directory: './src/seeds/',
+    directory: './db/seeds/',
     extension: 'ts',
   },
   migrations: {
-    tableName: 'migrations',
-    directory: './src/migrations/',
+    directory: './db/migrations/',
     extension: 'ts',
   },
 };
