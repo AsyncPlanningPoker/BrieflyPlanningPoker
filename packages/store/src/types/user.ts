@@ -1,16 +1,30 @@
 interface IStoreUser {
-  create(user: UserType): Promise<void>;
-  deleteByEmail(email: string, user: UpdateUserType): Promise<void>
-  findByEmail(email: string): Promise<UserType | undefined>;
-  updatePassByEmail(email: string, user: UpdateUserType): Promise<void>; 
+  create(user: CreateUserType): Promise<void>;
+  findByEmail(email: string): Promise<LoadedUserType | undefined>;
+  updatePassByEmail(email: string, user: UpdateUserPassType): Promise<void>;
+  deleteByEmail(email: string, user: DeleteUserType): Promise<void>
 }
 
-type UpdateUserType = {
-  password?: string;
+//updateAvatarByEmail
+//updateNameByEmail
+
+type CreateUserType = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+};
+
+type UpdateUserPassType = {
+  password: string;
   updatedAt: Date;
 };
 
-type UserType = {
+type DeleteUserType = {
+  updatedAt: Date;
+};
+
+type LoadedUserType = {
   id: string;
   name: string;
   email: string;
@@ -18,4 +32,4 @@ type UserType = {
 };
 
 export { IStoreUser };
-export type { UpdateUserType, UserType };
+export type { CreateUserType, DeleteUserType, UpdateUserPassType, LoadedUserType };
