@@ -71,7 +71,7 @@ export async function seed(knex: Knex): Promise<void> {
   ];
 
   const tasksMessages: ITaskMessagesSeed[] = [
-    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 2, message: "I think its a simple task" },
+    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 1, message: "I think its a simple task" },
   ];
 
   //Delete all data from squads, squad-users, tasks, tasks-messages, tasks-messages and users table

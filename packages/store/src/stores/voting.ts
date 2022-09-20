@@ -84,11 +84,11 @@ class VotingDbStore implements IStoreVoting {
     })
   }
 
-  async finishTask(task: String, point: Number){
+  async finishTask(task: String, points: Number){
     await this.#client('tasks')
     .where({ id: task, enabled: true, finished: false, active: true})
     .update({
-      point,
+      points,
       finished: true,
       updatedAt: new Date(),
     })

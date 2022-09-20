@@ -29,6 +29,8 @@ routes.post('/squad/:squadId/task', checkSchema(createTask), schema.handler, aut
 routes.put('/squad/:squadId/task/:taskId/deactive', auth.handler, task.deactive);
 routes.delete('/squad/:squadId/task/:taskId', auth.handler, task.deleteTask);
 routes.get('/squad/:squadId/task', auth.handler, task.findAll)
+routes.get('/squad/:squadId/task/:taskId', auth.handler, task.find)
+
 routes.post('/squad/:squadId/task/:taskId/vote', checkSchema(vote), schema.handler, auth.handler, voting.vote)
 routes.post('/squad/:squadId/task/:taskId/message', checkSchema(message), schema.handler, auth.handler, voting.message)
 

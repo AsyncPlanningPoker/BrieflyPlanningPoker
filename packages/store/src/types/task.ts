@@ -3,6 +3,7 @@ interface IStoreTask {
   deactive(task: IdentifierTaskType): Promise<void>;
   delete(task: IdentifierTaskType): Promise<void>;
   findAll(squad: FindTaskType): Promise<LoadedAllTask>
+  find(squad: IdentifierTaskType): Promise<LoadedTask | void>
 }
 
 type CreateTaskType = IdentifierTaskType & {
@@ -38,9 +39,23 @@ type LoadedAllTask = {
   }[]
 };
 
+type LoadedTask = {
+  task: string,
+  description: string,
+  finished: string,
+  actions:{
+    type: string,
+    content: string,
+    user: string,
+    email: string
+    date: Date
+    currentRound: boolean
+  }[]
+};
+
 type LoadedTaskType = {
   id: string;
 };
 
 export { IStoreTask };
-export type { CreateTaskType, IdentifierTaskType, FindTaskType, LoadedAllTask, LoadedTaskType };
+export type { CreateTaskType, IdentifierTaskType, FindTaskType, LoadedAllTask, LoadedTaskType, LoadedTask };
