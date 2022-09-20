@@ -36,8 +36,6 @@ type ITaskSeed = {
   description?: string;
   maxRounds: number;
   percentual: number;
-  active?: boolean;
-  finished?: boolean;
 };
 
 type IUserSeed = {
@@ -66,7 +64,6 @@ export async function seed(knex: Knex): Promise<void> {
   const tasks: ITaskSeed[] = [
     { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 1', description: "Description 1",  maxRounds: 3, percentual: 0.9 },
     { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084811', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 2', description: "Description 2", maxRounds: 3, percentual: 0.9 },
-    { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084812', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 3', description: "Description 3", maxRounds: 3, percentual: 0.9, active: false, finished: true },
   ];
 
   const tasksPoints: ITaskPointsSeed[] = [
@@ -74,7 +71,7 @@ export async function seed(knex: Knex): Promise<void> {
   ];
 
   const tasksMessages: ITaskMessagesSeed[] = [
-    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 2, message: "I think its a simple task" },
+    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 1, message: "I think its a simple task" },
   ];
 
   //Delete all data from squads, squad-users, tasks, tasks-messages, tasks-messages and users table

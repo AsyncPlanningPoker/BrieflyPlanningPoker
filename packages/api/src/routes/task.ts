@@ -91,4 +91,26 @@ async function findAll(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
-export { create, deactive, deleteTask, findAll };
+async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const db = req.app.get('taskDbStore');
+  
+  const task = {
+    id: req.params.taskId,
+    squad: req.params.squadId
+  };
+
+  try {
+    await db
+      .find(task)
+      .then(async (result: any) => {
+        return res.status(200).json(result);
+      })
+      .catch(({ message }: any) => {
+        throw new CustomError(message);
+      });
+  } catch (error: any) {
+    next(error);
+  }
+}
+
+export { create, deactive, deleteTask, find, findAll };
