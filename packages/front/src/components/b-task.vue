@@ -9,36 +9,55 @@
         class="b-task__name"
         size="medium"
         tag="strong"
-        @click="toggleModal"
+        @click="toggleModal(task.task)"
       >
         {{ task.name }}
       </BText>
     </div>
 
     <div class="b-task__info-wrapper">
-      <div class="b-task__round">
+      <div
+        v-if="task.finished" 
+        class="b-task__round"
+      >
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-circle-check" />
+
+        <BText
+          align="right"
+          size="large"
+          tag="p"
+        >
+          Finished
+        </BText>
+      </div>
+
+      <div
+        v-else
+        class="b-task__round"
+      >
         <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
 
         <BText
           align="right"
-          size="medium"
-          tag="span"
+          size="large"
+          tag="p"
         >
-          ?/{{ task.maxRounds }}
+          {{ `${task.currentRound || 1} / ${task.maxRounds}` }}
         </BText>
       </div>
 
       <div class="b-task__buttons">
         <font-awesome-icon
+          v-if="active"
           class="b-task__icon"
           icon="fa-solid fa-square-caret-down"
-          @click="store.dispatch('disableTask', task.id)"
+          @click="store.dispatch('disableTask', task.task)"
         />
 
         <font-awesome-icon
           class="b-task__icon"
           icon="fa-solid fa-trash-can"
-          @click="store.dispatch('deleteTask', task.id)"
+          @click="store.dispatch('deleteTask', task.task)"
         />
       </div>
 
@@ -46,12 +65,16 @@
   </div>
 
   <BModal color="gray-10" :open="showModal">
-    <BTaskExpanded @close="toggleModal" />
+    <BTaskExpanded 
+      :taskId="taskId"
+      :squadId="squadId"
+      @close="toggleModal(taskId)" 
+    />
   </BModal>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import BModal from '../components/b-modal.vue';
@@ -82,9 +105,11 @@ export default {
 
 <script setup>
 const store = useStore();
+const squadId = computed(() => store.getters.getActiveId);
 
 const showModal = ref(false);
-const toggleModal = () => { showModal.value = !showModal.value };
+const taskId = ref(null);
+const toggleModal = (task) => { taskId.value = task, showModal.value = !showModal.value };
 </script>
 
 <style lang="scss" scoped>
@@ -96,6 +121,10 @@ const toggleModal = () => { showModal.value = !showModal.value };
   grid-template-areas: 'name' 'info';
   grid-row-gap: var(--unit-0300);
   padding: var(--unit-0200);
+
+  &:hover {
+    box-shadow: 0 0 0 var(--unit-0050) var(--color-accent);
+  }
 }
 
 .b-task__name-wrapper {
@@ -141,20 +170,12 @@ const toggleModal = () => { showModal.value = !showModal.value };
   }
 }
 
-// .b-task--active {
-//   cursor: pointer;
-
-//   &:hover {
-//     box-shadow: 0 0 0 var(--unit-0050) var(--color-accent);
-//   }
-// }
-
 .b-task--archived {
   background-color: var(--color-gray-20);
   color: var(--color-gray-30);
 
-  &:hover {
-    background-color: var(--color-gray-10);
-  }
+  // &:hover {
+  //   background-color: var(--color-gray-10);
+  // }
 }
 </style>

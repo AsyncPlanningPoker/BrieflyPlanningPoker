@@ -1,29 +1,60 @@
 <template>
   <div class="b-comment">
-    <BText
-      align="left"
-      color="primary"
-      size="medium"
-    >
-      {{ author }}:
-    </BText>
+    <template v-if="type=='vote'">
+      <BText
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        {{ author }}
+      </BText>
 
-    <BText v-if="!hidden"
-      align="left"
-      color="gray-20"
-      size="medium"
-    >
-      {{ comment }}
-    </BText>
+      <BText
+        v-if="!hidden"
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        {{ ` voted ${content}` }}
+      </BText>
 
-    <BText v-else
-      align="left"
-      class="blurred"
-      color="gray-20"
-      size="medium"
-    >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    </BText>
+      <BText
+        v-else
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        voted in the current round.
+      </BText>
+    </template>
+
+    <template v-else>
+      <BText
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        {{ author }}:
+      </BText>
+
+      <BText
+        v-if="!hidden"
+        align="left"
+        color="gray-20"
+        size="medium"
+      >
+        {{ content }}
+      </BText>
+
+      <BText
+        v-else
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        commented in the current round.
+      </BText>
+    </template>
   </div>
 </template>
 
@@ -42,8 +73,12 @@ export default {
       type: String,
       required: true,
     },
-    comment: {
+    type: {
       type: String,
+      required: true,
+    },
+    content: {
+      type: [String, Number],
       required: true,
     },
     hidden: {

@@ -16,7 +16,7 @@
       size="giant"
       tag="h1"
     >
-      [DISCOVERY] Lorem ipsum dolor sit amet.
+      {{ task.task }}
     </BText>
 
     <BText
@@ -25,68 +25,149 @@
       color="gray-30"
       size="medium"
     >
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a sagittis lacus. In pellentesque bibendum mattis. Fusce eu metus volutpat, convallis leo vel, lobortis lorem. Ut lacinia eget magna ut interdum.
+      {{ task.description }}
     </BText>
 
     <div class="b-task-expanded__wrapper b-task-expanded__comments">
       <BComment 
-        v-for="(comment, index) in comments"
-        :author="comment.name"
-        :comment="comment.comment"
-      />
-      <BComment 
-        v-for="(comment, index) in comments"
-        :author="comment.name"
-        :comment="comment.comment"
-        :hidden="true"
+        v-for="(action, index) in task.actions"
+        :author="action.user"
+        :content="action.content"
+        :type="action.type"
+        :hidden="action.currentRound"
       />
     </div>
 
-    <div class="b-task-expanded__wrapper"></div>
-    <BInputField
-      color="gray-30"
-      label="Write a comment"
-      name="taskDescription"
-    >
-      <BTextArea 
-        name="taskDescription"
-      />
-    </BInputField>
+    <div class="b-task-expanded__wrapper" v-if="finished">
+      <BInputField
+        color="gray-30"
+        label="Write a comment"
+        name="newMessage"
+      >
+        <BTextArea 
+          name="newMessage"
+          @keyup.enter="comment"
+        />
+      </BInputField>
+    </div>
 
-    <div class="b-task-expanded__wrapper">
-      <BCards />
+    <div class="b-task-expanded__wrapper" v-if="finished">
+      <div class="b-task-expanded__card-container">
+        <BCard 
+          v-for="fibo in fibonacci"
+          :active="votable"
+          :value="fibo"
+          @click="vote(fibo)"
+        />
+      </div>
     </div>
     
   </div>
 </template>
 
 <script>
+import { useStore } from 'vuex';
+import { api } from '../services/api';
+
 import BButton from '../components/b-button.vue';
-import BCards from '../components/b-cards.vue';
+import BCard from '../components/b-card.vue';
 import BComment from '../components/b-comment.vue';
 import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
 import BTextArea from '../components/b-text-area.vue';
-
-import comments from '../mocks/task-comments.json';
 
 export default {
   name: 'BTaskExpanded',
 
   components: {
     BButton,
-    BCards,
+    BCard,
     BComment,
     BInputField,
     BText,
     BTextArea,
 },
 
+  props: {
+    taskId: {
+      type: String,
+      required: true,
+    },
+    squadId: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
-    return { comments };
+    return {
+      task: {},
+      fibonacci: [1, 2, 3, 5, 8, 13],
+      votable: true,
+      finished: false,
+    }
+  },
+
+  computed: {
+    userEmail() {
+      return useStore().getters.getUserEmail;
+    },
+  },
+
+  methods: {
+    async vote(point) {
+      if(this.votable){
+        await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point })
+          .then(console.log('success!'))
+          .catch((err) => {
+            console.log(err.response.data.message);
+          });
+        this.load();
+      }
+    },
+    async comment() {
+      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${newMessage.value}` })
+        .then(console.log('success!'))
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
+      this.load();
+    },
+    async load() {
+      await api.get(`/squad/${this.squadId}/task/${this.taskId}`)
+        .then((res) => {
+          this.task = res.data;
+          this.finished = !(this.task.finished);
+          this.task.actions.every(x => this.votable = this.eligible(x));
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
+      
+    },
+    eligible(x) {
+      if(x.type == "vote" && x.currentRound==true && x.email==this.userEmail){
+        return false;
+      }
+      return true;
+    },
+  },
+
+  mounted() {
+    this.userEmail;
+    this.load();
   },
 };
 </script>
+
+<!-- <script setup>
+let userEmail = ref(null);
+
+function getUserEmail() {
+  const store = useStore();
+  userEmail = computed(() => store.getters.getUserEmail);
+}
+</script> -->
 
 <style lang="scss" scoped>
 .b-task-expanded {
@@ -135,6 +216,11 @@ export default {
   right: 0;
   top: 0;
   width: var(--unit-1000);
+}
+
+.b-task-expanded__card-container {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .teste {

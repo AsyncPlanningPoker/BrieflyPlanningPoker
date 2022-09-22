@@ -1,52 +1,41 @@
 <template>
-  <div class="b-card__wrapper">
-    <button
-      v-for="fibo in fibonacci"
-      class="b-card"
-      :class="disabled ? 'b-card--disabled' : 'b-card--active'"
-      @click="disable"
+  <button
+    class="b-card"
+    :class="active ? 'b-card--active' : 'b-card--disabled'"
+  >
+    <BText
+      align="center"
+      size="giant"
     >
-      <BText
-        align="center"
-        size="giant"
-      >
-        {{ fibo }}
-      </BText>
-    </button>
-  </div>
+      {{ value }}
+    </BText>
+  </button>
 </template>
 
 <script>
-import { ref } from 'vue';
-
 import BText from '../components/b-text.vue';
 
-import fibonacci from '../mocks/fibonacci.json';
-
 export default {
-  name: 'BCards',
+  name: 'BCard',
 
   components: {
     BText,
   },
 
-  data() {
-    return { fibonacci };
+  props: {
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    value: {
+      type: Number,
+      default: '?',
+    }
   },
 };
 </script>
 
-<script setup>
-const disabled = ref(false);
-const disable = () => { disabled.value = true };
-</script>
-
 <style lang="scss" scoped>
-.b-card__wrapper {
-  display: flex;
-  justify-content: space-evenly;
-}
-
 .b-card {
   align-items: center;
   background-color: var(--color-white);
