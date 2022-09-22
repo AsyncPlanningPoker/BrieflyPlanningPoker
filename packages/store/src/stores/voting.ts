@@ -24,9 +24,19 @@ class VotingDbStore implements IStoreVoting {
 
 
     if(squad && task && squadUsers.length === validUsers.length ){
-      await this.#client('tasks-messages').insert({id: randomUUID(), user, task: message.task, currentRound: currentRound + 1, message: message.message})
+      await Promise.all([this.#client('tasks-messages').insert({id: randomUUID(), user, task: message.task, currentRound: currentRound + 1, message: message.message}),
+      this.#client('tasks')
+      .where({id: message.task})
+      .update({
+        updatedAt: new Date()
+      })]) 
     }else if(squadUsers.length !== validUsers.length){
-      await this.#client('tasks-messages').insert({id: randomUUID(), user, task: message.task, currentRound, message: message.message})
+      await Promise.all([this.#client('tasks-messages').insert({id: randomUUID(), user, task: message.task, currentRound, message: message.message}),
+      this.#client('tasks')
+      .where({id: message.task})
+      .update({
+        updatedAt: new Date()
+      })]) 
     }
   }
 
@@ -81,10 +91,15 @@ class VotingDbStore implements IStoreVoting {
   }
 
   async insertNewPoints(points: {points: Number, currentRound: Number, task: String, user: String}){
-    await this.#client('tasks-points').insert({
+    await Promise.all([this.#client('tasks-points').insert({
       id: randomUUID(),
       ...points
-    })
+    }), 
+    this.#client('tasks')
+    .where({id: points.task})
+    .update({
+      updatedAt: new Date()
+    })]) 
   }
 
   async finishTask(task: String, points: Number){
