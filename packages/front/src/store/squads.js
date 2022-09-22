@@ -48,7 +48,7 @@ export default {
 
     async addUser({dispatch, getters}, payload) {
       const id = getters.getActiveId;
-      await api.post(`squad/${id}/users`, {"email":payload, "owner":false}).catch((error) => {error = error.data.message});
+      await api.post(`squad/${id}/users`, {"email":payload, "owner":true}).catch((error) => {error = error.data.message});
       await dispatch('gatherSquad', id);
     },
 
