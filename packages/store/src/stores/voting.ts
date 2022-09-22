@@ -19,7 +19,7 @@ class VotingDbStore implements IStoreVoting {
     const squad = (await this.#client('squads').select().where({enabled: true, id: message.squad}))[0]
     const tasks = await this.findTasksPoints( message.squad, message.task)
     const currentRound = tasks[0]?.currentRound ?? 1
-    const task = (await this.#client('tasks').select().where({enabled: true, id: message.task}))[0]
+    const task = (await this.#client('tasks').select().where({enabled: true, id: message.task, active: true, finished: false}))[0]
     let validUsers = getValidUsers(tasks, squadUsers, currentRound)
 
 
@@ -31,7 +31,8 @@ class VotingDbStore implements IStoreVoting {
   }
 
   async vote(task: VoteTaskType): Promise<void> {
-
+    const squad = (await this.#client('squads').select().where({enabled: true, id: task.squad}))[0]
+    const taskDb = (await this.#client('tasks').select().where({enabled: true, id: task.task, active: true, finished: false}))[0]
     const user = (await this.#client.select('id').from('users').where({email: task.email, enabled: true}))[0].id
     const squadUsers = (await this.#client
       .select('user')
@@ -47,33 +48,35 @@ class VotingDbStore implements IStoreVoting {
 
     let validUsers = getValidUsers(tasks, squadUsers, currentRound)
    
-      //Current user didnt vote at the current round yet and isnt the last one who needed to vote
-      if(squadUsers.length - validUsers.length > 1 && validVote){
-        await this.insertNewPoints({points: task.points, currentRound, task: task.task, user} )
-      }
-      //Current user didnt vote at the current round yet and is the last one who needed to vote
-      else if(squadUsers.length - validUsers.length == 1 && validVote){
-        await this.insertNewPoints({points: task.points, currentRound, task: task.task, user} )
-        tasks = await this.findTasksPoints(task.squad, task.task)
-        const percentual = getAllPercentual (tasks, currentRound, squadUsers.length)
-        const {newPoint, maxPercentual} = getMaxPercentual(percentual)
-
-        if(isDraw(percentual)){
-          if (currentRound == maxRounds){
-            await this.finishTask(task.task, getEstimative(tasks, currentRound, percentual))
-          } 
-        } else {
-          if(maxPercentual >= minPercentual){
-            await this.finishTask(task.task, Number(newPoint))
-          } else {
-              if(currentRound == maxRounds){
-                await this.finishTask(task.task, getEstimative(tasks, currentRound, percentual))
-              }
-          }
+    if(squad && taskDb){
+        //Current user didnt vote at the current round yet and isnt the last one who needed to vote
+        if(squadUsers.length - validUsers.length > 1 && validVote){
+          await this.insertNewPoints({points: task.points, currentRound, task: task.task, user} )
         }
-    }
-    else if (squadUsers.length - validUsers.length == 0 ){
-      await this.insertNewPoints({points: task.points, currentRound: currentRound + 1, task: task.task, user} )
+        //Current user didnt vote at the current round yet and is the last one who needed to vote
+        else if(squadUsers.length - validUsers.length == 1 && validVote){
+          await this.insertNewPoints({points: task.points, currentRound, task: task.task, user} )
+          tasks = await this.findTasksPoints(task.squad, task.task)
+          const percentual = getAllPercentual (tasks, currentRound, squadUsers.length)
+          const {newPoint, maxPercentual} = getMaxPercentual(percentual)
+
+          if(isDraw(percentual)){
+            if (currentRound == maxRounds){
+              await this.finishTask(task.task, getEstimative(tasks, currentRound, percentual))
+            } 
+          } else {
+            if(maxPercentual >= minPercentual){
+              await this.finishTask(task.task, Number(newPoint))
+            } else {
+                if(currentRound == maxRounds){
+                  await this.finishTask(task.task, getEstimative(tasks, currentRound, percentual))
+                }
+            }
+          }
+      }
+      else if (squadUsers.length - validUsers.length == 0 ){
+        await this.insertNewPoints({points: task.points, currentRound: currentRound + 1, task: task.task, user} )
+      }
     }
   }
 
