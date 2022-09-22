@@ -5,6 +5,9 @@
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,
+  "engines": {
+      "node": "16.14.0"
+  },
   "scripts": {
     "build": "tsc --build",
     "packageManager": "yarn@3.2.0"

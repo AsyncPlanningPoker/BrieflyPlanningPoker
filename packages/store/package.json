@@ -6,6 +6,9 @@
   "private": true,
   "main": "dist/src/index",
   "types": "dist/src/index",
+  "engines": {
+    "node": "16.14.0"
+  },
   "scripts": {
     "db:up": "yarn migration:latest && yarn seed:up",
     "migration:latest": "npx knex migrate:latest",
