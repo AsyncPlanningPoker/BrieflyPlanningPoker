@@ -10,8 +10,7 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "packageManager": "yarn@3.2.0",
-    "postinstall": "tsc"
+    "packageManager": "yarn@3.2.0"
   },
   "workspaces": [
     "packages/*"
