@@ -140,7 +140,7 @@ export default {
     };
 
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
+      name: Yup.string().max(55).required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).required(),
       confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match"),

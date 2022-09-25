@@ -175,7 +175,7 @@ function onInvalidSubmit() {
 };
 
 const schema = Yup.object().shape({
-  squadName: Yup.string().required(),
+  squadName: Yup.string().max(25).required(),
   maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
   percentual: Yup.number().typeError('percentual must be a number').required().positive().min(0).max(1).test((number) => Number.isInteger(number * (10 ** 2))),
 });

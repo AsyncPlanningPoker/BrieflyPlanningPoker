@@ -84,7 +84,8 @@ function onInvalidSubmit() {
 };
 
 const schema = Yup.object().shape({
-  taskTitle: Yup.string().required(),
+  taskTitle: Yup.string().max(85).required(),
+  taskDescription: Yup.string().max(300),
 });
 </script>
 

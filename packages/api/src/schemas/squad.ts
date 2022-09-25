@@ -6,7 +6,7 @@ const createSquad: Schema = {
     },
     isLength: {
       errorMessage: 'Name is required',
-      options: { min: 1 },
+      options: { min: 1, max: 25 },
     },
   },
   currentMaxRounds: {
@@ -32,6 +32,10 @@ const updateSquad: Schema = {
     optional: true,
     isString: {
       errorMessage: 'Name must be a string',
+    },
+    isLength: {
+      errorMessage: 'Name is required',
+      options: { min: 1, max: 25 },
     },
   },
   currentMaxRounds: {
