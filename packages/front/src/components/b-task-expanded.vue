@@ -28,7 +28,10 @@
       {{ task.description }}
     </BText>
 
-    <div class="b-task-expanded__wrapper b-task-expanded__comments">
+    <div
+      id="comment-box" 
+      class="b-task-expanded__wrapper b-task-expanded__comments"
+    >
       <BComment 
         v-for="(action, index) in task.actions"
         :author="action.user"
@@ -147,6 +150,8 @@ export default {
         .catch((err) => {
           console.log(err.response.data.message);
         });
+      const box = document.getElementById("comment-box");
+      box.scroll({ top: box.scrollHeight, behavior: 'smooth' });
     },
     eligible(person) {
       return !(person.type == "vote" && person.currentRound==true && person.email==this.userEmail);
