@@ -20,14 +20,15 @@
         v-if="task.finished" 
         class="b-task__round"
       >
-        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-circle-check" />
+        <font-awesome-icon v-if="!!task.points" class="b-task__icon" icon="fa-solid fa-circle-check" />
+        <font-awesome-icon v-else class="b-task__icon" icon="fa-solid fa-circle-xmark" />
 
         <BText
           align="right"
           size="large"
           tag="p"
         >
-          Finished
+          {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : "incomplete"}}
         </BText>
       </div>
 
@@ -36,7 +37,7 @@
         class="b-task__round"
       >
         <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
-
+    
         <BText
           align="right"
           size="large"
