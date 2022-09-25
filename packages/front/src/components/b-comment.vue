@@ -6,6 +6,7 @@
         color="primary"
         size="medium"
       >
+        {{ `[${date}] ` }}
         {{ author }}
       </BText>
 
@@ -34,6 +35,7 @@
         color="primary"
         size="medium"
       >
+        {{ `[${date}] ` }}
         {{ author }}:
       </BText>
 
@@ -70,6 +72,10 @@ export default {
 
   props: {
     author: {
+      type: String,
+      required: true,
+    },
+    date: {
       type: String,
       required: true,
     },

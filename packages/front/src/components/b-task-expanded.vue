@@ -33,6 +33,7 @@
         v-for="(action, index) in task.actions"
         :author="action.user"
         :content="action.content"
+        :date=formatDate(action.date)
         :type="action.type"
         :hidden="action.currentRound"
       />
@@ -112,6 +113,9 @@ export default {
     userEmail() {
       return useStore().getters.getUserEmail;
     },
+    formatDate(){
+      return date => new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'});
+    }
   },
 
   methods: {
