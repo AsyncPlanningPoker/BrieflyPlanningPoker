@@ -9,7 +9,7 @@
         class="b-task__name"
         size="medium"
         tag="strong"
-        @click="toggleModal(task.task)"
+        @click="toggleModal(task.task, false)"
       >
         {{ task.name }}
       </BText>
@@ -68,7 +68,7 @@
     <BTaskExpanded 
       :taskId="taskId"
       :squadId="squadId"
-      @close="toggleModal(taskId)" 
+      @close="toggleModal(taskId, true)" 
     />
   </BModal>
 </template>
@@ -105,11 +105,18 @@ export default {
 
 <script setup>
 const store = useStore();
+
 const squadId = computed(() => store.getters.getActiveId);
 
 const showModal = ref(false);
+
 const taskId = ref(null);
-const toggleModal = (task) => { taskId.value = task, showModal.value = !showModal.value };
+
+function toggleModal (task, refresh) {
+  taskId.value = task;
+  if(refresh) store.dispatch('gatherTasks', squadId.value);
+  showModal.value = !showModal.value;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -173,9 +180,5 @@ const toggleModal = (task) => { taskId.value = task, showModal.value = !showModa
 .b-task--archived {
   background-color: var(--color-gray-20);
   color: var(--color-gray-30);
-
-  // &:hover {
-  //   background-color: var(--color-gray-10);
-  // }
 }
 </style>
