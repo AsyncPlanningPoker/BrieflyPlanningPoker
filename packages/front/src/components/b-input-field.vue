@@ -31,6 +31,7 @@
 
     <BText
       class="error"
+      color="error"
       size="small"
       tag="div"
     >
@@ -42,6 +43,7 @@
 <script>
 import { toRef } from "vue";
 import { useField } from "vee-validate";
+
 import BText from './b-text.vue';
 import BInput from './b-input.vue';
 
