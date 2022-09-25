@@ -68,6 +68,7 @@ const toggle = () => {
     & > svg {
       background-color: var(--color-gray-30);
       color: var(--color-#{$color});
+      cursor: pointer;
     }
   }
 }
