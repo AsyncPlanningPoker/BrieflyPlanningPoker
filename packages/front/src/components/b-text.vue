@@ -49,6 +49,7 @@ export default {
   text-align: inherit;
   text-decoration: none;
   text-transform: none;
+  white-space: pre-line;
 }
 
 @each $align in ('left','center','right') {
