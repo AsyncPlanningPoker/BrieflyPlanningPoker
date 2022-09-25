@@ -32,13 +32,13 @@ const signUpStore = {
   },
 
   actions: {
-    registry({ commit }) {
+    registry({ dispatch, commit }) {
       api
         .post('user', { name: this.state.signUp.name, email: this.state.signUp.email, password: this.state.signUp.password })
         .then((res) => {
           const token = res.data.token;
           dispatch('updateUserToken', token);
-          dispatch('updateUserEmail', token);
+          dispatch('updateUserEmail', this.state.signIn.email);
           router.push('/');
         })
         .catch((err) => {
