@@ -147,13 +147,9 @@ export default {
         .catch((err) => {
           console.log(err.response.data.message);
         });
-      
     },
-    eligible(x) {
-      if(x.type == "vote" && x.currentRound==true && x.email==this.userEmail){
-        return false;
-      }
-      return true;
+    eligible(person) {
+      return !(person.type == "vote" && person.currentRound==true && person.email==this.userEmail);
     },
   },
 
@@ -163,15 +159,6 @@ export default {
   },
 };
 </script>
-
-<!-- <script setup>
-let userEmail = ref(null);
-
-function getUserEmail() {
-  const store = useStore();
-  userEmail = computed(() => store.getters.getUserEmail);
-}
-</script> -->
 
 <style lang="scss" scoped>
 .b-task-expanded {
