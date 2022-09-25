@@ -194,7 +194,7 @@ export default {
 
 .b-task-expanded__comments {
   max-height: 200px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .b-task-expanded__leave-wrapper {
