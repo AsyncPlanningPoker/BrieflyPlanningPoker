@@ -43,16 +43,7 @@
     </div>
 
     <div class="b-task-expanded__wrapper" v-if="finished">
-      <BInputField
-        color="gray-30"
-        label="Write a comment"
-        name="newMessage"
-      >
-        <BTextArea 
-          name="newMessage"
-          @keyup.enter="comment"
-        />
-      </BInputField>
+      <FAddComment @comment="comment" />
     </div>
 
     <div class="b-task-expanded__wrapper" v-if="finished">
@@ -80,6 +71,8 @@ import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
 import BTextArea from '../components/b-text-area.vue';
 
+import FAddComment from '../forms/f-add-comment.vue';
+
 export default {
   name: 'BTaskExpanded',
 
@@ -90,7 +83,8 @@ export default {
     BInputField,
     BText,
     BTextArea,
-},
+    FAddComment,
+  },
 
   props: {
     taskId: {
@@ -132,8 +126,8 @@ export default {
         this.load();
       }
     },
-    async comment() {
-      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${newMessage.value}` })
+    async comment(message) {
+      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` })
         .then(console.log('success!'))
         .catch((err) => {
           console.log(err.response.data.message);
@@ -217,9 +211,5 @@ export default {
 .b-task-expanded__card-container {
   display: flex;
   justify-content: space-evenly;
-}
-
-.teste {
-  padding: 20px;
 }
 </style>

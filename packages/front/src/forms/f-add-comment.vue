@@ -1,0 +1,57 @@
+<template>
+  <Form
+    ref="form"
+    :validation-schema="schema"
+    @submit="onSubmit"
+  >
+    <BInputField
+      color="gray-30"
+      label="Write a comment"
+      name="addComment"
+    >
+      <BTextArea 
+        name="addComment"
+        type="text"
+        @keyup.enter="onKeyup"
+      />
+    </BInputField>
+  </Form>
+</template>
+
+<script>
+import { Form } from 'vee-validate';
+import * as Yup from 'yup';
+
+import BInputField from '../components/b-input-field.vue';
+import BTextArea from '../components/b-text-area.vue';
+
+export default {
+  name: 'FAddComment',
+
+  components: {
+    BInputField,
+    BTextArea,
+    Form,
+  },
+
+  methods: {
+    onKeyup(event) {
+      this.$refs.form.$el.dispatchEvent(new Event("submit", { cancelable: true}));
+    },
+  },
+};
+</script>
+
+<script setup>
+const emit = defineEmits(['comment']);
+
+function onSubmit() {
+  emit('comment', addComment.value);
+  addComment.value = null;
+  addComment.blur();
+};
+
+const schema = Yup.object().shape({
+  addComment: Yup.string().max(180).trim().required(),
+});
+</script>
