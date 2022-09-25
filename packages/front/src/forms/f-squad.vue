@@ -12,6 +12,7 @@
     >
       <BInput
         name="squadName"
+        placeholder="Name"
         type="text"
       />
     </BInputField>
@@ -22,6 +23,7 @@
     >
       <BInput
         name="maxRounds"
+        placeholder="3"
         type="number"
       />
     </BInputField>

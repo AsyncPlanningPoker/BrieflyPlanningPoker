@@ -6,21 +6,23 @@
     @invalid-submit="onInvalidSubmit"
   >
     <BInputField
-      label="Title"
+      label="Task title"
       name="taskTitle"
     >
       <BInput
         name="taskTitle"
+        placeholder="Title"
         type="text"
       />
     </BInputField>
 
     <BInputField
-      label="Description"
+      label="Task description"
       name="taskDescription"
     >
-      <BTextArea 
+      <BTextArea
         name="taskDescription"
+        placeholder="Description (optional)"
       />
     </BInputField>
 
