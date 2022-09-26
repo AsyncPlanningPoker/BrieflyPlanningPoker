@@ -9,10 +9,10 @@
     "node": "16.14.0"
   },
   "scripts": {
-    "packageManager": "yarn@3.2.0"
+    "packageManager": "yarn@3.2.0",
+    "start": "yarn workspace @briefly/front start"
   },
   "workspaces": [
     "packages/front"
-  ],
-  "devDependencies": {}
+  ]
 }
