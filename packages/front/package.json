@@ -21,7 +21,8 @@
     "vue-prop-validation-helper": "^3.0.0",
     "vue-router": "^4.0.14",
     "vuex": "^4.0.0",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "vite": "^2.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
