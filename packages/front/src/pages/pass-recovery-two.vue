@@ -100,8 +100,14 @@ export default {
       PassRecoveryTwo.commit('updateConfirmPassword', e.target.value);
     };
 
+    function noWhitespace() {
+      return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
+    };
+
+    Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);
+
     const schema = Yup.object().shape({
-      password: Yup.string().min(6).required(),
+      password: Yup.string().min(6).trim().noWhitespace().required(),
       confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match"),
     });
 
