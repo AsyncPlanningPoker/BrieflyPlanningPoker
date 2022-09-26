@@ -52,7 +52,7 @@ export default {
   border: none;
   border-radius: var(--unit-0100);
   color: var(--color-white);
-  font-family: 'Hammersmith One', sans-serif;
+  font-family: var(--font-family);
   font-size: var(--unit-0500);
   min-height: var(--unit-1000);
   padding: var(--unit-0100);

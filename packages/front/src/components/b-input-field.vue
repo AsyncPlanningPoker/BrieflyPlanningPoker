@@ -97,7 +97,7 @@ export default {
 <style scoped lang="scss">
 .b-input-field {
   display: grid;
-  font-family: 'Hammersmith One', sans-serif;
+  font-family: var(--font-family);
   font-size: var(--unit-0400);
   row-gap: var(--unit-0200);
 }
