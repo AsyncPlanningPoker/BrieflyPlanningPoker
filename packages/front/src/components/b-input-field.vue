@@ -3,16 +3,18 @@
     <div class="b-input-field__label">
       <BText 
         :for="name"
+        :color="color"
         tag="label"
       >
         {{ label }}
       </BText>
 
       <BText
-        :href="link"
+        v-if="link"
+        color="link"
         tabindex="-1"
         tag="a"
-        v-if="link"
+        :href="link"
       >
         {{ linkLabel }}
       </BText>
@@ -29,6 +31,7 @@
 
     <BText
       class="error"
+      color="error"
       size="small"
       tag="div"
     >
@@ -40,6 +43,7 @@
 <script>
 import { toRef } from "vue";
 import { useField } from "vee-validate";
+
 import BText from './b-text.vue';
 import BInput from './b-input.vue';
 
@@ -55,6 +59,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    color: {
+      type: String,
+      default: 'white',
     },
     initial: {},
     label: {
@@ -89,7 +97,7 @@ export default {
 <style scoped lang="scss">
 .b-input-field {
   display: grid;
-  font-family: 'Hammersmith One', sans-serif;
+  font-family: var(--font-family);
   font-size: var(--unit-0400);
   row-gap: var(--unit-0200);
 }

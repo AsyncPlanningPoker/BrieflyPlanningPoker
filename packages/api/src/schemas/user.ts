@@ -7,7 +7,7 @@ const createUser: Schema = {
     },
     isLength: {
       errorMessage: 'Name is required',
-      options: { min: 1 },
+      options: { min: 1, max: 55 },
     },
   },
   email: {

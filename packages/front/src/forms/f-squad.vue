@@ -12,6 +12,7 @@
     >
       <BInput
         name="squadName"
+        placeholder="Name"
         type="text"
       />
     </BInputField>
@@ -22,6 +23,7 @@
     >
       <BInput
         name="maxRounds"
+        placeholder="3"
         type="number"
       />
     </BInputField>
@@ -42,7 +44,7 @@
 
     <div class="f-squad__buttons-container">
       <BButton
-        :transparent="true"
+        variant="transparent"
         value="cancel"
         @click="$emit('close')"
       />
@@ -103,7 +105,7 @@
 
     <div class="f-squad__buttons-container">
       <BButton
-        :transparent="true"
+        variant="transparent"
         value="cancel"
         @click="$emit('close')"
       />
@@ -175,7 +177,7 @@ function onInvalidSubmit() {
 };
 
 const schema = Yup.object().shape({
-  squadName: Yup.string().required(),
+  squadName: Yup.string().max(25).required(),
   maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
   percentual: Yup.number().typeError('percentual must be a number').required().positive().min(0).max(1).test((number) => Number.isInteger(number * (10 ** 2))),
 });

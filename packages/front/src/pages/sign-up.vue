@@ -2,7 +2,7 @@
   <div class="sign-up">
     <BBrand/>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <Form
         class="sign-up__form"
         :validation-schema="schema"
@@ -63,7 +63,7 @@
 
         <div class="sign-up__buttons-container">
           <BButton
-            :transparent="true"
+            variant="transparent"
             value="return"
             @click="$router.push('signin')"
           />
@@ -139,10 +139,16 @@ export default {
       SignUp.commit('updateConfirmPassword', e.target.value);
     };
 
+    function noWhitespace() {
+      return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
+    };
+
+    Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);
+
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
+      name: Yup.string().max(55).required(),
       email: Yup.string().email().required(),
-      password: Yup.string().min(6).required(),
+      password: Yup.string().min(6).trim().noWhitespace().required(),
       confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match"),
     });
 

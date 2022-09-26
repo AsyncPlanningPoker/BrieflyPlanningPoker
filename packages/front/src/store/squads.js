@@ -1,7 +1,7 @@
 import { api } from '../services/api';
+import router from '../router'
 
 export default {
-
   state: {
     squadList: [],
 
@@ -35,9 +35,9 @@ export default {
 
   actions: {
     async gatherSquadList({commit}) {
-      const req = await api.get('squad');
-      const reqdata = req.data;
-      commit('ADD_SQUAD_LIST', reqdata);
+      await api.get('squad')
+        .then((res) => commit('ADD_SQUAD_LIST', res.data))
+        .catch(() => router.push('signin'));
     },
 
     async gatherSquad({commit}, id) {
@@ -48,7 +48,7 @@ export default {
 
     async addUser({dispatch, getters}, payload) {
       const id = getters.getActiveId;
-      await api.post(`squad/${id}/users`, {"email":payload, "owner":false}).catch((error) => {error = error.data.message});
+      await api.post(`squad/${id}/users`, {"email":payload, "owner":true}).catch((error) => {error = error.data.message});
       await dispatch('gatherSquad', id);
     },
 

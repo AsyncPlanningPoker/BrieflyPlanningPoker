@@ -51,10 +51,11 @@ class TaskDbStore implements IStoreTask {
       const tasks =  await this.#client
       .select('tasks.id as task', 'tasks.name', 'tasks.maxRounds', this.#client.raw('max(??)  as "currentRound"', ['tasks-points.currentRound']),  'tasks.points', 'tasks.active', 'tasks.finished')
       .where({squad, "tasks.enabled":true})
+      .orderBy('tasks.updatedAt', 'desc')
       .from('tasks')
       .leftJoin('tasks-points', 'tasks-points.task', '=', 'tasks.id')
-      .groupBy('tasks.id', 'name', 'maxRounds', 'tasks.points', 'finished', 'active')
-
+      .groupBy('tasks.id', 'name', 'maxRounds', 'tasks.points', 'finished', 'active', 'tasks.updatedAt')
+      
       const res : LoadedAllTask =  {active: [], deactive: []}
 
       tasks.forEach((task) => {
@@ -78,21 +79,21 @@ class TaskDbStore implements IStoreTask {
       const [votes, comment] =  await Promise.all([
         
         this.#client
-        .select('tasks.name as task', 'tasks.description', 'tasks.finished', this.#client.raw('\'vote\' as "type"'), 'users.id as userId', 'users.name as user', 'users.email', 'tasks-points.currentRound as round', 'tasks-points.points as content', 'tasks-points.updatedAt', this.#client.raw('max(??)  as "currentRound"', ['tasks-points.currentRound']))
+        .select('tasks.name as task', 'tasks.description', 'tasks.finished', "tasks.active", this.#client.raw('\'vote\' as "type"'), 'users.id as userId', 'users.name as user', 'users.email', 'tasks-points.currentRound as round', 'tasks-points.points as content', 'tasks-points.updatedAt', this.#client.raw('max(??)  as "currentRound"', ['tasks-points.currentRound']))
         .where({squad, "tasks.id": id, "tasks.enabled":true})
         .from('tasks')
         .leftJoin('tasks-points', 'tasks-points.task', '=', 'tasks.id')
         .leftJoin('users', 'users.id', '=', 'tasks-points.user')
-        .groupBy('tasks.name', 'tasks.description', 'tasks.finished', 'users.id', 'users.name', 'users.email', 'tasks-points.currentRound', 'tasks-points.points', 'tasks-points.updatedAt')
+        .groupBy('tasks.name', 'tasks.description', 'tasks.finished',  "tasks.active", 'users.id', 'users.name', 'users.email', 'tasks-points.currentRound', 'tasks-points.points', 'tasks-points.updatedAt')
         .orderBy('tasks-points.updatedAt', 'desc')
         ,
          this.#client
-        .select('tasks.name as task', 'tasks.description', 'tasks.finished', this.#client.raw('\'comment\' as "type"'),  'users.id as userId', 'users.name as user', 'users.email', 'tasks-messages.currentRound as round', 'tasks-messages.message as content', 'tasks-messages.updatedAt', this.#client.raw('max(??)  as "currentRound"', ['tasks-messages.currentRound']))
+        .select('tasks.name as task', 'tasks.description', 'tasks.finished',  "tasks.active", this.#client.raw('\'comment\' as "type"'),  'users.id as userId', 'users.name as user', 'users.email', 'tasks-messages.currentRound as round', 'tasks-messages.message as content', 'tasks-messages.updatedAt', this.#client.raw('max(??)  as "currentRound"', ['tasks-messages.currentRound']))
         .where({squad, "tasks.id": id, "tasks.enabled":true})
         .from('tasks')
         .leftJoin('tasks-messages', 'tasks-messages.task', '=', 'tasks.id')
         .leftJoin('users', 'users.id', '=', 'tasks-messages.user')
-        .groupBy('tasks.name', 'tasks.description', 'tasks.finished', 'users.id', 'users.name', 'users.email', 'tasks-messages.currentRound', 'tasks-messages.message', 'tasks-messages.updatedAt'),])
+        .groupBy('tasks.name', 'tasks.description', 'tasks.finished', "tasks.active", 'users.id', 'users.name', 'users.email', 'tasks-messages.currentRound', 'tasks-messages.message', 'tasks-messages.updatedAt'),])
 
         if (!(votes.length == 0 && comment.length == 0)){
 
@@ -120,7 +121,7 @@ class TaskDbStore implements IStoreTask {
                 user: v.user,
                 email: v.email,
                 date: v.updatedAt,
-                currentRound: v.round === a
+                currentRound: v.active ? a ? v.round === a : true : false
               })
             }
           })

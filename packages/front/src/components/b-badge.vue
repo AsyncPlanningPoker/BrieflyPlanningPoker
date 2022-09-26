@@ -15,7 +15,7 @@
 import BText from '../components/b-text.vue';
 
 export default {
-  name: 'BDivisor',
+  name: 'BBadge',
 
   components: {
     BText,

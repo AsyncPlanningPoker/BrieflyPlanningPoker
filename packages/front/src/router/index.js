@@ -2,10 +2,20 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: () => import('../pages/home.vue'),
     props: true,
+    // beforeEnter: (to, from, next) => {
+    //   if(!localStorage.getItem('userToken')){
+    //     console.log('aaaaaaa');
+    //     next('/signin');
+    //   }
+    //   else{
+    //     console.log('bbbb');
+    //     next();
+    //   }
+    // },
   },
   {
     path: '/signin',

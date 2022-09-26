@@ -4,8 +4,8 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('tasks', function (column: any) {
     column.uuid('id').primary();
     column.uuid('squad').notNullable().references('id').inTable('squads');
-    column.string('name').notNullable();
-    column.string('description');
+    column.string('name', 85).notNullable();
+    column.string('description', 300);
     column.integer('maxRounds').notNullable();
     column.decimal('percentual', 14, 2).notNullable();
     column.integer('points');

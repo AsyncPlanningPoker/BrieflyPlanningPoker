@@ -5,6 +5,9 @@
   "license": "GPL-3.0 License",
   "private": true,
   "main": "dist/index",
+  "engines": {
+    "node": "16.14.0"
+  },
   "scripts": {
     "start": "concurrently -k \"tsc -b -w\" \"nodemon --inspect=0.0.0.0:9229 -L dist/index.js\"",
     "build": "tsc -b",

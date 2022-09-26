@@ -1,7 +1,7 @@
 <template>
   <div class="b-modal__external" v-if="open">
     <div class="b-modal">
-      <BContainer>
+      <BContainer :color="color">
         <slot />
       </BContainer>
     </div>
@@ -23,6 +23,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    color: {
+      type: String,
+      required: false,
+    }
   },
 };
 </script>

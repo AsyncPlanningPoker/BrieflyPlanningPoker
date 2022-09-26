@@ -6,7 +6,7 @@ const createTask: Schema = {
     },
     isLength: {
       errorMessage: 'Name is required',
-      options: { min: 1 },
+      options: { min: 1, max: 85 },
     },
   },
   description: {
@@ -14,30 +14,11 @@ const createTask: Schema = {
     isString: {
       errorMessage: 'Description must be a string',
     },
-  },
-};
-
-const vote: Schema = {
-  points: {
-      isNumeric: {
-        errorMessage: 'Points must have a numeric value',
-      },
-      isLength: {
-        errorMessage: 'Points is required',
-      },
-    },
-};
-
-const message: Schema = {
-  message: {
-    isString: {
-      errorMessage: 'Message must be a string',
-    },
     isLength: {
-      errorMessage: 'Message is required',
-      options: { min: 1 },
+      errorMessage: 'Name is required',
+      options: { max: 300 },
     },
   },
 };
 
-export { createTask, vote, message };
+export { createTask };

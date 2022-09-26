@@ -2,7 +2,7 @@
   <div class="sign-in">
     <BBrand/>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <Form
         class="sign-in__form"
         :validation-schema="schema"
@@ -49,7 +49,7 @@
       </Form>
     </BContainer>
 
-    <BContainer>
+    <BContainer color="gray-30">
       <BButton
         class="sign-in__registry-button"
         size="small"
@@ -104,9 +104,15 @@ export default {
       SignIn.commit('updatePassword', e.target.value);
     };
 
+    function noWhitespace() {
+      return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
+    };
+
+    Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);
+
     const schema = Yup.object().shape({
       email: Yup.string().email().required(),
-      password: Yup.string().min(6).required(),
+      password: Yup.string().min(6).trim().noWhitespace().required(),
     });
 
     return { onSubmit, onInvalidSubmit, updateEmail, updatePassword, schema };

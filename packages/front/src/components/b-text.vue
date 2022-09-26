@@ -26,7 +26,7 @@ export default {
     },
     color: {
       type: String,
-      validator: shouldBeOneOf(['primary','accent','white','gray','black'])
+      validator: shouldBeOneOf(['primary','accent','white','gray-10','gray-20','gray-30','black','link','error'])
     },
     size: {
       type: String,
@@ -43,11 +43,13 @@ export default {
 
 <style scoped lang="scss">
 .b-text {
+  color: inherit;
   font-family: var(--font-family);
   letter-spacing: normal;
   text-align: inherit;
   text-decoration: none;
   text-transform: none;
+  white-space: pre-line;
 }
 
 @each $align in ('left','center','right') {
@@ -56,13 +58,13 @@ export default {
   }
 }
 
-@each $color in ('primary','accent','white','gray','black') {
+@each $color in ('primary','accent','white','gray-10','gray-20','gray-30','black','link','error') {
   .b-text--#{$color} {
     color: var(--color-#{$color});
   }
 }
 
-@each $size in ('small','medium','large', 'giant') {
+@each $size in ('small','medium','large','giant') {
   .b-text--#{$size} {
     font-size: var(--font-size-#{$size});
     line-height: var(--line-height-#{$size});

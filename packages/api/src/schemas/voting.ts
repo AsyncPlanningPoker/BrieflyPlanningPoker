@@ -17,7 +17,7 @@ const message: Schema = {
     },
     isLength: {
       errorMessage: 'Message is required',
-      options: { min: 1 },
+      options: { min: 1, max: 180 },
     },
   },
 };
