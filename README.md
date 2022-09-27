@@ -10,7 +10,7 @@
     Badge
 </h2>
 <p>
-    coverage, tests, ci/cd, prs, issues, license!!
+    coverage, tests, ci/cd, prs, issues, license
 </p>
 
 
