@@ -15,7 +15,5 @@
   "workspaces": [
     "packages/front"
   ],
-  "dependencies": {
-    "vite": "^2.8.0"
-  }
+  "dependencies": {}
 }
