@@ -6,7 +6,7 @@
     "build": "vite build",
     "start": "vite",
     "test:unit": "jest --env jsdom",
-    "test": "jest --env jsdom --coverage"   
+    "test": "jest --env jsdom --coverage"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
