@@ -10,9 +10,8 @@
   },
   "scripts": {
     "packageManager": "yarn@3.2.0",
-    "postinstall": "yarn install",
-    "postinstall-client": "cd packages/front && yarn install && yarn build",
-    "postinstall-server": "cd packages/api && yarn install"
+    "postinstall": "yarn postinstall-client",
+    "postinstall-client": "cd packages/front && yarn build"
   },
   "workspaces": [
     "packages/front"
