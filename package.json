@@ -13,7 +13,7 @@
     "postinstall": "node productionScript.js"
   },
   "workspaces": [
-    "packages/front"
+    "packages/*"
   ],
   "dependencies": {
     "dotenv": "^16.0.2"
