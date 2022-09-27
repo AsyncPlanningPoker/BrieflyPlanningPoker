@@ -14,5 +14,8 @@
   },
   "workspaces": [
     "packages/front"
-  ]
+  ],
+  "dependencies": {
+    "dotenv": "^16.0.2"
+  }
 }

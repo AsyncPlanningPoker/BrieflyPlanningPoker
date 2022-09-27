@@ -2491,6 +2491,8 @@ __metadata:
 "briefly@workspace:.":
   version: 0.0.0-use.local
   resolution: "briefly@workspace:."
+  dependencies:
+    dotenv: ^16.0.2
   languageName: unknown
   linkType: soft
 
@@ -3092,7 +3094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.0.0":
+"dotenv@npm:^16.0.0, dotenv@npm:^16.0.2":
   version: 16.0.2
   resolution: "dotenv@npm:16.0.2"
   checksum: ca8f9ca2d67929c7771069f4c31b4e46b9932621009e658e5afd655dde2d69b77642bf36dbc9e72bc170523dfd908a9ee41c26f034c1fdc605ace3b1b4b10faf
