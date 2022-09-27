@@ -11,4 +11,4 @@ app.get('/*', function(req, res) {
 
 console.log(8)
 console.log(process.env.PORT)
-app.listen(process.env.PORT || 8080, '186.220.198.126');
+app.listen(process.env.PORT || 8080);

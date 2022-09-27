@@ -10,7 +10,9 @@
   },
   "scripts": {
     "packageManager": "yarn@3.2.0",
-    "start": "yarn workspace @briefly/front start"
+    "postinstall": "if [ $CLIENT_ENV ]; then npm run postinstall-client; elif [ $SERVER_ENV ]; then npm run postinstall-server; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi",
+    "postinstall-client": "cd packages/front && yarn install && yarn build",
+    "postinstall-server": "cd packages/api && yarn install"
   },
   "workspaces": [
     "packages/front"
