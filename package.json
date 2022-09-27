@@ -10,7 +10,7 @@
   },
   "scripts": {
     "packageManager": "yarn@3.2.0",
-    "postinstall": "node teste.js"
+    "postinstall": "node productionScript.js"
   },
   "workspaces": [
     "packages/front"

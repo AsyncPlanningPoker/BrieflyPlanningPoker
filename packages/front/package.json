@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "start": "vite",
-    "test:unit": "jest --env jsdom",
-    "test": "jest --env jsdom --coverage"
+    "start": "vite"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
