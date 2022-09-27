@@ -1,1 +1,1 @@
-api: cd packages/api/dist && node index.js
+server: cd packages/api/dist && node index.js
