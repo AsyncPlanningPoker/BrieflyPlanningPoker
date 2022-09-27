@@ -10,7 +10,7 @@
   },
   "scripts": {
     "packageManager": "yarn@3.2.0",
-    "start": "yarn workspace @briefly/front prod"
+    "start": "yarn workspace @briefly/front start"
   },
   "workspaces": [
     "packages/front"

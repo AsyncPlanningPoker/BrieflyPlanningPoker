@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "vite",
     "build": "vite build",
     "test:unit": "jest --env jsdom",
     "test": "jest --env jsdom --coverage",
     "docker:test": "docker-compose run front yarn test",
-    "prod": "yarn build && node server.js"
+    "start": "yarn build && node server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
