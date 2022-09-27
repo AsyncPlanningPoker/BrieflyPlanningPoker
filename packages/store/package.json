@@ -15,8 +15,7 @@
     "migration:down": "npx knex migrate:down",
     "seed:up": "npx knex seed:run",
     "build": "tsc -b",
-    "test": "jest --coverage",
-    "postinstall": "tsc"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@types/node": "^17.0.22",
