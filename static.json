@@ -1,7 +1,0 @@
-{
-    "root": "src",
-    "clean_urls": true,
-    "routes": {
-      "/**": "./packages/front/index.html"
-    }
-  }
