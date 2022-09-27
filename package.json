@@ -10,10 +10,9 @@
   },
   "scripts": {
     "packageManager": "yarn@3.2.0",
-    "postinstall": "yarn postinstall-client",
-    "postinstall-client": "cd packages/front && yarn build"
+    "postinstall": "node teste.js"
   },
   "workspaces": [
-    "packages/*"
+    "packages/front"
   ]
 }
