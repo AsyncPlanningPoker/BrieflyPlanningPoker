@@ -17,12 +17,12 @@
     "core-js": "^3.8.3",
     "dotenv": "^16.0.0",
     "vee-validate": "^4.5.11",
+    "vite": "^2.8.0",
     "vue": "^3.2.13",
     "vue-prop-validation-helper": "^3.0.0",
     "vue-router": "^4.0.14",
     "vuex": "^4.0.0",
-    "yup": "^0.32.11",
-    "vite": "^2.8.0"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
