@@ -1,0 +1,1 @@
+import{i as e}from"./b-input-field.3d31c11b.js";function p(o,t,r){if(!o||!e(o.prototype))throw new TypeError("You must provide a yup schema constructor function");if(typeof t!="string")throw new TypeError("A Method name must be provided");if(typeof r!="function")throw new TypeError("Method function must be provided");o.prototype[t]=r}export{p as a};
