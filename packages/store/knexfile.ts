@@ -10,9 +10,9 @@ const config = {
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     host: process.env.POSTGRES_HOST,
-    ssl: {
+    ssl: process.env.NODE_ENV === 'production' ? {
       rejectUnauthorized: false
-    }
+    } : false
   },
   pool: {
     min: 2,
