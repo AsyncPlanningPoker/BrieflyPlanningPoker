@@ -5,7 +5,6 @@ import { FactoryStore } from '@briefly/store';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
 import * as dotenv from 'dotenv';
-import morgan from 'morgan';
 import cors from 'cors';
 
 function listen(): void {
@@ -39,7 +38,6 @@ function setExit(): void {
 }
 
 function setMiddlewares() {
-  app.use(morgan('tiny'));
   app.use(cors());
 
   app.use(

@@ -1,0 +1,1 @@
+web: cd packages/front/app && node server.js
