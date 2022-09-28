@@ -12,7 +12,6 @@
   "scripts": {
     "db:up": "yarn migration:latest && yarn seed:up",
     "migration:latest": "npx knex migrate:latest",
-    "migration:down": "npx knex migrate:down",
     "seed:up": "npx knex seed:run",
     "build": "tsc -b",
     "test": "jest --coverage"
