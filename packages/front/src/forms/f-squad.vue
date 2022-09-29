@@ -23,6 +23,7 @@
     >
       <BInput
         name="maxRounds"
+        :min=1
         placeholder="3"
         type="number"
       />
@@ -82,6 +83,7 @@
     >
       <BInput
         name="maxRounds"
+        :min=1
         type="number"
         :value="squad.currentMaxRounds"
       />
