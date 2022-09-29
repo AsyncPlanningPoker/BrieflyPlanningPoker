@@ -207,14 +207,6 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
   }
 }
 
-// .b-squad__clickable {
-//   cursor: pointer;
-
-//   &:hover {
-//     color: var(--color-accent);
-//   }
-// }
-
 .b-squad__max-rounds,
 .b-squad__percentual,
 .b-squad__leave {

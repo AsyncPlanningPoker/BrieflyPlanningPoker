@@ -90,7 +90,6 @@ onMounted(store.dispatch('gatherSquadList'));
   
   main {
     flex: 1 1 0;
-    // height: 100%;
     margin-left: 68px;
     
     @media (min-width: 768px) {

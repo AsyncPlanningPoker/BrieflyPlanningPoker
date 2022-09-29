@@ -119,7 +119,6 @@ export default {
     async vote(point) {
       if(this.votable){
         await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point })
-          .then(console.log('success!'))
           .catch((err) => {
             console.log(err.response.data.message);
           });
@@ -128,7 +127,6 @@ export default {
     },
     async comment(message) {
       await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` })
-        .then(console.log('success!'))
         .catch((err) => {
           console.log(err.response.data.message);
         });
