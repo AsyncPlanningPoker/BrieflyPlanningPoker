@@ -54,14 +54,14 @@ async function passRecovery(req: Request, res: Response, next: NextFunction): Pr
   const db = req.app.get('userDbStore');
   const user = await db.findByEmail(email);
   const token = user ? auth.create(email, 'pass-recovery', 300) : auth.create('inexistentAccount', 'inexistentAccount', 0);
-
-  await send({ to: email, subject: 'password recovery', message: `${req.body.url}${token}` })
-    .then(() => {
-      return res.status(200).json({});
-    })
-    .catch((error: any) => {
-      return next(error);
-    });
+  return res.status(200).json({});
+  // await send({ to: email, subject: 'password recovery', message: `${req.body.url}${token}` })
+    // .then(() => {
+    //   return res.status(200).json({});
+    // })
+    // .catch((error: any) => {
+    //   return next(error);
+    // });
 }
 
 async function passUpdate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
