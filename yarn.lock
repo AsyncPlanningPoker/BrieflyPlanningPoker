@@ -2541,11 +2541,11 @@ __metadata:
   linkType: hard
 
 "@vue/test-utils@npm:^2.0.0-rc.17":
-  version: 2.0.2
-  resolution: "@vue/test-utils@npm:2.0.2"
+  version: 2.1.0
+  resolution: "@vue/test-utils@npm:2.1.0"
   peerDependencies:
     vue: ^3.0.1
-  checksum: 384bdd4231d3f3eaa02e2ffaef2e2c90934cd9f44ab53fdfe1e9603fbe9a0e702c4a15e8bdc0fc907af210f23abe35fc43a4814598ed0a297af4fa144161f87f
+  checksum: 4612568209cefca8d8839f364b62126d34d57d4de4f4ef8b8f83588f3c12a0144872ac54aa4bb24a5a597447d5d732b9fd63e71d57a6dec3bcb784352db70706
   languageName: node
   linkType: hard
 
@@ -3229,9 +3229,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001400":
-  version: 1.0.30001412
-  resolution: "caniuse-lite@npm:1.0.30001412"
-  checksum: 7f5f476355f25a9841c30785c11df5225e2e7613f3334573e8da5490f195ac897a525fe4b514fa926b7be7e7937f15743e466bbc3a3272e848fb7ace7432ae02
+  version: 1.0.30001413
+  resolution: "caniuse-lite@npm:1.0.30001413"
+  checksum: 06f6d633edf0b1126d33e328d205f3dd0944e6322fb605460276cdd00ea9cfc12980f73e2b252cd96a84a2a8efbc6b4cf87f2e25233d61f7b95811207795ba56
   languageName: node
   linkType: hard
 
