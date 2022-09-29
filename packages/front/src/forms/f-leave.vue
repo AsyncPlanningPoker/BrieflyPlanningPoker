@@ -70,6 +70,7 @@ function confirm() {
 .f-leave {
   display: grid;
   margin-top: calc(var(--unit-0200) * -1);
+  min-width: 280px;
   row-gap: var(--unit-0500);
   width: min-content;
 }
