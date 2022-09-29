@@ -1,12 +1,12 @@
 <template>
   <div class="f-leave">
     <BText
-      v-if="this.email"
+      v-if="email"
       align="left"
       type="p"
       size="large"
     >
-      Are you sure you want to remove {{ this.email }} from the squad?
+      Are you sure you want to remove {{ email }} from the squad?
     </BText>
     <BText
       v-else
@@ -71,7 +71,7 @@ function confirm() {
   display: grid;
   margin-top: calc(var(--unit-0200) * -1);
   row-gap: var(--unit-0500);
-  width: 280px;
+  width: min-content;
 }
 
 .f-leave__buttons-container {
