@@ -149,7 +149,7 @@ export default {
       name: Yup.string().max(55).required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).trim().noWhitespace().required(),
-      confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match"),
+      confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match").required(),
     });
 
     return { onSubmit, onInvalidSubmit, updateName, updateEmail, updatePassword, updateConfirmPassword, schema };
