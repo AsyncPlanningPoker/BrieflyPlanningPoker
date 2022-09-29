@@ -53,7 +53,7 @@ class VotingDbStore implements IStoreVoting {
 
     const currentRound = tasks[0]?.currentRound ?? 1
     const maxRounds = tasks[0]?.maxRounds
-    const minPercentual = tasks[0]?.minPercentual * 100
+    let minPercentual = Number(tasks[0]?.minPercentual)*100
     const validVote = isVoteValid(tasks, user, currentRound)
 
     let validUsers = getValidUsers(tasks, squadUsers, currentRound)
@@ -67,6 +67,7 @@ class VotingDbStore implements IStoreVoting {
         else if(squadUsers.length - validUsers.length == 1 && validVote){
           await this.insertNewPoints({points: task.points, currentRound, task: task.task, user} )
           tasks = await this.findTasksPoints(task.squad, task.task)
+          minPercentual = Number(tasks[0]?.minPercentual)*100
           const percentual = getAllPercentual (tasks, currentRound, squadUsers.length)
           const {newPoint, maxPercentual} = getMaxPercentual(percentual)
 
