@@ -52,6 +52,6 @@ function onSubmit() {
 };
 
 const schema = Yup.object().shape({
-  addComment: Yup.string().max(180).trim().required(),
+  addComment: Yup.string().min(1).max(180).trim(),
 });
 </script>
