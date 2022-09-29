@@ -17,10 +17,12 @@ class SquadDbStore implements IStoreSquad {
         .where({ email, enabled: true }),
       this.#client('squads')
         .select('name', 'id')
-        .where({ id: squadId, enabled: true })
+        .where({ id: squadId, enabled: true }),
     ]);
 
-    if (userDb.length !== 0 && squadDb.length !== 0) {
+    const alreadyExist = (await this.#client('squads-users').select().where({ user: userDb[0].id, enabled: true, squad: squadDb[0].id })).length > 0
+
+    if (userDb.length !== 0 && squadDb.length !== 0 && !alreadyExist) {
         await this.#client('squads-users')
           .insert({ id: randomUUID(), user: userDb[0].id, squad: squadId, enabled: owner })
       
