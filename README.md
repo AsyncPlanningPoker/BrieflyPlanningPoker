@@ -31,7 +31,7 @@
 
 
 <h2>
-  Tech Stack
+  Ligation Stack
 </h2>
 <p>
    programming language, frameworks, authentication, deploy..
