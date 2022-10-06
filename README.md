@@ -5,13 +5,13 @@
     description about briefly planning poker web site.. demo..
 </p>
 
+
 <h2>
     Badge
 </h2>
 <p>
     coverage, tests, ci/cd, prs, issues, license
 </p>
-
 
 
 <h2> 
