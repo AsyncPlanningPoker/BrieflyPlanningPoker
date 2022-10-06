@@ -4,7 +4,6 @@
 <p>
     description about briefly planning poker web site.. demo..
 </p>
-k
 
 <h2>
     Badge
