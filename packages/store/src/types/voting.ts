@@ -6,17 +6,17 @@ interface IStoreVoting {
 type IdentifierVotingType = {
   id: string;
   squad: string;
-  task: string,
-  email: string,
-}
+  task: string;
+  email: string;
+};
 
 type MessageTaskType = IdentifierVotingType & {
-  message: string
-}
+  message: string;
+};
 
 type VoteTaskType = IdentifierVotingType & {
-  points: number
-}
+  points: number;
+};
 
 export { IStoreVoting };
 export type { IdentifierVotingType, MessageTaskType, VoteTaskType };
