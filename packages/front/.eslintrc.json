@@ -41,6 +41,7 @@
         "comma-spacing": "error",
         "comma-style": ["error", "last"],
         "no-useless-return": "error",
-        "curly": ["error"]
+        "curly": ["error"],
+        "vue/no-reserved-component-names": "off"
     }
 }

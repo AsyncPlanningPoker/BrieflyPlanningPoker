@@ -35,9 +35,7 @@ import { api } from '../services/api';
 import BButton from '../components/b-button.vue';
 import BCard from '../components/b-card.vue';
 import BComment from '../components/b-comment.vue';
-import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
-import BTextArea from '../components/b-text-area.vue';
 
 import FAddComment from '../forms/f-add-comment.vue';
 
@@ -48,9 +46,7 @@ export default {
     BButton,
     BCard,
     BComment,
-    BInputField,
     BText,
-    BTextArea,
     FAddComment,
   },
 

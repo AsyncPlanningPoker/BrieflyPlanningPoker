@@ -25,14 +25,12 @@ import { toRef } from 'vue';
 import { useField } from 'vee-validate';
 
 import BText from './b-text.vue';
-import BInput from './b-input.vue';
 
 export default {
   name: 'BInputField',
 
   components: {
     BText,
-    BInput,
   },
 
   props: {

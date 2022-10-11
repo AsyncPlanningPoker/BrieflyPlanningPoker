@@ -61,7 +61,6 @@ import { useStore } from 'vuex';
 
 import BBadge from '../components/b-badge.vue';
 import BDivisor from '../components/b-divisor.vue';
-import BInput from '../components/b-input.vue';
 import BModal from '../components/b-modal.vue';
 import BText from '../components/b-text.vue';
 
@@ -75,7 +74,6 @@ export default {
   components: {
     BBadge,
     BDivisor,
-    BInput,
     BModal,
     BText,
     FAddUser,
