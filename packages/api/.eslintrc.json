@@ -35,6 +35,10 @@
         "semi": [
             "error",
             "always"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
         ]
     }
 }

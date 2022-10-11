@@ -19,7 +19,7 @@ type ITaskMessagesSeed = {
   user: string;
   currentRound: number;
   message: string;
-}
+};
 
 type ITaskPointsSeed = {
   id: string;
@@ -27,7 +27,7 @@ type ITaskPointsSeed = {
   user: string;
   points: number;
   currentRound: number;
-}
+};
 
 type ITaskSeed = {
   id: string;
@@ -62,20 +62,16 @@ export async function seed(knex: Knex): Promise<void> {
   ];
 
   const tasks: ITaskSeed[] = [
-    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 1', description: "Description 1",  maxRounds: 3, percentual: 0.9 },
-    { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084811', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 2', description: "Description 2", maxRounds: 3, percentual: 0.9 },
+    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 1', description: 'Description 1', maxRounds: 3, percentual: 0.9 },
+    { id: '7e13d8f9-159e-4bfb-b67f-1f9cd3084811', squad: '715cadc0-bae2-453b-97cf-d5a54d8f2c82', name: 'Task 2', description: 'Description 2', maxRounds: 3, percentual: 0.9 },
   ];
 
-  const tasksPoints: ITaskPointsSeed[] = [
-    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c47', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', points: 2, currentRound: 1 },
-  ];
+  const tasksPoints: ITaskPointsSeed[] = [{ id: '715cadc0-bae2-453b-97cf-d5a54d8f2c47', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', points: 2, currentRound: 1 }];
 
-  const tasksMessages: ITaskMessagesSeed[] = [
-    { id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 1, message: "I think its a simple task" },
-  ];
+  const tasksMessages: ITaskMessagesSeed[] = [{ id: '715cadc0-bae2-453b-97cf-d5a54d8f2c45', task: '715cadc0-bae2-453b-97cf-d5a54d8f2c80', user: '715cadc0-bae2-453b-97cf-d5a54d8f2c86', currentRound: 1, message: 'I think its a simple task' }];
 
   //Delete all data from squads, squad-users, tasks, tasks-messages, tasks-messages and users table
-  await Promise.all([knex('squads-users').del(), knex('tasks-points').del()])
+  await Promise.all([knex('squads-users').del(), knex('tasks-points').del()]);
   await Promise.all([knex('tasks').del(), knex('squads').del(), knex('users').del()]);
 
   //Insert new data
