@@ -21,7 +21,6 @@ k
     documentation link, getting started link etc
 </p>
 
-
 <h2>
     Roadmap
 </h2>
@@ -29,23 +28,99 @@ k
     checklist: features.. new features
 </p>
 
+<h2> 
+     :gear:Requirements
+</h2>
+<ul>
+    <li>
+        <a href="https://nodejs.org/en/download/">Node.js</a>*
+    </li>
+    <li>
+        <a href="https://classic.yarnpkg.com/en/docs/getting-started">Yarn</a>
+    </li>
+    <li>
+        <a href="https://www.docker.com/get-started/">Docker</a>
+    </li>
+    <li>
+        <a href="https://docs.docker.com/compose/install/">Docker Compose</a>
+    </li>
+    <li>
+        <a href="https://www.pgadmin.org/download/">PgAdmin</a>**
+    </li>
+</ul>
+
+<i>* Check current Node version at package.json</i>
+
+<i>** The project uses PostgreSQL, PgAdmin is a usefull recommended tool to check database structure, status and tables.</i>
+
 
 <h2>
-  Tech Stack
+     🛠Development
 </h2>
+
+<ul>
+    <li>
+        <div>
+            <p>To run <strong>all</strong> application (front-end, back-end and database): <code>docker-compose up front</code></p>
+            <p>This command will create a new postgreSQL database using .env variables to set up password, username and database name. Also runs all migrations and seeds scripts (./packages/store/db/migrations), and finally starts api and front-end.</p>
+        </div>
+    </li>
+    <li>
+        <div>
+            <p>To run only <strong>back-end</strong>: <code>docker-compose up api</code></p>
+            <p>This command will create a new postgreSQL database using .env variables to set up password, username and database name. Also runs all migrations and seeds scripts (./packages/store/db/migrations), and finally starts api.</p>
+        </div>
+    </li>
+    <li>
+        <div>
+            <p>To run only <strong>database</strong>: <code>docker-compose up db</code></p>
+            <p>This command will create a new postgreSQL database using .env variables to set up password, username and database name.</p>
+        </div>
+    </li>
+</ul>
+<br/>
 <p>
-   programming language, frameworks, authentication, deploy..
+    <i>* Make sure all requeriments are installed</i>
+</p>
+<p>
+    <i>* All environment variables must be filled in .env at root folder</i>
 </p>
 
+<h2>
+  :computer:Tech Stack
+</h2>
+<ul>
+    <li>
+        <a href="https://vuejs.org/">Vue.js</a>
+    </li>
+    <li>
+        <a href="https://sass-lang.com/">Sass</a>
+    </li>
+    <li>
+        <a href="https://www.typescriptlang.org/">Typescript</a>
+    </li>
+    <li>
+        <a href="https://expressjs.com/">Express.js</a>
+    </li>
+    <li>
+        <a href="https://knexjs.org/">Knex</a>
+    </li>
+    <li>
+        <a href="https://www.postgresql.org/">PostgreSQL</a>
+    </li>
+    <li>
+        <a href="https://jestjs.io/pt-BR/">Jest</a>
+    </li>
+</ul>    
 
 <h2>
-  Contribute
+   :handshake:Contribute
 </h2>
 <p>
    link to guide
 </p>
 <h3>
-  Contributors
+ Contributors
 </h3>
 <table>
     <tr>
