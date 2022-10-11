@@ -42,6 +42,7 @@
         "comma-style": ["error", "last"],
         "no-useless-return": "error",
         "curly": ["error"],
-        "vue/no-reserved-component-names": "off"
+        "vue/no-reserved-component-names": "off",
+        "vue/no-multiple-template-root": "off"
     }
 }

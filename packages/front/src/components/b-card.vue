@@ -22,7 +22,7 @@ export default {
       default: true,
     },
     value: {
-      type: Number,
+      type: String,
       default: '?',
     },
   },

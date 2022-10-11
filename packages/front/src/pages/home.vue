@@ -34,6 +34,7 @@ import BTaskContainer from '../components/b-task-container.vue';
 import BText from '../components/b-text.vue';
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Home',
 
   components: {
