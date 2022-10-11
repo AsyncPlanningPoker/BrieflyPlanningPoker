@@ -1,43 +1,17 @@
 <template>
-  <Form
-    class="f-task"
-    :validation-schema="schema"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Task title"
-      name="taskTitle"
-    >
-      <BInput
-        name="taskTitle"
-        placeholder="Title"
-        type="text"
-      />
+  <Form class="f-task" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
+    <BInputField label="Task title" name="taskTitle">
+      <BInput name="taskTitle" placeholder="Title" type="text" />
     </BInputField>
 
-    <BInputField
-      label="Task description"
-      name="taskDescription"
-    >
-      <BTextArea
-        name="taskDescription"
-        placeholder="Description (optional)"
-      />
+    <BInputField label="Task description" name="taskDescription">
+      <BTextArea name="taskDescription" placeholder="Description (optional)" />
     </BInputField>
 
     <div class="f-task__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-      
-      <BButton
-        class="f-task__button"
-        type="submit"
-        value="create"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+
+      <BButton class="f-task__button" type="submit" value="create" />
     </div>
   </Form>
 </template>
@@ -47,7 +21,7 @@ import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
 
-import BButton from '../components/b-button.vue'
+import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BTextArea from '../components/b-text-area.vue';
@@ -73,17 +47,19 @@ function onSubmit(values) {
   const newTask = {
     name: values.taskTitle,
     description: values.taskDescription,
-  }
+  };
   store.dispatch('addTask', newTask);
 
   emit('close');
-};
+}
 
 function onInvalidSubmit() {
-  const submitButton = document.querySelector(".f-task__button");
-  submitButton.classList.add("invalid");
-  setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-};
+  const submitButton = document.querySelector('.f-task__button');
+  submitButton.classList.add('invalid');
+  setTimeout(() => {
+    submitButton.classList.remove('invalid');
+  }, 1000);
+}
 
 const schema = Yup.object().shape({
   taskTitle: Yup.string().max(85).required(),

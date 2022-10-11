@@ -2,18 +2,14 @@
   <div class="b-sidebar">
     <div class="b-sidebar__logo-wrapper">
       <a @click="store.dispatch('addSquadActive', {})">
-        <img class="b-sidebar__image" src="../assets/square-logo-80.png" alt="brand-logo">
+        <img class="b-sidebar__image" src="../assets/square-logo-80.png" alt="brand-logo" />
       </a>
     </div>
 
     <BDivisor color="gray-30" />
 
     <div class="b-sidebar__new-squad-wrapper">
-      <BButton
-        size="small"
-        value="+"
-        @click="toggleModal"
-      />
+      <BButton size="small" value="+" @click="toggleModal" />
 
       <BModal color="gray-30" :open="showModal">
         <FSquad @close="toggleModal" />
@@ -23,17 +19,8 @@
     <BDivisor color="gray-30" />
 
     <div class="b-sidebar__squad-wrapper">
-      <div
-        v-for="(squad, index) in squads.slice().reverse()"
-        :key="index"
-        class="b-sidebar__squad"
-      >
-        <BButton
-          size="small"
-          variant="transparent"
-          :value="`${ index + 1 }`"
-          @click="store.dispatch('gatherSquad', squad.id)"
-        />
+      <div v-for="(squad, index) in squads.slice().reverse()" :key="index" class="b-sidebar__squad">
+        <BButton size="small" variant="transparent" :value="`${index + 1}`" @click="store.dispatch('gatherSquad', squad.id)" />
       </div>
     </div>
   </div>
@@ -62,10 +49,14 @@ export default {
 
 <script setup>
 const store = useStore();
-const squads = computed(() => store.getters.getSquadList);
+const squads = computed(() => {
+  return store.getters.getSquadList;
+});
 
 const showModal = ref(false);
-const toggleModal = () => { showModal.value = !showModal.value };
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 
 <style lang="scss" scoped>

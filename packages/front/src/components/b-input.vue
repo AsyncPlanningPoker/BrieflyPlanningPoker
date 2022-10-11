@@ -1,16 +1,6 @@
 <template>
   <div class="b-input__wrapper">
-    <input 
-      class="b-input"
-      :id="name"
-      :max="max"
-      :min="min"
-      :name="name"
-      :placeholder="placeholder"
-      :step="step"
-      :type="type"
-      :value="value"
-    />
+    <input class="b-input" :id="name" :max="max" :min="min" :name="name" :placeholder="placeholder" :step="step" :type="type" :value="value" />
   </div>
 </template>
 
@@ -40,7 +30,7 @@ export default {
     type: {
       type: String,
       default: 'text',
-      validator: shouldBeOneOf(['email','number','password','text']),
+      validator: shouldBeOneOf(['email', 'number', 'password', 'text']),
     },
     value: {},
   },

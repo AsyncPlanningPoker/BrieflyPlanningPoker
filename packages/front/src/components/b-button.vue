@@ -26,12 +26,12 @@ export default {
     size: {
       type: String,
       default: 'medium',
-      validator: shouldBeOneOf(['small','medium']),
+      validator: shouldBeOneOf(['small', 'medium']),
     },
     type: {
       type: String,
       default: 'button',
-      validator: shouldBeOneOf(['button','reset','submit']),
+      validator: shouldBeOneOf(['button', 'reset', 'submit']),
     },
     value: {
       type: String,
@@ -40,8 +40,8 @@ export default {
     variant: {
       type: String,
       default: 'primary',
-      validator: shouldBeOneOf(['primary','transparent','inverted']),
-    }
+      validator: shouldBeOneOf(['primary', 'transparent', 'inverted']),
+    },
   },
 };
 </script>

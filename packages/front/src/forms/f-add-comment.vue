@@ -1,19 +1,7 @@
 <template>
-  <Form
-    ref="form"
-    :validation-schema="schema"
-    @submit="onSubmit"
-  >
-    <BInputField
-      color="gray-30"
-      label="Write a comment"
-      name="addComment"
-    >
-      <BTextArea 
-        name="addComment"
-        type="text"
-        @keyup.enter="onKeyup"
-      />
+  <Form ref="form" :validation-schema="schema" @submit="onSubmit">
+    <BInputField color="gray-30" label="Write a comment" name="addComment">
+      <BTextArea name="addComment" type="text" @keyup.enter="onKeyup" />
     </BInputField>
   </Form>
 </template>
@@ -35,8 +23,8 @@ export default {
   },
 
   methods: {
-    onKeyup(event) {
-      this.$refs.form.$el.dispatchEvent(new Event("submit", { cancelable: true}));
+    onKeyup() {
+      this.$refs.form.$el.dispatchEvent(new Event('submit', { cancelable: true }));
     },
   },
 };
@@ -49,7 +37,7 @@ function onSubmit() {
   emit('comment', addComment.value);
   addComment.value = null;
   addComment.blur();
-};
+}
 
 const schema = Yup.object().shape({
   addComment: Yup.string().min(1).max(180).trim(),

@@ -1,71 +1,37 @@
 <template>
   <div class="sign-in">
-    <BBrand/>
+    <BBrand />
 
     <BContainer color="gray-30">
-      <Form
-        class="sign-in__form"
-        :validation-schema="schema"
-        @submit="onSubmit"
-        @invalid-submit="onInvalidSubmit"
-      >
-        <BInputField
-          label="E-mail"
-          name="email"
-        >
-          <BInput
-            name="email"
-            type="email"
-            @input="updateEmail"
-          />
+      <Form class="sign-in__form" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
+        <BInputField label="E-mail" name="email">
+          <BInput name="email" type="email" @input="updateEmail" />
         </BInputField>
 
-        <BInputField
-          label="Password"
-          link="/password_reset"
-          link-label="forgot password?"
-          name="password"
-        >
-          <BInput
-            name="password"
-            type="password"
-            @input="updatePassword"
-          />
+        <BInputField label="Password" link="/password_reset" link-label="forgot password?" name="password">
+          <BInput name="password" type="password" @input="updatePassword" />
         </BInputField>
 
-        <BText
-          class="error"
-          size="small"
-          tag="div"
-        >
+        <BText class="error" size="small" tag="div">
           {{ this.$store.state.signIn.errorMessage }}
         </BText>
 
-        <BButton
-          class="sign-in__login-button"
-          type="submit"
-          value="login"
-        />
+        <BButton class="sign-in__login-button" type="submit" value="login" />
       </Form>
     </BContainer>
 
     <BContainer color="gray-30">
-      <BButton
-        class="sign-in__registry-button"
-        size="small"
-        value="create an account"
-        @click="$router.push('signup')"
-      />
+      <BButton class="sign-in__registry-button" size="small" value="create an account" @click="$router.push('signup')" />
     </BContainer>
   </div>
 </template>
 
 <script>
-import { Form } from "vee-validate";
-import * as Yup from "yup";
-import BBrand from '../components/b-brand.vue'
-import BButton from '../components/b-button.vue'
-import BContainer from '../components/b-container.vue'
+import { Form } from 'vee-validate';
+import * as Yup from 'yup';
+import BBrand from '../components/b-brand.vue';
+import BButton from '../components/b-button.vue';
+import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
@@ -87,26 +53,30 @@ export default {
   setup() {
     function onSubmit() {
       SignIn.dispatch('login');
-    };
+    }
 
     function onInvalidSubmit() {
-      const submitButton = document.querySelector(".sign-in__login-button");
+      const submitButton = document.querySelector('.sign-in__login-button');
 
-      submitButton.classList.add("invalid");
-      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-    };
+      submitButton.classList.add('invalid');
+      setTimeout(() => {
+        submitButton.classList.remove('invalid');
+      }, 1000);
+    }
 
     function updateEmail(e) {
       SignIn.commit('updateEmail', e.target.value);
-    };
+    }
 
     function updatePassword(e) {
       SignIn.commit('updatePassword', e.target.value);
-    };
+    }
 
     function noWhitespace() {
-      return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
-    };
+      return this.transform((value, originalValue) => {
+        return /\s/.test(originalValue) ? NaN : value;
+      });
+    }
 
     Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);
 

@@ -28,28 +28,34 @@ export default {
   },
 
   actions: {
-    async gatherTasks({commit}, payload) {
+    async gatherTasks({ commit }, payload) {
       const req = await api.get(`/squad/${payload}/task`);
       commit('ADD_ENABLED_TASKS', req.data.active);
       commit('ADD_DISABLED_TASKS', req.data.deactive);
     },
 
-    async addTask({getters, dispatch}, payload) {
+    async addTask({ getters, dispatch }, payload) {
       const id = getters.getActiveId;
-      await api.post(`/squad/${id}/task`, payload).catch((error) => {error = error.data.message});
+      await api.post(`/squad/${id}/task`, payload).catch((error) => {
+        error = error.data.message;
+      });
       await dispatch('gatherTasks', id);
     },
 
-    async disableTask({dispatch, getters}, payload) {
+    async disableTask({ dispatch, getters }, payload) {
       const id = getters.getActiveId;
-      await api.put(`/squad/${id}/task/${payload}/deactive`).catch((error) => {error = error.data.message});
+      await api.put(`/squad/${id}/task/${payload}/deactive`).catch((error) => {
+        error = error.data.message;
+      });
       await dispatch('gatherTasks', id);
     },
 
-    async deleteTask({dispatch, getters}, payload) {
+    async deleteTask({ dispatch, getters }, payload) {
       const id = getters.getActiveId;
-      await api.delete(`/squad/${id}/task/${payload}`).catch((error) => {error = error.data.message});
+      await api.delete(`/squad/${id}/task/${payload}`).catch((error) => {
+        error = error.data.message;
+      });
       await dispatch('gatherTasks', id);
-    }
+    },
   },
-}
+};

@@ -1,9 +1,6 @@
 <template>
   <div class="b-badge">
-    <BText
-      color="white"
-      size="medium"
-    >
+    <BText color="white" size="medium">
       <slot />
     </BText>
 

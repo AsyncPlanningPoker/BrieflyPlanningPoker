@@ -42,19 +42,19 @@ import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
 import BSidebar from '../components/b-sidebar.vue';
-import BSquad from '../components/b-squad.vue'
+import BSquad from '../components/b-squad.vue';
 import BTaskContainer from '../components/b-task-container.vue';
-import BText from '../components/b-text.vue'
+import BText from '../components/b-text.vue';
 
 export default {
-  name: 'Home',
+	name: 'Home',
 
-  components: {
-    BSidebar,
-    BSquad,
-    BTaskContainer,
-    BText,
-  },
+	components: {
+		BSidebar,
+		BSquad,
+		BTaskContainer,
+		BText,
+	},
 };
 </script>
 
@@ -62,10 +62,10 @@ export default {
 const store = useStore();
 
 const squad = computed(() => {
-  const req = store.getters.getSquadActive;
-  if(req.id) store.dispatch('gatherTasks', req.id);
+	const req = store.getters.getSquadActive;
+	if(req.id) store.dispatch('gatherTasks', req.id);
   
-  return req;
+	return req;
 });
 
 const activeTasks = computed(() => store.getters.getEnabledTasks);

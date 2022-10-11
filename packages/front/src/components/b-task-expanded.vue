@@ -1,45 +1,19 @@
 <template>
   <div class="b-task-expanded">
     <div class="b-task-expanded__leave-wrapper">
-      <BButton
-        size="small"
-        variant="inverted"
-        value="x"
-        @click="$emit('close')"
-      />
+      <BButton size="small" variant="inverted" value="x" @click="$emit('close')" />
     </div>
 
-    <BText
-      align="center"
-      class="b-task-expanded__title"
-      color="black"
-      size="giant"
-      tag="h1"
-    >
+    <BText align="center" class="b-task-expanded__title" color="black" size="giant" tag="h1">
       {{ task.task }}
     </BText>
 
-    <BText
-      align="left"
-      class="b-task-expanded__wrapper"
-      color="gray-30"
-      size="medium"
-    >
+    <BText align="left" class="b-task-expanded__wrapper" color="gray-30" size="medium">
       {{ task.description }}
     </BText>
 
-    <div
-      id="comment-box" 
-      class="b-task-expanded__wrapper b-task-expanded__comments"
-    >
-      <BComment 
-        v-for="(action, index) in task.actions"
-        :author="action.user"
-        :content="action.content"
-        :date=formatDate(action.date)
-        :type="action.type"
-        :hidden="action.currentRound"
-      />
+    <div id="comment-box" class="b-task-expanded__wrapper b-task-expanded__comments">
+      <BComment v-for="(action, index) in task.actions" :author="action.user" :content="action.content" :date="formatDate(action.date)" :type="action.type" :hidden="action.currentRound" />
     </div>
 
     <div class="b-task-expanded__wrapper" v-if="finished">
@@ -48,15 +22,9 @@
 
     <div class="b-task-expanded__wrapper" v-if="finished">
       <div class="b-task-expanded__card-container">
-        <BCard 
-          v-for="fibo in fibonacci"
-          :active="votable"
-          :value="fibo"
-          @click="vote(fibo)"
-        />
+        <BCard v-for="fibo in fibonacci" :active="votable" :value="fibo" @click="vote(fibo)" />
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -103,50 +71,53 @@ export default {
       fibonacci: [1, 2, 3, 5, 8, 13],
       votable: true,
       finished: false,
-    }
+    };
   },
 
   computed: {
     userEmail() {
       return useStore().getters.getUserEmail;
     },
-    formatDate(){
-      return date => new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'});
-    }
+    formatDate() {
+      return (date) => {
+        return new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      };
+    },
   },
 
   methods: {
     async vote(point) {
-      if(this.votable){
-        await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point })
-          .catch((err) => {
-            console.log(err.response.data.message);
-          });
+      if (this.votable) {
+        await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point }).catch((err) => {
+          console.log(err.response.data.message);
+        });
         this.load();
       }
     },
     async comment(message) {
-      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` })
-        .catch((err) => {
-          console.log(err.response.data.message);
-        });
+      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` }).catch((err) => {
+        console.log(err.response.data.message);
+      });
       this.load();
     },
     async load() {
-      await api.get(`/squad/${this.squadId}/task/${this.taskId}`)
+      await api
+        .get(`/squad/${this.squadId}/task/${this.taskId}`)
         .then((res) => {
           this.task = res.data;
-          this.finished = !(this.task.finished);
-          this.task.actions.every(x => this.votable = this.eligible(x));
+          this.finished = !this.task.finished;
+          this.task.actions.every((x) => {
+            return (this.votable = this.eligible(x));
+          });
         })
         .catch((err) => {
           console.log(err.response.data.message);
         });
-      const box = document.getElementById("comment-box");
+      const box = document.getElementById('comment-box');
       box.scroll({ top: box.scrollHeight, behavior: 'smooth' });
     },
     eligible(person) {
-      return !(person.type == "vote" && person.currentRound==true && person.email==this.userEmail);
+      return !(person.type === 'vote' && person.currentRound === true && person.email === this.userEmail);
     },
   },
 
@@ -162,7 +133,7 @@ export default {
   display: grid;
   position: relative;
   width: 100%;
-  
+
   @media (min-width: 768px) {
     width: 880px;
   }

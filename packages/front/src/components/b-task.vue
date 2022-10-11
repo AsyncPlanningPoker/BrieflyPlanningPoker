@@ -1,76 +1,39 @@
 <template>
-  <div 
-    class="b-task"
-    :class="active ?  'b-task--active' : 'b-task--archived'"
-  >
+  <div class="b-task" :class="active ? 'b-task--active' : 'b-task--archived'">
     <div class="b-task__name-wrapper">
-      <BText
-        align="left"
-        class="b-task__name"
-        size="medium"
-        tag="strong"
-        @click="toggleModal(task.task, false)"
-      >
+      <BText align="left" class="b-task__name" size="medium" tag="strong" @click="toggleModal(task.task, false)">
         {{ task.name }}
       </BText>
     </div>
 
     <div class="b-task__info-wrapper">
-      <div
-        v-if="task.finished" 
-        class="b-task__round"
-      >
+      <div v-if="task.finished" class="b-task__round">
         <font-awesome-icon v-if="!!task.points" class="b-task__icon" icon="fa-solid fa-circle-check" />
         <font-awesome-icon v-else class="b-task__icon" icon="fa-solid fa-circle-xmark" />
 
-        <BText
-          align="right"
-          size="large"
-          tag="p"
-        >
-          {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : "incomplete"}}
+        <BText align="right" size="large" tag="p">
+          {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : 'incomplete' }}
         </BText>
       </div>
 
-      <div
-        v-else
-        class="b-task__round"
-      >
+      <div v-else class="b-task__round">
         <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
-    
-        <BText
-          align="right"
-          size="large"
-          tag="p"
-        >
+
+        <BText align="right" size="large" tag="p">
           {{ `${task.currentRound || 1} / ${task.maxRounds}` }}
         </BText>
       </div>
 
       <div class="b-task__buttons">
-        <font-awesome-icon
-          v-if="active"
-          class="b-task__icon"
-          icon="fa-solid fa-square-caret-down"
-          @click="store.dispatch('disableTask', task.task)"
-        />
+        <font-awesome-icon v-if="active" class="b-task__icon" icon="fa-solid fa-square-caret-down" @click="store.dispatch('disableTask', task.task)" />
 
-        <font-awesome-icon
-          class="b-task__icon"
-          icon="fa-solid fa-trash-can"
-          @click="store.dispatch('deleteTask', task.task)"
-        />
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-trash-can" @click="store.dispatch('deleteTask', task.task)" />
       </div>
-
     </div>
   </div>
 
   <BModal color="gray-10" :open="showModal">
-    <BTaskExpanded 
-      :taskId="taskId"
-      :squadId="squadId"
-      @close="toggleModal(taskId, true)" 
-    />
+    <BTaskExpanded :taskId="taskId" :squadId="squadId" @close="toggleModal(taskId, true)" />
   </BModal>
 </template>
 
@@ -107,17 +70,21 @@ export default {
 <script setup>
 const store = useStore();
 
-const squadId = computed(() => store.getters.getActiveId);
+const squadId = computed(() => {
+  return store.getters.getActiveId;
+});
 
 const showModal = ref(false);
 
 const taskId = ref(null);
 
-function toggleModal (task, refresh) {
+function toggleModal(task, refresh) {
   taskId.value = task;
-  if(refresh) store.dispatch('gatherTasks', squadId.value);
+  if (refresh) {
+    store.dispatch('gatherTasks', squadId.value);
+  }
   showModal.value = !showModal.value;
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -152,7 +119,7 @@ function toggleModal (task, refresh) {
   grid-area: info;
 }
 
-.b-task__buttons, 
+.b-task__buttons,
 .b-task__info-wrapper,
 .b-task__round {
   align-items: center;
@@ -165,7 +132,7 @@ function toggleModal (task, refresh) {
   color: var(--color-gray-30);
   height: var(--unit-0600);
   padding: var(--unit-0200);
-  width: var(--unit-0600); 
+  width: var(--unit-0600);
 }
 
 .b-task__buttons > .b-task__icon {

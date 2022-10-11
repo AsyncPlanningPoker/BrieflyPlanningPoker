@@ -1,12 +1,6 @@
 <template>
-  <button
-    class="b-card"
-    :class="active ? 'b-card--active' : 'b-card--disabled'"
-  >
-    <BText
-      align="center"
-      size="giant"
-    >
+  <button class="b-card" :class="active ? 'b-card--active' : 'b-card--disabled'">
+    <BText align="center" size="giant">
       {{ value }}
     </BText>
   </button>
@@ -30,7 +24,7 @@ export default {
     value: {
       type: Number,
       default: '?',
-    }
+    },
   },
 };
 </script>

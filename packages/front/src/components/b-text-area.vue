@@ -1,17 +1,10 @@
 <template>
   <div class="b-text-area__wrapper">
-    <textarea 
-      class="b-text-area"
-      :id="name"
-      :name="name"
-      :placeholder="placeholder"
-      :row="row"
-    />
+    <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" />
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'BTextArea',
 

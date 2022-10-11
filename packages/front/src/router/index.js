@@ -4,7 +4,9 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../pages/home.vue'),
+    component: () => {
+      return import('../pages/home.vue');
+    },
     props: true,
     // beforeEnter: (to, from, next) => {
     //   if(!localStorage.getItem('userToken')){
@@ -45,7 +47,9 @@ const routes = [
       return import('../pages/pass-recovery-two.vue');
     },
     beforeEnter: (route) => {
-      if(!route.query.token) return false
+      if (!route.query.token) {
+        return false;
+      }
     },
     props: (route) => {
       return { token: route.query.token };
