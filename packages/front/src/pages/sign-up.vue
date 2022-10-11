@@ -91,9 +91,7 @@ export default {
     }
 
     function noWhitespace() {
-      return this.transform((value, originalValue) => {
-        return /\s/.test(originalValue) ? NaN : value;
-      });
+      return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
     }
 
     Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);

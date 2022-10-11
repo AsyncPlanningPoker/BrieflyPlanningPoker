@@ -4,9 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => {
-      return import('../pages/home.vue');
-    },
+    component: () => import('../pages/home.vue'),
     props: true,
     // beforeEnter: (to, from, next) => {
     //   if(!localStorage.getItem('userToken')){
@@ -22,30 +20,22 @@ const routes = [
   {
     path: '/signin',
     name: 'SignIn',
-    component: () => {
-      return import('../pages/sign-in.vue');
-    },
+    component: () => import('../pages/sign-in.vue'),
   },
   {
     path: '/signup',
     name: 'SignUp',
-    component: () => {
-      return import('../pages/sign-up.vue');
-    },
+    component: () => import('../pages/sign-up.vue'),
   },
   {
     path: '/password_reset',
     name: 'pass-recovery-one',
-    component: () => {
-      return import('../pages/pass-recovery-one.vue');
-    },
+    component: () => import('../pages/pass-recovery-one.vue'),
   },
   {
     path: '/confirm_reset',
     name: 'pass-recovery-two',
-    component: () => {
-      return import('../pages/pass-recovery-two.vue');
-    },
+    component: () => import('../pages/pass-recovery-two.vue'),
     beforeEnter: (route) => {
       if (!route.query.token) {
         return false;

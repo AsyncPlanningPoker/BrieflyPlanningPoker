@@ -106,9 +106,7 @@ export default {
         .then((res) => {
           this.task = res.data;
           this.finished = !this.task.finished;
-          this.task.actions.every((x) => {
-            return (this.votable = this.eligible(x));
-          });
+          this.task.actions.every((x) => (this.votable = this.eligible(x)));
         })
         .catch((err) => {
           console.log(err.response.data.message);

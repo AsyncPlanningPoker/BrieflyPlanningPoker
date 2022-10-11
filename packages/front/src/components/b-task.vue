@@ -70,9 +70,7 @@ export default {
 <script setup>
 const store = useStore();
 
-const squadId = computed(() => {
-  return store.getters.getActiveId;
-});
+const squadId = computed(() => store.getters.getActiveId);
 
 const showModal = ref(false);
 
@@ -83,6 +81,7 @@ function toggleModal(task, refresh) {
   if (refresh) {
     store.dispatch('gatherTasks', squadId.value);
   }
+
   showModal.value = !showModal.value;
 }
 </script>

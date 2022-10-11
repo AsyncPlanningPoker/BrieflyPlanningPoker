@@ -94,9 +94,7 @@ export default {
 
 <script setup>
 const store = useStore();
-const actualUser = computed(() => {
-  return store.getters.getUserEmail;
-});
+const actualUser = computed(() => store.getters.getUserEmail);
 
 const moreInfo = ref(false);
 const toggleInfo = () => {

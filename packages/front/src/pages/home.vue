@@ -57,13 +57,9 @@ const squad = computed(() => {
   return req;
 });
 
-const activeTasks = computed(() => {
-  return store.getters.getEnabledTasks;
-});
+const activeTasks = computed(() => store.getters.getEnabledTasks);
 
-const archivedTasks = computed(() => {
-  return store.getters.getDisabledTasks;
-});
+const archivedTasks = computed(() => store.getters.getDisabledTasks);
 
 onMounted(store.dispatch('gatherSquadList'));
 </script>
