@@ -22,8 +22,7 @@ export default {
       default: true,
     },
     value: {
-      type: String,
-      default: '?',
+      type: Number,
     },
   },
 };
