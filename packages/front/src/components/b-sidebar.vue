@@ -49,9 +49,7 @@ export default {
 
 <script setup>
 const store = useStore();
-const squads = computed(() => {
-  return store.getters.getSquadList;
-});
+const squads = computed(() => store.getters.getSquadList);
 
 const showModal = ref(false);
 const toggleModal = () => {

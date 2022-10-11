@@ -131,9 +131,7 @@ function getValidUsers(tasks: any, usersSquad: string[], currentRound: number) {
         return t.user;
       }
     })
-    .filter((f: string) => {
-      return f !== undefined;
-    });
+    .filter((f: string) => f !== undefined);
 }
 
 function getAllPercentual(tasks: any, currentRound: number, allUsers: number) {
