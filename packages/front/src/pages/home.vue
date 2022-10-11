@@ -3,36 +3,23 @@
     <aside>
       <BSidebar />
     </aside>
-    
+
     <main v-if="squad.squad">
       <div class="home__section">
         <BSquad :squad="squad" />
       </div>
-      
+
       <div class="home__section">
-        <BTaskContainer
-          title="Active" 
-          :active=true
-          :tasks="activeTasks"
-        />
+        <BTaskContainer title="Active" :active="true" :tasks="activeTasks" />
       </div>
 
       <div class="home__section">
-        <BTaskContainer 
-          title="Archived"
-          :active=false
-          :tasks="archivedTasks"
-        />
+        <BTaskContainer title="Archived" :active="false" :tasks="archivedTasks" />
       </div>
     </main>
 
     <main v-else class="home__blank">
-        <BText
-          color="gray-30"
-          size="giant"
-        >
-          Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻
-        </BText>
+      <BText color="gray-30" size="giant"> Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻ </BText>
     </main>
   </div>
 </template>
@@ -47,14 +34,14 @@ import BTaskContainer from '../components/b-task-container.vue';
 import BText from '../components/b-text.vue';
 
 export default {
-	name: 'Home',
+  name: 'Home',
 
-	components: {
-		BSidebar,
-		BSquad,
-		BTaskContainer,
-		BText,
-	},
+  components: {
+    BSidebar,
+    BSquad,
+    BTaskContainer,
+    BText,
+  },
 };
 </script>
 
@@ -62,15 +49,21 @@ export default {
 const store = useStore();
 
 const squad = computed(() => {
-	const req = store.getters.getSquadActive;
-	if(req.id) store.dispatch('gatherTasks', req.id);
-  
-	return req;
+  const req = store.getters.getSquadActive;
+  if (req.id) {
+    store.dispatch('gatherTasks', req.id);
+  }
+
+  return req;
 });
 
-const activeTasks = computed(() => store.getters.getEnabledTasks);
+const activeTasks = computed(() => {
+  return store.getters.getEnabledTasks;
+});
 
-const archivedTasks = computed(() => store.getters.getDisabledTasks);
+const archivedTasks = computed(() => {
+  return store.getters.getDisabledTasks;
+});
 
 onMounted(store.dispatch('gatherSquadList'));
 </script>
@@ -87,11 +80,11 @@ onMounted(store.dispatch('gatherSquadList'));
       max-width: 120px;
     }
   }
-  
+
   main {
     flex: 1 1 0;
     margin-left: 68px;
-    
+
     @media (min-width: 768px) {
       margin-left: 120px;
     }
