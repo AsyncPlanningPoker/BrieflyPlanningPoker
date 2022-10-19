@@ -1,4 +1,4 @@
-import { createUser, login, passRecovery, passUpdate } from '../schemas/user';
+import { createUser, login, passRecovery, passUpdate, deleteUser } from '../schemas/user';
 import { createSquad, updateSquad, addMembers } from '../schemas/squad';
 import { createTask } from '../schemas/task';
 import { vote, message } from '../schemas/voting';
@@ -17,6 +17,7 @@ routes.post('/user', checkSchema(createUser), schema.handler, user.create);
 routes.post('/user/login', checkSchema(login), schema.handler, user.login);
 routes.post('/user/pass-recovery', checkSchema(passRecovery), schema.handler, user.passRecovery);
 routes.patch('/user/pass-recovery', checkSchema(passUpdate), schema.handler, user.passUpdate);
+routes.delete('/user', checkSchema(deleteUser), schema.handler, user.deleteUser);
 
 routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, squad.create);
 routes.get('/squad/', auth.handler, squad.findAll);

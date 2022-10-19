@@ -70,4 +70,21 @@ const passUpdate: Schema = {
   },
 };
 
-export { createUser, login, passRecovery, passUpdate };
+const deleteUser: Schema = {
+  password: {
+    isLength: {
+      errorMessage: 'Password must contain a maximum of 255 characters and a minimum of 8 characters',
+      options: { max: 255, min: 6 },
+    },
+  },
+  token: {
+    isString: {
+      errorMessage: 'Token must be a string',
+    },
+    isLength: {
+      errorMessage: 'Token is required',
+    },
+  },
+};
+
+export { createUser, login, passRecovery, passUpdate, deleteUser };

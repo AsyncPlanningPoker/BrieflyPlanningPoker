@@ -82,4 +82,22 @@ async function passUpdate(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
-export { create, login, passRecovery, passUpdate };
+async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const password = await crypt.create(req.body.password);
+  const token = req.body.token;
+  const db = req.app.get('userDbStore');
+  const verify = auth.verify(token.replace('Bearer', '').trim());
+
+  try {
+    if (verify?.role === 'login') {
+      await db.deleteByEmail(verify.user, { password: password, updatedAt: new Date() });
+      return res.sendStatus(200);
+    } else {
+      throw new Unauthorized('your link is invalid or has expired');
+    }
+  } catch (error: any) {
+    next(error);
+  }
+}
+
+export { create, login, passRecovery, passUpdate, deleteUser };
