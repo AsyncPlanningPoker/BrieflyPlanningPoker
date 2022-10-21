@@ -87,4 +87,20 @@ const deleteUser: Schema = {
   },
 };
 
-export { createUser, login, passRecovery, passUpdate, deleteUser };
+const nameAndPassUpdate: Schema = {
+  email: {
+    isEmail: {
+      bail: true,
+    },
+  },
+  token: {
+    isString: {
+      errorMessage: 'Token must be a string',
+    },
+    isLength: {
+      errorMessage: 'Token is required',
+    },
+  },
+};
+
+export { createUser, login, passRecovery, passUpdate, deleteUser, nameAndPassUpdate};

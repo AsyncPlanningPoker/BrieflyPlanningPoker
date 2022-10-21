@@ -100,4 +100,45 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
-export { create, login, passRecovery, passUpdate, deleteUser };
+async function nameAndPassUpdate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  
+  const token = req.body.token;
+  const db = req.app.get('userDbStore');
+  const verify = auth.verify(token.replace('Bearer', '').trim());
+  const email = req.body.email;
+  const name = req.body.name?req.body.name:null;
+  const oldPassword = req.body.oldPassword?req.body.oldPassword:null;
+
+  if (oldPassword){
+    const user = await db.findByEmail(email);
+    if (user) {
+      const passwordMatch = await crypt.compare(oldPassword, user.password);
+      try{
+        if (passwordMatch) {
+          const password = await crypt.create(req.body.password);
+          if(name){
+            await db.updatePassByEmail(verify.user, { password: password, updatedAt: new Date(), name: name});
+            return res.sendStatus(200);
+          }else {
+            await db.updatePassByEmail(verify.user, { password: password, updatedAt: new Date() });
+            return res.sendStatus(200);
+          }
+        } else {
+          throw new Unauthorized ('The password did not match.')
+        }
+      } catch(error:any){
+          next(error);
+      }
+  }
+  } else{
+    if(name){
+      await db.updatePassByEmail(verify.user, {updatedAt: new Date(), name: name});
+      return res.sendStatus(200);
+    }else {
+      return res.status(400).json({ message: 'Missing Values.' });
+    }
+  }
+
+}
+
+export { create, login, passRecovery, passUpdate, nameAndPassUpdate, deleteUser};
