@@ -70,4 +70,56 @@ const passUpdate: Schema = {
   },
 };
 
-export { createUser, login, passRecovery, passUpdate };
+const deleteUser: Schema = {
+  token: {
+    isString: {
+      errorMessage: 'Token must be a string',
+    },
+    isLength: {
+      errorMessage: 'Token is required',
+    },
+  },
+};
+
+const nameAndPassUpdate: Schema = {
+  name: {
+    isString: {
+      errorMessage: 'Name must be a string',
+    },
+    isLength: {
+      errorMessage: 'Name cannot be empty',
+      options: { min: 1, max: 55 },
+    },
+    optional: { 
+      options: { nullable: true } 
+    },
+  },
+  oldpassword: {
+    isLength: {
+      errorMessage: 'Old password must contain a maximum of 255 characters and a minimum of 6 characters',
+      options: { max: 255, min: 6 },
+    },
+    optional: { 
+      options: { nullable: true } 
+    }
+  },
+  password: {
+    isLength: {
+      errorMessage: 'Password must contain a maximum of 255 characters and a minimum of 6 characters',
+      options: { max: 255, min: 6 },
+    },
+    optional: { 
+      options: { nullable: true } 
+    }
+  },
+  token: {
+    isString: {
+      errorMessage: 'Token must be a string',
+    },
+    isLength: {
+      errorMessage: 'Token is required',
+    },
+  },
+};
+
+export { createUser, login, passRecovery, passUpdate, deleteUser, nameAndPassUpdate};
