@@ -51,7 +51,7 @@ class TaskDbStore implements IStoreTask {
       const tasks =  await this.#client
       .select('tasks.id as task', 'tasks.name', 'tasks.maxRounds', this.#client.raw('max(??)  as "currentRound"', ['tasks-points.currentRound']),  'tasks.points', 'tasks.active', 'tasks.finished')
       .where({squad, "tasks.enabled":true})
-      .orderBy('tasks.updatedAt', 'desc')
+      .orderBy('tasks.createdAt', 'desc')
       .from('tasks')
       .leftJoin('tasks-points', 'tasks-points.task', '=', 'tasks.id')
       .groupBy('tasks.id', 'name', 'maxRounds', 'tasks.points', 'finished', 'active', 'tasks.updatedAt')
