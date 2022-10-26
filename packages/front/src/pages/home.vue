@@ -3,22 +3,22 @@
     <aside>
       <BSidebar />
     </aside>
-    
+
     <main v-if="squad.squad">
       <div class="home__section">
         <BSquad :squad="squad" />
       </div>
-      
+
       <div class="home__section">
         <BTaskContainer
-          title="Active" 
+          title="Active"
           :active=true
           :tasks="activeTasks"
         />
       </div>
 
       <div class="home__section">
-        <BTaskContainer 
+        <BTaskContainer
           title="Archived"
           :active=false
           :tasks="archivedTasks"
@@ -64,7 +64,7 @@ const store = useStore();
 const squad = computed(() => {
   const req = store.getters.getSquadActive;
   if(req.id) store.dispatch('gatherTasks', req.id);
-  
+
   return req;
 });
 
@@ -72,7 +72,7 @@ const activeTasks = computed(() => store.getters.getEnabledTasks);
 
 const archivedTasks = computed(() => store.getters.getDisabledTasks);
 
-onMounted(store.dispatch('gatherSquadList'));
+onMounted(() => store.dispatch('gatherSquadList'));
 </script>
 
 <style lang="scss" scoped>
@@ -87,11 +87,11 @@ onMounted(store.dispatch('gatherSquadList'));
       max-width: 120px;
     }
   }
-  
+
   main {
     flex: 1 1 0;
     margin-left: 68px;
-    
+
     @media (min-width: 768px) {
       margin-left: 120px;
     }
