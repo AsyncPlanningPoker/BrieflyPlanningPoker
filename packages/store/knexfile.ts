@@ -6,10 +6,7 @@ dotenv.config({ path: `../../.env${env}`});
 const config = {
   client: 'pg',
   connection: {
-   user: 'postgres',
-   password: 'postgres',
-   host: 'localhost',
-   port: 5432,
+    connectionString: process.env.DATABASE_URL,
     ssl: process.env.NODE_ENV === 'production' ? {
       rejectUnauthorized: false
     } : false
