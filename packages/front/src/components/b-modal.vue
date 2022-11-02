@@ -1,5 +1,8 @@
 <template>
-  <div class="b-modal__external" v-if="open">
+  <div
+    class="b-modal__external"
+    v-if="open"
+  >
     <div class="b-modal">
       <BContainer :color="color">
         <slot />

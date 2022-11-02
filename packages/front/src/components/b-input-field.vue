@@ -1,20 +1,40 @@
 <template>
   <div class="b-input-field">
     <div class="b-input-field__label">
-      <BText :for="name" :color="color" tag="label">
+      <BText
+        :for="name"
+        :color="color"
+        tag="label"
+      >
         {{ label }}
       </BText>
 
-      <BText v-if="link" color="link" tabindex="-1" tag="a" :href="link">
+      <BText
+        v-if="link"
+        color="link"
+        tabindex="-1"
+        tag="a"
+        :href="link"
+      >
         {{ linkLabel }}
       </BText>
     </div>
 
-    <div :error="errorMessage" :value="inputValue" @input="handleChange" @blur="handleBlur">
+    <div
+      :error="errorMessage"
+      :value="inputValue"
+      @input="handleChange"
+      @blur="handleBlur"
+    >
       <slot />
     </div>
 
-    <BText class="error" color="error" size="small" tag="div">
+    <BText
+      class="error"
+      color="error"
+      size="small"
+      tag="div"
+    >
       {{ errorMessage }}
     </BText>
   </div>

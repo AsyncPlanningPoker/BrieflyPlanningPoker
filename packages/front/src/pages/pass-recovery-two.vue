@@ -3,20 +3,47 @@
     <BBrand />
 
     <BContainer color="gray-30">
-      <Form class="pass-recovery-two__form" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-        <BInputField label="New password" name="password">
-          <BInput name="password" type="password" @input="updateNewPassword" />
+      <Form
+        class="pass-recovery-two__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
+          label="New password"
+          name="password"
+        >
+          <BInput
+            name="password"
+            type="password"
+            @input="updateNewPassword"
+          />
         </BInputField>
 
-        <BInputField label="Confirm new password" name="confirmPassword">
-          <BInput name="confirmPassword" type="password" @input="updateConfirmPassword" />
+        <BInputField
+          label="Confirm new password"
+          name="confirmPassword"
+        >
+          <BInput
+            name="confirmPassword"
+            type="password"
+            @input="updateConfirmPassword"
+          />
         </BInputField>
 
-        <BText class="error" size="small" tag="div">
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
           {{ this.$store.state.passRecoveryTwo.errorMessage }}
         </BText>
 
-        <BButton class="pass-recovery-two__submit-button" type="submit" value="update" />
+        <BButton
+          class="pass-recovery-two__submit-button"
+          type="submit"
+          value="update"
+        />
       </Form>
     </BContainer>
   </div>

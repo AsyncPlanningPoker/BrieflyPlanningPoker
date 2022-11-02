@@ -1,8 +1,22 @@
 <template>
-  <div class="b-divisor" :class="`b-divisor--${color}`">
-    <div v-if="button" class="b-divisor__button" :class="`b-divisor__button--${color}`" @click="toggle">
-      <font-awesome-icon v-show="!toggled" icon="fa-solid fa-circle-chevron-down" />
-      <font-awesome-icon v-show="toggled" icon="fa-solid fa-circle-chevron-up" />
+  <div
+    class="b-divisor"
+    :class="`b-divisor--${color}`"
+  >
+    <div
+      v-if="button"
+      class="b-divisor__button"
+      :class="`b-divisor__button--${color}`"
+      @click="toggle"
+    >
+      <font-awesome-icon
+        v-show="!toggled"
+        icon="fa-solid fa-circle-chevron-down"
+      />
+      <font-awesome-icon
+        v-show="toggled"
+        icon="fa-solid fa-circle-chevron-up"
+      />
     </div>
   </div>
 </template>

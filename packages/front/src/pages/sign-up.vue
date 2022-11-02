@@ -3,36 +3,87 @@
     <BBrand />
 
     <BContainer color="gray-30">
-      <Form class="sign-up__form" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-        <BInputField label="Name" name="name">
-          <BInput name="name" type="text" @input="updateName" />
+      <Form
+        class="sign-up__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
+          label="Name"
+          name="name"
+        >
+          <BInput
+            name="name"
+            type="text"
+            @input="updateName"
+          />
         </BInputField>
 
-        <BInputField label="E-mail" name="email">
-          <BInput name="email" type="email" @input="updateEmail" />
+        <BInputField
+          label="E-mail"
+          name="email"
+        >
+          <BInput
+            name="email"
+            type="email"
+            @input="updateEmail"
+          />
         </BInputField>
 
-        <BInputField label="Password" name="password">
-          <BInput name="password" type="password" @input="updatePassword" />
+        <BInputField
+          label="Password"
+          name="password"
+        >
+          <BInput
+            name="password"
+            type="password"
+            @input="updatePassword"
+          />
         </BInputField>
 
-        <BInputField label="Confirm password" name="confirmPassword">
-          <BInput name="confirmPassword" type="password" @input="updateConfirmPassword" />
+        <BInputField
+          label="Confirm password"
+          name="confirmPassword"
+        >
+          <BInput
+            name="confirmPassword"
+            type="password"
+            @input="updateConfirmPassword"
+          />
         </BInputField>
 
-        <BText class="error" size="small" tag="div">
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
           {{ this.$store.state.signUp.errorMessage }}
         </BText>
 
         <div class="sign-up__buttons-container">
-          <BButton variant="transparent" value="return" @click="$router.push('signin')" />
+          <BButton
+            variant="transparent"
+            value="return"
+            @click="$router.push('signin')"
+          />
 
-          <BButton class="sign-up__create-button" type="submit" value="create" />
+          <BButton
+            class="sign-up__create-button"
+            type="submit"
+            value="create"
+          />
         </div>
       </Form>
     </BContainer>
 
-    <BText class="sign-up__terms" size="small" tag="p"> By creating an account, you agree to the <a href="#">Terms of Service</a>. </BText>
+    <BText
+      class="sign-up__terms"
+      size="small"
+      tag="p"
+    >
+      By creating an account, you agree to the <a href="#">Terms of Service</a>.
+    </BText>
   </div>
 </template>
 

@@ -1,17 +1,43 @@
 <template>
-  <Form class="f-task" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-    <BInputField label="Task title" name="taskTitle">
-      <BInput name="taskTitle" placeholder="Title" type="text" />
+  <Form
+    class="f-task"
+    :validation-schema="schema"
+    @submit="onSubmit"
+    @invalid-submit="onInvalidSubmit"
+  >
+    <BInputField
+      label="Task title"
+      name="taskTitle"
+    >
+      <BInput
+        name="taskTitle"
+        placeholder="Title"
+        type="text"
+      />
     </BInputField>
 
-    <BInputField label="Task description" name="taskDescription">
-      <BTextArea name="taskDescription" placeholder="Description (optional)" />
+    <BInputField
+      label="Task description"
+      name="taskDescription"
+    >
+      <BTextArea
+        name="taskDescription"
+        placeholder="Description (optional)"
+      />
     </BInputField>
 
     <div class="f-task__buttons-container">
-      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton
+        variant="transparent"
+        value="cancel"
+        @click="$emit('close')"
+      />
 
-      <BButton class="f-task__button" type="submit" value="create" />
+      <BButton
+        class="f-task__button"
+        type="submit"
+        value="create"
+      />
     </div>
   </Form>
 </template>

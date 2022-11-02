@@ -1,7 +1,19 @@
 <template>
-  <Form ref="form" :validation-schema="schema" @submit="onSubmit">
-    <BInputField color="gray-30" label="Write a comment" name="addComment">
-      <BTextArea name="addComment" type="text" @keyup.enter="onKeyup" />
+  <Form
+    ref="form"
+    :validation-schema="schema"
+    @submit="onSubmit"
+  >
+    <BInputField
+      color="gray-30"
+      label="Write a comment"
+      name="addComment"
+    >
+      <BTextArea
+        name="addComment"
+        type="text"
+        @keyup.enter="onKeyup"
+      />
     </BInputField>
   </Form>
 </template>

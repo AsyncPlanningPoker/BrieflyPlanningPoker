@@ -2,33 +2,64 @@
   <div class="b-squad">
     <div class="b-squad__container">
       <div class="b-squad__name">
-        <BText class="b-squad__title" color="white" size="giant" @click="toggleUpdateModal">
+        <BText
+          class="b-squad__title"
+          color="white"
+          size="giant"
+          @click="toggleUpdateModal"
+        >
           {{ squad.squad }}
         </BText>
       </div>
 
-      <BDivisor class="b-squad__divisor" color="black" />
+      <BDivisor
+        class="b-squad__divisor"
+        color="black"
+      />
 
       <div class="b-squad__info">
         <div class="b-squad__max-rounds">
-          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-arrow-rotate-right" />
+          <font-awesome-icon
+            class="b-squad__icon"
+            icon="fa-solid fa-arrow-rotate-right"
+          />
 
-          <BText color="white" size="giant">
+          <BText
+            color="white"
+            size="giant"
+          >
             {{ squad.currentMaxRounds }}
           </BText>
         </div>
 
         <div class="b-squad__percentual">
-          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-user-check" />
+          <font-awesome-icon
+            class="b-squad__icon"
+            icon="fa-solid fa-user-check"
+          />
 
-          <BText color="white" size="giant">
+          <BText
+            color="white"
+            size="giant"
+          >
             {{ squad.currentPercentual }}
           </BText>
         </div>
-        <div class="b-squad__leave" @click="toggleLeaveModal('')">
-          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-right-from-bracket" />
+        <div
+          class="b-squad__leave"
+          @click="toggleLeaveModal('')"
+        >
+          <font-awesome-icon
+            class="b-squad__icon"
+            icon="fa-solid fa-right-from-bracket"
+          />
 
-          <BText color="white" size="giant"> Sair </BText>
+          <BText
+            color="white"
+            size="giant"
+          >
+            Sair
+          </BText>
         </div>
       </div>
     </div>
@@ -37,21 +68,42 @@
       <FAddUser />
 
       <div class="b-squad__users-container">
-        <BBadge v-for="(user, index) in squad.users.filter((x) => x.email !== actualUser)" :key="index" @action="toggleLeaveModal(user.email)">
+        <BBadge
+          v-for="(user, index) in squad.users.filter((x) => x.email !== actualUser)"
+          :key="index"
+          @action="toggleLeaveModal(user.email)"
+        >
           {{ user.email }}
         </BBadge>
       </div>
     </div>
 
-    <BDivisor v-if="squad.squad" :button="true" color="primary" @action="toggleInfo" />
+    <BDivisor
+      v-if="squad.squad"
+      :button="true"
+      color="primary"
+      @action="toggleInfo"
+    />
   </div>
 
-  <BModal color="gray-30" :open="updateModal">
-    <FSquad :update="true" @close="toggleUpdateModal" />
+  <BModal
+    color="gray-30"
+    :open="updateModal"
+  >
+    <FSquad
+      :update="true"
+      @close="toggleUpdateModal"
+    />
   </BModal>
 
-  <BModal color="gray-30" :open="leaveModal">
-    <FLeave :email="email" @close="toggleLeaveModal('')" />
+  <BModal
+    color="gray-30"
+    :open="leaveModal"
+  >
+    <FLeave
+      :email="email"
+      @close="toggleLeaveModal('')"
+    />
   </BModal>
 </template>
 

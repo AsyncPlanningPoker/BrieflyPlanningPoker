@@ -1,11 +1,32 @@
 <template>
   <div class="f-leave">
-    <BText v-if="email" align="left" type="p" size="large"> Are you sure you want to remove {{ email }} from the squad? </BText>
-    <BText v-else align="left" type="p" size="large"> Are you sure you want to leave the squad? </BText>
+    <BText
+      v-if="email"
+      align="left"
+      type="p"
+      size="large"
+    >
+      Are you sure you want to remove {{ email }} from the squad?
+    </BText>
+    <BText
+      v-else
+      align="left"
+      type="p"
+      size="large"
+    >
+      Are you sure you want to leave the squad?
+    </BText>
     <div class="f-leave__buttons-container">
-      <BButton variant="transparent" value="no" @click="$emit('close')" />
+      <BButton
+        variant="transparent"
+        value="no"
+        @click="$emit('close')"
+      />
 
-      <BButton value="yes" @click="confirm" />
+      <BButton
+        value="yes"
+        @click="confirm"
+      />
     </div>
   </div>
 </template>

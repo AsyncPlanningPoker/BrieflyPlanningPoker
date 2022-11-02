@@ -1,13 +1,30 @@
 <template>
-  <Form class="f-add-user" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
+  <Form
+    class="f-add-user"
+    :validation-schema="schema"
+    @submit="onSubmit"
+    @invalid-submit="onInvalidSubmit"
+  >
     <div class="f-add-user__input-wrapper">
-      <BInputField label="Partner's e-mail" name="email">
-        <BInput name="email" placeholder="fellow-worker@briefly.com" type="email" />
+      <BInputField
+        label="Partner's e-mail"
+        name="email"
+      >
+        <BInput
+          name="email"
+          placeholder="fellow-worker@briefly.com"
+          type="email"
+        />
       </BInputField>
     </div>
 
     <div class="f-add-user__button-wrapper">
-      <BButton class="f-add-user__button" size="small" type="submit" value="send" />
+      <BButton
+        class="f-add-user__button"
+        size="small"
+        type="submit"
+        value="send"
+      />
     </div>
   </Form>
 </template>

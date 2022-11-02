@@ -1,10 +1,21 @@
 <template>
-  <a href="/" class="b-brand__container">
+  <a
+    href="/"
+    class="b-brand__container"
+  >
     <div class="b-brand__logo-one">
-      <img class="b-brand__image" src="../assets/brand-icon-circle.png" alt="brand-logo-circle" />
+      <img
+        class="b-brand__image"
+        src="../assets/brand-icon-circle.png"
+        alt="brand-logo-circle"
+      >
     </div>
     <div class="b-brand__logo-two">
-      <img class="b-brand__image" src="../assets/brand-icon-rectangle.png" alt="brand-logo-rectangle" />
+      <img
+        class="b-brand__image"
+        src="../assets/brand-icon-rectangle.png"
+        alt="brand-logo-rectangle"
+      >
     </div>
   </a>
 </template>

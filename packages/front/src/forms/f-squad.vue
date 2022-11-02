@@ -1,40 +1,122 @@
 <template>
-  <Form v-if="!update" class="f-squad" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-    <BInputField label="Squad name" name="squadName">
-      <BInput name="squadName" placeholder="Name" type="text" />
+  <Form
+    v-if="!update"
+    class="f-squad"
+    :validation-schema="schema"
+    @submit="onSubmit"
+    @invalid-submit="onInvalidSubmit"
+  >
+    <BInputField
+      label="Squad name"
+      name="squadName"
+    >
+      <BInput
+        name="squadName"
+        placeholder="Name"
+        type="text"
+      />
     </BInputField>
 
-    <BInputField label="Max rounds" name="maxRounds">
-      <BInput name="maxRounds" :min="1" placeholder="3" type="number" />
+    <BInputField
+      label="Max rounds"
+      name="maxRounds"
+    >
+      <BInput
+        name="maxRounds"
+        :min="1"
+        placeholder="3"
+        type="number"
+      />
     </BInputField>
 
-    <BInputField label="Percentual" name="percentual">
-      <BInput name="percentual" :max="1" :min="0" placeholder="0.25" :step="0.1" type="number" />
+    <BInputField
+      label="Percentual"
+      name="percentual"
+    >
+      <BInput
+        name="percentual"
+        :max="1"
+        :min="0"
+        placeholder="0.25"
+        :step="0.1"
+        type="number"
+      />
     </BInputField>
 
     <div class="f-squad__buttons-container">
-      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton
+        variant="transparent"
+        value="cancel"
+        @click="$emit('close')"
+      />
 
-      <BButton class="f-squad__button" type="submit" value="create" />
+      <BButton
+        class="f-squad__button"
+        type="submit"
+        value="create"
+      />
     </div>
   </Form>
-  <Form v-else class="f-squad" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-    <BInputField label="Squad name" name="squadName" :initial="squad.squad">
-      <BInput name="squadName" type="text" :value="squad.squad" />
+  <Form
+    v-else
+    class="f-squad"
+    :validation-schema="schema"
+    @submit="onSubmit"
+    @invalid-submit="onInvalidSubmit"
+  >
+    <BInputField
+      label="Squad name"
+      name="squadName"
+      :initial="squad.squad"
+    >
+      <BInput
+        name="squadName"
+        type="text"
+        :value="squad.squad"
+      />
     </BInputField>
 
-    <BInputField label="Max rounds" name="maxRounds" :initial="squad.currentMaxRounds">
-      <BInput name="maxRounds" :min="1" type="number" :value="squad.currentMaxRounds" />
+    <BInputField
+      label="Max rounds"
+      name="maxRounds"
+      :initial="squad.currentMaxRounds"
+    >
+      <BInput
+        name="maxRounds"
+        :min="1"
+        type="number"
+        :value="squad.currentMaxRounds"
+      />
     </BInputField>
 
-    <BInputField label="Percentual" name="percentual" :initial="squad.currentPercentual">
-      <BInput name="percentual" :max="1" :min="0" placeholder="0.25" :step="0.1" type="number" :value="squad.currentPercentual" />
+    <BInputField
+      label="Percentual"
+      name="percentual"
+      :initial="squad.currentPercentual"
+    >
+      <BInput
+        name="percentual"
+        :max="1"
+        :min="0"
+        placeholder="0.25"
+        :step="0.1"
+        type="number"
+        :value="squad.currentPercentual"
+      />
     </BInputField>
 
     <div class="f-squad__buttons-container">
-      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton
+        variant="transparent"
+        value="cancel"
+        @click="$emit('close')"
+      />
 
-      <BButton class="f-squad__button" type="submit" value="update" />
+      <BButton
+        class="f-squad__button"
+        type="submit"
+        value="update"
+      />
     </div>
   </Form>
 </template>

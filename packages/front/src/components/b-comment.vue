@@ -1,29 +1,61 @@
 <template>
   <div class="b-comment">
     <template v-if="type == 'vote'">
-      <BText align="left" color="primary" size="medium">
+      <BText
+        align="left"
+        color="primary"
+        size="medium"
+      >
         {{ `[${date}] ` }}
         {{ author }}
       </BText>
 
-      <BText v-if="!hidden" align="left" color="primary" size="medium">
+      <BText
+        v-if="!hidden"
+        align="left"
+        color="primary"
+        size="medium"
+      >
         {{ ` voted ${content}` }}
       </BText>
 
-      <BText v-else align="left" color="primary" size="medium"> voted in the current round. </BText>
+      <BText
+        v-else
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        voted in the current round.
+      </BText>
     </template>
 
     <template v-else>
-      <BText align="left" color="primary" size="medium">
+      <BText
+        align="left"
+        color="primary"
+        size="medium"
+      >
         {{ `[${date}] ` }}
         {{ author }}:
       </BText>
 
-      <BText v-if="!hidden" align="left" color="gray-20" size="medium">
+      <BText
+        v-if="!hidden"
+        align="left"
+        color="gray-20"
+        size="medium"
+      >
         {{ content }}
       </BText>
 
-      <BText v-else align="left" color="primary" size="medium"> commented in the current round. </BText>
+      <BText
+        v-else
+        align="left"
+        color="primary"
+        size="medium"
+      >
+        commented in the current round.
+      </BText>
     </template>
   </div>
 </template>

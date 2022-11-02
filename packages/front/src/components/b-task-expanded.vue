@@ -1,28 +1,65 @@
 <template>
   <div class="b-task-expanded">
     <div class="b-task-expanded__leave-wrapper">
-      <BButton size="small" variant="inverted" value="x" @click="$emit('close')" />
+      <BButton
+        size="small"
+        variant="inverted"
+        value="x"
+        @click="$emit('close')"
+      />
     </div>
 
-    <BText align="center" class="b-task-expanded__title" color="black" size="giant" tag="h1">
+    <BText
+      align="center"
+      class="b-task-expanded__title"
+      color="black"
+      size="giant"
+      tag="h1"
+    >
       {{ task.task }}
     </BText>
 
-    <BText align="left" class="b-task-expanded__wrapper" color="gray-30" size="medium">
+    <BText
+      align="left"
+      class="b-task-expanded__wrapper"
+      color="gray-30"
+      size="medium"
+    >
       {{ task.description }}
     </BText>
 
-    <div id="comment-box" class="b-task-expanded__wrapper b-task-expanded__comments">
-      <BComment v-for="(action, index) in task.actions" :author="action.user" :content="action.content" :date="formatDate(action.date)" :type="action.type" :hidden="action.currentRound" />
+    <div
+      id="comment-box"
+      class="b-task-expanded__wrapper b-task-expanded__comments"
+    >
+      <BComment
+        v-for="(action, index) in task.actions"
+        :author="action.user"
+        :content="action.content"
+        :date="formatDate(action.date)"
+        :type="action.type"
+        :hidden="action.currentRound"
+      />
     </div>
 
-    <div class="b-task-expanded__wrapper" v-if="finished">
+    <div
+      class="b-task-expanded__wrapper"
+      v-if="finished"
+    >
       <FAddComment @comment="comment" />
     </div>
 
-    <div class="b-task-expanded__wrapper" v-if="finished">
+    <div
+      class="b-task-expanded__wrapper"
+      v-if="finished"
+    >
       <div class="b-task-expanded__card-container">
-        <BCard v-for="fibo in fibonacci" :active="votable" :value="fibo" @click="vote(fibo)" />
+        <BCard
+          v-for="fibo in fibonacci"
+          :active="votable"
+          :value="fibo"
+          @click="vote(fibo)"
+        />
       </div>
     </div>
   </div>

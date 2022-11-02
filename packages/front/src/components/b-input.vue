@@ -1,6 +1,16 @@
 <template>
   <div class="b-input__wrapper">
-    <input class="b-input" :id="name" :max="max" :min="min" :name="name" :placeholder="placeholder" :step="step" :type="type" :value="value" />
+    <input
+      class="b-input"
+      :id="name"
+      :max="max"
+      :min="min"
+      :name="name"
+      :placeholder="placeholder"
+      :step="step"
+      :type="type"
+      :value="value"
+    >
   </div>
 </template>
 

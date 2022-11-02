@@ -3,25 +3,59 @@
     <BBrand />
 
     <BContainer color="gray-30">
-      <Form class="sign-in__form" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-        <BInputField label="E-mail" name="email">
-          <BInput name="email" type="email" @input="updateEmail" />
+      <Form
+        class="sign-in__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
+          label="E-mail"
+          name="email"
+        >
+          <BInput
+            name="email"
+            type="email"
+            @input="updateEmail"
+          />
         </BInputField>
 
-        <BInputField label="Password" link="/password_reset" link-label="forgot password?" name="password">
-          <BInput name="password" type="password" @input="updatePassword" />
+        <BInputField
+          label="Password"
+          link="/password_reset"
+          link-label="forgot password?"
+          name="password"
+        >
+          <BInput
+            name="password"
+            type="password"
+            @input="updatePassword"
+          />
         </BInputField>
 
-        <BText class="error" size="small" tag="div">
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
           {{ this.$store.state.signIn.errorMessage }}
         </BText>
 
-        <BButton class="sign-in__login-button" type="submit" value="login" />
+        <BButton
+          class="sign-in__login-button"
+          type="submit"
+          value="login"
+        />
       </Form>
     </BContainer>
 
     <BContainer color="gray-30">
-      <BButton class="sign-in__registry-button" size="small" value="create an account" @click="$router.push('signup')" />
+      <BButton
+        class="sign-in__registry-button"
+        size="small"
+        value="create an account"
+        @click="$router.push('signup')"
+      />
     </BContainer>
   </div>
 </template>

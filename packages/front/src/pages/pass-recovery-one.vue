@@ -3,19 +3,43 @@
     <BBrand />
 
     <BContainer color="gray-30">
-      <Form class="pass-recovery-one__form" :validation-schema="schema" @submit="onSubmit" @invalid-submit="onInvalidSubmit">
-        <BInputField label="Enter your e-mail address and we will send you a password reset link" name="email">
-          <BInput name="email" type="email" @input="updateEmail" />
+      <Form
+        class="pass-recovery-one__form"
+        :validation-schema="schema"
+        @submit="onSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <BInputField
+          label="Enter your e-mail address and we will send you a password reset link"
+          name="email"
+        >
+          <BInput
+            name="email"
+            type="email"
+            @input="updateEmail"
+          />
         </BInputField>
 
-        <BText class="error" size="small" tag="div">
+        <BText
+          class="error"
+          size="small"
+          tag="div"
+        >
           {{ this.$store.state.passRecoveryOne.errorMessage }}
         </BText>
 
         <div class="pass-recovery-one__buttons-container">
-          <BButton variant="transparent" value="return" @click="$router.push('signin')" />
+          <BButton
+            variant="transparent"
+            value="return"
+            @click="$router.push('signin')"
+          />
 
-          <BButton class="pass-recovery-one__send-button" type="submit" value="send" />
+          <BButton
+            class="pass-recovery-one__send-button"
+            type="submit"
+            value="send"
+          />
         </div>
       </Form>
     </BContainer>

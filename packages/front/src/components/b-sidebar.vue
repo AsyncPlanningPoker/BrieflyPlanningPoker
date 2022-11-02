@@ -2,16 +2,27 @@
   <div class="b-sidebar">
     <div class="b-sidebar__logo-wrapper">
       <a @click="store.dispatch('addSquadActive', {})">
-        <img class="b-sidebar__image" src="../assets/square-logo-80.png" alt="brand-logo" />
+        <img
+          class="b-sidebar__image"
+          src="../assets/square-logo-80.png"
+          alt="brand-logo"
+        >
       </a>
     </div>
 
     <BDivisor color="gray-30" />
 
     <div class="b-sidebar__new-squad-wrapper">
-      <BButton size="small" value="+" @click="toggleModal" />
+      <BButton
+        size="small"
+        value="+"
+        @click="toggleModal"
+      />
 
-      <BModal color="gray-30" :open="showModal">
+      <BModal
+        color="gray-30"
+        :open="showModal"
+      >
         <FSquad @close="toggleModal" />
       </BModal>
     </div>
@@ -19,8 +30,17 @@
     <BDivisor color="gray-30" />
 
     <div class="b-sidebar__squad-wrapper">
-      <div v-for="(squad, index) in squads.slice().reverse()" :key="index" class="b-sidebar__squad">
-        <BButton size="small" variant="transparent" :value="`${index + 1}`" @click="store.dispatch('gatherSquad', squad.id)" />
+      <div
+        v-for="(squad, index) in squads.slice().reverse()"
+        :key="index"
+        class="b-sidebar__squad"
+      >
+        <BButton
+          size="small"
+          variant="transparent"
+          :value="`${index + 1}`"
+          @click="store.dispatch('gatherSquad', squad.id)"
+        />
       </div>
     </div>
   </div>
