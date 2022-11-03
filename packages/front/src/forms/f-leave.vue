@@ -51,7 +51,10 @@ export default {
 const emit = defineEmits(['close']);
 const store = useStore();
 const props = defineProps({
-  email: String,
+  email: {
+    type: String,
+    default: undefined,
+  },
 });
 
 function confirm() {

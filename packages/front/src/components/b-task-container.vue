@@ -26,8 +26,9 @@
   >
     <BTask
       v-for="(task, index) in tasks"
-      :task="task"
       :active="active"
+      :key="index"
+      :task="task"
     />
   </div>
 

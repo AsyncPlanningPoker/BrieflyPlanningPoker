@@ -45,8 +45,9 @@ export default {
 <script setup>
 const emit = defineEmits(['comment']);
 
-function onSubmit() {
-  emit('comment', addComment.value);
+function onSubmit(event) {
+  emit('comment', event.addComment);
+  /* eslint-disable no-undef */
   addComment.value = null;
   addComment.blur();
 }

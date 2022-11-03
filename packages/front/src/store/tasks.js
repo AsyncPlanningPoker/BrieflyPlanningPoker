@@ -37,7 +37,7 @@ export default {
     async addTask({ getters, dispatch }, payload) {
       const id = getters.getActiveId;
       await api.post(`/squad/${id}/task`, payload).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherTasks', id);
     },
@@ -45,7 +45,7 @@ export default {
     async disableTask({ dispatch, getters }, payload) {
       const id = getters.getActiveId;
       await api.put(`/squad/${id}/task/${payload}/deactive`).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherTasks', id);
     },
@@ -53,7 +53,7 @@ export default {
     async deleteTask({ dispatch, getters }, payload) {
       const id = getters.getActiveId;
       await api.delete(`/squad/${id}/task/${payload}`).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherTasks', id);
     },

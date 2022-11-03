@@ -29,6 +29,7 @@ export default {
     },
     value: {
       type: Number,
+      default: undefined,
     },
   },
 };

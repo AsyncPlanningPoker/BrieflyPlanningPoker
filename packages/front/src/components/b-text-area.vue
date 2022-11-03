@@ -21,9 +21,11 @@ export default {
     },
     placeholder: {
       type: String,
+      default: undefined,
     },
     row: {
       type: Number,
+      default: undefined,
     },
   },
 };

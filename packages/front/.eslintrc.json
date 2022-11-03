@@ -3,7 +3,8 @@
         "browser": true,
         "es2021": true,
         "jest": true,
-        "node": true
+        "node": true,
+        "vue/setup-compiler-macros": true
     },
     "extends": [
         "eslint:recommended",
@@ -28,6 +29,7 @@
         "arrow-spacing": "error",
         "array-bracket-spacing": "error",
         "no-duplicate-imports": "error",
+        "no-trailing-spaces": "error",
         "no-var": "error",
         "eqeqeq": ["error", "always"],
         "no-empty-function": "error",

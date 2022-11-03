@@ -14,9 +14,9 @@
         color="link"
         tabindex="-1"
         tag="a"
-        :href="link"
+        :href="link[0]"
       >
-        {{ linkLabel }}
+        {{ link[1] }}
       </BText>
     </div>
 
@@ -62,16 +62,17 @@ export default {
       type: String,
       default: 'white',
     },
-    initial: {},
+    initial: {
+      type: [String, Number],
+      default: undefined,
+    },
     label: {
       type: String,
       required: true,
     },
     link: {
-      type: String,
-    },
-    linkLabel: {
-      type: String,
+      type: [String, Array],
+      default: undefined,
     },
   },
 

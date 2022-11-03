@@ -5,7 +5,6 @@
       'b-button--small': size === 'small',
       [`b-button--${variant}`]: variant,
     }"
-    :style="`height: ${height}px;`"
     :type="type"
   >
     {{ this.value.toUpperCase() }}
@@ -19,10 +18,6 @@ export default {
   name: 'BButton',
 
   props: {
-    height: {
-      type: Number,
-      required: false,
-    },
     size: {
       type: String,
       default: 'medium',

@@ -34,6 +34,7 @@
     >
       <BComment
         v-for="(action, index) in task.actions"
+        :key="index"
         :author="action.user"
         :content="action.content"
         :date="formatDate(action.date)"
@@ -43,20 +44,21 @@
     </div>
 
     <div
-      class="b-task-expanded__wrapper"
       v-if="finished"
+      class="b-task-expanded__wrapper"
     >
       <FAddComment @comment="comment" />
     </div>
 
     <div
-      class="b-task-expanded__wrapper"
       v-if="finished"
+      class="b-task-expanded__wrapper"
     >
       <div class="b-task-expanded__card-container">
         <BCard
           v-for="fibo in fibonacci"
           :active="votable"
+          :key="fibo"
           :value="fibo"
           @click="vote(fibo)"
         />
@@ -86,6 +88,8 @@ export default {
     BText,
     FAddComment,
   },
+
+  emits: ['close'],
 
   props: {
     taskId: {

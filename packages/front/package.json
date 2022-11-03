@@ -5,8 +5,8 @@
   "scripts": {
     "build": "vite build",
     "start": "vite",
-    "lint": "eslint --ext .js,.vue . && stylelint './**/*.{s?(a|c)ss,less,stylus,vue}'",
-    "lint:fix": "eslint --fix --ext .js,.vue . && stylelint './**/*.{s?(a|c)ss,less,stylus,vue}' --fix"
+    "lint": "eslint --ext .js,.vue .",
+    "lint:fix": "eslint --fix --ext .js,.vue ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",

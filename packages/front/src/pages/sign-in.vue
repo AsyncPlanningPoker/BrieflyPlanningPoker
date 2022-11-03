@@ -22,8 +22,7 @@
 
         <BInputField
           label="Password"
-          link="/password_reset"
-          link-label="forgot password?"
+          :link="['/password_reset', 'forgot password?']"
           name="password"
         >
           <BInput

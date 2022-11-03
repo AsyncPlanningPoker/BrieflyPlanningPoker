@@ -53,7 +53,7 @@ export default {
     async addUser({ dispatch, getters }, payload) {
       const id = getters.getActiveId;
       await api.post(`squad/${id}/users`, { email: payload, owner: true }).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherSquad', id);
     },
@@ -61,7 +61,7 @@ export default {
     async addYourself({ dispatch, getters }, id) {
       const email = getters.getUserEmail;
       await api.post(`squad/${id}/users`, { email: email, owner: true }).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherSquad', id);
     },
@@ -69,7 +69,7 @@ export default {
     async delUser({ dispatch, getters }, payload) {
       const id = getters.getActiveId;
       await api.delete(`squad/${id}/users?email=${payload}`).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherSquad', id);
     },
@@ -78,7 +78,7 @@ export default {
       const id = getters.getActiveId;
       const email = getters.getUserEmail;
       await api.delete(`squad/${id}/users?email=${email}`).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherSquadList');
       await dispatch('addSquadActive', {});
@@ -86,7 +86,7 @@ export default {
 
     async addSquad({ dispatch }, payload) {
       const req = await api.post('squad', payload).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       const id = req.data.id;
       await dispatch('addYourself', id);
@@ -96,7 +96,7 @@ export default {
     async updateSquad({ dispatch, getters }, payload) {
       const id = getters.getSquadActive.id;
       await api.put(`squad/${id}`, payload).catch((error) => {
-        error = error.data.message;
+        throw error;
       });
       await dispatch('gatherSquad', id);
     },
