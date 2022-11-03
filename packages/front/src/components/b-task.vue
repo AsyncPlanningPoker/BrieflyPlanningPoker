@@ -1,7 +1,7 @@
 <template>
-  <div 
+  <div
     class="b-task"
-    :class="active ?  'b-task--active' : 'b-task--archived'"
+    :class="active ? 'b-task--active' : 'b-task--archived'"
   >
     <div class="b-task__name-wrapper">
       <BText
@@ -17,18 +17,26 @@
 
     <div class="b-task__info-wrapper">
       <div
-        v-if="task.finished" 
+        v-if="task.finished"
         class="b-task__round"
       >
-        <font-awesome-icon v-if="!!task.points" class="b-task__icon" icon="fa-solid fa-circle-check" />
-        <font-awesome-icon v-else class="b-task__icon" icon="fa-solid fa-circle-xmark" />
+        <font-awesome-icon
+          v-if="!!task.points"
+          class="b-task__icon"
+          icon="fa-solid fa-circle-check"
+        />
+        <font-awesome-icon
+          v-else
+          class="b-task__icon"
+          icon="fa-solid fa-circle-xmark"
+        />
 
         <BText
           align="right"
           size="large"
           tag="p"
         >
-          {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : "incomplete"}}
+          {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : 'incomplete' }}
         </BText>
       </div>
 
@@ -36,8 +44,11 @@
         v-else
         class="b-task__round"
       >
-        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
-    
+        <font-awesome-icon
+          class="b-task__icon"
+          icon="fa-solid fa-arrow-rotate-right"
+        />
+
         <BText
           align="right"
           size="large"
@@ -61,15 +72,17 @@
           @click="store.dispatch('deleteTask', task.task)"
         />
       </div>
-
     </div>
   </div>
 
-  <BModal color="gray-10" :open="showModal">
-    <BTaskExpanded 
-      :taskId="taskId"
-      :squadId="squadId"
-      @close="toggleModal(taskId, true)" 
+  <BModal
+    color="gray-10"
+    :open="showModal"
+  >
+    <BTaskExpanded
+      :task-id="taskId"
+      :squad-id="squadId"
+      @close="toggleModal(taskId, true)"
     />
   </BModal>
 </template>
@@ -113,11 +126,14 @@ const showModal = ref(false);
 
 const taskId = ref(null);
 
-function toggleModal (task, refresh) {
+function toggleModal(task, refresh) {
   taskId.value = task;
-  if(refresh) store.dispatch('gatherTasks', squadId.value);
+  if (refresh) {
+    store.dispatch('gatherTasks', squadId.value);
+  }
+
   showModal.value = !showModal.value;
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -152,7 +168,7 @@ function toggleModal (task, refresh) {
   grid-area: info;
 }
 
-.b-task__buttons, 
+.b-task__buttons,
 .b-task__info-wrapper,
 .b-task__round {
   align-items: center;
@@ -165,7 +181,7 @@ function toggleModal (task, refresh) {
   color: var(--color-gray-30);
   height: var(--unit-0600);
   padding: var(--unit-0200);
-  width: var(--unit-0600); 
+  width: var(--unit-0600);
 }
 
 .b-task__buttons > .b-task__icon {

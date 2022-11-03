@@ -1,6 +1,6 @@
 <template>
   <div class="b-comment">
-    <template v-if="type=='vote'">
+    <template v-if="type == 'vote'">
       <BText
         align="left"
         color="primary"
@@ -90,7 +90,7 @@ export default {
     hidden: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 };
 </script>
@@ -106,6 +106,6 @@ export default {
 
 .blurred {
   color: transparent;
-  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 </style>

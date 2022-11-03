@@ -9,7 +9,7 @@
       label="Write a comment"
       name="addComment"
     >
-      <BTextArea 
+      <BTextArea
         name="addComment"
         type="text"
         @keyup.enter="onKeyup"
@@ -35,8 +35,8 @@ export default {
   },
 
   methods: {
-    onKeyup(event) {
-      this.$refs.form.$el.dispatchEvent(new Event("submit", { cancelable: true}));
+    onKeyup() {
+      this.$refs.form.$el.dispatchEvent(new Event('submit', { cancelable: true }));
     },
   },
 };
@@ -45,11 +45,12 @@ export default {
 <script setup>
 const emit = defineEmits(['comment']);
 
-function onSubmit() {
-  emit('comment', addComment.value);
+function onSubmit(event) {
+  emit('comment', event.addComment);
+  /* eslint-disable no-undef */
   addComment.value = null;
   addComment.blur();
-};
+}
 
 const schema = Yup.object().shape({
   addComment: Yup.string().min(1).max(180).trim(),

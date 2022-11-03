@@ -13,6 +13,27 @@ docs and commits) are in english. </p>
   All commits are written using <a href="https://gitmoji.dev/">gitmoji</a> guide
 </p>
 
+<h2> :lipstick: Lint </h2>
+<p>
+  We're using ESLint and Prettier at the project, then it will be necessary install them on your editor. 
+  
+  In case you're using VS Code:
+    <ul>
+        <li>
+            Download and install Prettier - Code formatter 
+        </li>
+        <li>
+            Download and install ESLint 
+        </li>
+        <li>
+            Restart VS Code
+        </li>
+        <li>
+            <i>Optional: you can add this line <code> "editor.codeActionsOnSave": { "source.fixAll.eslint": true } </code> at setting.json to fix some kind of warnings after saving</i>
+        </li>
+    </ul>
+</p>
+
 <h2> :twisted_rightwards_arrows: Pull requests </h2>
 <p>
   The repository doesn't allow merging directly at main/master, thus first you'll need to develop at your new local branch and create a pull request which

@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "start": "vite"
+    "start": "vite",
+    "lint": "eslint --ext .js,.vue .",
+    "lint:fix": "eslint --fix --ext .js,.vue ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
@@ -29,10 +31,13 @@
     "@vue/vue3-jest": "^27.0.0-alpha.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^27.5.1",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.6.0",
     "jest": "^27.5.1",
+    "prettier": "^2.7.1",
     "sass": "^1.32.7",
-    "stylelint": "^14.6.0",
-    "stylelint-config-recommended-scss": "^6.0.0",
     "vite": "^2.8.0",
     "vue3-jest": "^27.0.0-alpha.1"
   }

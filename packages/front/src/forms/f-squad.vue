@@ -23,7 +23,7 @@
     >
       <BInput
         name="maxRounds"
-        :min=1
+        :min="1"
         placeholder="3"
         type="number"
       />
@@ -35,10 +35,10 @@
     >
       <BInput
         name="percentual"
-        :max=1
-        :min=0
+        :max="1"
+        :min="0"
         placeholder="0.25"
-        :step=0.10
+        :step="0.1"
         type="number"
       />
     </BInputField>
@@ -49,7 +49,7 @@
         value="cancel"
         @click="$emit('close')"
       />
-      
+
       <BButton
         class="f-squad__button"
         type="submit"
@@ -83,7 +83,7 @@
     >
       <BInput
         name="maxRounds"
-        :min=1
+        :min="1"
         type="number"
         :value="squad.currentMaxRounds"
       />
@@ -96,10 +96,10 @@
     >
       <BInput
         name="percentual"
-        :max=1
-        :min=0
+        :max="1"
+        :min="0"
         placeholder="0.25"
-        :step=0.10
+        :step="0.1"
         type="number"
         :value="squad.currentPercentual"
       />
@@ -111,7 +111,7 @@
         value="cancel"
         @click="$emit('close')"
       />
-      
+
       <BButton
         class="f-squad__button"
         type="submit"
@@ -127,7 +127,7 @@ import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
 
-import BButton from '../components/b-button.vue'
+import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 
@@ -146,42 +146,53 @@ export default {
 <script setup>
 const props = defineProps({
   update: {
-      type: Boolean,
-      default: false,
-    },
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['close']);
 const store = useStore();
-const squad = computed(() => store.getters.getSquadActive);
+const squad = computed(() => {
+  return store.getters.getSquadActive;
+});
 
 function onSubmit(values) {
   const newSquad = {
     name: values.squadName,
     currentMaxRounds: values.maxRounds,
-    currentPercentual: values.percentual
-  }
+    currentPercentual: values.percentual,
+  };
 
-  if(!props.update) {
+  if (!props.update) {
     store.dispatch('addSquad', newSquad);
-  }
-  else {
+  } else {
     store.dispatch('updateSquad', newSquad);
   }
 
   emit('close');
-};
+}
 
 function onInvalidSubmit() {
-  const submitButton = document.querySelector(".f-squad__button");
-  submitButton.classList.add("invalid");
-  setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-};
+  const submitButton = document.querySelector('.f-squad__button');
+  submitButton.classList.add('invalid');
+  setTimeout(() => {
+    submitButton.classList.remove('invalid');
+  }, 1000);
+}
 
 const schema = Yup.object().shape({
   squadName: Yup.string().max(25).required(),
   maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
-  percentual: Yup.number().typeError('percentual must be a number').required().positive().min(0).max(1).test((number) => Number.isInteger(number * (10 ** 2))),
+  percentual: Yup.number()
+    .typeError('percentual must be a number')
+    .required()
+    .positive()
+    .min(0)
+    .max(1)
+    .test((number) => {
+      return Number.isInteger(number * 10 ** 2);
+    }),
 });
 </script>
 

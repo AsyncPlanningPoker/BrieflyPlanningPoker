@@ -29,8 +29,8 @@ export default {
     },
     value: {
       type: Number,
-      default: '?',
-    }
+      default: undefined,
+    },
   },
 };
 </script>

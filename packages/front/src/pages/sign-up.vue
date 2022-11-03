@@ -1,6 +1,6 @@
 <template>
   <div class="sign-up">
-    <BBrand/>
+    <BBrand />
 
     <BContainer color="gray-30">
       <Form
@@ -67,17 +67,17 @@
             value="return"
             @click="$router.push('signin')"
           />
-          
+
           <BButton
             class="sign-up__create-button"
             type="submit"
             value="create"
           />
         </div>
-      </form>
+      </Form>
     </BContainer>
 
-    <BText 
+    <BText
       class="sign-up__terms"
       size="small"
       tag="p"
@@ -88,11 +88,11 @@
 </template>
 
 <script>
-import { Form } from "vee-validate";
-import * as Yup from "yup";
-import BBrand from '../components/b-brand.vue'
-import BButton from '../components/b-button.vue'
-import BContainer from '../components/b-container.vue'
+import { Form } from 'vee-validate';
+import * as Yup from 'yup';
+import BBrand from '../components/b-brand.vue';
+import BButton from '../components/b-button.vue';
+import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
@@ -114,34 +114,36 @@ export default {
   setup() {
     function onSubmit() {
       SignUp.dispatch('registry');
-    };
+    }
 
     function onInvalidSubmit() {
-      const submitButton = document.querySelector(".sign-up__create-button");
+      const submitButton = document.querySelector('.sign-up__create-button');
 
-      submitButton.classList.add("invalid");
-      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-    };
+      submitButton.classList.add('invalid');
+      setTimeout(() => {
+        submitButton.classList.remove('invalid');
+      }, 1000);
+    }
 
-    function updateName (e) {
+    function updateName(e) {
       SignUp.commit('updateName', e.target.value);
-    };
+    }
 
     function updateEmail(e) {
       SignUp.commit('updateEmail', e.target.value);
-    };
+    }
 
     function updatePassword(e) {
       SignUp.commit('updatePassword', e.target.value);
-    };
+    }
 
-    function updateConfirmPassword (e) {
+    function updateConfirmPassword(e) {
       SignUp.commit('updateConfirmPassword', e.target.value);
-    };
+    }
 
     function noWhitespace() {
       return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
-    };
+    }
 
     Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);
 
@@ -149,12 +151,14 @@ export default {
       name: Yup.string().max(55).required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).trim().noWhitespace().required(),
-      confirmPassword: Yup.string().oneOf([Yup.ref("password")], "passwords do not match").required(),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'passwords do not match')
+        .required(),
     });
 
     return { onSubmit, onInvalidSubmit, updateName, updateEmail, updatePassword, updateConfirmPassword, schema };
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -163,7 +167,7 @@ export default {
   background-color: var(--color-black);
   display: grid;
   justify-items: center;
-  min-height:100vh;
+  min-height: 100vh;
   row-gap: var(--unit-1000);
 }
 

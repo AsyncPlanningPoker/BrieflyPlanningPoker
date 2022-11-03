@@ -1,6 +1,6 @@
 <template>
   <div class="sign-in">
-    <BBrand/>
+    <BBrand />
 
     <BContainer color="gray-30">
       <Form
@@ -22,8 +22,7 @@
 
         <BInputField
           label="Password"
-          link="/password_reset"
-          link-label="forgot password?"
+          :link="['/password_reset', 'forgot password?']"
           name="password"
         >
           <BInput
@@ -61,11 +60,11 @@
 </template>
 
 <script>
-import { Form } from "vee-validate";
-import * as Yup from "yup";
-import BBrand from '../components/b-brand.vue'
-import BButton from '../components/b-button.vue'
-import BContainer from '../components/b-container.vue'
+import { Form } from 'vee-validate';
+import * as Yup from 'yup';
+import BBrand from '../components/b-brand.vue';
+import BButton from '../components/b-button.vue';
+import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
@@ -87,26 +86,28 @@ export default {
   setup() {
     function onSubmit() {
       SignIn.dispatch('login');
-    };
+    }
 
     function onInvalidSubmit() {
-      const submitButton = document.querySelector(".sign-in__login-button");
+      const submitButton = document.querySelector('.sign-in__login-button');
 
-      submitButton.classList.add("invalid");
-      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-    };
+      submitButton.classList.add('invalid');
+      setTimeout(() => {
+        submitButton.classList.remove('invalid');
+      }, 1000);
+    }
 
     function updateEmail(e) {
       SignIn.commit('updateEmail', e.target.value);
-    };
+    }
 
     function updatePassword(e) {
       SignIn.commit('updatePassword', e.target.value);
-    };
+    }
 
     function noWhitespace() {
       return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
-    };
+    }
 
     Yup.addMethod(Yup.string, 'noWhitespace', noWhitespace);
 

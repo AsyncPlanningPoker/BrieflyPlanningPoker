@@ -7,7 +7,11 @@
       <slot />
     </BText>
 
-    <font-awesome-icon class="b-badge__xmark" icon="fa-solid fa-xmark" @click="$emit('action')" />
+    <font-awesome-icon
+      class="b-badge__xmark"
+      icon="fa-solid fa-xmark"
+      @click="$emit('action')"
+    />
   </div>
 </template>
 

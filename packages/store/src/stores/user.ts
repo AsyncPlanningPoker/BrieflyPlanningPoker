@@ -19,21 +19,25 @@ class UserDbStore implements IStoreUser {
 
   //Find a valid user by its email
   async findByEmail(email: string): Promise<UserType | undefined> {
-    const res = await this.#client.select('id', 'name', 'email', 'password').from('users').where({email, enabled: true});
+    const res = await this.#client.select('id', 'name', 'email', 'password').from('users').where({ email, enabled: true });
     return res[0];
   }
 
   //Update the password user by its email
   async updatePassByEmail(email: string, user: UpdateUserType): Promise<void> {
-    await this.#client('users').where({ email: email, enabled: true }).update({...user});
+    await this.#client('users')
+      .where({ email: email, enabled: true })
+      .update({ ...user });
   }
 
   //Delete a user by its email
   async deleteByEmail(email: string, user: UpdateUserType): Promise<void> {
-    await this.#client('users').where({ email: email, enabled: true }).update({
-      enabled: false,
-      ...user
-    });
+    await this.#client('users')
+      .where({ email: email, enabled: true })
+      .update({
+        enabled: false,
+        ...user,
+      });
   }
 }
 
