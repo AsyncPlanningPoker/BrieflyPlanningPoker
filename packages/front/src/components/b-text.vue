@@ -26,7 +26,7 @@ export default {
     },
     color: {
       type: String,
-      default: 'white',
+      default: undefined,
       validator: shouldBeOneOf(['primary', 'accent', 'white', 'gray-10', 'gray-20', 'gray-30', 'black', 'link', 'error']),
     },
     size: {
