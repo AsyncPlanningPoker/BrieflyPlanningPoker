@@ -6,16 +6,9 @@ const routes = [
     name: 'Home',
     component: () => import('../pages/home.vue'),
     props: true,
-    // beforeEnter: (to, from, next) => {
-    //   if(!localStorage.getItem('userToken')){
-    //     console.log('aaaaaaa');
-    //     next('/signin');
-    //   }
-    //   else{
-    //     console.log('bbbb');
-    //     next();
-    //   }
-    // },
+    beforeEnter: (to, from, next) => {
+      !localStorage.getItem('userToken') ? next('/signin') : next();
+    },
   },
   {
     path: '/signin',
