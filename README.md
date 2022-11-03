@@ -114,7 +114,7 @@
    :handshake:Contribute
 </h2>
 <p>
-   link to guide
+Contribution guide can be access <a href="https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker/blob/main/CONTRIBUTING.md">here</a>!
 </p>
 <h3>
  Contributors

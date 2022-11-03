@@ -78,7 +78,7 @@ const activeTasks = computed(() => store.getters.getEnabledTasks);
 
 const archivedTasks = computed(() => store.getters.getDisabledTasks);
 
-onMounted(store.dispatch('gatherSquadList'));
+onMounted(() => store.dispatch('gatherSquadList'));
 </script>
 
 <style lang="scss" scoped>

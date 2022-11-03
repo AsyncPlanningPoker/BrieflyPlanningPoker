@@ -118,6 +118,12 @@ const toggleModal = () => {
 .b-sidebar__squad-wrapper {
   display: grid;
   row-gap: var(--unit-0500);
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .b-sidebar__squad {
     width: 100%;
