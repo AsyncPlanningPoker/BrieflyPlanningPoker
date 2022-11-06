@@ -9,7 +9,7 @@
         class="b-task__name"
         size="medium"
         tag="strong"
-        @click="toggleModal(task.task, false)"
+        @click="toggleExpandedTaskModal(task.task, false)"
       >
         {{ task.name }}
       </BText>
@@ -62,14 +62,14 @@
         <font-awesome-icon
           v-if="active"
           class="b-task__icon"
-          icon="fa-solid fa-square-caret-down"
-          @click="store.dispatch('disableTask', task.task)"
+          icon="fa-solid fa-lock"
+          @click="toggleArchiveModal()"
         />
 
         <font-awesome-icon
           class="b-task__icon"
           icon="fa-solid fa-trash-can"
-          @click="store.dispatch('deleteTask', task.task)"
+          @click="toggleDeleteModal()"
         />
       </div>
     </div>
@@ -77,12 +77,34 @@
 
   <BModal
     color="gray-10"
-    :open="showModal"
+    :open="expandedTaskModal"
   >
     <BTaskExpanded
       :task-id="taskId"
       :squad-id="squadId"
-      @close="toggleModal(taskId, true)"
+      @close="toggleExpandedTaskModal(taskId, true)"
+    />
+  </BModal>
+
+  <BModal
+    color="gray-30"
+    :open="archiveModal"
+  >
+    <FConfirmation
+      variable="archive"
+      @close="toggleArchiveModal()"
+      @confirm="store.dispatch('disableTask', task.task), toggleArchiveModal()"
+    />
+  </BModal>
+
+  <BModal
+    color="gray-30"
+    :open="deleteModal"
+  >
+    <FConfirmation
+      variable="delete"
+      @close="toggleDeleteModal()"
+      @confirm="store.dispatch('deleteTask', task.task), toggleDeleteModal()"
     />
   </BModal>
 </template>
@@ -95,6 +117,8 @@ import BModal from '../components/b-modal.vue';
 import BTaskExpanded from '../components/b-task-expanded.vue';
 import BText from '../components/b-text.vue';
 
+import FConfirmation from '../forms/f-confirmation.vue';
+
 export default {
   name: 'BTask',
 
@@ -102,6 +126,7 @@ export default {
     BModal,
     BTaskExpanded,
     BText,
+    FConfirmation,
   },
 
   props: {
@@ -122,17 +147,29 @@ const store = useStore();
 
 const squadId = computed(() => store.getters.getActiveId);
 
-const showModal = ref(false);
-
 const taskId = ref(null);
 
-function toggleModal(task, refresh) {
+const expandedTaskModal = ref(false);
+
+function toggleExpandedTaskModal(task, refresh) {
   taskId.value = task;
   if (refresh) {
     store.dispatch('gatherTasks', squadId.value);
   }
 
-  showModal.value = !showModal.value;
+  expandedTaskModal.value = !expandedTaskModal.value;
+}
+
+const archiveModal = ref(false);
+
+function toggleArchiveModal() {
+  archiveModal.value = !archiveModal.value;
+}
+
+const deleteModal = ref(false);
+
+function toggleDeleteModal() {
+  deleteModal.value = !deleteModal.value;
 }
 </script>
 
