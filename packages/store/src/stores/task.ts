@@ -118,6 +118,7 @@ class TaskDbStore implements IStoreTask {
             user: v.user,
             email: v.email,
             date: v.updatedAt,
+            round: v.round,
             currentRound: v.active ? (a ? v.round === a : true) : false,
           });
         }

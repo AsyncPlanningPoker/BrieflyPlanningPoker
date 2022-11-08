@@ -32,15 +32,34 @@
       id="comment-box"
       class="b-task-expanded__wrapper b-task-expanded__comments"
     >
-      <BComment
-        v-for="(action, index) in task.actions"
-        :key="index"
-        :author="action.user"
-        :content="action.content"
-        :date="formatDate(action.date)"
-        :type="action.type"
-        :hidden="action.currentRound"
-      />
+      <template
+        v-for="round in rounds"
+        :key="round"
+      >
+        <BText
+          align="center"
+          color="gray-20"
+          size="medium"
+        >
+          Round: {{ round }}
+        </BText>
+
+        <BDivisor color="gray-20" />
+
+        <template
+          v-for="action in task.actions"
+          :key="action.date"
+        >
+          <BComment
+            v-if="action.round === round"
+            :author="action.user"
+            :content="action.content"
+            :date="formatDate(action.date)"
+            :type="action.type"
+            :hidden="action.currentRound"
+          />
+        </template>
+      </template>
     </div>
 
     <div
@@ -74,6 +93,7 @@ import { api } from '../services/api';
 import BButton from '../components/b-button.vue';
 import BCard from '../components/b-card.vue';
 import BComment from '../components/b-comment.vue';
+import BDivisor from '../components/b-divisor.vue';
 import BText from '../components/b-text.vue';
 
 import FAddComment from '../forms/f-add-comment.vue';
@@ -85,6 +105,7 @@ export default {
     BButton,
     BCard,
     BComment,
+    BDivisor,
     BText,
     FAddComment,
   },
@@ -105,9 +126,11 @@ export default {
   data() {
     return {
       task: {},
+      rounds: [],
       fibonacci: [1, 2, 3, 5, 8, 13],
       votable: true,
       finished: false,
+      actualRound: 0,
     };
   },
 
@@ -115,6 +138,7 @@ export default {
     userEmail() {
       return useStore().getters.getUserEmail;
     },
+
     formatDate() {
       return (date) => {
         return new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
@@ -131,17 +155,20 @@ export default {
         this.load();
       }
     },
+
     async comment(message) {
       await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` }).catch((err) => {
         console.log(err.response.data.message);
       });
       this.load();
     },
+
     async load() {
       await api
         .get(`/squad/${this.squadId}/task/${this.taskId}`)
         .then((res) => {
           this.task = res.data;
+          this.rounds = [...new Set(this.task.actions.map((e) => e.round))];
           this.finished = !this.task.finished;
           this.task.actions.every((x) => (this.votable = this.eligible(x)));
         })
@@ -151,6 +178,7 @@ export default {
       const box = document.getElementById('comment-box');
       box.scroll({ top: box.scrollHeight, behavior: 'smooth' });
     },
+
     eligible(person) {
       return !(person.type === 'vote' && person.currentRound === true && person.email === this.userEmail);
     },
@@ -192,15 +220,15 @@ export default {
 }
 
 .b-task-expanded__wrapper {
-  margin-top: var(--unit-0400);
+  margin-top: var(--unit-0300);
 
   @media (min-width: 768px) {
-    margin-top: var(--unit-1000);
+    margin-top: var(--unit-0500);
   }
 }
 
 .b-task-expanded__comments {
-  max-height: 200px;
+  max-height: 40vh;
   overflow: auto;
 }
 

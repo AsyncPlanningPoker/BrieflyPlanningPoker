@@ -50,6 +50,6 @@ export default {
 .b-modal {
   display: flex;
   justify-content: center;
-  margin-top: 20vh;
+  margin-top: 10vh;
 }
 </style>
