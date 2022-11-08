@@ -1,8 +1,8 @@
 interface IStoreUser {
   create(user: UserType): Promise<void>;
-  deleteByEmail(email: string, user: UpdateUserType): Promise<void>
+  deleteByEmail(email: string, user: UpdateUserType): Promise<void>;
   findByEmail(email: string): Promise<UserType | undefined>;
-  updatePassByEmail(email: string, user: UpdateUserType): Promise<void>; 
+  updatePassByEmail(email: string, user: UpdateUserType): Promise<void>;
 }
 
 type UpdateUserType = {

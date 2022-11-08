@@ -1,6 +1,6 @@
 <template>
   <div class="b-text-area__wrapper">
-    <textarea 
+    <textarea
       class="b-text-area"
       :id="name"
       :name="name"
@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'BTextArea',
 
@@ -22,9 +21,11 @@ export default {
     },
     placeholder: {
       type: String,
+      default: undefined,
     },
     row: {
       type: Number,
+      default: undefined,
     },
   },
 };

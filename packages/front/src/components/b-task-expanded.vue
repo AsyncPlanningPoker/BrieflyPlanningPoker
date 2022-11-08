@@ -29,34 +29,41 @@
     </BText>
 
     <div
-      id="comment-box" 
+      id="comment-box"
       class="b-task-expanded__wrapper b-task-expanded__comments"
     >
-      <BComment 
+      <BComment
         v-for="(action, index) in task.actions"
+        :key="index"
         :author="action.user"
         :content="action.content"
-        :date=formatDate(action.date)
+        :date="formatDate(action.date)"
         :type="action.type"
         :hidden="action.currentRound"
       />
     </div>
 
-    <div class="b-task-expanded__wrapper" v-if="finished">
+    <div
+      v-if="finished"
+      class="b-task-expanded__wrapper"
+    >
       <FAddComment @comment="comment" />
     </div>
 
-    <div class="b-task-expanded__wrapper" v-if="finished">
+    <div
+      v-if="finished"
+      class="b-task-expanded__wrapper"
+    >
       <div class="b-task-expanded__card-container">
-        <BCard 
+        <BCard
           v-for="fibo in fibonacci"
           :active="votable"
+          :key="fibo"
           :value="fibo"
           @click="vote(fibo)"
         />
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -67,9 +74,7 @@ import { api } from '../services/api';
 import BButton from '../components/b-button.vue';
 import BCard from '../components/b-card.vue';
 import BComment from '../components/b-comment.vue';
-import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
-import BTextArea from '../components/b-text-area.vue';
 
 import FAddComment from '../forms/f-add-comment.vue';
 
@@ -80,11 +85,11 @@ export default {
     BButton,
     BCard,
     BComment,
-    BInputField,
     BText,
-    BTextArea,
     FAddComment,
   },
+
+  emits: ['close'],
 
   props: {
     taskId: {
@@ -103,50 +108,51 @@ export default {
       fibonacci: [1, 2, 3, 5, 8, 13],
       votable: true,
       finished: false,
-    }
+    };
   },
 
   computed: {
     userEmail() {
       return useStore().getters.getUserEmail;
     },
-    formatDate(){
-      return date => new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'});
-    }
+    formatDate() {
+      return (date) => {
+        return new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      };
+    },
   },
 
   methods: {
     async vote(point) {
-      if(this.votable){
-        await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point })
-          .catch((err) => {
-            console.log(err.response.data.message);
-          });
+      if (this.votable) {
+        await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point }).catch((err) => {
+          console.log(err.response.data.message);
+        });
         this.load();
       }
     },
     async comment(message) {
-      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` })
-        .catch((err) => {
-          console.log(err.response.data.message);
-        });
+      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` }).catch((err) => {
+        console.log(err.response.data.message);
+      });
       this.load();
     },
     async load() {
-      await api.get(`/squad/${this.squadId}/task/${this.taskId}`)
+      await api
+        .get(`/squad/${this.squadId}/task/${this.taskId}`)
         .then((res) => {
           this.task = res.data;
-          this.finished = !(this.task.finished);
-          this.task.actions.every(x => this.votable = this.eligible(x));
+          this.finished = !this.task.finished;
+          this.task.actions.every((x) => (this.votable = this.eligible(x)));
         })
         .catch((err) => {
           console.log(err.response.data.message);
         });
-      const box = document.getElementById("comment-box");
+      const box = document.getElementById('comment-box');
       box.scroll({ top: box.scrollHeight, behavior: 'smooth' });
     },
     eligible(person) {
-      return !(person.type == "vote" && person.currentRound==true && person.email==this.userEmail);
+      return !(person.type === 'vote' && person.currentRound === true && person.email === this.userEmail);
     },
   },
 
@@ -162,7 +168,7 @@ export default {
   display: grid;
   position: relative;
   width: 100%;
-  
+
   @media (min-width: 768px) {
     width: 880px;
   }

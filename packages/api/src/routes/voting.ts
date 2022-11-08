@@ -6,7 +6,7 @@ async function vote(req: Request, res: Response, next: NextFunction): Promise<Re
     task: req.params.taskId,
     squad: req.params.squadId,
     email: req.query.user,
-    points: req.body.points
+    points: req.body.points,
   };
 
   const db = req.app.get('votingDbStore');
@@ -30,7 +30,7 @@ async function message(req: Request, res: Response, next: NextFunction): Promise
     task: req.params.taskId,
     squad: req.params.squadId,
     email: req.query.user,
-    message: req.body.message
+    message: req.body.message,
   };
 
   const db = req.app.get('votingDbStore');
@@ -48,8 +48,5 @@ async function message(req: Request, res: Response, next: NextFunction): Promise
     next(error);
   }
 }
-
-
-
 
 export { vote, message };

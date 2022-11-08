@@ -1,6 +1,6 @@
 <template>
   <div class="pass-recovery-one">
-    <BBrand/>
+    <BBrand />
 
     <BContainer color="gray-30">
       <Form
@@ -34,7 +34,7 @@
             value="return"
             @click="$router.push('signin')"
           />
-          
+
           <BButton
             class="pass-recovery-one__send-button"
             type="submit"
@@ -47,11 +47,11 @@
 </template>
 
 <script>
-import { Form } from "vee-validate";
-import * as Yup from "yup";
-import BBrand from './../components/b-brand.vue'
-import BButton from './../components/b-button.vue'
-import BContainer from './../components/b-container.vue'
+import { Form } from 'vee-validate';
+import * as Yup from 'yup';
+import BBrand from './../components/b-brand.vue';
+import BButton from './../components/b-button.vue';
+import BContainer from './../components/b-container.vue';
 import BInput from './../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
@@ -73,18 +73,20 @@ export default {
   setup() {
     function onSubmit() {
       PassRecoveryOne.dispatch('recovery');
-    };
+    }
 
     function onInvalidSubmit() {
-      const submitButton = document.querySelector(".pass-recovery-one__send-button");
+      const submitButton = document.querySelector('.pass-recovery-one__send-button');
 
-      submitButton.classList.add("invalid");
-      setTimeout(() => { submitButton.classList.remove("invalid"); }, 1000);
-    };
+      submitButton.classList.add('invalid');
+      setTimeout(() => {
+        submitButton.classList.remove('invalid');
+      }, 1000);
+    }
 
     function updateEmail(e) {
       PassRecoveryOne.commit('updateEmail', e.target.value);
-    };
+    }
 
     const schema = Yup.object().shape({
       email: Yup.string().email().required(),
@@ -92,7 +94,7 @@ export default {
 
     return { onSubmit, onInvalidSubmit, updateEmail, schema };
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -101,7 +103,7 @@ export default {
   background-color: var(--color-black);
   display: grid;
   justify-items: center;
-  min-height:100vh;
+  min-height: 100vh;
   row-gap: var(--unit-1000);
 }
 
@@ -117,5 +119,4 @@ export default {
   gap: var(--unit-1000);
   width: 100%;
 }
-
 </style>

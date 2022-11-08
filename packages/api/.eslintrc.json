@@ -24,7 +24,6 @@
        "curly": ["error"],
        "eqeqeq": ["error", "always"],
        "no-empty-function": "error",
-       "arrow-body-style": ["error", "always"],
        "camelcase": "error",
        "no-var": "error",
        "key-spacing": ["error", { "beforeColon": false }],
@@ -35,6 +34,10 @@
         "semi": [
             "error",
             "always"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
         ]
     }
 }

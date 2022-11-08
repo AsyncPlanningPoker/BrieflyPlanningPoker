@@ -1,5 +1,8 @@
 <template>
-  <div class="b-modal__external" v-if="open">
+  <div
+    class="b-modal__external"
+    v-if="open"
+  >
     <div class="b-modal">
       <BContainer :color="color">
         <slot />
@@ -25,15 +28,15 @@ export default {
     },
     color: {
       type: String,
-      required: false,
-    }
+      default: undefined,
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .b-modal__external {
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   height: 100%;
   left: 0;
   overflow-x: hidden;

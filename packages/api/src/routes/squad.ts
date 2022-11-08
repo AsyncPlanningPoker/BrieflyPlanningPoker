@@ -1,6 +1,5 @@
 import { CustomError } from '../middlewares/error/error';
 import { NextFunction, Request, Response } from 'express';
-import send from '../services/email';
 import { randomUUID } from 'crypto';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
@@ -28,7 +27,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 }
 
 async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const {squadId} = req.params;
+  const { squadId } = req.params;
   const db = req.app.get('squadDbStore');
 
   try {
@@ -47,7 +46,7 @@ async function find(req: Request, res: Response, next: NextFunction): Promise<Re
 
 async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('squadDbStore');
-  const {user} = req.query
+  const { user } = req.query;
 
   try {
     await db
@@ -89,7 +88,7 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
 
 async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const squadId = req.params.squadId;
-  const {email, owner} = req.body;
+  const { email, owner } = req.body;
 
   const db = req.app.get('squadDbStore');
 

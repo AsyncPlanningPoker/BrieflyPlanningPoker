@@ -22,7 +22,7 @@
         value="no"
         @click="$emit('close')"
       />
-      
+
       <BButton
         value="yes"
         @click="confirm"
@@ -34,7 +34,7 @@
 <script>
 import { useStore } from 'vuex';
 
-import BButton from '../components/b-button.vue'
+import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
 export default {
@@ -48,22 +48,24 @@ export default {
 </script>
 
 <script setup>
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 const store = useStore();
 const props = defineProps({
-  email: String,
+  email: {
+    type: String,
+    default: undefined,
+  },
 });
 
 function confirm() {
-  if(props.email) {
+  if (props.email) {
     store.dispatch('delUser', props.email);
-  }
-  else {
+  } else {
     store.dispatch('delYourself');
   }
 
   emit('close');
-};
+}
 </script>
 
 <style lang="scss" scoped>

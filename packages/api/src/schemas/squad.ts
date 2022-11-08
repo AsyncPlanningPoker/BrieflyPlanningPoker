@@ -65,15 +65,15 @@ const addMembers: Schema = {
       bail: true,
     },
   },
-  owner:{
-    isBoolean:{
+  owner: {
+    isBoolean: {
       errorMessage: 'Owner must be a boolean',
     },
     isLength: {
       errorMessage: 'Owner is required',
       options: { min: 1 },
     },
-  }
+  },
 };
 
 export { createSquad, updateSquad, addMembers };
