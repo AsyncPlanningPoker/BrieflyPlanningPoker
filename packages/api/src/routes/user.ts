@@ -83,59 +83,39 @@ async function passUpdate(req: Request, res: Response, next: NextFunction): Prom
 }
 
 async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const token = req.body.token;
   const db = req.app.get('userDbStore');
-  const verify = auth.verify(token.replace('Bearer', '').trim());
 
   try {
-    if (verify?.role === 'login') {
-      await db.deleteByEmail(verify.user, { updatedAt: new Date() });
+      await db.deleteByEmail(req.query.user, { updatedAt: new Date() });
       return res.sendStatus(200);
-    } else {
-      throw new Unauthorized('your link is invalid or has expired');
-    }
   } catch (error: any) {
     next(error);
   }
 }
 
-async function nameAndPassUpdate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const token = req.body.token;
+async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('userDbStore');
-  const verify = auth.verify(token.replace('Bearer', '').trim());
+  const email = req.query.user;
 
   try {
+    const dataUpdate: any = { updatedAt: new Date() };
+    const oldPassword = req.body.oldpassword;
+    const password = req.body.password;
+    const name = req.body.name;
 
-    let dataUpdate: any = { updatedAt: new Date() };
-    req.body.name ? dataUpdate.name = req.body.name : null;
-
-    const oldPassword = req.body.oldpassword ? req.body.oldpassword : null;
-    if(oldPassword) {
-      const user = await db.findByEmail(verify.user);
-
-      if (user) {
-        const passwordMatch = await crypt.compare(oldPassword, user.password);
-
-        if (passwordMatch) {
-          dataUpdate.password = await crypt.create(req.body.password);
-          await db.updatePassByEmail(verify.user, dataUpdate);
-          return res.sendStatus(200);
-        } else {
-          throw new Unauthorized ('The password did not match.');
-        }
+    if (password === oldPassword) {
+        dataUpdate.password = await crypt.create(password);
+      } else {
+        throw new Unauthorized('The password did not match.');
       }
-    } else if(dataUpdate.name) {
-      await db.updatePassByEmail(verify.user, dataUpdate);
-      return res.sendStatus(200);
-    } else {
-      return res.status(400).json({ message: 'Missing values.' });
-    }
-
-  } catch(error:any){
+    name ? (dataUpdate.name = name) : {};
+    await db.updatePassByEmail(email, dataUpdate);
+    return res.sendStatus(200);
+  } catch (error: any) {
     next(error);
   }
   
 
 }
 
-export { create, login, passRecovery, passUpdate, nameAndPassUpdate, deleteUser};
+export { create, login, passRecovery, passUpdate, updateUser, deleteUser};
