@@ -1,65 +1,65 @@
-import {FactoryStore} from '../../src/factory'
+import { FactoryStore } from '../../src/factory';
 import knexfile from '../../knexfile';
 import { randomUUID } from 'crypto';
 import knex from 'knex';
 
 describe('User', () => {
-    const db = knex(knexfile)
-    const factory = new FactoryStore();
-    const { close, userDbStore } = factory.createStores();
-    
-    const user = {   
+  const db = knex(knexfile);
+  const factory = new FactoryStore();
+  const { close, userDbStore } = factory.createStores();
+
+  const user = {
+    id: randomUUID(),
+    name: 'user test',
+    email: 'usertest@briefly.com',
+    password: '$2a$10$IrVhCnXDAxEhVknwQlI/IONAJZwDXRSSzRt5Yb.n46CXVxj27jFSq',
+  };
+
+  afterAll(() => {
+    close();
+    db.destroy();
+  });
+
+  beforeEach(async () => {
+    await db('users').insert(user);
+  });
+
+  afterEach(async () => {
+    await db('users').del();
+  });
+
+  it('Should find a user by email', async () => {
+    const res = await userDbStore.findByEmail(user.email);
+    expect(res).toStrictEqual(user);
+  });
+
+  it('Should not find find a user by an invalid email', async () => {
+    const res = await userDbStore.findByEmail('invalid@briefly.com');
+    expect(res).toBe(undefined);
+  });
+
+  it('Should a create a user', async () => {
+    const user = {
       id: randomUUID(),
-      name: 'user test',
-      email: 'usertest@briefly.com',
-      password: '$2a$10$IrVhCnXDAxEhVknwQlI/IONAJZwDXRSSzRt5Yb.n46CXVxj27jFSq'
-    }
+      name: 'user test 2',
+      email: 'usertest2@briefly.com',
+      password: '$2a$10$IrVhCnXDAxEhVknwQlI/IONAJZwDXRSSzRt5Yb.n46CXVxj27jFSq',
+    };
 
-    afterAll(()=>{
-      close()
-      db.destroy()
-    })
+    await userDbStore.create(user);
+    const res = await userDbStore.findByEmail('usertest2@briefly.com');
+    expect(res).toStrictEqual(user);
+  });
 
-    beforeEach(async()=>{
-      await db('users').insert(user)
-    })
+  it('Should throw an error after trying to create a user with duplicate email', async () => {
+    await expect(userDbStore.create(user)).rejects.toThrow(Error);
+  });
 
-    afterEach(async ()=>{
-      await db('users').del()
-    })
-
-    it('Should find a user by email', async () => {
-      const res = await userDbStore.findByEmail(user.email)
-      expect(res).toStrictEqual(user)
-    });
-
-    it('Should not find find a user by an invalid email', async () => {
-      const res = await userDbStore.findByEmail('invalid@briefly.com')
-      expect(res).toBe(undefined)
-    });
-
-    it('Should a create a user', async () => {
-      const user = {   
-        id: randomUUID(),
-        name: 'user test 2',
-        email: 'usertest2@briefly.com',
-        password: '$2a$10$IrVhCnXDAxEhVknwQlI/IONAJZwDXRSSzRt5Yb.n46CXVxj27jFSq'
-      }
-
-      await userDbStore.create(user)
-      const res = await userDbStore.findByEmail('usertest2@briefly.com')
-      expect(res).toStrictEqual(user)
-    });
-
-    it('Should throw an error after trying to create a user with duplicate email', async () => {
-      await expect(userDbStore.create(user)).rejects.toThrow(Error);
-    });
-
-    it('Should throw an error after trying to create a user with duplicate id', async () => {
-      const newUser = {...user}
-      newUser.email = "usertest3@briefly.com"
-      await expect(userDbStore.create(newUser)).rejects.toThrow(Error);
-    });
+  it('Should throw an error after trying to create a user with duplicate id', async () => {
+    const newUser = { ...user };
+    newUser.email = 'usertest3@briefly.com';
+    await expect(userDbStore.create(newUser)).rejects.toThrow(Error);
+  });
 
     it('Should update the password by user email', async () => {
       const updatedUser = {

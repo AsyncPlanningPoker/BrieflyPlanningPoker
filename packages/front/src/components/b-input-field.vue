@@ -1,7 +1,7 @@
 <template>
   <div class="b-input-field">
     <div class="b-input-field__label">
-      <BText 
+      <BText
         :for="name"
         :color="color"
         tag="label"
@@ -14,9 +14,9 @@
         color="link"
         tabindex="-1"
         tag="a"
-        :href="link"
+        :href="link[0]"
       >
-        {{ linkLabel }}
+        {{ link[1] }}
       </BText>
     </div>
 
@@ -41,18 +41,16 @@
 </template>
 
 <script>
-import { toRef } from "vue";
-import { useField } from "vee-validate";
+import { toRef } from 'vue';
+import { useField } from 'vee-validate';
 
 import BText from './b-text.vue';
-import BInput from './b-input.vue';
 
 export default {
   name: 'BInputField',
 
   components: {
     BText,
-    BInput,
   },
 
   props: {
@@ -64,21 +62,22 @@ export default {
       type: String,
       default: 'white',
     },
-    initial: {},
+    initial: {
+      type: [String, Number],
+      default: undefined,
+    },
     label: {
       type: String,
       required: true,
     },
     link: {
-      type: String,
-    },
-    linkLabel: {
-      type: String,
+      type: [String, Array],
+      default: undefined,
     },
   },
-  
+
   setup(props) {
-    const name = toRef(props, "name");
+    const name = toRef(props, 'name');
 
     const {
       value: inputValue,

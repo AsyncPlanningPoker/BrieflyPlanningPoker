@@ -17,9 +17,9 @@ export default {
     color: {
       type: String,
       default: 'black',
-      validator: shouldBeOneOf(['primary','white','gray-10','gray-20','gray-30','black']),
+      validator: shouldBeOneOf(['primary', 'white', 'gray-10', 'gray-20', 'gray-30', 'black']),
     },
-  }
+  },
 };
 </script>
 
@@ -36,7 +36,7 @@ export default {
   }
 }
 
-@each $color in ('primary','white','gray-10','gray-20','gray-30','black') {
+@each $color in ('primary', 'white', 'gray-10', 'gray-20', 'gray-30', 'black') {
   .b-container--#{$color} {
     background-color: var(--color-#{$color});
   }

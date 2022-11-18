@@ -6,46 +6,33 @@ const routes = [
     name: 'Home',
     component: () => import('../pages/home.vue'),
     props: true,
-    // beforeEnter: (to, from, next) => {
-    //   if(!localStorage.getItem('userToken')){
-    //     console.log('aaaaaaa');
-    //     next('/signin');
-    //   }
-    //   else{
-    //     console.log('bbbb');
-    //     next();
-    //   }
-    // },
+    beforeEnter: (to, from, next) => {
+      !localStorage.getItem('userToken') ? next('/signin') : next();
+    },
   },
   {
     path: '/signin',
     name: 'SignIn',
-    component: () => {
-      return import('../pages/sign-in.vue');
-    },
+    component: () => import('../pages/sign-in.vue'),
   },
   {
     path: '/signup',
     name: 'SignUp',
-    component: () => {
-      return import('../pages/sign-up.vue');
-    },
+    component: () => import('../pages/sign-up.vue'),
   },
   {
     path: '/password_reset',
     name: 'pass-recovery-one',
-    component: () => {
-      return import('../pages/pass-recovery-one.vue');
-    },
+    component: () => import('../pages/pass-recovery-one.vue'),
   },
   {
     path: '/confirm_reset',
     name: 'pass-recovery-two',
-    component: () => {
-      return import('../pages/pass-recovery-two.vue');
-    },
+    component: () => import('../pages/pass-recovery-two.vue'),
     beforeEnter: (route) => {
-      if(!route.query.token) return false
+      if (!route.query.token) {
+        return false;
+      }
     },
     props: (route) => {
       return { token: route.query.token };

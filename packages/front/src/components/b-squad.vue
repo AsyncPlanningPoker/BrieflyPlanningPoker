@@ -8,19 +8,22 @@
           size="giant"
           @click="toggleUpdateModal"
         >
-           {{ squad.squad }}
+          {{ squad.squad }}
         </BText>
       </div>
 
-      <BDivisor 
+      <BDivisor
         class="b-squad__divisor"
         color="black"
       />
-      
+
       <div class="b-squad__info">
         <div class="b-squad__max-rounds">
-          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-arrow-rotate-right" />
-        
+          <font-awesome-icon
+            class="b-squad__icon"
+            icon="fa-solid fa-arrow-rotate-right"
+          />
+
           <BText
             color="white"
             size="giant"
@@ -30,8 +33,11 @@
         </div>
 
         <div class="b-squad__percentual">
-          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-user-check" />
-        
+          <font-awesome-icon
+            class="b-squad__icon"
+            icon="fa-solid fa-user-check"
+          />
+
           <BText
             color="white"
             size="giant"
@@ -39,9 +45,15 @@
             {{ squad.currentPercentual }}
           </BText>
         </div>
-        <div class="b-squad__leave"  @click="toggleLeaveModal('')" >
-          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-right-from-bracket" />
-        
+        <div
+          class="b-squad__leave"
+          @click="toggleLeaveModal('')"
+        >
+          <font-awesome-icon
+            class="b-squad__icon"
+            icon="fa-solid fa-right-from-bracket"
+          />
+
           <BText
             color="white"
             size="giant"
@@ -56,7 +68,7 @@
       <FAddUser />
 
       <div class="b-squad__users-container">
-        <BBadge 
+        <BBadge
           v-for="(user, index) in squad.users.filter((x) => x.email !== actualUser)"
           :key="index"
           @action="toggleLeaveModal(user.email)"
@@ -73,13 +85,25 @@
       @action="toggleInfo"
     />
   </div>
-    
-  <BModal color="gray-30" :open="updateModal">
-    <FSquad :update="true" @close="toggleUpdateModal" />
+
+  <BModal
+    color="gray-30"
+    :open="updateModal"
+  >
+    <FSquad
+      :update="true"
+      @close="toggleUpdateModal"
+    />
   </BModal>
 
-  <BModal color="gray-30" :open="leaveModal">
-    <FLeave :email="email" @close="toggleLeaveModal('')" />
+  <BModal
+    color="gray-30"
+    :open="leaveModal"
+  >
+    <FLeave
+      :email="email"
+      @close="toggleLeaveModal('')"
+    />
   </BModal>
 </template>
 
@@ -89,7 +113,6 @@ import { useStore } from 'vuex';
 
 import BBadge from '../components/b-badge.vue';
 import BDivisor from '../components/b-divisor.vue';
-import BInput from '../components/b-input.vue';
 import BModal from '../components/b-modal.vue';
 import BText from '../components/b-text.vue';
 
@@ -103,7 +126,6 @@ export default {
   components: {
     BBadge,
     BDivisor,
-    BInput,
     BModal,
     BText,
     FAddUser,
@@ -115,9 +137,9 @@ export default {
     squad: {
       type: Object,
       required: true,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <script setup>
@@ -125,14 +147,20 @@ const store = useStore();
 const actualUser = computed(() => store.getters.getUserEmail);
 
 const moreInfo = ref(false);
-const toggleInfo = () => { moreInfo.value = !moreInfo.value };
+const toggleInfo = () => {
+  moreInfo.value = !moreInfo.value;
+};
 
 const updateModal = ref(false);
-const toggleUpdateModal = () => { updateModal.value = !updateModal.value };
+const toggleUpdateModal = () => {
+  updateModal.value = !updateModal.value;
+};
 
 const email = ref(String);
 const leaveModal = ref(false);
-const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !leaveModal.value };
+const toggleLeaveModal = (user) => {
+  (email.value = user), (leaveModal.value = !leaveModal.value);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -142,7 +170,7 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
 
   @media (max-width: 768px) {
     row-gap: var(--unit-0600);
-  }  
+  }
 }
 
 .b-squad__container {
@@ -217,7 +245,8 @@ const toggleLeaveModal = (user) => { email.value = user, leaveModal.value = !lea
   cursor: pointer;
 
   &:hover {
-    & > svg, span {
+    & > svg,
+    span {
       color: var(--color-accent);
     }
   }

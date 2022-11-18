@@ -2,7 +2,6 @@ import { api } from '../services/api';
 
 import router from '../router/index';
 
-
 const signInStore = {
   state: {
     email: '',
@@ -26,7 +25,8 @@ const signInStore = {
 
   actions: {
     async login({ dispatch, commit }) {
-      await api.post('user/login', { email: this.state.signIn.email, password: this.state.signIn.password })
+      await api
+        .post('user/login', { email: this.state.signIn.email, password: this.state.signIn.password })
         .then((res) => {
           const token = res.data.token;
           dispatch('updateUserToken', token);

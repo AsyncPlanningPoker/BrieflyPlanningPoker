@@ -5,14 +5,12 @@
     description about briefly planning poker web site.. demo..
 </p>
 
-
 <h2>
     Badge
 </h2>
 <p>
     coverage, tests, ci/cd, prs, issues, license
 </p>
-
 
 <h2> 
     Documentation
@@ -49,10 +47,9 @@
     </li>
 </ul>
 
-<i>* Check current Node version at package.json</i>
+<i>\* Check current Node version at package.json</i>
 
-<i>** The project uses PostgreSQL, PgAdmin is a usefull recommended tool to check database structure, status and tables.</i>
-
+<i>\*\* The project uses PostgreSQL, PgAdmin is a usefull recommended tool to check database structure, status and tables.</i>
 
 <h2>
      🛠Development
@@ -111,7 +108,7 @@
     <li>
         <a href="https://jestjs.io/pt-BR/">Jest</a>
     </li>
-</ul>    
+</ul>
 
 <h2>
    :handshake:Contribute

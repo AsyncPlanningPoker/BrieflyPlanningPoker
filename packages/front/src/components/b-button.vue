@@ -5,7 +5,6 @@
       'b-button--small': size === 'small',
       [`b-button--${variant}`]: variant,
     }"
-    :style="`height: ${height}px;`"
     :type="type"
   >
     {{ this.value.toUpperCase() }}
@@ -19,19 +18,15 @@ export default {
   name: 'BButton',
 
   props: {
-    height: {
-      type: Number,
-      required: false,
-    },
     size: {
       type: String,
       default: 'medium',
-      validator: shouldBeOneOf(['small','medium']),
+      validator: shouldBeOneOf(['small', 'medium']),
     },
     type: {
       type: String,
       default: 'button',
-      validator: shouldBeOneOf(['button','reset','submit']),
+      validator: shouldBeOneOf(['button', 'reset', 'submit']),
     },
     value: {
       type: String,
@@ -40,8 +35,8 @@ export default {
     variant: {
       type: String,
       default: 'primary',
-      validator: shouldBeOneOf(['primary','transparent','inverted']),
-    }
+      validator: shouldBeOneOf(['primary', 'transparent', 'inverted']),
+    },
   },
 };
 </script>

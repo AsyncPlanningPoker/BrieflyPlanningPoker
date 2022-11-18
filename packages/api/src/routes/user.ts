@@ -3,7 +3,6 @@ import * as auth from '../middlewares/authorization/authorization';
 import { NextFunction, Request, Response } from 'express';
 import * as crypt from '../utils/crypt';
 import { randomUUID } from 'crypto';
-import send from '../services/email';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const user = {
@@ -56,12 +55,12 @@ async function passRecovery(req: Request, res: Response, next: NextFunction): Pr
   const token = user ? auth.create(email, 'pass-recovery', 300) : auth.create('inexistentAccount', 'inexistentAccount', 0);
   return res.status(200).json({});
   // await send({ to: email, subject: 'password recovery', message: `${req.body.url}${token}` })
-    // .then(() => {
-    //   return res.status(200).json({});
-    // })
-    // .catch((error: any) => {
-    //   return next(error);
-    // });
+  // .then(() => {
+  //   return res.status(200).json({});
+  // })
+  // .catch((error: any) => {
+  //   return next(error);
+  // });
 }
 
 async function passUpdate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {

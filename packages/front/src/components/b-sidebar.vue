@@ -2,7 +2,11 @@
   <div class="b-sidebar">
     <div class="b-sidebar__logo-wrapper">
       <a @click="store.dispatch('addSquadActive', {})">
-        <img class="b-sidebar__image" src="../assets/square-logo-80.png" alt="brand-logo">
+        <img
+          class="b-sidebar__image"
+          src="../assets/square-logo-80.png"
+          alt="brand-logo"
+        >
       </a>
     </div>
 
@@ -15,7 +19,10 @@
         @click="toggleModal"
       />
 
-      <BModal color="gray-30" :open="showModal">
+      <BModal
+        color="gray-30"
+        :open="showModal"
+      >
         <FSquad @close="toggleModal" />
       </BModal>
     </div>
@@ -31,7 +38,7 @@
         <BButton
           size="small"
           variant="transparent"
-          :value="`${ index + 1 }`"
+          :value="`${index + 1}`"
           @click="store.dispatch('gatherSquad', squad.id)"
         />
       </div>
@@ -65,7 +72,9 @@ const store = useStore();
 const squads = computed(() => store.getters.getSquadList);
 
 const showModal = ref(false);
-const toggleModal = () => { showModal.value = !showModal.value };
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 
 <style lang="scss" scoped>

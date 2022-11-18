@@ -3,36 +3,39 @@
     <aside>
       <BSidebar />
     </aside>
-    
+
     <main v-if="squad.squad">
       <div class="home__section">
         <BSquad :squad="squad" />
       </div>
-      
+
       <div class="home__section">
         <BTaskContainer
-          title="Active" 
-          :active=true
+          title="Active"
+          :active="true"
           :tasks="activeTasks"
         />
       </div>
 
       <div class="home__section">
-        <BTaskContainer 
+        <BTaskContainer
           title="Archived"
-          :active=false
+          :active="false"
           :tasks="archivedTasks"
         />
       </div>
     </main>
 
-    <main v-else class="home__blank">
-        <BText
-          color="gray-30"
-          size="giant"
-        >
-          Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻
-        </BText>
+    <main
+      v-else
+      class="home__blank"
+    >
+      <BText
+        color="gray-30"
+        size="giant"
+      >
+        Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻
+      </BText>
     </main>
   </div>
 </template>
@@ -42,11 +45,12 @@ import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
 import BSidebar from '../components/b-sidebar.vue';
-import BSquad from '../components/b-squad.vue'
+import BSquad from '../components/b-squad.vue';
 import BTaskContainer from '../components/b-task-container.vue';
-import BText from '../components/b-text.vue'
+import BText from '../components/b-text.vue';
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Home',
 
   components: {
@@ -63,8 +67,10 @@ const store = useStore();
 
 const squad = computed(() => {
   const req = store.getters.getSquadActive;
-  if(req.id) store.dispatch('gatherTasks', req.id);
-  
+  if (req.id) {
+    store.dispatch('gatherTasks', req.id);
+  }
+
   return req;
 });
 
@@ -72,7 +78,7 @@ const activeTasks = computed(() => store.getters.getEnabledTasks);
 
 const archivedTasks = computed(() => store.getters.getDisabledTasks);
 
-onMounted(store.dispatch('gatherSquadList'));
+onMounted(() => store.dispatch('gatherSquadList'));
 </script>
 
 <style lang="scss" scoped>
@@ -87,11 +93,11 @@ onMounted(store.dispatch('gatherSquadList'));
       max-width: 120px;
     }
   }
-  
+
   main {
     flex: 1 1 0;
     margin-left: 68px;
-    
+
     @media (min-width: 768px) {
       margin-left: 120px;
     }

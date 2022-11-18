@@ -26,12 +26,13 @@
   >
     <BTask
       v-for="(task, index) in tasks"
+      :active="active"
+      :key="index"
       :task="task"
-      :active=active
     />
   </div>
 
-  <div 
+  <div
     v-else
     class="b-task-container__empty"
   >
@@ -45,7 +46,10 @@
     </BText>
   </div>
 
-  <BModal color="gray-20" :open="showModal">
+  <BModal
+    color="gray-20"
+    :open="showModal"
+  >
     <FTask @close="toggleModal" />
   </BModal>
 </template>
@@ -87,7 +91,9 @@ export default {
 
 <script setup>
 const showModal = ref(false);
-const toggleModal = () => { showModal.value = !showModal.value };
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 
 <style lang="scss" scoped>

@@ -7,7 +7,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
     id: randomUUID(),
     squad: req.params.squadId,
     name: req.body.name,
-    description: req.body.description
+    description: req.body.description,
   };
 
   const db = req.app.get('taskDbStore');
@@ -29,7 +29,7 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 async function deactive(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const task = {
     id: req.params.taskId,
-    squad: req.params.squadId
+    squad: req.params.squadId,
   };
 
   const db = req.app.get('taskDbStore');
@@ -51,7 +51,7 @@ async function deactive(req: Request, res: Response, next: NextFunction): Promis
 async function deleteTask(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const task = {
     id: req.params.taskId,
-    squad: req.params.squadId
+    squad: req.params.squadId,
   };
 
   const db = req.app.get('taskDbStore');
@@ -72,9 +72,9 @@ async function deleteTask(req: Request, res: Response, next: NextFunction): Prom
 
 async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('taskDbStore');
-  
+
   const task = {
-    squad: req.params.squadId
+    squad: req.params.squadId,
   };
 
   try {
@@ -93,10 +93,10 @@ async function findAll(req: Request, res: Response, next: NextFunction): Promise
 
 async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const db = req.app.get('taskDbStore');
-  
+
   const task = {
     id: req.params.taskId,
-    squad: req.params.squadId
+    squad: req.params.squadId,
   };
 
   try {
