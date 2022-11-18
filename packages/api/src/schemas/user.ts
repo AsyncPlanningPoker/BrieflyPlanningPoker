@@ -72,28 +72,28 @@ const passUpdate: Schema = {
 
 const updateUser: Schema = {
   name: {
+    optional: true,
     isString: {
       errorMessage: 'Name must be a string',
     },
     isLength: {
       errorMessage: 'Name cannot be empty',
       options: { min: 1, max: 55 },
-    },
-    optional: true
+    }
   },
   oldpassword: {
+    optional: true,
     isLength: {
       errorMessage: 'Old password must contain a maximum of 255 characters and a minimum of 6 characters',
       options: { max: 255, min: 6 },
-    },
-    optional: true
+    }
   },
   password: {
+    optional: true,
     isLength: {
       errorMessage: 'Password must contain a maximum of 255 characters and a minimum of 6 characters',
       options: { max: 255, min: 6 },
-    },
-    optional: true
+    }
   }
 };
 
