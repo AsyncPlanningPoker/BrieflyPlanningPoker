@@ -108,11 +108,13 @@
                 <div class="button">
                   <BButton
                     size="medium"
+                    variant="transparent"
                     value="Delete Account"
                     @click="any"
                   />
                   <BButton
                     size="medium"
+                    type="submit"
                     value="Save"
                     @click="any"
                   />
@@ -369,10 +371,9 @@
     }
 
     .button {
-        position: relative;
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        gap: var(--unit-1000);
+        width: 80%;
     }
 
   </style>
