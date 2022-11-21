@@ -1,0 +1,41 @@
+name: Unit tests
+
+on: pull_request
+
+env:
+  ENVIRONMENT: test
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run unit tests
+        run: cd packages/store && yarn test
+
+      - name: Run DB Tests
+        run: cd packages/store && yarn build
+
+      - name: Run API Tests
+        run: cd packages/api && yarn build
+
+      - name: Run API Tests
+        run: cd packages/api && yarn test
+        
+
+
+
+
