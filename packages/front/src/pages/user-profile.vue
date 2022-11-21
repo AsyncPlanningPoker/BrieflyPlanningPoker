@@ -92,7 +92,7 @@
               <a
                 href="#"
                 class="list_profile"
-              >Log Out</a>
+              >Delete User</a>
             </div>
 
             <div class="contents">
