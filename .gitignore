@@ -1,6 +1,5 @@
 node_modules
 .env
-.env.test
 .env.dev
 .env.prod
 dist
