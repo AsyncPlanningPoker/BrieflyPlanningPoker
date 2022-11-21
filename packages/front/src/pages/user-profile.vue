@@ -48,86 +48,7 @@
         </head>
         <body>
           <div class="client">
-            <div class="profile">
-              <div class="photo_perfil">
-                <img
-                  src="img/perfil-sem-borda.png"
-                  alt=""
-                  class="img_profile"
-                >
-              </div>
-
-              <p class="name_user">
-                User's Full Name
-              </p>
-              <p class="nick_name_user">
-                Nickname
-              </p>
-
-              <a
-                href="#"
-                class="list_profile"
-              >Profile</a>
-              <div id="linha-horizontal" />
-              <a
-                href="#"
-                class="list_profile"
-              >Settings</a>
-              <div id="linha-horizontal" />
-              <a
-                href="#"
-                class="list_profile"
-              >Team Management</a>
-              <div id="linha-horizontal" />
-              <a
-                href="#"
-                class="list_profile"
-              >Language</a>
-              <div id="linha-horizontal" />
-              <a
-                href="#"
-                class="list_profile"
-              >Information</a>
-              <div id="linha-horizontal" />
-              <a
-                href="#"
-                class="list_profile"
-              >Delete User</a>
-            </div>
-
             <div class="contents">
-              <div class="description_profile">
-                <div id="title">
-                  Description
-                </div>
-                <a
-                  href="#"
-                  class="icon-description"
-                ><i class="fa-regular fa-pen-to-square" /></a>
-
-                <p class="teste">
-                  User's Full Name
-                </p>
-                <p class="teste">
-                  useremail@outlook.com
-                </p>
-                <p class="teste">
-                  10 - 05 - 1990
-                </p>
-                <p class="teste">
-                  Female
-                </p>
-                <p class="teste">
-                  São Paulo
-                </p>
-                <p class="teste">
-                  Brasil
-                </p>
-              </div>
-
-              <div id="linha-horizontal-description" />
-
-
               <div class="original-password">
                 <div class="password">
                   <div id="title">
@@ -184,6 +105,18 @@
                     </div>
                   </div>
                 </div>
+                <div class="button">
+                  <BButton
+                    size="medium"
+                    value="Delete Account"
+                    @click="any"
+                  />
+                  <BButton
+                    size="medium"
+                    value="Save"
+                    @click="any"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -196,7 +129,7 @@
   <script>
       import { computed, onMounted } from 'vue';
       import { useStore } from 'vuex';
-
+      import BButton from '../components/b-button.vue';
       import BSidebar from '../components/b-sidebar.vue';
       import BSquad from '../components/b-squad.vue';
       import BTaskContainer from '../components/b-task-container.vue';
@@ -208,7 +141,8 @@
           components: {
               BSidebar,
               BSquad,
-              BTaskContainer
+              BTaskContainer,
+              BButton
           },
       };
   </script>
@@ -296,7 +230,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 30%;
+        width: 50%;
         height: 90%;
         background: #0d0d0d;
         border-radius: 10px;
@@ -310,90 +244,13 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 90%;
+        width: 150%;
         background: #0d0d0d;
         border-radius: 10px;
         margin: 10%;
         padding: 50px;
     }
-
-    /*------------------------------------------- CONTEÚDO MENU PERFIL-------------------------------------------*/
-
-    .photo_perfil {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 3px solid #fff;
-        border-radius: 50%;
-    }
-
-    .name_user {
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font: 600 20px 'Hammersmith one', sans-serif;
-        padding: 15px 0 2px 0;
-        color: #fff;
-    }
-
-    .nick_name_user {
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font: 300 18px 'Hammersmith one', sans-serif;
-        color: #fff;
-        padding: 0 0 20px 0;
-    }
-
-    .list_profile {
-        position: relative;
-        text-decoration: none;
-        text-align: center;
-        color: inherit;
-        font: 400 16px 'Hammersmith one', sans-serif;
-        color: #fff;
-        padding: 20px 0;
-    }
-
-    #linha-horizontal {
-        width: 90%;
-        border: 1px solid #000;
-        opacity: 70%;
-        /* box-shadow: rgba(0, 0, 0, 25%) 0 2px; */
-        box-shadow: rgba(240, 239, 239, 0.887) 0 2px;
-        filter: blur(1px);
-    }
-
     /*------------------------------------------- CONTEÚDO DESCRIÇÃO DO USUÁRIO-------------------------------------------*/
-
-    .description_profile {
-        position: relative;
-        width: 90%;
-        border: 1px solid #fff;
-        border-radius: 10px;
-        margin: 1% 0 1% 0;
-        padding: 0px 0 10px 30px;
-    }
-
-    .description_profile #title {
-        position: relative;
-        top: -0.7em;
-        padding: 10px;
-        display: inline;
-        background-color: #0d0d0d;
-        color: #fff;
-        font: 200 20px 'Hammersmith one', sans-serif;
-    }
-
-    .icon-description {
-        position: relative;
-        margin: 0 0 0 93%;
-        color: #fff;
-    }
-
     .teste {
         font: 400 16px 'Hammersmith one', sans-serif;
         width: 100%;
@@ -509,6 +366,13 @@
         font: 200 20px 'Hammersmith one', sans-serif;
         padding: 0 10px;
         margin: 0 0 0 30px;
+    }
+
+    .button {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
   </style>
