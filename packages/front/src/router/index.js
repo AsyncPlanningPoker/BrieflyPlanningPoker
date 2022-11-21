@@ -21,6 +21,11 @@ const routes = [
     component: () => import('../pages/sign-up.vue'),
   },
   {
+    path: '/user-account',
+    name: 'user-profile',
+    component: () => import('../pages/user-profile.vue'),
+  },
+  {
     path: '/password_reset',
     name: 'pass-recovery-one',
     component: () => import('../pages/pass-recovery-one.vue'),
