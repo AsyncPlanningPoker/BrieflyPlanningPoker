@@ -374,6 +374,8 @@
         display: flex;
         gap: var(--unit-1000);
         width: 80%;
+        margin-top: calc(var(--unit-1000) * 1);
+        margin-left: 80px;
     }
 
   </style>
