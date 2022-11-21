@@ -43,4 +43,4 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run tests
-        run: cd packages/store && yarn test
+        run: source .env.test && cd packages/store && yarn test
