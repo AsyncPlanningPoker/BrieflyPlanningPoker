@@ -49,6 +49,26 @@
         <body>
           <div class="client">
             <div class="contents">
+              <Form
+                  class="change-password-form"
+                  @submit="onSubmit"
+                  :validation-schema="schema"
+              >
+                <BInputField label="Old Password" name="oldPassword">
+                  <BInput name="oldPassword" type="password" />
+                </BInputField>
+
+                <BInputField label="New Password" name="newPassword">
+                  <BInput name="newPassword" type="password" />
+                </BInputField>
+
+                <BInputField label="Confirm Password" name="confirmPassword">
+                  <BInput name="confirmPassword" type="password" />
+                </BInputField>
+
+                <BButton size="medium" type="submit" value="Save" />
+              </Form>
+
               <div class="original-password">
                 <div class="password">
                   <div id="title">
@@ -110,7 +130,7 @@
                     size="medium"
                     variant="transparent"
                     value="Delete Account"
-                    @click="any"
+                    @click="onDelete"
                   />
                   <BButton
                     size="medium"
@@ -129,12 +149,16 @@
 </template>
 
   <script>
+      import * as Yup from 'yup';
       import { computed, onMounted } from 'vue';
       import { useStore } from 'vuex';
+      import { Form } from 'vee-validate';
       import BButton from '../components/b-button.vue';
       import BSidebar from '../components/b-sidebar.vue';
       import BSquad from '../components/b-squad.vue';
       import BTaskContainer from '../components/b-task-container.vue';
+      import BInput from '../components/b-input.vue';
+      import BInputField from '../components/b-input-field.vue';
 
       export default {
           // eslint-disable-next-line vue/multi-word-component-names
@@ -144,7 +168,10 @@
               BSidebar,
               BSquad,
               BTaskContainer,
-              BButton
+              BButton,
+              BInput,
+              BInputField,
+              Form,
           },
       };
   </script>
@@ -166,6 +193,21 @@
       const archivedTasks = computed(() => store.getters.getDisabledTasks);
 
       onMounted(() => store.dispatch('gatherSquadList'));
+
+      const schema = Yup.object().shape({
+        oldPassword: Yup.string().required('Old password is required.'),
+        newPassword: Yup.string().required('New password is required.'),
+        confirmPassword: Yup.string().required('Confirm password is required.').oneOf([Yup.ref('newPassword'), null], 'Confirm password must be equal the new password.'),
+      });
+
+      function onSubmit(values) {
+        const { newPassword, oldPassword } = values;
+        store.dispatch('updateYourself', { newPassword, oldPassword });
+      }
+
+      function onDelete() {
+        store.dispatch('deleteYourself');
+      }
   </script>
 
   <style lang="scss" scoped>

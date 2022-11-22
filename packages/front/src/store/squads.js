@@ -84,6 +84,22 @@ export default {
       await dispatch('addSquadActive', {});
     },
 
+    async updateYourself({ dispatch }, payload) {
+      const body = {
+        oldpassword: payload.oldPassword,
+        password: payload.newPassword
+      };
+      await api.put('user', body).catch((error) => {
+        throw error;
+      });
+    },
+
+    async deleteYourself({ dispatch }) {
+      await api.delete('user').catch((error) => {
+        throw error;
+      });
+    },
+
     async addSquad({ dispatch }, payload) {
       const req = await api.post('squad', payload).catch((error) => {
         throw error;
