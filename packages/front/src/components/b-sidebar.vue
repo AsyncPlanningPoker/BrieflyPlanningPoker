@@ -43,6 +43,17 @@
         />
       </div>
     </div>
+
+    <BDivisor color="gray-30" />
+
+    <div class="user-page">
+      <a href="/user-account">
+        <img
+          class="user__image"
+          src="../assets/user-regular.svg"
+        >
+      </a>
+    </div>
   </div>
 </template>
 
@@ -127,6 +138,24 @@ const toggleModal = () => {
 
   .b-sidebar__squad {
     width: 100%;
+  }
+}
+
+.user-page {
+  cursor: pointer;
+  height: calc(12 * var(--unit-0100));
+  width: calc(12 * var(--unit-0100));
+  text-align: center;
+  margin-top: auto;
+
+  @media (max-width: 768px) {
+    height: calc(11 * var(--unit-0100));
+    width: calc(11 * var(--unit-0100));
+  }
+
+  & .user__image {
+    height: 80%;
+    width: 80%;
   }
 }
 </style>

@@ -1,31 +1,16 @@
 <template>
   <div class="user-account">
-    <aside>
-      <BSidebar />
-    </aside>
-
-    <main v-if="squad.squad">
-      <div class="user__section">
-        <BSquad :squad="squad" />
+    <div class="b-sidebar">
+      <div class="b-sidebar__logo-wrapper">
+        <a href="/">
+          <img
+            class="b-sidebar__image"
+            src="../assets/square-logo-80.png"
+            alt="brand-logo"
+          >
+        </a>
       </div>
-
-      <div class="user__section">
-        <BTaskContainer
-          title="Active"
-          :active="true"
-          :tasks="activeTasks"
-        />
-      </div>
-
-      <div class="user__section">
-        <BTaskContainer
-          title="Archived"
-          :active="false"
-          :tasks="archivedTasks"
-        />
-      </div>
-    </main>
-
+    </div>
 
     <main>
       <div class="client">
@@ -86,13 +71,10 @@
 
   <script>
       import * as Yup from 'yup';
-      import { computed, onMounted } from 'vue';
+      import { onMounted } from 'vue';
       import { useStore } from 'vuex';
       import { Form } from 'vee-validate';
       import BButton from '../components/b-button.vue';
-      import BSidebar from '../components/b-sidebar.vue';
-      import BSquad from '../components/b-squad.vue';
-      import BTaskContainer from '../components/b-task-container.vue';
       import BInput from '../components/b-input.vue';
       import BInputField from '../components/b-input-field.vue';
 
@@ -101,9 +83,6 @@
           name: 'UserAccount',
 
           components: {
-              BSidebar,
-              BSquad,
-              BTaskContainer,
               BButton,
               BInput,
               BInputField,
@@ -114,19 +93,6 @@
 
   <script setup>
       const store = useStore();
-
-      const squad = computed(() => {
-          const req = store.getters.getSquadActive;
-          if (req.id) {
-              store.dispatch('gatherTasks', req.id);
-          }
-
-          return req;
-      });
-
-      const activeTasks = computed(() => store.getters.getEnabledTasks);
-
-      const archivedTasks = computed(() => store.getters.getDisabledTasks);
 
       onMounted(() => store.dispatch('gatherSquadList'));
 
@@ -218,6 +184,36 @@
         margin-top: calc(var(--unit-1000) * 1);
         margin-left: auto;
         margin-right: auto;
+    }
+    .b-sidebar {
+      align-content: start;
+      background-color: var(--color-black);
+      display: grid;
+      height: 100vh;
+      justify-items: center;
+      padding: var(--unit-0900);
+      row-gap: var(--unit-0900);
+
+      @media (max-width: 768px) {
+        height: calc(100vh - (2 * var(--unit-0300)));
+        padding: var(--unit-0300);
+        row-gap: var(--unit-0600);
+      }
+    }
+    .b-sidebar__logo-wrapper {
+      cursor: pointer;
+      height: calc(12 * var(--unit-0100));
+      width: calc(12 * var(--unit-0100));
+
+      @media (max-width: 768px) {
+        height: calc(11 * var(--unit-0100));
+        width: calc(11 * var(--unit-0100));
+      }
+
+      & .b-sidebar__image {
+        height: 100%;
+        width: 100%;
+      }
     }
 
   </style>
