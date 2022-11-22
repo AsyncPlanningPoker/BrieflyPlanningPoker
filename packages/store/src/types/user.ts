@@ -6,6 +6,7 @@ interface IStoreUser {
 }
 
 type UpdateUserType = {
+  name?: string;
   password?: string;
   updatedAt: Date;
 };
