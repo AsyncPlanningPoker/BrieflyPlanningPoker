@@ -28,122 +28,58 @@
 
 
     <main>
-      <!DOCTYPE html>
-      <html lang="pt-Br">
-        <head>
-          <meta charset="UTF-8">
-          <meta
-            http-equiv="X-UA-Compatible"
-            content="IE=edge"
+      <div class="client">
+        <div class="contents">
+          <Form
+            class="change-password-form"
+            @submit="onSubmit"
+            :validation-schema="schema"
           >
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          >
-          <title>Página do Cliente</title>
-          <link
-            rel="stylesheet"
-            href="css/style.css"
-          >
-        </head>
-        <body>
-          <div class="client">
-            <div class="contents">
-              <Form
-                  class="change-password-form"
-                  @submit="onSubmit"
-                  :validation-schema="schema"
-              >
-                <BInputField label="Old Password" name="oldPassword">
-                  <BInput name="oldPassword" type="password" />
-                </BInputField>
+            <BInputField
+              label="Old Password"
+              name="oldPassword"
+            >
+              <BInput
+                name="oldPassword"
+                type="password"
+              />
+            </BInputField>
 
-                <BInputField label="New Password" name="newPassword">
-                  <BInput name="newPassword" type="password" />
-                </BInputField>
+            <BInputField
+              label="New Password"
+              name="newPassword"
+            >
+              <BInput
+                name="newPassword"
+                type="password"
+              />
+            </BInputField>
 
-                <BInputField label="Confirm Password" name="confirmPassword">
-                  <BInput name="confirmPassword" type="password" />
-                </BInputField>
-
-                <BButton size="medium" type="submit" value="Save" />
-              </Form>
-
-              <div class="original-password">
-                <div class="password">
-                  <div id="title">
-                    Old Password
-                  </div>
-
-                  <div class="field-new-password">
-                    <input
-                      type="password"
-                      name="new-password"
-                      id="new-password"
-                    >
-                    <a
-                      href="#"
-                      class="icon-password"
-                    ><i class="fa-regular fa-eye-slash" /></a>
-                  </div>
-                </div>
-
-                <div class="edit-password">
-                  <div class="edit-new-password">
-                    <div id="title">
-                      New Password
-                    </div>
-
-                    <div class="field-new-password">
-                      <input
-                        type="password"
-                        name="new-password"
-                        id="new-password"
-                      >
-                      <a
-                        href="#"
-                        class="icon-password"
-                      ><i class="fa-regular fa-eye-slash" /></a>
-                    </div>
-                  </div>
-
-                  <div class="edit-new-password">
-                    <div id="title">
-                      Confirm Password
-                    </div>
-
-                    <div class="field-new-password">
-                      <input
-                        type="password"
-                        name="new-password"
-                        id="new-password"
-                      >
-                      <a
-                        href="#"
-                        class="icon-password"
-                      ><i class="fa-regular fa-eye-slash" /></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="button">
-                  <BButton
-                    size="medium"
-                    variant="transparent"
-                    value="Delete Account"
-                    @click="onDelete"
-                  />
-                  <BButton
-                    size="medium"
-                    type="submit"
-                    value="Save"
-                    @click="any"
-                  />
-                </div>
-              </div>
+            <BInputField
+              label="Confirm Password"
+              name="confirmPassword"
+            >
+              <BInput
+                name="confirmPassword"
+                type="password"
+              />
+            </BInputField>
+            <div class="button">
+              <BButton
+                size="medium"
+                variant="transparent"
+                value="Delete Account"
+                @click="onDelete"
+              />
+              <BButton
+                size="medium"
+                type="submit"
+                value="Save"
+              />
             </div>
-          </div>
-        </body>
-      </html>
+          </Form>
+        </div>
+      </div>
     </main>
   </div>
 </template>
@@ -212,9 +148,6 @@
 
   <style lang="scss" scoped>
 
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Sora:wght@200;300;400;500;600;700;800&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap');
-
   .user__section {
     margin-top: var(--unit-0500);
     padding: var(--unit-0300);
@@ -256,10 +189,6 @@
         box-sizing: border-box;
     }
 
-    body {
-        background: #333333;
-    }
-
     .client {
         position: relative;
         display: flex;
@@ -268,19 +197,6 @@
         align-items: center;
     }
 
-    .profile {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 50%;
-        height: 90%;
-        background: #0d0d0d;
-        border-radius: 10px;
-        margin: 5% 0 5% 10%;
-        padding: 5.3% 2%;
-    }
 
     .contents {
         position: relative;
@@ -294,130 +210,14 @@
         margin: 10%;
         padding: 50px;
     }
-    /*------------------------------------------- CONTEÚDO DESCRIÇÃO DO USUÁRIO-------------------------------------------*/
-    .teste {
-        font: 400 16px 'Hammersmith one', sans-serif;
-        width: 100%;
-        color: #fff;
-        padding: 15px 0;
-    }
-
-    .teste-password {
-        font: 400 16px 'Hammersmith one', sans-serif;
-        width: 100%;
-        color: #fff;
-        padding: 6px 30px;
-    }
-
-    #linha-horizontal-description {
-        width: 90%;
-        margin: 5% 0 0 0;
-        border: 1px solid #000;
-        opacity: 70%;
-        box-shadow: rgba(240, 239, 239, 0.887) 0 2px;
-        filter: blur(1px);
-    }
-
-    .original-password {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 90%;
-    }
-    .edit-password {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .password {
-        position: relative;
-        width: 45%;
-        height: 50%;
-        border: 1px solid #fff;
-        border-radius: 10px;
-        margin: 10% 0 10% 0;
-        padding: 0px 0 2% 0;
-    }
-
-    .edit-new-password {
-        position: relative;
-        width: 45%;
-        height: 50%;
-        align-items: flex-start;
-        border: 1px solid #fff;
-        border-radius: 10px;
-        margin-right: 30px;
-        padding: 0px 0 2% 0px;
-    }
-
-    .field-new-password {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .icon-password {
-        position: relative;
-        color: #fff;
-        padding: 0 5% 0 0;
-    }
-
-    .password #new-password{
-        position: relative;
-        width: 100%;
-        height: 50%;
-        padding: 2px 0 2px 30px;
-        border: none;
-        border-radius: 10px;
-        background: none;
-        outline: none;
-        color: #fff;
-        font-size: 150%;
-    }
-
-    .edit-password #new-password{
-        position: relative;
-        width: 100%;
-        height: 50%;
-        padding: 2px 0 2px 30px;
-        border: none;
-        border-radius: 10px;
-        background: none;
-        outline: none;
-        color: #fff;
-        font-size: 150%;
-    }
-
-    .password #title {
-        position: relative;
-        top: -0.7em;
-        display: inline;
-        background-color: #0d0d0d;
-        color: #fff;
-        font: 200 20px 'Hammersmith one', sans-serif;
-        padding: 0 10px;
-        margin: 0 0 0 30px;
-    }
-
-    .edit-password #title {
-        position: relative;
-        top: -0.7em;
-        display: inline;
-        background-color: #0d0d0d;
-        color: #fff;
-        font: 200 20px 'Hammersmith one', sans-serif;
-        padding: 0 10px;
-        margin: 0 0 0 30px;
-    }
 
     .button {
         display: flex;
         gap: var(--unit-1000);
-        width: 80%;
+        width: 100%;
         margin-top: calc(var(--unit-1000) * 1);
-        margin-left: 80px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
   </style>
