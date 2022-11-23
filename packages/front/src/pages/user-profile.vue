@@ -60,6 +60,22 @@
                 type="password"
               />
             </BInputField>
+            <BText
+              v-if="this.$store.state.user.errorMessage"
+              color="error"
+              size="small"
+              tag="div"
+            >
+              {{ this.$store.state.user.errorMessage }}
+            </BText>
+            <BText
+            v-if="this.$store.state.user.success"
+              class="success-text"
+              size="small"
+              tag="div"
+            >
+              Saved.
+            </BText>
             <div class="button">
               <BButton
                 size="medium"
@@ -89,6 +105,7 @@
       import BInput from '../components/b-input.vue';
       import BInputField from '../components/b-input-field.vue';
       import BModal from '../components/b-modal.vue';
+      import BText from '../components/b-text.vue';
 
       export default {
           // eslint-disable-next-line vue/multi-word-component-names
@@ -99,6 +116,7 @@
               BInput,
               BInputField,
               BModal,
+              BText,
               Form,
           },
       };
@@ -187,6 +205,7 @@
         border-radius: 10px;
         margin: 10%;
         padding: 50px;
+        max-width: 350px;
     }
 
     .button {
@@ -240,6 +259,10 @@
         height: 100%;
         width: 100%;
       }
+    }
+
+    .success-text {
+      color: var(--color-success);
     }
 
   </style>
