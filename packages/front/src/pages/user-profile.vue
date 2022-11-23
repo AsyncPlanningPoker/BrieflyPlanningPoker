@@ -159,15 +159,10 @@
 
     main {
       flex: 1 1 0;
-      margin-left: 68px;
-
-      @media (min-width: 768px) {
-        margin-left: 120px;
-      }
     }
   }
 
-    *{
+    * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -188,7 +183,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 150%;
         background: #0d0d0d;
         border-radius: 10px;
         margin: 10%;
@@ -196,12 +190,26 @@
     }
 
     .button {
-        display: flex;
-        gap: var(--unit-1000);
-        width: 100%;
+      display: flex;
+      width: 100%;
+      margin-top: calc(var(--unit-0300) * 1);
+      margin-left: auto;
+      margin-right: auto;
+      flex-wrap: wrap-reverse;
+
+      button + button {
+        margin-bottom: var(--unit-0300);
+      }
+
+      @media (min-width: 768px) {
+        flex-wrap: nowrap;
         margin-top: calc(var(--unit-1000) * 1);
-        margin-left: auto;
-        margin-right: auto;
+
+        button + button {
+          margin-bottom: 0;
+          margin-left: var(--unit-0300);
+        }
+      }
     }
     .b-sidebar {
       align-content: start;
