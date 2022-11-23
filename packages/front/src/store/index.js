@@ -1,3 +1,4 @@
+import { api } from '../services/api';
 import { createStore } from 'vuex';
 import { signInStore } from './sign-in';
 import { signUpStore } from './sign-up';
@@ -29,14 +30,42 @@ export default createStore({
       localStorage.removeItem('userEmail');
       localStorage.setItem('userEmail', JSON.stringify(state.userEmail));
     },
+    LOGOUT(state) {
+      state.userToken = '';
+      state.userEmail = ''
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userEmail');
+    }
   },
 
   actions: {
     updateUserToken({ commit }, payload) {
       commit('UPDATE_USER_TOKEN', payload);
     },
+
     updateUserEmail({ commit }, payload) {
       commit('UPDATE_USER_EMAIL', payload);
+    },
+
+    logout({ commit }) {
+      commit('LOGOUT');
+    },
+
+    async updateYourself(_, payload) {
+      const body = {
+        oldpassword: payload.oldPassword,
+        password: payload.newPassword
+      };
+      await api.put('user', body).catch((error) => {
+        throw error;
+      });
+    },
+
+    async deleteYourself({ dispatch }) {
+      await api.delete('user').catch((error) => {
+        throw error;
+      });
+      dispatch('logout');
     },
   },
 

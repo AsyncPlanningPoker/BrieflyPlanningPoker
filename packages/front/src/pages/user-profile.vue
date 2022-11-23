@@ -12,6 +12,17 @@
       </div>
     </div>
 
+    <BModal
+      color="gray-30"
+      :open="deleteAccountModal"
+    >
+      <p>Are you sure you want to delete your account?</p>
+      <div class="button">
+        <BButton size="medium" variant="transparent" value="Cancel" @click="hideDeleteAccountModal">Cancel</BButton>
+        <BButton size="medium" value="Delete" @click="onDelete">Delete</BButton>
+      </div>
+    </BModal>
+
     <main>
       <div class="client">
         <div class="contents">
@@ -54,7 +65,7 @@
                 size="medium"
                 variant="transparent"
                 value="Delete Account"
-                @click="onDelete"
+                @click="showDeleteAccountModal"
               />
               <BButton
                 size="medium"
@@ -71,12 +82,13 @@
 
   <script>
       import * as Yup from 'yup';
-      import { onMounted } from 'vue';
+      import { ref, onMounted } from 'vue';
       import { useStore } from 'vuex';
       import { Form } from 'vee-validate';
       import BButton from '../components/b-button.vue';
       import BInput from '../components/b-input.vue';
       import BInputField from '../components/b-input-field.vue';
+      import BModal from '../components/b-modal.vue';
 
       export default {
           // eslint-disable-next-line vue/multi-word-component-names
@@ -86,6 +98,7 @@
               BButton,
               BInput,
               BInputField,
+              BModal,
               Form,
           },
       };
@@ -95,6 +108,10 @@
       const store = useStore();
 
       onMounted(() => store.dispatch('gatherSquadList'));
+
+      const deleteAccountModal = ref(false);
+      const showDeleteAccountModal = () => deleteAccountModal.value = true;
+      const hideDeleteAccountModal = () => deleteAccountModal.value = false;
 
       const schema = Yup.object().shape({
         oldPassword: Yup.string().required('Old password is required.'),
@@ -107,8 +124,9 @@
         store.dispatch('updateYourself', { newPassword, oldPassword });
       }
 
-      function onDelete() {
-        store.dispatch('deleteYourself');
+      async function onDelete() {
+        await store.dispatch('deleteYourself');
+        window.location.href = '/';
       }
   </script>
 
