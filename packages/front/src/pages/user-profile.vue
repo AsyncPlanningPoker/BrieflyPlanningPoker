@@ -240,7 +240,7 @@
       row-gap: var(--unit-0900);
 
       @media (max-width: 768px) {
-        height: calc(100vh - (2 * var(--unit-0300)));
+        height: 100vh;
         padding: var(--unit-0300);
         row-gap: var(--unit-0600);
       }
