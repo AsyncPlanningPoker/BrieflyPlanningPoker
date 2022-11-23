@@ -27,9 +27,9 @@
       </BModal>
     </div>
 
-    <BDivisor color="gray-30" />
+    <BDivisor v-if="squads?.length > 0" color="gray-30" />
 
-    <div class="b-sidebar__squad-wrapper">
+    <div v-if="squads?.length > 0" class="b-sidebar__squad-wrapper">
       <div
         v-for="(squad, index) in squads.slice().reverse()"
         :key="index"
