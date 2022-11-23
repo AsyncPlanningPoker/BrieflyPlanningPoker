@@ -27,7 +27,7 @@ const userStore = {
         },
         LOGOUT(state) {
             state.userToken = '';
-            state.userEmail = ''
+            state.userEmail = '';
             localStorage.removeItem('userToken');
             localStorage.removeItem('userEmail');
         },
@@ -75,7 +75,7 @@ const userStore = {
         },
 
         async deleteYourself({ dispatch }) {
-            await api.delete('user')
+            await api.delete('user');
             dispatch('logout');
         },
     },
