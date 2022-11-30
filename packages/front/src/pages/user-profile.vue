@@ -108,7 +108,7 @@
 
 <script>
 import * as Yup from 'yup';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
 import BButton from '../components/b-button.vue';
@@ -136,8 +136,6 @@ export default {
 
 <script setup>
 const store = useStore();
-
-onMounted(() => store.dispatch('gatherSquadList'));
 
 const deleteAccountModal = ref(false);
 const showDeleteAccountModal = () => deleteAccountModal.value = true;
