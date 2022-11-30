@@ -52,10 +52,10 @@
 
     <BDivisor color="gray-30" />
 
-    <div class="user-page">
+    <div class="b-sidebar__user-wrapper">
       <a href="/user-account">
         <font-awesome-icon
-          class="user__image"
+          class="b-sidebar__user-image"
           icon="fa-regular fa-user"
         />
       </a>
@@ -147,19 +147,20 @@ const toggleModal = () => {
   }
 }
 
-.user-page {
+.b-sidebar__user-wrapper {
   cursor: pointer;
-  height: calc(12 * var(--unit-0100));
-  width: calc(12 * var(--unit-0100));
-  text-align: center;
   margin-top: auto;
+  text-align: center;
+
+  height: var(--unit-1200);
+  width: var(--unit-1200);
 
   @media (max-width: 768px) {
-    height: calc(11 * var(--unit-0100));
-    width: calc(11 * var(--unit-0100));
+    height: var(--unit-1100);
+    width: var(--unit-1100);
   }
 
-  & .user__image {
+  & .b-sidebar__user-image {
     height: 80%;
     width: 80%;
     color: var(--color-white);
