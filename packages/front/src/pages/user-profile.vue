@@ -1,10 +1,9 @@
 <template>
-  <div class="user-account">
-    <div class="b-sidebar">
-      <div class="b-sidebar__logo-wrapper">
+  <div class="user-profile">
+    <div class="user-profile__sidebar">
+      <div class="user-profile__sidebar-logo-wrapper">
         <a href="/">
           <img
-            class="b-sidebar__image"
             src="../assets/square-logo-80.png"
             alt="brand-logo"
           >
@@ -17,252 +16,233 @@
       :open="deleteAccountModal"
     >
       <p>Are you sure you want to delete your account?</p>
-      <div class="button">
-        <BButton size="medium" variant="transparent" value="Cancel" @click="hideDeleteAccountModal">Cancel</BButton>
-        <BButton size="medium" value="Delete" @click="onDelete">Delete</BButton>
+      <div class="user-profile__form-buttons">
+        <BButton
+          size="medium"
+          variant="transparent"
+          value="Cancel"
+          @click="hideDeleteAccountModal"
+        >
+          Cancel
+        </BButton>
+        <BButton
+          size="medium"
+          value="Delete"
+          @click="onDelete"
+        >
+          Delete
+        </BButton>
       </div>
     </BModal>
 
     <main>
-      <div class="client">
-        <div class="contents">
-          <Form
-            class="change-password-form"
-            @submit="onSubmit"
-            :validation-schema="schema"
+      <BContainer class="user-profile__form-container">
+        <Form
+          class="change-password-form"
+          @submit="onSubmit"
+          :validation-schema="schema"
+        >
+          <BInputField
+            label="Old Password"
+            name="oldPassword"
           >
-            <BInputField
-              label="Old Password"
+            <BInput
               name="oldPassword"
-            >
-              <BInput
-                name="oldPassword"
-                type="password"
-              />
-            </BInputField>
+              type="password"
+            />
+          </BInputField>
 
-            <BInputField
-              label="New Password"
+          <BInputField
+            label="New Password"
+            name="newPassword"
+          >
+            <BInput
               name="newPassword"
-            >
-              <BInput
-                name="newPassword"
-                type="password"
-              />
-            </BInputField>
+              type="password"
+            />
+          </BInputField>
 
-            <BInputField
-              label="Confirm Password"
+          <BInputField
+            label="Confirm Password"
+            name="confirmPassword"
+          >
+            <BInput
               name="confirmPassword"
-            >
-              <BInput
-                name="confirmPassword"
-                type="password"
-              />
-            </BInputField>
-            <BText
-              v-if="this.$store.state.user.errorMessage"
-              color="error"
-              size="small"
-              tag="div"
-            >
-              {{ this.$store.state.user.errorMessage }}
-            </BText>
-            <BText
+              type="password"
+            />
+          </BInputField>
+          <BText
+            v-if="this.$store.state.user.errorMessage"
+            color="error"
+            size="small"
+            tag="div"
+          >
+            {{ this.$store.state.user.errorMessage }}
+          </BText>
+          <BText
             v-if="this.$store.state.user.success"
-              class="success-text"
-              size="small"
-              tag="div"
-            >
-              Saved.
-            </BText>
-            <div class="button">
-              <BButton
-                size="medium"
-                variant="transparent"
-                value="Delete Account"
-                @click="showDeleteAccountModal"
-              />
-              <BButton
-                size="medium"
-                type="submit"
-                value="Save"
-              />
-            </div>
-          </Form>
-        </div>
-      </div>
+            color="success"
+            size="small"
+            tag="div"
+          >
+            Saved.
+          </BText>
+          <div class="user-profile__form-buttons">
+            <BButton
+              size="medium"
+              variant="transparent"
+              value="Delete Account"
+              @click="showDeleteAccountModal"
+            />
+            <BButton
+              size="medium"
+              type="submit"
+              value="Save"
+            />
+          </div>
+        </Form>
+      </BContainer>
     </main>
   </div>
 </template>
 
-  <script>
-      import * as Yup from 'yup';
-      import { ref, onMounted } from 'vue';
-      import { useStore } from 'vuex';
-      import { Form } from 'vee-validate';
-      import BButton from '../components/b-button.vue';
-      import BInput from '../components/b-input.vue';
-      import BInputField from '../components/b-input-field.vue';
-      import BModal from '../components/b-modal.vue';
-      import BText from '../components/b-text.vue';
+<script>
+import * as Yup from 'yup';
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { Form } from 'vee-validate';
+import BButton from '../components/b-button.vue';
+import BContainer from '../components/b-container.vue';
+import BInput from '../components/b-input.vue';
+import BInputField from '../components/b-input-field.vue';
+import BModal from '../components/b-modal.vue';
+import BText from '../components/b-text.vue';
 
-      export default {
-          // eslint-disable-next-line vue/multi-word-component-names
-          name: 'UserAccount',
+export default {
+  name: 'UserProfile',
 
-          components: {
-              BButton,
-              BInput,
-              BInputField,
-              BModal,
-              BText,
-              Form,
-          },
-      };
-  </script>
+  components: {
+    BButton,
+    BContainer,
+    BInput,
+    BInputField,
+    BModal,
+    BText,
+    Form,
+  },
+};
+</script>
 
-  <script setup>
-      const store = useStore();
+<script setup>
+const store = useStore();
 
-      onMounted(() => store.dispatch('gatherSquadList'));
+onMounted(() => store.dispatch('gatherSquadList'));
 
-      const deleteAccountModal = ref(false);
-      const showDeleteAccountModal = () => deleteAccountModal.value = true;
-      const hideDeleteAccountModal = () => deleteAccountModal.value = false;
+const deleteAccountModal = ref(false);
+const showDeleteAccountModal = () => deleteAccountModal.value = true;
+const hideDeleteAccountModal = () => deleteAccountModal.value = false;
 
-      const schema = Yup.object().shape({
-        oldPassword: Yup.string().required('Old password is required.'),
-        newPassword: Yup.string().required('New password is required.'),
-        confirmPassword: Yup.string().required('Confirm password is required.').oneOf([Yup.ref('newPassword'), null], 'Confirm password must be equal the new password.'),
-      });
+const schema = Yup.object().shape({
+  oldPassword: Yup.string().required('Old password is required.'),
+  newPassword: Yup.string().required('New password is required.'),
+  confirmPassword: Yup.string().required('Confirm password is required.').oneOf([Yup.ref('newPassword'), null], 'Confirm password must be equal the new password.'),
+});
 
-      function onSubmit(values) {
-        const { newPassword, oldPassword } = values;
-        store.dispatch('updateYourself', { newPassword, oldPassword });
-      }
+function onSubmit(values) {
+  const { newPassword, oldPassword } = values;
+  store.dispatch('updateYourself', { newPassword, oldPassword });
+}
 
-      async function onDelete() {
-        await store.dispatch('deleteYourself');
-        window.location.href = '/';
-      }
-  </script>
+async function onDelete() {
+  await store.dispatch('deleteYourself');
+  window.location.href = '/';
+}
+</script>
 
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
+.user-profile {
+  display: flex;
 
-  .user__section {
-    margin-top: var(--unit-0500);
-    padding: var(--unit-0300);
+  aside {
+    max-width: 68px;
+    position: fixed;
 
     @media (min-width: 768px) {
-      padding: var(--unit-0900);
-    }
-
-    &:first-child {
-      margin-top: var(--unit-0000);
+      max-width: 120px;
     }
   }
 
-  .user-account {
+  main {
+    flex: 1 1 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 
-    aside {
-      max-width: 68px;
-      position: fixed;
+.user-profile__form-container {
+  display: block;
+  margin: var(--unit-0600);
+  min-width: 70%;
 
-      @media (min-width: 768px) {
-        max-width: 120px;
-      }
-    }
+  @media (min-width: 768px) {
+    width: 350px;
+    min-width: auto;
+  }
+}
 
-    main {
-      flex: 1 1 0;
-    }
+.user-profile__form-buttons {
+  display: flex;
+  width: 100%;
+  margin-top: calc(var(--unit-0300) * 1);
+  margin-left: auto;
+  margin-right: auto;
+  flex-wrap: wrap-reverse;
+
+  button+button {
+    margin-bottom: var(--unit-0300);
   }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+  @media (min-width: 768px) {
+    flex-wrap: nowrap;
+    margin-top: calc(var(--unit-1000) * 1);
+
+    button+button {
+      margin-bottom: 0;
+      margin-left: var(--unit-0300);
     }
+  }
+}
 
-    .client {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    }
+.user-profile__sidebar {
+  align-content: start;
+  background-color: var(--color-black);
+  display: grid;
+  height: calc(100vh - 2 * var(--unit-0900));
+  justify-items: center;
+  padding: var(--unit-0900);
+  row-gap: var(--unit-0900);
 
+  @media (max-width: 768px) {
+    height: calc(100vh - (2 * var(--unit-0300)));
+    padding: var(--unit-0300);
+    row-gap: var(--unit-0600);
+  }
+}
 
-    .contents {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: #0d0d0d;
-        border-radius: 10px;
-        margin: 10%;
-        padding: 50px;
-        max-width: 350px;
-    }
+.user-profile__sidebar-logo-wrapper {
+  cursor: pointer;
+  height: calc(12 * var(--unit-0100));
+  width: calc(12 * var(--unit-0100));
 
-    .button {
-      display: flex;
-      width: 100%;
-      margin-top: calc(var(--unit-0300) * 1);
-      margin-left: auto;
-      margin-right: auto;
-      flex-wrap: wrap-reverse;
+  @media (max-width: 768px) {
+    height: calc(11 * var(--unit-0100));
+    width: calc(11 * var(--unit-0100));
+  }
 
-      button + button {
-        margin-bottom: var(--unit-0300);
-      }
-
-      @media (min-width: 768px) {
-        flex-wrap: nowrap;
-        margin-top: calc(var(--unit-1000) * 1);
-
-        button + button {
-          margin-bottom: 0;
-          margin-left: var(--unit-0300);
-        }
-      }
-    }
-    .b-sidebar {
-      align-content: start;
-      background-color: var(--color-black);
-      display: grid;
-      height: 100vh;
-      justify-items: center;
-      padding: var(--unit-0900);
-      row-gap: var(--unit-0900);
-
-      @media (max-width: 768px) {
-        height: 100vh;
-        padding: var(--unit-0300);
-        row-gap: var(--unit-0600);
-      }
-    }
-    .b-sidebar__logo-wrapper {
-      cursor: pointer;
-      height: calc(12 * var(--unit-0100));
-      width: calc(12 * var(--unit-0100));
-
-      @media (max-width: 768px) {
-        height: calc(11 * var(--unit-0100));
-        width: calc(11 * var(--unit-0100));
-      }
-
-      & .b-sidebar__image {
-        height: 100%;
-        width: 100%;
-      }
-    }
-
-    .success-text {
-      color: var(--color-success);
-    }
-
-  </style>
+  & img {
+    height: 100%;
+    width: 100%;
+  }
+}
+</style>
