@@ -27,9 +27,15 @@
       </BModal>
     </div>
 
-    <BDivisor v-if="squads?.length > 0" color="gray-30" />
+    <BDivisor
+      v-if="squads?.length > 0"
+      color="gray-30"
+    />
 
-    <div v-if="squads?.length > 0" class="b-sidebar__squad-wrapper">
+    <div
+      v-if="squads?.length > 0"
+      class="b-sidebar__squad-wrapper"
+    >
       <div
         v-for="(squad, index) in squads.slice().reverse()"
         :key="index"
@@ -48,10 +54,10 @@
 
     <div class="user-page">
       <a href="/user-account">
-        <img
+        <font-awesome-icon
           class="user__image"
-          src="../assets/user-regular.svg"
-        >
+          icon="fa-regular fa-user"
+        />
       </a>
     </div>
   </div>
@@ -156,6 +162,7 @@ const toggleModal = () => {
   & .user__image {
     height: 80%;
     width: 80%;
+    color: var(--color-white);
   }
 }
 </style>
