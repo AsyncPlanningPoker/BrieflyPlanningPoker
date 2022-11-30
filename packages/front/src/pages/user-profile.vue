@@ -117,6 +117,7 @@ import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BModal from '../components/b-modal.vue';
 import BText from '../components/b-text.vue';
+import router from '../router';
 
 export default {
   name: 'UserProfile',
@@ -155,7 +156,7 @@ function onSubmit(values) {
 
 async function onDelete() {
   await store.dispatch('deleteYourself');
-  window.location.href = '/';
+  router.push('/signin');
 }
 </script>
 
