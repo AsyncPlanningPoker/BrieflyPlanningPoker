@@ -181,7 +181,7 @@ async function onDelete() {
 
 .user-profile__form-container {
   display: block;
-  margin: var(--unit-0600);
+  margin: var(--unit-3000);
   min-width: 70%;
 
   @media (min-width: 768px) {
