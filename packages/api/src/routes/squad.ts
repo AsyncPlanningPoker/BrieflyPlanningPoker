@@ -98,7 +98,7 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
       .then(async (created: any) => {
         // if (created) {
         //     if(!owner){
-        //       await send({ to: created.email, subject: 'invite', message: `oii ${created.name}` }).catch((error: any) => {
+        //       await send({ to: created.email, subject: 'invite', message: `${created.name}` }).catch((error: any) => {
         //         return next(error);
         //       });
         //     }
