@@ -11,7 +11,9 @@
   "scripts": {
     "start": "concurrently -k \"tsc -b -w\" \"nodemon --inspect=0.0.0.0:9229 -L dist/index.js\"",
     "build": "tsc -b",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lint": "eslint --ext .js,.ts",
+    "lint:fix": "eslint --fix --ext .js,.ts ."
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
