@@ -49,6 +49,7 @@ type LoadedTask = {
     user: string;
     email: string;
     date: Date;
+    round: number;
     currentRound: boolean;
   }[];
 };

@@ -5,7 +5,7 @@
     @submit="onSubmit"
     @invalid-submit="onInvalidSubmit"
   >
-    <div class="f-add-user__input-wrapper">
+    <div>
       <BInputField
         label="Partner's e-mail"
         name="email"
@@ -18,7 +18,7 @@
       </BInputField>
     </div>
 
-    <div class="f-add-user__button-wrapper">
+    <div>
       <BButton
         class="f-add-user__button"
         size="small"
@@ -55,6 +55,8 @@ const store = useStore();
 
 function onSubmit(values) {
   store.dispatch('addUser', values.email);
+  /* eslint-disable no-undef */
+  email.value = null;
   const submitButton = document.querySelector('.f-add-user__button');
   submitButton.classList.add('valid');
   setTimeout(() => {
@@ -82,12 +84,14 @@ const schema = Yup.object().shape({
   display: grid;
   grid-template-areas: 'email button';
   grid-template-columns: 1fr auto;
+  margin-top: var(--unit-0300);
   width: 100%;
 }
 
 .f-add-user__button {
   align-items: flex-end;
   margin-left: var(--unit-0500);
+  margin-top: var(--unit-0100);
   width: var(--unit-2000);
 }
 </style>
