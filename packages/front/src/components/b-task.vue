@@ -91,7 +91,8 @@
     :open="archiveModal"
   >
     <FConfirmation
-      variable="archive"
+      action="archive"
+      message="Are you sure you want to archive this task? This action is IRREVERSIBLE"
       @close="toggleArchiveModal()"
       @confirm="store.dispatch('disableTask', task.task), toggleArchiveModal()"
     />
@@ -102,7 +103,8 @@
     :open="deleteModal"
   >
     <FConfirmation
-      variable="delete"
+      action="delete"
+      message="Are you sure you want to delete this task? This action is IRREVERSIBLE"
       @close="toggleDeleteModal()"
       @confirm="store.dispatch('deleteTask', task.task), toggleDeleteModal()"
     />
