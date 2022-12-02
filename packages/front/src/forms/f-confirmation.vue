@@ -5,7 +5,7 @@
       type="p"
       size="large"
     >
-      Are you sure you want to {{ variable }} this task? This action is IRREVERSIBLE
+      {{ message }}
     </BText>
     <div class="f-confirmation__buttons-container">
       <BButton
@@ -15,7 +15,7 @@
       />
 
       <BButton
-        :value="variable"
+        :value="action"
         @click="$emit('confirm')"
       />
     </div>
@@ -35,7 +35,11 @@ export default {
   },
 
   props: {
-    variable: {
+    action: {
+      type: String,
+      default: 'Confirm',
+    },
+    message: {
       type: String,
       default: undefined,
       required: true,
