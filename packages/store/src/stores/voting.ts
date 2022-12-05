@@ -188,7 +188,7 @@ function getEstimative(tasks: any, currentRound: number, frequencyArray: Record<
 
   const frequencyValue = Object.values(frequencyArray);
   let maxPoint = 0;
-  let maxFrequencyValue = 100 / total.length;
+  let maxFrequencyValue = 100 / total;
   let newFibonacci = 0;
 
   frequencyValue.forEach((r: number, idx) => {
