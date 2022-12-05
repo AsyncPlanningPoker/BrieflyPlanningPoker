@@ -184,10 +184,11 @@ function getEstimative(tasks: any, currentRound: number, frequencyArray: Record<
   const points = Object.keys(frequencyArray).map((k) => {
     return Number(k);
   });
+  const total = pointsCurrentRound.length;
 
   const frequencyValue = Object.values(frequencyArray);
   let maxPoint = 0;
-  let maxFrequencyValue = 0;
+  let maxFrequencyValue = 100 / total.length;
   let newFibonacci = 0;
 
   frequencyValue.forEach((r: number, idx) => {
@@ -197,11 +198,10 @@ function getEstimative(tasks: any, currentRound: number, frequencyArray: Record<
     }
   });
 
-  const total = pointsCurrentRound.length;
   const sum = pointsCurrentRound.reduce((acm: any, s: any) => {
     return s + acm;
   });
-  const media = Math.ceil((maxPoint + sum / total) / 2);
+  const media = maxPoint > 0 ? Math.ceil((maxPoint + sum / total) / 2) : Math.ceil(sum / total);
 
   if (fibonacci.includes(media)) {
     newFibonacci =
