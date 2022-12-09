@@ -59,50 +59,50 @@ describe('Task', () => {
     expect(res).toStrictEqual(expected);
   });
 
-  // it('Should list all tasks by squad id', async () => {
-  //   const tasks = [
-  //     {
-  //       id: randomUUID(),
-  //       squad: squad.id,
-  //       name: 'task test',
-  //       description: 'description test',
-  //     },
-  //     {
-  //       id: randomUUID(),
-  //       squad: squad.id,
-  //       name: 'task test 1',
-  //       description: 'description test 1',
-  //     },
-  //   ];
+  it.skip('Should list all tasks by squad id', async () => {
+    const tasks = [
+      {
+        id: randomUUID(),
+        squad: squad.id,
+        name: 'task test',
+        description: 'description test',
+      },
+      {
+        id: randomUUID(),
+        squad: squad.id,
+        name: 'task test 1',
+        description: 'description test 1',
+      },
+    ];
 
-  //   const expected = {
-  //     active: [
-  //       {
-  //         task: tasks[0].id,
-  //         name: tasks[0].name,
-  //         points: null,
-  //         currentRound: null,
-  //         maxRounds: squad.currentMaxRounds,
-  //         finished: false,
-  //       },
-  //       {
-  //         task: tasks[1].id,
-  //         name: tasks[1].name,
-  //         points: null,
-  //         currentRound: null,
-  //         maxRounds: squad.currentMaxRounds,
-  //         finished: false,
-  //       },
-  //     ],
-  //     deactive: [],
-  //   };
+    const expected = {
+      active: [
+        {
+          task: tasks[0].id,
+          name: tasks[0].name,
+          points: null,
+          currentRound: null,
+          maxRounds: squad.currentMaxRounds,
+          finished: false,
+        },
+        {
+          task: tasks[1].id,
+          name: tasks[1].name,
+          points: null,
+          currentRound: null,
+          maxRounds: squad.currentMaxRounds,
+          finished: false,
+        },
+      ],
+      deactive: [],
+    };
 
-  //   await taskDbStore.create(tasks[0]);
-  //   await taskDbStore.create(tasks[1]);
+    await taskDbStore.create(tasks[0]);
+    await taskDbStore.create(tasks[1]);
 
-  //   const res = await taskDbStore.findAll({ squad: squad.id });
-  //   expect(res).toStrictEqual(expected);
-  // });
+    const res = await taskDbStore.findAll({ squad: squad.id });
+    expect(res).toStrictEqual(expected);
+  });
 
   it('Should deactive a task', async () => {
     const task = {
