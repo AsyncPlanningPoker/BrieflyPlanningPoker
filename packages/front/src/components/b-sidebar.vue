@@ -11,31 +11,32 @@
     </div>
 
     <BDivisor color="gray-30" />
+    <div class="b-sidebar__squad-wrapper">
+      <div class="b-sidebar__new-squad-wrapper">
+        <BButton
+          size="small"
+          value="+"
+          @click="toggleModal"
+        />
 
-    <div class="b-sidebar__new-squad-wrapper">
-      <BButton
-        size="small"
-        value="+"
-        @click="toggleModal"
+        <BModal
+          color="gray-30"
+          :open="showModal"
+        >
+          <FSquad @close="toggleModal" />
+        </BModal>
+      </div>
+
+      <BDivisor
+        v-if="squads?.length > 0"
+        color="gray-30"
       />
 
-      <BModal
-        color="gray-30"
-        :open="showModal"
-      >
-        <FSquad @close="toggleModal" />
-      </BModal>
-    </div>
+      <div
+        v-if="squads?.length > 0"
+        class="b-sidebar__squad-list"
+      />
 
-    <BDivisor
-      v-if="squads?.length > 0"
-      color="gray-30"
-    />
-
-    <div
-      v-if="squads?.length > 0"
-      class="b-sidebar__squad-wrapper"
-    >
       <div
         v-for="(squad, index) in squads.slice().reverse()"
         :key="index"
@@ -52,13 +53,14 @@
 
     <BDivisor color="gray-30" />
 
-    <div class="b-sidebar__user-wrapper">
-      <a href="/user-account">
-        <font-awesome-icon
-          class="b-sidebar__user-image"
-          icon="fa-regular fa-user"
-        />
-      </a>
+    <div
+      class="b-sidebar__user-wrapper"
+      @click="$router.push({ name: 'user-profile' })"
+    >
+      <font-awesome-icon
+        class="b-sidebar__user-image"
+        icon="fa-regular fa-user"
+      />
     </div>
   </div>
 </template>
@@ -98,7 +100,8 @@ const toggleModal = () => {
 .b-sidebar {
   align-content: start;
   background-color: var(--color-black);
-  display: grid;
+  display: flex;
+  flex-flow: column;
   height: calc(100vh - (2 * var(--unit-0900)));
   justify-items: center;
   padding: var(--unit-0900);
@@ -121,6 +124,12 @@ const toggleModal = () => {
     width: calc(11 * var(--unit-0100));
   }
 
+  .b-sidebar__squad-wrapper {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+
   & .b-sidebar__image {
     height: 100%;
     width: 100%;
@@ -128,11 +137,11 @@ const toggleModal = () => {
 }
 
 .b-sidebar__new-squad-wrapper,
-.b-sidebar__squad-wrapper {
+.b-sidebar__squad-list {
   width: var(--unit-1000);
 }
 
-.b-sidebar__squad-wrapper {
+.b-sidebar__squad-list {
   display: grid;
   row-gap: var(--unit-0500);
   overflow-y: scroll;
@@ -148,22 +157,19 @@ const toggleModal = () => {
 }
 
 .b-sidebar__user-wrapper {
-  cursor: pointer;
+  color: var(--color-white);
+  height: var(--unit-1000);
   margin-top: auto;
   text-align: center;
-
-  height: var(--unit-1200);
-  width: var(--unit-1200);
-
-  @media (max-width: 768px) {
-    height: var(--unit-1100);
-    width: var(--unit-1100);
-  }
-
+  width: var(--unit-1000);
   & .b-sidebar__user-image {
+    color: inherit;
     height: 80%;
     width: 80%;
-    color: var(--color-white);
+  }
+  &:hover {
+    cursor: pointer;
+    color: var(--color-accent);
   }
 }
 </style>

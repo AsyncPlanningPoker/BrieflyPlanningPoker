@@ -15,24 +15,12 @@
       color="gray-30"
       :open="deleteAccountModal"
     >
-      <p>Are you sure you want to delete your account?</p>
-      <div class="user-profile__form-buttons">
-        <BButton
-          size="medium"
-          variant="transparent"
-          value="Cancel"
-          @click="hideDeleteAccountModal"
-        >
-          Cancel
-        </BButton>
-        <BButton
-          size="medium"
-          value="Delete"
-          @click="onDelete"
-        >
-          Delete
-        </BButton>
-      </div>
+      <FConfirmation
+        action="delete"
+        message="Are you sure you want to delete your account?"
+        @close="hideDeleteAccountModal"
+        @confirm="onDelete"
+      />
     </BModal>
 
     <main>
@@ -118,6 +106,7 @@ import BInputField from '../components/b-input-field.vue';
 import BModal from '../components/b-modal.vue';
 import BText from '../components/b-text.vue';
 import router from '../router';
+import FConfirmation from '../forms/f-confirmation.vue';
 
 export default {
   name: 'UserProfile',
@@ -174,19 +163,21 @@ async function onDelete() {
   main {
     flex: 1 1 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-left: 68px;
+
+    @media (min-width: 768px) {
+      margin-left: 120px;
+    }
   }
 }
 
 .user-profile__form-container {
   display: block;
-  margin: var(--unit-3000);
-  min-width: 70%;
+  margin: auto;
+  width: 80%;
 
   @media (min-width: 768px) {
     width: 350px;
-    min-width: auto;
   }
 }
 
