@@ -12,6 +12,7 @@
     </div>
 
     <BDivisor color="gray-30" />
+
     <div class="b-sidebar__squad-wrapper">
       <div class="b-sidebar__new-squad-wrapper">
         <BButton
@@ -36,19 +37,19 @@
       <div
         v-if="squads?.length > 0"
         class="b-sidebar__squad-list"
-      />
-
-      <div
-        v-for="(squad, index) in squads.slice().reverse()"
-        :key="index"
-        class="b-sidebar__squad"
       >
-        <BButton
-          size="small"
-          variant="transparent"
-          :value="`${index + 1}`"
-          @click="store.dispatch('gatherSquad', squad.id), $router.push({ name: 'Home' })"
-        />
+        <div
+          v-for="(squad, index) in squads.slice().reverse()"
+          :key="index"
+          class="b-sidebar__squad"
+        >
+          <BButton
+            size="small"
+            variant="transparent"
+            :value="`${index + 1}`"
+            @click="store.dispatch('gatherSquad', squad.id), $router.push({ name: 'Home' })"
+          />
+        </div>
       </div>
     </div>
 
@@ -125,12 +126,6 @@ const toggleModal = () => {
     width: calc(11 * var(--unit-0100));
   }
 
-  .b-sidebar__squad-wrapper {
-    display: flex;
-    flex-flow: column;
-    height: 100%;
-  }
-
   & .b-sidebar__image {
     height: 100%;
     width: 100%;
@@ -140,6 +135,13 @@ const toggleModal = () => {
 .b-sidebar__new-squad-wrapper,
 .b-sidebar__squad-list {
   width: var(--unit-1000);
+}
+
+.b-sidebar__squad-wrapper {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  row-gap: var(--unit-0900);
 }
 
 .b-sidebar__squad-list {
