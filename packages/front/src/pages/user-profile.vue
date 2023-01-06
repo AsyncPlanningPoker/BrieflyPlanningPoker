@@ -26,7 +26,6 @@
     <main>
       <BContainer class="user-profile__form-container">
         <Form
-          class="change-password-form"
           @submit="onSubmit"
           :validation-schema="schema"
         >
