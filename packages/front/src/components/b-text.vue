@@ -27,7 +27,7 @@ export default {
     color: {
       type: String,
       default: undefined,
-      validator: shouldBeOneOf(['primary', 'accent', 'white', 'gray-10', 'gray-20', 'gray-30', 'black', 'link', 'error']),
+      validator: shouldBeOneOf(['primary', 'accent', 'white', 'gray-10', 'gray-20', 'gray-30', 'black', 'link', 'error', 'success']),
     },
     size: {
       type: String,
@@ -59,7 +59,7 @@ export default {
   }
 }
 
-@each $color in ('primary', 'accent', 'white', 'gray-10', 'gray-20', 'gray-30', 'black', 'link', 'error') {
+@each $color in ('primary', 'accent', 'white', 'gray-10', 'gray-20', 'gray-30', 'black', 'link', 'error', 'success') {
   .b-text--#{$color} {
     color: var(--color-#{$color});
   }
