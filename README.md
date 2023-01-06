@@ -111,5 +111,40 @@ Contribution guide can be access <a href="https://github.com/AsyncPlanningPoker/
             <sub>Lucca Jacomassi</sub>
             <br />
         </td>
+        <td align="center">
+            <a href="https://github.com/bachiari">
+                <img src="https://avatars.githubusercontent.com/u/58713326" width="100px;" alt="bachiari"><br />
+            </a>
+            <sub>Bárbara Chiari</sub>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/igorney">
+                <img src="https://avatars.githubusercontent.com/u/48994130" width="100px;" alt="rafaelhs-debug"><br />
+            </a>
+            <sub>Igor Santos</sub>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/LeTrovoes">
+                <img src="https://avatars.githubusercontent.com/u/25932176" width="100px;" alt="letrovoes"><br />
+            </a>
+            <sub>Leandro Trovões</sub>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/rafaelhs-debug">
+                <img src="https://avatars.githubusercontent.com/u/55901457" width="100px;" alt="rafaelhs-debug"><br />
+            </a>
+            <sub>Rafael Henrique</sub>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/thenriique">
+                <img src="https://avatars.githubusercontent.com/u/58703497" width="100px;" alt="thenriique"><br />
+            </a>
+            <sub>Thiago Henrique</sub>
+            <br />
+        </td>
     </tr>
 </table>
