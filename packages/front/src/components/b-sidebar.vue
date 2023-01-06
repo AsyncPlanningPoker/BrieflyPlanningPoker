@@ -2,7 +2,7 @@
   <div class="b-sidebar">
     <div 
       class="b-sidebar__logo-wrapper"
-      @click="store.dispatch('addSquadActive', {})"
+      @click="store.dispatch('addSquadActive', {}), $router.push({ name: 'Home' })"
     >
       <img
         class="b-sidebar__image"
@@ -47,7 +47,7 @@
           size="small"
           variant="transparent"
           :value="`${index + 1}`"
-          @click="store.dispatch('gatherSquad', squad.id)"
+          @click="store.dispatch('gatherSquad', squad.id), $router.push({ name: 'Home' })"
         />
       </div>
     </div>
