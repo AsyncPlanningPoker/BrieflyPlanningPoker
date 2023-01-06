@@ -150,6 +150,7 @@ async function onDelete() {
 <style lang="scss" scoped>
 .user-profile {
   display: flex;
+  min-height: 100vh;
 
   aside {
     max-width: 68px;
