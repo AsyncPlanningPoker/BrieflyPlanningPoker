@@ -1,6 +1,8 @@
 import { api } from '../services/api';
 import router from '../router/index';
 
+const envVars = import.meta.env;
+
 const passRecoveryOneStore = {
   state: {
     email: '',
@@ -21,7 +23,7 @@ const passRecoveryOneStore = {
   actions: {
     recovery({ commit }) {
       api
-        .post('user/pass-recovery', { email: this.state.passRecoveryOne.email, url: 'http://localhost:8080/confirm_reset?token=' })
+        .post('user/pass-recovery', { email: this.state.passRecoveryOne.email, url: `${envVars.DEV ? envVars.VITE_DEV_WEB_URL : envVars.VITE_PROD_WEB_URL}confirm_reset?token=` })
         .then(() => {
           router.push('/signin');
         })
