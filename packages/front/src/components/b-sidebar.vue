@@ -1,6 +1,6 @@
 <template>
   <div class="b-sidebar">
-    <div 
+    <div
       class="b-sidebar__logo-wrapper"
       @click="store.dispatch('addSquadActive', {}), $router.push({ name: 'Home' })"
     >
