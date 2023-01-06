@@ -1,13 +1,14 @@
 <template>
   <div class="b-sidebar">
-    <div class="b-sidebar__logo-wrapper">
-      <a @click="store.dispatch('addSquadActive', {})">
-        <img
-          class="b-sidebar__image"
-          src="../assets/square-logo-80.png"
-          alt="brand-logo"
-        >
-      </a>
+    <div 
+      class="b-sidebar__logo-wrapper"
+      @click="store.dispatch('addSquadActive', {})"
+    >
+      <img
+        class="b-sidebar__image"
+        src="../assets/square-logo-80.png"
+        alt="brand-logo"
+      >
     </div>
 
     <BDivisor color="gray-30" />
