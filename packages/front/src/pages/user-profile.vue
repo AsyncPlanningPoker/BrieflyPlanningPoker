@@ -1,15 +1,8 @@
 <template>
   <div class="user-profile">
-    <div class="user-profile__sidebar">
-      <div class="user-profile__sidebar-logo-wrapper">
-        <a href="/">
-          <img
-            src="../assets/square-logo-80.png"
-            alt="brand-logo"
-          >
-        </a>
-      </div>
-    </div>
+    <aside>
+      <BSidebar />
+    </aside>
 
     <BModal
       color="gray-30"
@@ -26,7 +19,6 @@
     <main>
       <BContainer class="user-profile__form-container">
         <Form
-          class="change-password-form"
           @submit="onSubmit"
           :validation-schema="schema"
         >
@@ -104,6 +96,7 @@ import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BModal from '../components/b-modal.vue';
+import BSidebar from '../components/b-sidebar.vue';
 import BText from '../components/b-text.vue';
 import router from '../router';
 import FConfirmation from '../forms/f-confirmation.vue';
@@ -117,6 +110,7 @@ export default {
     BInput,
     BInputField,
     BModal,
+    BSidebar,
     BText,
     Form,
   },
@@ -150,6 +144,7 @@ async function onDelete() {
 <style lang="scss" scoped>
 .user-profile {
   display: flex;
+  min-height: 100vh;
 
   aside {
     max-width: 68px;
@@ -201,38 +196,6 @@ async function onDelete() {
       margin-bottom: 0;
       margin-left: var(--unit-0300);
     }
-  }
-}
-
-.user-profile__sidebar {
-  align-content: start;
-  background-color: var(--color-black);
-  display: grid;
-  height: calc(100vh - 2 * var(--unit-0900));
-  justify-items: center;
-  padding: var(--unit-0900);
-  row-gap: var(--unit-0900);
-
-  @media (max-width: 768px) {
-    height: calc(100vh - (2 * var(--unit-0300)));
-    padding: var(--unit-0300);
-    row-gap: var(--unit-0600);
-  }
-}
-
-.user-profile__sidebar-logo-wrapper {
-  cursor: pointer;
-  height: calc(12 * var(--unit-0100));
-  width: calc(12 * var(--unit-0100));
-
-  @media (max-width: 768px) {
-    height: calc(11 * var(--unit-0100));
-    width: calc(11 * var(--unit-0100));
-  }
-
-  & img {
-    height: 100%;
-    width: 100%;
   }
 }
 </style>

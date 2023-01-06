@@ -24,6 +24,9 @@ const routes = [
     path: '/user-account',
     name: 'user-profile',
     component: () => import('../pages/user-profile.vue'),
+    beforeEnter: (to, from, next) => {
+      !localStorage.getItem('userToken') ? next('/signin') : next();
+    },
   },
   {
     path: '/password_reset',
