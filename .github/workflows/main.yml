@@ -18,7 +18,7 @@ jobs:
             packages/front
 
       - name: List files
-        run: ls -la
+        run: ls -la && cat README.md
 
       # - name: Install dependencies
       #   run:  yarn
