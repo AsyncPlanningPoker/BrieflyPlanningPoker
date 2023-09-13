@@ -1,5 +1,5 @@
 <h1 align="center"> 
-    Briefly Planning Poker 
+    Briefly Planning Poker - USP
 </h1>
 
 <h2> 
