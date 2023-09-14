@@ -28,7 +28,7 @@ jobs:
       - name: Deploy
         uses: reggionick/s3-deploy@v4
         with:
-          folder: packages/front/dist
+          folder: packages/front/dist/
           bucket: ${{ secrets.S3_BUCKET }}
           bucket-region: ${{ secrets.S3_BUCKET_REGION }}
           # dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
@@ -36,4 +36,4 @@ jobs:
           delete-removed: true
           no-cache: true
           private: false
-          files-to-include: 'dist/**'
+          files-to-include: '**'
