@@ -16,6 +16,7 @@ jobs:
         with:
           sparse-checkout: |
             packages/front/
+            .yarn/
 
       - uses: actions/setup-node@v3
         with:
