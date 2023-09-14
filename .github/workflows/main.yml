@@ -25,15 +25,15 @@ jobs:
       - name: Build
         run: cd packages/front/ && yarn build
 
-      - name: Deploy
-        uses: reggionick/s3-deploy@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          folder: packages/front/dist/
-          bucket: ${{ secrets.S3_BUCKET }}
-          bucket-region: ${{ secrets.S3_BUCKET_REGION }}
-          # dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          # invalidation: /
-          delete-removed: true
-          no-cache: true
-          private: false
-          files-to-include: '**'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy dashboard to bucket
+        run: aws --region ${{ secrets.S3_BUCKET_REGION }} s3 sync ./packages/dashboard/build s3://${{ secrets.S3_BUCKET }}
+
+      # - name: Invalidate dashboard cloudfront
+      #   run: aws cloudfront create-invalidation --distribution-id <dist-id> --paths "/<invalidation-path>/*"
