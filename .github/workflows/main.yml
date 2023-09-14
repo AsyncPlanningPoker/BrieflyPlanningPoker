@@ -33,7 +33,7 @@ jobs:
           bucket-region: ${{ secrets.S3_BUCKET_REGION }}
           # dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           # invalidation: /
-          delete-removed: true
+          delete-removed: false
           no-cache: true
           private: false
-          files-to-include: '.*/*,*/*,**'
+          files-to-include: '**'
