@@ -24,7 +24,9 @@ jobs:
         run:  cd packages/front/ && yarn
 
       - name: Build
-        run: cd packages/front/ && yarn build
+        run: |
+          echo $VITE_PROD_API_URL
+          cd packages/front/ && yarn build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
