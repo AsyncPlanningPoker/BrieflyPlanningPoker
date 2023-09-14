@@ -36,4 +36,4 @@ jobs:
           delete-removed: true
           no-cache: true
           private: false
-          files-to-include: './*'
+          files-to-include: 'dist/*'
