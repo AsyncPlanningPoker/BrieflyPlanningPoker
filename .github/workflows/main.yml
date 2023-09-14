@@ -20,6 +20,12 @@ jobs:
         #     .yarn/
         #     plugins/
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+          cache-dependency-path: packages/front/package-lock.json
+
       - name: Install dependencies
         run:  cd packages/front/ && yarn
 
@@ -35,7 +41,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy dashboard to bucket
+      - name: Deploy to bucket
         run: aws --region ${{ secrets.S3_BUCKET_REGION }} s3 sync ./packages/front/dist s3://${{ secrets.S3_BUCKET }}
 
       # - name: Invalidate dashboard cloudfront
