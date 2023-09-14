@@ -13,11 +13,11 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            packages/front/
-            .yarn/
-            plugins/
+        # with:
+        #   sparse-checkout: |
+        #     packages/front/
+        #     .yarn/
+        #     plugins/
 
       - name: Install dependencies
         run:  cd packages/front/ && yarn
