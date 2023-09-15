@@ -9,8 +9,7 @@
     "node": "16.14.0"
   },
   "scripts": {
-    "packageManager": "yarn@3.2.0",
-    "postinstall": "node productionScript.js"
+    "packageManager": "yarn@3.2.0"
   },
   "workspaces": [
     "packages/*"
