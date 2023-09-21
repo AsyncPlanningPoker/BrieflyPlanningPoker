@@ -42,7 +42,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to bucket
-        run: aws --region ${{ secrets.S3_BUCKET_REGION }} s3 sync ./packages/front/dist s3://${{ secrets.S3_BUCKET }}
+        run: aws --region ${{ vars.S3_REGION }} s3 sync ./packages/front/dist s3://${{ vars.S3_BUCKET }}
 
       # - name: Invalidate dashboard cloudfront
       #   run: aws cloudfront create-invalidation --distribution-id <dist-id> --paths "/<invalidation-path>/*"
