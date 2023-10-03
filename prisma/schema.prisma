@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider = "zod-prisma-types"
+  output   = "./src/generated/zod"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Squad {
+  id                String          @id @db.Uuid @default(uuid())
+  name              String          @db.VarChar(25)
+  currentMaxRounds  Int
+  currentPercentual Decimal         @db.Decimal(14, 2)
+  enabled           Boolean?        @default(true)
+  updatedAt         DateTime?       @default(now()) @db.Timestamptz(6)
+  createdAt         DateTime?       @default(now()) @db.Timestamptz(6)
+  users             UsersOnSquads[]
+  tasks             Task[]
+}
+
+model UsersOnSquads {
+  userId      String    @db.Uuid
+  squadId     String    @db.Uuid
+  enabled     Boolean?  @default(true)
+  updatedAt   DateTime? @default(now()) @db.Timestamptz(6)
+  createdAt   DateTime? @default(now()) @db.Timestamptz(6)
+  squad       Squad     @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userId, squadId])
+}
+
+model Task {
+  id              String            @id @db.Uuid @default(uuid())
+  squadId         String            @db.Uuid
+  name            String            @db.VarChar(85)
+  description     String?           @db.VarChar(300)
+  maxRounds       Int
+  percentual      Decimal           @db.Decimal(14, 2)
+  points          Int?
+  finished        Boolean?          @default(false)
+  active          Boolean?          @default(true)
+  enabled         Boolean?          @default(true)
+  updatedAt       DateTime?         @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime?         @default(now()) @db.Timestamptz(6)
+  squad           Squad             @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  messagesOnTasks MessagesOnTasks[]
+  pointsOnTasks   PointsOnTasks[]
+}
+
+model MessagesOnTasks {
+  taskId         String    @db.Uuid
+  userId         String    @db.Uuid
+  currentRound   Int
+  message        String    @db.VarChar(180)
+  enabled        Boolean?  @default(true)
+  updatedAt      DateTime? @default(now()) @db.Timestamptz(6)
+  createdAt      DateTime? @default(now()) @db.Timestamptz(6)
+  task           Task      @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([taskId, userId])
+}
+
+model PointsOnTasks {
+  taskId       String    @db.Uuid
+  userId       String    @db.Uuid
+  currentRound Int
+  points       Int
+  enabled      Boolean?  @default(true)
+  updatedAt    DateTime? @default(now()) @db.Timestamptz(6)
+  createdAt    DateTime? @default(now()) @db.Timestamptz(6)
+  task         Task      @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([taskId, userId])
+}
+
+model User {
+  id              String            @id @db.Uuid @default(uuid())
+  name            String            @db.VarChar(55)
+  email           String            @unique @db.VarChar(255)
+  password        String            @db.VarChar(255)
+  enabled         Boolean?          @default(true)
+  updatedAt       DateTime?         @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime?         @default(now()) @db.Timestamptz(6)
+  UsersOnSquads   UsersOnSquads[]
+  MessagesOnTasks MessagesOnTasks[]
+  PointsOnTasks   PointsOnTasks[]
+}

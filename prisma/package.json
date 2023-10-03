@@ -1,0 +1,16 @@
+{
+  "name": "myprisma",
+  "packageManager": "yarn@3.2.0",
+  "private": true,
+  "main": "dist/index",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@prisma/client": "5.2.0",
+    "prisma": "5.2.0",
+    "typescript": "^4.6.2",
+    "zod": "3.21.1",
+    "zod-prisma-types": "2.7.9"
+  }
+}
