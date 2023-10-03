@@ -14,7 +14,6 @@ import * as user from './user';
 const routes = Router();
 
 routes.post('/user', user.create);
-// routes.post('/user', checkSchema(createUser), schema.handler, user.create);
 // routes.post('/user/login', checkSchema(login), schema.handler, user.login);
 // routes.post('/user/pass-recovery', checkSchema(passRecovery), schema.handler, user.passRecovery);
 // routes.patch('/user/pass-recovery', checkSchema(passUpdate), schema.handler, user.passUpdate);

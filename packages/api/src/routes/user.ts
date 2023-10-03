@@ -6,7 +6,7 @@ import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
 import { prisma, UserCreateInputSchema } from 'myprisma';
 import { ZodError, z } from 'zod';
-import { Prisma } from '@prisma/client';
+// import { Prisma } from '@prisma/client';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
