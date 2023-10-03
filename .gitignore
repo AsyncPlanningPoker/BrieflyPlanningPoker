@@ -17,3 +17,4 @@ tsconfig.tsbuildinfo
 !/.yarn/plugins
 !/.yarn/sdks
 yarn-error.log
+.vscode
