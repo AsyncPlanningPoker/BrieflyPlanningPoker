@@ -9,17 +9,20 @@ import { ZodError, z } from 'zod';
 import { Prisma } from '@prisma/client';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  // throw new Error('Erro caralho');
-  // console.error(prisma);
-  return await UserCreateInputSchema.transform(async (user) => {
-    user.password = await crypt.create(user.password);
-    return user;
-  })
-    .parseAsync(req.body)
-    .then((data) => prisma.user.create({ data }))
-    .then((obj) => res.status(201).json(obj));
+  try {
+    return await UserCreateInputSchema.transform(async (user) => {
+      user.password = await crypt.create(user.password);
+      return user;
+    })
+      .parseAsync(req.body)
+      .then((data) => prisma.user.create({ data }))
+      .then((obj) => res.status(201).json(obj));
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json(error.issues);
+    }
+  }
 }
-
 // async function passRecovery(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 //   const email = req.body.email;
 //   const db = req.app.get('userDbStore');
