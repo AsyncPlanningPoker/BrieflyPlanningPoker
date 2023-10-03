@@ -7,6 +7,7 @@ import routes from './routes/index';
 import * as dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
+import { prisma } from 'myprisma';
 
 function listen(): void {
   if (require.main === module) {

@@ -12,9 +12,14 @@
     "packageManager": "yarn@3.2.0"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "prisma"
   ],
   "dependencies": {
-    "dotenv": "^16.0.2"
+    "@prisma/client": "5.2.0",
+    "dotenv": "^16.0.2",
+    "prisma": "5.2.0",
+    "zod": "3.21.1",
+    "zod-prisma-types": "2.7.9"
   }
 }

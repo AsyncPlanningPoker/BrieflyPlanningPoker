@@ -47,6 +47,7 @@
     "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "myprisma": "file:../../prisma",
     "nodemailer": "^6.7.3"
   }
 }
