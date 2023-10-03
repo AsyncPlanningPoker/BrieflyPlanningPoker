@@ -11,7 +11,7 @@
   },
   "scripts": {
     "db:up": "yarn migration:latest && yarn seed:up",
-    "migration:latest": "npx knex migrate:latest",
+    "migration:latest": "prisma migrate dev",
     "seed:up": "npx knex seed:run",
     "build": "tsc -b",
     "test": "jest --coverage"

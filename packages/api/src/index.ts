@@ -1,13 +1,13 @@
-import express, { NextFunction, Request, Response } from 'express';
-import { CustomError } from './middlewares/error/error';
-import * as error from './middlewares/error/handler';
-import { FactoryStore } from '@briefly/store';
+import express from 'express';
+// import express, { NextFunction, Request, Response } from 'express';
+// import { CustomError } from './middlewares/error/error';
+// import * as error from './middlewares/error/handler';
+// import { FactoryStore } from '@briefly/store';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
 import * as dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
-import { prisma } from 'myprisma';
 
 function listen(): void {
   if (require.main === module) {
@@ -17,24 +17,24 @@ function listen(): void {
   }
 }
 
-function setDb() {
-  const factory = new FactoryStore();
-  const { close, userDbStore, squadDbStore, taskDbStore, votingDbStore } = factory.createStores();
-  app.set('userDbStore', userDbStore);
-  app.set('squadDbStore', squadDbStore);
-  app.set('taskDbStore', taskDbStore);
-  app.set('votingDbStore', votingDbStore);
-  return close;
-}
+// function setDb() {
+//   const factory = new FactoryStore();
+//   const { close, userDbStore, squadDbStore, taskDbStore, votingDbStore } = factory.createStores();
+//   app.set('userDbStore', userDbStore);
+//   app.set('squadDbStore', squadDbStore);
+//   app.set('taskDbStore', taskDbStore);
+//   app.set('votingDbStore', votingDbStore);
+//   return close;
+// }
 
 function setExit(): void {
   process.on('SIGTERM', () => {
-    close();
+    // close();
     process.exit(0);
   });
 
   process.on('SIGINT', () => {
-    close();
+    // close();
     process.exit(0);
   });
 }
@@ -51,15 +51,15 @@ function setMiddlewares() {
 
   app.use(express.json());
   app.use(routes);
-  app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
-    error.handler(err, res);
-  });
+  // app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
+  //   error.handler(err, res);
+  // });
 }
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
-const close = setDb();
+// const close = setDb();
 
 setMiddlewares();
 setExit();

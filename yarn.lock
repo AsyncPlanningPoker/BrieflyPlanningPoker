@@ -7395,14 +7395,14 @@ __metadata:
 
 "myprisma@file:../../prisma::locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi":
   version: 0.0.0
-  resolution: "myprisma@file:../../prisma#../../prisma::hash=401a56&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
+  resolution: "myprisma@file:../../prisma#../../prisma::hash=1af3fd&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
   dependencies:
     "@prisma/client": 5.2.0
     prisma: 5.2.0
     typescript: ^4.6.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9
-  checksum: dc4279b9fe63681bd7fad26b4bd2f9b5306adf482da594bea292d2f54ff1f03001e9ca918dd100f1a2c553964a5cac1f5532920d6ec7035ca37a672baedae5be
+  checksum: defb9dc7bc1a8b2125a77059699cd78891ffe04c23de68588dd95e89e56250f4e0445b016c11b61f33eaa7bda18c65dfc671694f8bc5fa725c694d03772ed26e
   languageName: node
   linkType: hard
 
