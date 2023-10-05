@@ -141,7 +141,7 @@ export type PointsOnTasks = z.infer<typeof PointsOnTasksSchema>
 export const UserSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().nullable(),
   updatedAt: z.coerce.date().nullable(),
@@ -766,18 +766,18 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
 export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> = z.union([
   z.object({
     id: z.string().uuid(),
-    email: z.string()
+    email: z.string().email()
   }),
   z.object({
     id: z.string().uuid(),
   }),
   z.object({
-    email: z.string(),
+    email: z.string().email(),
   }),
 ])
 .and(z.object({
   id: z.string().uuid().optional(),
-  email: z.string().optional(),
+  email: z.string().email().optional(),
   AND: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => UserWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
@@ -1200,7 +1200,7 @@ export const PointsOnTasksUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Point
 export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -1213,7 +1213,7 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object
 export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreateInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -1226,7 +1226,7 @@ export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreat
 export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1239,7 +1239,7 @@ export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object
 export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1252,7 +1252,7 @@ export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdat
 export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -1262,7 +1262,7 @@ export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = 
 export const UserUpdateManyMutationInputSchema: z.ZodType<Prisma.UserUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1272,7 +1272,7 @@ export const UserUpdateManyMutationInputSchema: z.ZodType<Prisma.UserUpdateManyM
 export const UserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.UserUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2612,7 +2612,7 @@ export const SquadCreateOrConnectWithoutUsersInputSchema: z.ZodType<Prisma.Squad
 export const UserCreateWithoutUsersOnSquadsInputSchema: z.ZodType<Prisma.UserCreateWithoutUsersOnSquadsInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -2624,7 +2624,7 @@ export const UserCreateWithoutUsersOnSquadsInputSchema: z.ZodType<Prisma.UserCre
 export const UserUncheckedCreateWithoutUsersOnSquadsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutUsersOnSquadsInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -2685,7 +2685,7 @@ export const UserUpdateToOneWithWhereWithoutUsersOnSquadsInputSchema: z.ZodType<
 export const UserUpdateWithoutUsersOnSquadsInputSchema: z.ZodType<Prisma.UserUpdateWithoutUsersOnSquadsInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2697,7 +2697,7 @@ export const UserUpdateWithoutUsersOnSquadsInputSchema: z.ZodType<Prisma.UserUpd
 export const UserUncheckedUpdateWithoutUsersOnSquadsInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutUsersOnSquadsInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2920,7 +2920,7 @@ export const TaskCreateOrConnectWithoutMessagesOnTasksInputSchema: z.ZodType<Pri
 export const UserCreateWithoutMessagesOnTasksInputSchema: z.ZodType<Prisma.UserCreateWithoutMessagesOnTasksInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -2932,7 +2932,7 @@ export const UserCreateWithoutMessagesOnTasksInputSchema: z.ZodType<Prisma.UserC
 export const UserUncheckedCreateWithoutMessagesOnTasksInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutMessagesOnTasksInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -3003,7 +3003,7 @@ export const UserUpdateToOneWithWhereWithoutMessagesOnTasksInputSchema: z.ZodTyp
 export const UserUpdateWithoutMessagesOnTasksInputSchema: z.ZodType<Prisma.UserUpdateWithoutMessagesOnTasksInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3015,7 +3015,7 @@ export const UserUpdateWithoutMessagesOnTasksInputSchema: z.ZodType<Prisma.UserU
 export const UserUncheckedUpdateWithoutMessagesOnTasksInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutMessagesOnTasksInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3064,7 +3064,7 @@ export const TaskCreateOrConnectWithoutPointsOnTasksInputSchema: z.ZodType<Prism
 export const UserCreateWithoutPointsOnTasksInputSchema: z.ZodType<Prisma.UserCreateWithoutPointsOnTasksInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -3076,7 +3076,7 @@ export const UserCreateWithoutPointsOnTasksInputSchema: z.ZodType<Prisma.UserCre
 export const UserUncheckedCreateWithoutPointsOnTasksInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutPointsOnTasksInput> = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
   enabled: z.boolean().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
@@ -3147,7 +3147,7 @@ export const UserUpdateToOneWithWhereWithoutPointsOnTasksInputSchema: z.ZodType<
 export const UserUpdateWithoutPointsOnTasksInputSchema: z.ZodType<Prisma.UserUpdateWithoutPointsOnTasksInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3159,7 +3159,7 @@ export const UserUpdateWithoutPointsOnTasksInputSchema: z.ZodType<Prisma.UserUpd
 export const UserUncheckedUpdateWithoutPointsOnTasksInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutPointsOnTasksInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().email(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   password: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   enabled: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),

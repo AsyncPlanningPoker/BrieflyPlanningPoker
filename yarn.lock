@@ -3429,6 +3429,7 @@ __metadata:
     "@prisma/client": 5.2.0
     dotenv: ^16.0.2
     prisma: 5.2.0
+    ts-node: ^10.9.1
     zod: 3.21.1
     zod-prisma-types: 2.7.9
   languageName: unknown
@@ -7403,14 +7404,14 @@ __metadata:
 
 "myprisma@file:../../prisma::locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi":
   version: 0.0.0
-  resolution: "myprisma@file:../../prisma#../../prisma::hash=745071&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
+  resolution: "myprisma@file:../../prisma#../../prisma::hash=eb11b2&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
   dependencies:
     "@prisma/client": 5.2.0
     prisma: 5.2.0
     typescript: ^4.6.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9
-  checksum: 6cdea68abad4589590aee36269ac02cf90a0b1bcef4c1d9d25523a0d08b1f0d3427532a6c9580e371da2f58364588178f1ed980880b84932b275afc6d008a245
+  checksum: 07d418c5fc0b3aa5106064c520aaa125f4af55ccee30fde29c17675d1ca356c61355d496562bb0769e24b2e88be9cd340a6f55dcd9bececb2d32c043ba4617a4
   languageName: node
   linkType: hard
 
@@ -9134,7 +9135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.7.0":
+"ts-node@npm:^10.7.0, ts-node@npm:^10.9.1":
   version: 10.9.1
   resolution: "ts-node@npm:10.9.1"
   dependencies:

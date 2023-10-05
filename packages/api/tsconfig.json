@@ -22,5 +22,6 @@
   ],
   "references": [
     { "path": "../store" },
+    { "path": "../../prisma" },
   ]
 }

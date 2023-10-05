@@ -2,7 +2,7 @@
 // import { createSquad, updateSquad, addMembers } from '../schemas/squad';
 // import { createTask } from '../schemas/task';
 // import { vote, message } from '../schemas/voting';
-// import * as auth from '../middlewares/authorization/handler';
+import * as auth from '../middlewares/authorization/handler';
 // import * as schema from '../middlewares/schema/schema';
 // import { checkSchema } from 'express-validator';
 import { Router } from 'express';
@@ -14,11 +14,11 @@ import * as user from './user';
 const routes = Router();
 
 routes.post('/user', user.create);
-// routes.post('/user/login', checkSchema(login), schema.handler, user.login);
+routes.post('/user/login', user.login);
 // routes.post('/user/pass-recovery', checkSchema(passRecovery), schema.handler, user.passRecovery);
 // routes.patch('/user/pass-recovery', checkSchema(passUpdate), schema.handler, user.passUpdate);
 // routes.delete('/user', auth.handler, user.deleteUser);
-// routes.put('/user', checkSchema(updateUser), schema.handler, auth.handler, user.updateUser);
+routes.put('/user', auth.handler, user.updateUser);
 
 // routes.post('/squad', checkSchema(createSquad), schema.handler, auth.handler, squad.create);
 // routes.get('/squad/', auth.handler, squad.findAll);
