@@ -4,7 +4,8 @@ import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
 import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
-import { prisma, User, UserCreateInputSchema, UserSchema, UserUpdateInputSchema } from 'myprisma';
+import { prisma, schemaAndExtraArgs, User, UserCreateInputSchema, UserSchema, UserUpdateInputSchema } from 'myprisma';
+import { z } from 'zod';
 
 const myUserSchema = UserSchema.omit({
   id: true,
@@ -87,40 +88,32 @@ async function login(req: Request, res: Response, next: NextFunction): Promise<R
 //   }
 // }
 async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const schema = schemaAndExtraArgs(
+    myUserSchema.partial(),
+    z.object({
+      oldPassword: UserSchema.shape.password.optional(),
+    })
+  );
+
   try {
-    const oldEmail = UserSchema.shape.email.parse(req.body.user);
-    delete req.body.user;
+    const { data, extraArgs } = schema.parse(req.body);
+    const oldEmail = req.query.user as string;
 
-    const data = await myUserSchema
-      .extend({
-        oldPassword: UserSchema.shape.password,
-      })
-      .partial()
-      .transform(async (data) => {
-        if (data.password) {
-          if (!data.oldPassword) {
-            throw new Unauthorized('Must supply old password.');
-          }
-
-          const { password } = await prisma.user.findUniqueOrThrow({
-            select: { password: true },
-            where: { email: oldEmail },
-          });
-
-          if (await crypt.compare(data.oldPassword, password)) {
-            const pass = await crypt.create(data.password);
-            console.error(pass);
-            data.password = pass;
-          } else {
-            throw new Unauthorized('Incorrect password.');
-          }
-        }
-        return data;
-      })
-      .parseAsync(req.body)
-      .catch((e: unknown) => {
-        throw e;
+    if (data.password) {
+      if (!extraArgs.oldPassword) {
+        throw new Unauthorized('Must supply current password');
+      }
+      const { password } = await prisma.user.findUniqueOrThrow({
+        select: { password: true },
+        where: { email: oldEmail },
       });
+
+      if (await crypt.compare(extraArgs.oldPassword, password)) {
+        data.password = await crypt.create(data.password as string);
+      } else {
+        throw new Unauthorized('Wrong password');
+      }
+    }
 
     return prisma.user
       .update({

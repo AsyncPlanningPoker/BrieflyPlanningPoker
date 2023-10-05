@@ -7404,14 +7404,14 @@ __metadata:
 
 "myprisma@file:../../prisma::locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi":
   version: 0.0.0
-  resolution: "myprisma@file:../../prisma#../../prisma::hash=eb11b2&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
+  resolution: "myprisma@file:../../prisma#../../prisma::hash=c96065&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
   dependencies:
     "@prisma/client": 5.2.0
     prisma: 5.2.0
     typescript: ^4.6.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9
-  checksum: 07d418c5fc0b3aa5106064c520aaa125f4af55ccee30fde29c17675d1ca356c61355d496562bb0769e24b2e88be9cd340a6f55dcd9bececb2d32c043ba4617a4
+  checksum: 064815498365278f1ab8beab0834fec1ca87d5dc7f52c449854dde56e0195678c1b4721aa9343e8cf52b58c9b7772d85197b4a3711223e13f4740e59ac259ca0
   languageName: node
   linkType: hard
 
@@ -7421,6 +7421,7 @@ __metadata:
   dependencies:
     "@prisma/client": 5.2.0
     prisma: 5.2.0
+    ts-node: ^10.9.1
     typescript: ^4.6.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9

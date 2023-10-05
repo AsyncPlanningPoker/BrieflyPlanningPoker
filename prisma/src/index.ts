@@ -1,24 +1,35 @@
-import { z, ZodTypeAny, ZodObject, ZodRawShape, ZodError, ZodIssueCode, ZodIssue } from 'zod';
+import {
+    z, ZodObject, ZodRawShape,
+    ZodError, ZodIssueCode, ZodIssue,
+    ZodType, ZodTypeDef, UnknownKeysParam, ZodTypeAny
+} from 'zod';
+import { UserSchema } from './generated/zod';
 
 type myt<T extends ZodObject<ZodRawShape>> = {
     [Property in keyof T["shape"]]: z.input<T["shape"][Property]>
 };
 
-export function schemaAndExtraArgs(dataSchema: ZodTypeAny, extraArgsSchema: ZodTypeAny): z.ZodEffects<any>{
+export function schemaAndExtraArgs<T1, T2>(
+    dataSchema: ZodObject<ZodRawShape, UnknownKeysParam, ZodTypeAny, T1, T1>,
+    extraArgsSchema: ZodObject<ZodRawShape, UnknownKeysParam, ZodTypeAny, T2, T2>
+){
     const o = z.object({
         data: dataSchema,
-        extraargs: extraArgsSchema
+        extraArgs: extraArgsSchema
     });
     const unrecognizedKeys: string[] = [];
     const a = z.preprocess((val: any) => {
-        const ret: myt<typeof o> = {} as myt<typeof o>;
-        for (const key in Object.keys(val)){
-            if(key in ret.data){
-                ret.data[key as keyof typeof ret.data] = val[key];
+        const ret: myt<typeof o> = {
+            data: {},
+            extraArgs: {}
+        } as myt<typeof o>;
+        for (const key in val){
+            if(key in dataSchema.shape){
+                ret.data[key as keyof typeof ret["data"]] = val[key];
                 continue;
             }
-            if(key in ret.extraargs){
-                ret.extraargs[key as keyof typeof ret.extraargs] = val[key];
+            if(key in extraArgsSchema.shape){
+                ret.extraArgs[key as keyof typeof ret["extraArgs"]] = val[key];
                 continue;
             }
             unrecognizedKeys.push(key);
@@ -28,7 +39,7 @@ export function schemaAndExtraArgs(dataSchema: ZodTypeAny, extraArgsSchema: ZodT
                 code: ZodIssueCode.unrecognized_keys,
                 path: [],
                 keys: unrecognizedKeys,
-                message: "Unrecognized keys"
+                message: "Unrecognized key(s)"
             };
             throw new ZodError([zIssue]);
         }
