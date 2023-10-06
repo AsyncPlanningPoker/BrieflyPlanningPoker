@@ -5,6 +5,7 @@ export const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error']
         $allModels: {
             async update({ model, operation, args, query }){
                 args.data.updatedAt = new Date();
+                if("id" in args.data) throw new Error("CANT UPDATE ID");
                 return query(args);
             },
 

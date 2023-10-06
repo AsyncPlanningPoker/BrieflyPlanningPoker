@@ -7404,14 +7404,14 @@ __metadata:
 
 "myprisma@file:../../prisma::locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi":
   version: 0.0.0
-  resolution: "myprisma@file:../../prisma#../../prisma::hash=17b525&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
+  resolution: "myprisma@file:../../prisma#../../prisma::hash=3d3732&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
   dependencies:
     "@prisma/client": 5.2.0
     prisma: 5.2.0
     typescript: ^4.6.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9
-  checksum: 6064f1e6a7c85658e4d438e4f8b9dcf26eb20508fce98c952e3433ad63e09b06cf777ddc807b8ce02e1f4cc1c120f698064f89604135f0efb7c22fcb40c1c6a7
+  checksum: 6d79f5da3b022a89f0064829a1c452995389843e0dea015f2c7f0a8732f34ebccc3130e770f6bdbf5a368d87c70563f68d29d263238f5ce742d49c48395f5df1
   languageName: node
   linkType: hard
 

@@ -6,6 +6,7 @@ import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
 import { prisma, schemaAndExtraArgs, User, UserOptionalDefaultsSchema, UserPartialSchema, UserSchema } from 'myprisma';
 import { z } from 'zod';
+import { resolve } from 'path';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
@@ -37,7 +38,9 @@ async function login(req: Request, res: Response, next: NextFunction): Promise<R
       })
     ).password;
     if (await crypt.compare(password, realPassword)) {
-      return res.status(200).json({ token: auth.create(email, 'login') });
+      return res.status(200).json({
+        token: auth.create(email, 'login'),
+      });
     }
     throw new Unauthorized('Invalid credentials');
   } catch (error: unknown) {

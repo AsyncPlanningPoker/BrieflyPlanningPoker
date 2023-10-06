@@ -1,134 +1,120 @@
-import { CustomError } from '../middlewares/error/error';
 import { NextFunction, Request, Response } from 'express';
-import { randomUUID } from 'crypto';
+import { prisma, SquadOptionalDefaultsSchema, SquadPartialSchema } from 'myprisma';
+import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squad = {
-    id: randomUUID(),
-    name: req.body.name,
-    currentMaxRounds: req.body.currentMaxRounds,
-    currentPercentual: req.body.currentPercentual,
-  };
-
-  const db = req.app.get('squadDbStore');
-
   try {
-    await db
-      .create(squad)
-      .then(() => {
-        return res.status(201).json({ id: squad.id });
+    const data = SquadOptionalDefaultsSchema.strict().parse(req.body);
+    return prisma.squad
+      .create({
+        data,
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(201).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
 async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const { squadId } = req.params;
-  const db = req.app.get('squadDbStore');
+  const id: string = req.params.squadId as string;
 
   try {
-    await db
-      .find(squadId)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
+    return await prisma.squad
+      .findUniqueOrThrow({
+        where: { id },
+        include: { users: true, tasks: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
 async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const db = req.app.get('squadDbStore');
-  const { user } = req.query;
-
+  const email: string = req.query.user as string;
   try {
-    await db
-      .findAll(user)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
+    return await prisma.squad
+      .findMany({
+        where: {
+          users: {
+            some: {
+              user: { email },
+            },
+          },
+        },
+        include: { tasks: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
 async function update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
-  const squad = {
-    name: req.body.name,
-    currentMaxRounds: req.body.currentMaxRounds,
-    currentPercentual: req.body.currentPercentual,
-  };
-
-  const db = req.app.get('squadDbStore');
+  const id: string = req.params.squadId as string;
 
   try {
-    await db
-      .updateById(squadId, squad)
-      .then(() => {
-        return res.sendStatus(200);
+    const data = SquadPartialSchema.strict().parse(req.body);
+    return await prisma.squad
+      .update({
+        where: { id },
+        data,
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
-  const { email, owner } = req.body;
+const addUsersSchema = z.object({
+  email: z.string().email(),
+  owner: z.boolean(),
+});
 
-  const db = req.app.get('squadDbStore');
+async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  const id: string = req.params.squadId as string;
 
   try {
-    await db
-      .addSquadUsersByEmail(squadId, email, owner)
-      .then(async (created: any) => {
-        // if (created) {
-        //     if(!owner){
-        //       await send({ to: created.email, subject: 'invite', message: `${created.name}` }).catch((error: any) => {
-        //         return next(error);
-        //       });
-        //     }
-        //   }
-        return res.sendStatus(201);
+    const { email, owner } = addUsersSchema.parse(req.body);
+    return await prisma.squad
+      .update({
+        where: { id },
+        data: {
+          users: {
+            create: {
+              user: {
+                connect: { email },
+              },
+              enabled: owner,
+            },
+          },
+        },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(201).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
 async function delUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
-  const email = req.query.email;
-
-  const db = req.app.get('squadDbStore');
+  const squadId: string = req.params.squadId as string;
+  const email: string = req.query.email as string;
 
   try {
-    await db
-      .delSquadUserByEmail(squadId, email)
-      .then(() => {
-        return res.sendStatus(200);
+    const userId = (
+      await prisma.user.findUniqueOrThrow({
+        where: { email },
+        select: { id: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    ).id;
+
+    const obj = await prisma.usersOnSquads.delete({
+      where: { userId_squadId: { userId, squadId } },
+    });
+
+    return res.status(200).json(obj);
+  } catch (error: unknown) {
     next(error);
   }
 }
