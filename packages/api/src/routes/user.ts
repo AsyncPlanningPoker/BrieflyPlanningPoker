@@ -4,21 +4,16 @@ import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
 import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
-import { prisma, schemaAndExtraArgs, User, UserCreateInputSchema, UserSchema, UserUpdateInputSchema } from 'myprisma';
+import { prisma, schemaAndExtraArgs, User, UserOptionalDefaultsSchema, UserPartialSchema, UserSchema } from 'myprisma';
 import { z } from 'zod';
-
-const myUserSchema = UserSchema.omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-}).strict();
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    return await UserCreateInputSchema.transform(async (user) => {
-      user.password = await crypt.create(user.password);
-      return user;
-    })
+    return await UserOptionalDefaultsSchema.strict()
+      .transform(async (user) => {
+        user.password = await crypt.create(user.password);
+        return user;
+      })
       .parseAsync(req.body)
       .then((data) => prisma.user.create({ data, select: { name: true, email: true } }))
       .then((obj) => res.status(201).json(obj));
@@ -29,7 +24,12 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 
 async function login(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    const { password, email } = UserSchema.pick({ email: true, password: true }).strict().parse(req.body);
+    const { password, email } = UserOptionalDefaultsSchema.pick({
+      email: true,
+      password: true,
+    })
+      .strict()
+      .parse(req.body);
     const realPassword = (
       await prisma.user.findUniqueOrThrow({
         select: { password: true },
@@ -89,7 +89,7 @@ async function login(req: Request, res: Response, next: NextFunction): Promise<R
 // }
 async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const schema = schemaAndExtraArgs(
-    myUserSchema.partial(),
+    UserPartialSchema,
     z.object({
       oldPassword: UserSchema.shape.password.optional(),
     })

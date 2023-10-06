@@ -13,7 +13,7 @@
     "preinstall": "echo \"AAAAA\"",
     "prep": "yarn install && yarn prisma:up",
     "prisma:up": "yarn prisma generate && yarn workspace myprisma build",
-    "all": "yarn prep && yarn install"
+    "all": "yarn prep && yarn install && yarn workspaces foreach install"
   },
   "workspaces": [
     "packages/*",
