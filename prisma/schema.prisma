@@ -3,15 +3,14 @@ generator client {
 }
 
 generator zod {
-  provider = "zod-prisma-types"
-  output   = "./src/generated/zod"
+  provider                         = "zod-prisma-types"
+  output                           = "./src/generated/zod"
   createInputTypes                 = false // default is true
   addIncludeType                   = false // default is true
   addSelectType                    = false // default is true
   validateWhereUniqueInput         = true // default is false
   createOptionalDefaultValuesTypes = true // default is false
   createPartialTypes               = true // default is false
-
 }
 
 datasource db {
@@ -20,83 +19,87 @@ datasource db {
 }
 
 model Squad {
-  id                String          @id @db.Uuid @default(uuid())
-  name              String          @db.VarChar(25)
-  currentMaxRounds  Int
-  currentPercentual Decimal         @db.Decimal(14, 2)
-  enabled           Boolean?        @default(true)
-  updatedAt         DateTime?       @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  createdAt         DateTime?       @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  users             UsersOnSquads[]
-  tasks             Task[]
+  id         String   @id @default(uuid()) @db.Uuid /// @zod.custom.omit(["model", "input"])
+  name       String   @db.VarChar(25)
+  maxRounds  Int
+  percentual Decimal  @db.Decimal(14, 2)
+  enabled    Boolean  @default(true)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+  createdAt  DateTime @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+
+  users UsersOnSquads[]
+  tasks Task[]
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid /// @zod.custom.omit(["model", "input"])
+  name      String   @db.VarChar(55)
+  email     String   @unique @db.VarChar(255) /// @zod.string.email()
+  password  String   @db.VarChar(255)
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+  createdAt DateTime @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+
+  squads   UsersOnSquads[]
+  messages Message[]
+  votes    Vote[]
 }
 
 model UsersOnSquads {
-  userId      String    @db.Uuid
-  squadId     String    @db.Uuid
-  enabled     Boolean?  @default(true)
-  updatedAt   DateTime? @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  createdAt   DateTime? @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  squad       Squad     @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String   @db.Uuid
+  squadId   String   @db.Uuid
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+  createdAt DateTime @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+
+  squad Squad @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userId, squadId])
 }
 
 model Task {
-  id              String            @id @db.Uuid @default(uuid())
-  squadId         String            @db.Uuid
-  name            String            @db.VarChar(85)
-  description     String?           @db.VarChar(300)
-  maxRounds       Int
-  percentual      Decimal           @db.Decimal(14, 2)
-  points          Int?
-  finished        Boolean?          @default(false)
-  active          Boolean?          @default(true)
-  enabled         Boolean?          @default(true)
-  updatedAt       DateTime?         @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  createdAt       DateTime?         @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  squad           Squad             @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  messagesOnTasks MessagesOnTasks[]
-  pointsOnTasks   PointsOnTasks[]
+  id           String   @id @default(uuid()) @db.Uuid /// @zod.custom.omit(["model", "input"])
+  squadId      String   @db.Uuid
+  name         String   @db.VarChar(85)
+  description  String?  @db.VarChar(300)
+  maxRounds    Int      @default(0)
+  currentRound Int      @default(1) /// @zod.custom.omit(["model", "input"])
+  percentual   Decimal  @db.Decimal(14, 2) @default(0)
+  points       Int?     /// @zod.custom.omit(["model", "input"])
+  finished     Boolean  @default(false)
+  active       Boolean  @default(true)
+  enabled      Boolean  @default(true)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+  createdAt    DateTime @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+
+  squad Squad @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  messages Message[]
+  votes    Vote[]
 }
 
-model MessagesOnTasks {
-  id             String    @id @db.Uuid @default(uuid())
-  taskId         String    @db.Uuid
-  userId         String    @db.Uuid
-  currentRound   Int
-  message        String    @db.VarChar(180)
-  enabled        Boolean?  @default(true)
-  updatedAt      DateTime? @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  createdAt      DateTime? @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  task           Task      @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+model Message {
+  id           String   @id @default(uuid()) @db.Uuid /// @zod.custom.omit(["model", "input"])
+  taskId       String   @db.Uuid
+  userId       String   @db.Uuid
+  round        Int      @default(0) /// @zod.custom.omit(["model", "input"])
+  message      String   @db.VarChar(180)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
-model PointsOnTasks {
-  taskId       String    @db.Uuid
-  userId       String    @db.Uuid
-  currentRound Int
+model Vote {
+  taskId       String   @db.Uuid
+  userId       String   @db.Uuid
+  round        Int      @default(0) /// @zod.custom.omit(["model", "input"])
   points       Int
-  enabled      Boolean?  @default(true)
-  updatedAt    DateTime? @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  createdAt    DateTime? @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  task         Task      @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
 
-  @@id([taskId, userId, currentRound])
-}
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-model User {
-  id              String            @id @db.Uuid @default(uuid())
-  name            String            @db.VarChar(55)
-  email           String            @unique @db.VarChar(255) /// @zod.string.email()
-  password        String            @db.VarChar(255)
-  enabled         Boolean?          @default(true)
-  updatedAt       DateTime?         @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  createdAt       DateTime?         @default(now()) @db.Timestamptz(6) /// @zod.custom.omit(["model", "input"])
-  UsersOnSquads   UsersOnSquads[]
-  MessagesOnTasks MessagesOnTasks[]
-  PointsOnTasks   PointsOnTasks[]
+  @@id([taskId, userId, round])
 }

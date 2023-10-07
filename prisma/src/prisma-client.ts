@@ -1,20 +1,48 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 export const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] }).$extends({
     query: {
-        $allModels: {
-            async update({ model, operation, args, query }){
-                args.data.updatedAt = new Date();
-                if("id" in args.data) throw new Error("CANT UPDATE ID");
+        vote: {
+            async create({ model, operation, args, query }){
+                
+                const { currentRound } = await prisma.task.findUniqueOrThrow({
+                    select: { currentRound: true },
+                    where: { id: args.data.taskId }
+                });
+                args.data.round ??= currentRound;
+                
                 return query(args);
-            },
+            }   
+        },
+        message: {
+            async create({ model, operation, args, query }){
+                const { currentRound } = await prisma.task.findUniqueOrThrow({
+                    select: { currentRound: true },
+                    where: { id: args.data.taskId }
+                });
+                args.data.round ??= currentRound;
+                const result = await query(args);
+                /** 
+                 ** Implantar logica de verificacao de termino de rodada e votacao
+                */
+                return result;
+            }   
+        },
+        task: {
+            async create({ model, operation, args, query }){
+                const { maxRounds, percentual } = await prisma.squad.findUniqueOrThrow({
+                    select: {
+                        maxRounds: true,
+                        percentual: true
+                    },
+                    where: { id: args.data.squadId }
+                });
 
-            // async create({ model, operation, args, query }){
-            //     if("id" in args.data){
-            //         args.data.id
-            //     }
-            //     return query(args);
-            // }
+                args.data.maxRounds ??= maxRounds;
+                args.data.percentual ??= percentual;
+
+                return query(args);
+            }   
         }
     }
 });

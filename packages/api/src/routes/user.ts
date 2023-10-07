@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Unauthorized } from '../middlewares/error/error';
 import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
 import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
-import { prisma, schemaAndExtraArgs, User, UserOptionalDefaultsSchema, UserPartialSchema, UserSchema } from 'myprisma';
+import { prisma, schemaAndExtraArgs, UserOptionalDefaultsSchema, UserPartialSchema, UserSchema } from 'myprisma';
 import { z } from 'zod';
-import { resolve } from 'path';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
@@ -80,16 +78,19 @@ async function login(req: Request, res: Response, next: NextFunction): Promise<R
 //   }
 // }
 
-// async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-//   const db = req.app.get('userDbStore');
+async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  try {
+    const email: string = req.query.user as string;
+    return await prisma.user
+      .delete({
+        where: { email },
+      })
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
+    next(error);
+  }
+}
 
-//   try {
-//     await db.deleteByEmail(req.query.user, { updatedAt: new Date() });
-//     return res.sendStatus(200);
-//   } catch (error: any) {
-//     next(error);
-//   }
-// }
 async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const schema = schemaAndExtraArgs(
     UserPartialSchema,
@@ -138,5 +139,5 @@ async function updateUser(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
-export { create, login, updateUser };
+export { create, login, updateUser, deleteUser };
 // export { create, login, passRecovery, passUpdate, updateUser, deleteUser };

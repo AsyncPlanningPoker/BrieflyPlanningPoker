@@ -1,116 +1,96 @@
-import { CustomError } from '../middlewares/error/error';
-import { NextFunction, Request, Response } from 'express';
-import { randomUUID } from 'crypto';
+import { NextFunction, Response } from 'express';
+import { prisma, TaskOptionalDefaultsSchema } from 'myprisma';
+import { squadReqType, taskReqType } from './utils';
 
-async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    id: randomUUID(),
-    squad: req.params.squadId,
-    name: req.body.name,
-    description: req.body.description,
-  };
-
-  const db = req.app.get('taskDbStore');
-
+async function findAll(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {
+  const squadId: string = req.params.squadId;
   try {
-    await db
-      .create(task)
-      .then(() => {
-        return res.status(201).json({ id: task.id });
+    return await prisma.task
+      .findMany({
+        where: { squadId },
+        select: { id: true, name: true, points: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function deactive(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    id: req.params.taskId,
-    squad: req.params.squadId,
-  };
-
-  const db = req.app.get('taskDbStore');
-
+async function create(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    await db
-      .deactive(task)
-      .then(() => {
-        return res.sendStatus(200);
+    const data = TaskOptionalDefaultsSchema.strict().parse({
+      ...req.body,
+      squadId: req.params.squadId,
+    });
+    return await prisma.task
+      .create({
+        data,
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(201).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function deleteTask(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    id: req.params.taskId,
-    squad: req.params.squadId,
-  };
-
-  const db = req.app.get('taskDbStore');
-
+async function find(req: taskReqType, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    await db
-      .delete(task)
-      .then(() => {
-        return res.sendStatus(200);
+    return await prisma.task
+      .findUniqueOrThrow({
+        where: { id: req.params.taskId },
+        include: {
+          votes: {
+            select: {
+              user: {
+                select: { email: true },
+              },
+              points: true,
+              round: true,
+              createdAt: true,
+            },
+          },
+          messages: {
+            select: {
+              user: {
+                select: { email: true },
+              },
+              message: true,
+              round: true,
+              createdAt: true,
+            },
+          },
+        },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const db = req.app.get('taskDbStore');
-
-  const task = {
-    squad: req.params.squadId,
-  };
-
+async function deactivate(req: taskReqType, res: Response, next: NextFunction): Promise<Response | void> {
+  const id: string = req.params.taskId;
   try {
-    await db
-      .findAll(task)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
+    return await prisma.task
+      .update({
+        where: { id },
+        data: { active: false, finished: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const db = req.app.get('taskDbStore');
-
-  const task = {
-    id: req.params.taskId,
-    squad: req.params.squadId,
-  };
-
+async function deleteTask(req: taskReqType, res: Response, next: NextFunction): Promise<Response | void> {
+  const id: string = req.params.taskId;
   try {
-    await db
-      .find(task)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
+    return await prisma.task
+      .delete({
+        where: { id },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-export { create, deactive, deleteTask, find, findAll };
+export { create, deactivate, deleteTask, find, findAll };

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { prisma, SquadOptionalDefaultsSchema, SquadPartialSchema } from 'myprisma';
 import { z } from 'zod';
-import { Prisma } from '@prisma/client';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
@@ -23,7 +22,18 @@ async function find(req: Request, res: Response, next: NextFunction): Promise<Re
     return await prisma.squad
       .findUniqueOrThrow({
         where: { id },
-        include: { users: true, tasks: true },
+        include: {
+          users: {
+            select: {
+              user: {
+                select: { email: true },
+              },
+            },
+          },
+          tasks: {
+            select: { id: true },
+          },
+        },
       })
       .then((obj) => res.status(200).json(obj));
   } catch (error: unknown) {
@@ -43,7 +53,11 @@ async function findAll(req: Request, res: Response, next: NextFunction): Promise
             },
           },
         },
-        include: { tasks: true },
+        include: {
+          tasks: {
+            select: { id: true, name: true, points: true },
+          },
+        },
       })
       .then((obj) => res.status(200).json(obj));
   } catch (error: unknown) {
@@ -110,6 +124,7 @@ async function delUsers(req: Request, res: Response, next: NextFunction): Promis
     ).id;
 
     const obj = await prisma.usersOnSquads.delete({
+      // eslint-disable-next-line camelcase
       where: { userId_squadId: { userId, squadId } },
     });
 

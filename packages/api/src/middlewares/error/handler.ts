@@ -1,7 +1,6 @@
 import { ZodError } from 'zod';
 import { BadRequest, CustomError } from './error';
 import { Response } from 'express';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 function handler(error: CustomError | Error, res: Response): Response<any> {
   if (error instanceof CustomError) {

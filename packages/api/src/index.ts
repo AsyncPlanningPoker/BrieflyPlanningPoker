@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { CustomError } from './middlewares/error/error';
 import * as error from './middlewares/error/handler';
-// import { FactoryStore } from '@briefly/store';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
 import * as dotenv from 'dotenv';
@@ -18,12 +17,10 @@ function listen(): void {
 
 function setExit(): void {
   process.on('SIGTERM', () => {
-    // close();
     process.exit(0);
   });
 
   process.on('SIGINT', () => {
-    // close();
     process.exit(0);
   });
 }
@@ -40,6 +37,7 @@ function setMiddlewares() {
 
   app.use(express.json());
   app.use(routes);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
     error.handler(err, res);
   });

@@ -1,50 +1,59 @@
-import { CustomError } from '../middlewares/error/error';
 import { NextFunction, Request, Response } from 'express';
+import { MessageSchema, VoteSchema, prisma } from 'myprisma';
+
+const pointsSchema = VoteSchema.pick({ points: true }).strict();
+const messageSchema = MessageSchema.pick({ message: true }).strict();
 
 async function vote(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    task: req.params.taskId,
-    squad: req.params.squadId,
-    email: req.query.user,
-    points: req.body.points,
-  };
-
-  const db = req.app.get('votingDbStore');
-
   try {
-    await db
-      .vote(task)
-      .then(() => {
-        return res.sendStatus(200);
+    const { points } = pointsSchema.parse(req.body);
+    const taskId: string = req.params.taskId;
+    const email: string = req.query.user as string;
+
+    const userId = (
+      await prisma.user.findUniqueOrThrow({
+        where: { email },
+        select: { id: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    ).id;
+
+    return await prisma.vote
+      .create({
+        data: {
+          points,
+          taskId,
+          userId,
+        },
+      })
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
 
 async function message(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    task: req.params.taskId,
-    squad: req.params.squadId,
-    email: req.query.user,
-    message: req.body.message,
-  };
-
-  const db = req.app.get('votingDbStore');
-
   try {
-    await db
-      .createMessage(task)
-      .then(() => {
-        return res.sendStatus(200);
+    const { message } = messageSchema.parse(req.body);
+    const taskId: string = req.params.taskId;
+    const email: string = req.query.user as string;
+
+    const userId = (
+      await prisma.user.findUniqueOrThrow({
+        where: { email },
+        select: { id: true },
       })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    ).id;
+
+    return await prisma.message
+      .create({
+        data: {
+          message,
+          taskId,
+          userId,
+        },
+      })
+      .then((obj) => res.status(200).json(obj));
+  } catch (error: unknown) {
     next(error);
   }
 }
