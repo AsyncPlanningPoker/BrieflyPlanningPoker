@@ -4,8 +4,6 @@ import {
     ZodType, ZodTypeDef, UnknownKeysParam, ZodTypeAny
 } from 'zod';
 
-import { UserSchema } from './generated/zod';
-
 type myt<T extends ZodObject<ZodRawShape>> = {
     [Property in keyof T["shape"]]: z.input<T["shape"][Property]>
 };

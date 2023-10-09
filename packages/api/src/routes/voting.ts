@@ -10,22 +10,7 @@ async function vote(req: Request, res: Response, next: NextFunction): Promise<Re
     const taskId: string = req.params.taskId;
     const email: string = req.query.user as string;
 
-    const userId = (
-      await prisma.user.findUniqueOrThrow({
-        where: { email },
-        select: { id: true },
-      })
-    ).id;
-
-    return await prisma.vote
-      .create({
-        data: {
-          points,
-          taskId,
-          userId,
-        },
-      })
-      .then((obj) => res.status(200).json(obj));
+    return await prisma.task.vote(taskId, email, points).then((obj) => res.status(200).json(obj));
   } catch (error: unknown) {
     next(error);
   }
@@ -37,22 +22,7 @@ async function message(req: Request, res: Response, next: NextFunction): Promise
     const taskId: string = req.params.taskId;
     const email: string = req.query.user as string;
 
-    const userId = (
-      await prisma.user.findUniqueOrThrow({
-        where: { email },
-        select: { id: true },
-      })
-    ).id;
-
-    return await prisma.message
-      .create({
-        data: {
-          message,
-          taskId,
-          userId,
-        },
-      })
-      .then((obj) => res.status(200).json(obj));
+    return await prisma.task.comment(taskId, email, message).then((obj) => res.status(200).json(obj));
   } catch (error: unknown) {
     next(error);
   }
