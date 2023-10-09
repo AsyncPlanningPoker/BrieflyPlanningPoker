@@ -21,7 +21,6 @@
     "./src/**/*.ts",
   ],
   "references": [
-    { "path": "../store" },
     { "path": "../../prisma" },
   ]
 }
