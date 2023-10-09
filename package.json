@@ -10,21 +10,15 @@
   },
   "scripts": {
     "packageManager": "yarn@3.2.0",
-    "preinstall": "echo \"AAAAA\"",
+    "preinstall": "echo \"Instala!\"",
     "prep": "yarn install && yarn prisma:up",
-    "prisma:up": "yarn prisma generate && yarn workspace myprisma build",
-    "all": "yarn prep && yarn install && yarn workspaces foreach install"
+    "all": "yarn prep && yarn workspaces foreach install"
   },
   "workspaces": [
-    "packages/*",
-    "prisma"
+    "packages/*"
   ],
   "dependencies": {
-    "@prisma/client": "5.2.0",
-    "dotenv": "^16.0.2",
-    "prisma": "5.2.0",
-    "zod": "3.21.1",
-    "zod-prisma-types": "2.7.9"
+    "dotenv": "^16.0.2"
   },
   "devDependencies": {
     "ts-node": "^10.9.1"

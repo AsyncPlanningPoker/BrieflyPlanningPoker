@@ -3,7 +3,7 @@ import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
 import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
-import { prisma, users } from 'myprisma';
+import { prisma, users } from '@briefly/prisma';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {

@@ -1,11 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { CustomError } from './middlewares/error/error';
-import * as error from './middlewares/error/handler';
 import bodyParser from 'body-parser';
-import routes from './routes/index';
 import * as dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
+
+import { CustomError } from './middlewares/error/error';
+import * as error from './middlewares/error/handler';
+import routes from './routes';
 
 function listen(): void {
   if (require.main === module) {

@@ -6,8 +6,8 @@
 			"path": "../packages/api"
 		},
 		{
-			"name": "myprisma",
-			"path": "../prisma"
+			"name": "prisma",
+			"path": "../packages/prisma"
 		},
 	],
 	"settings": {}

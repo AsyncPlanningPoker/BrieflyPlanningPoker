@@ -13,8 +13,7 @@
     "build": "tsc -b",
     "test": "jest --coverage",
     "lint": "eslint --ext .js,.ts",
-    "lint:fix": "eslint --fix --ext .js,.ts .",
-    "db:up": "yarn prisma migrate deploy --schema=../../prisma/schema.prisma"
+    "lint:fix": "eslint --fix --ext .js,.ts ."
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -40,6 +39,7 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
+    "@briefly/prisma": "1.0.0",
     "@prisma/client": "5.2.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -48,7 +48,6 @@
     "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "myprisma": "file:../../prisma",
     "nodemailer": "^6.7.3",
     "prisma": "5.2.0",
     "zod": "3.21.1",

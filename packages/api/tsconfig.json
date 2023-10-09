@@ -21,6 +21,6 @@
     "./src/**/*.ts",
   ],
   "references": [
-    { "path": "../../prisma" },
+    { "path": "../prisma" },
   ]
 }

@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { prisma, tasks } from 'myprisma';
+import { prisma, tasks } from '@briefly/prisma';
 import { squadReqType, taskReqType } from './utils';
 
 async function findAll(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {

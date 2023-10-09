@@ -62,6 +62,9 @@
 <script>
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
+// import { users } from 'myprisma';
+// import { toTypedSchema } from '@vee-validate/zod';
+
 import BBrand from '../components/b-brand.vue';
 import BButton from '../components/b-button.vue';
 import BContainer from '../components/b-container.vue';
@@ -69,7 +72,6 @@ import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
 import SignIn from '../store';
-
 export default {
   name: 'SignIn',
 
@@ -115,6 +117,8 @@ export default {
       email: Yup.string().email().required(),
       password: Yup.string().min(6).trim().noWhitespace().required(),
     });
+
+    // const schema = toTypedSchema(users.createSchema);
 
     return { onSubmit, onInvalidSubmit, updateEmail, updatePassword, schema };
   },

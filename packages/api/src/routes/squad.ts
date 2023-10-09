@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { prisma, squads } from 'myprisma';
+import { prisma, squads } from '@briefly/prisma';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {

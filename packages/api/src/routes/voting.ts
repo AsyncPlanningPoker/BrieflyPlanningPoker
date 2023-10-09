@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { prisma, voting } from 'myprisma';
+import { prisma, voting } from '@briefly/prisma';
 
 async function vote(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
