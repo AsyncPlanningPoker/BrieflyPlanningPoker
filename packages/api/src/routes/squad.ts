@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { prisma, SquadOptionalDefaultsSchema, SquadPartialSchema } from 'myprisma';
-import { z } from 'zod';
+import { prisma, squads } from 'myprisma';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    const data = SquadOptionalDefaultsSchema.strict().parse(req.body);
+    const data = squads.createSchema.parse(req.body);
     return prisma.squad
       .create({
         data,
@@ -69,7 +68,7 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
   const id: string = req.params.squadId as string;
 
   try {
-    const data = SquadPartialSchema.strict().parse(req.body);
+    const data = squads.updateSchema.parse(req.body);
     return await prisma.squad
       .update({
         where: { id },
@@ -81,16 +80,11 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
   }
 }
 
-const addUsersSchema = z.object({
-  email: z.string().email(),
-  owner: z.boolean(),
-});
-
 async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   const id: string = req.params.squadId as string;
 
   try {
-    const { email, owner } = addUsersSchema.parse(req.body);
+    const { email, owner } = squads.addUsersSchema.parse(req.body);
     return await prisma.squad
       .update({
         where: { id },

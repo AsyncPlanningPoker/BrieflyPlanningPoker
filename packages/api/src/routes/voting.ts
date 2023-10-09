@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { MessageSchema, VoteSchema, prisma } from 'myprisma';
-
-const pointsSchema = VoteSchema.pick({ points: true }).strict();
-const messageSchema = MessageSchema.pick({ message: true }).strict();
+import { prisma, voting } from 'myprisma';
 
 async function vote(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    const { points } = pointsSchema.parse(req.body);
+    const { points } = voting.voteSchema.parse(req.body);
     const taskId: string = req.params.taskId;
     const email: string = req.query.user as string;
 
@@ -18,7 +15,7 @@ async function vote(req: Request, res: Response, next: NextFunction): Promise<Re
 
 async function message(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    const { message } = messageSchema.parse(req.body);
+    const { message } = voting.messageSchema.parse(req.body);
     const taskId: string = req.params.taskId;
     const email: string = req.query.user as string;
 

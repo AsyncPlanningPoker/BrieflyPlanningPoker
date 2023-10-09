@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { prisma, TaskOptionalDefaultsSchema } from 'myprisma';
+import { prisma, tasks } from 'myprisma';
 import { squadReqType, taskReqType } from './utils';
 
 async function findAll(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {
@@ -18,7 +18,7 @@ async function findAll(req: squadReqType, res: Response, next: NextFunction): Pr
 
 async function create(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    const data = TaskOptionalDefaultsSchema.strict().parse({
+    const data = tasks.createSchema.parse({
       ...req.body,
       squadId: req.params.squadId,
     });

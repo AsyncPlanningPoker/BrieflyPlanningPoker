@@ -3,12 +3,11 @@ import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
 import * as crypt from '../utils/crypt';
 import { NextFunction, Request, Response } from 'express';
-import { prisma, schemaAndExtraArgs, UserOptionalDefaultsSchema, UserPartialSchema, UserSchema } from 'myprisma';
-import { z } from 'zod';
+import { prisma, users } from 'myprisma';
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    return await UserOptionalDefaultsSchema.strict()
+    return await users.createSchema
       .transform(async (user) => {
         user.password = await crypt.create(user.password);
         return user;
@@ -23,10 +22,11 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 
 async function login(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
   try {
-    const { password, email } = UserOptionalDefaultsSchema.pick({
-      email: true,
-      password: true,
-    })
+    const { password, email } = users.loginSchema
+      .pick({
+        email: true,
+        password: true,
+      })
       .strict()
       .parse(req.body);
     const realPassword = (
@@ -92,15 +92,8 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
 }
 
 async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const schema = schemaAndExtraArgs(
-    UserPartialSchema,
-    z.object({
-      oldPassword: UserSchema.shape.password.optional(),
-    })
-  );
-
   try {
-    const { data, extraArgs } = schema.parse(req.body);
+    const { data, extraArgs } = users.updateSchema.parse(req.body);
     const oldEmail = req.query.user as string;
 
     if (data.password) {

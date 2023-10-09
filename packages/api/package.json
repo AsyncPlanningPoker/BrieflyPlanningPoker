@@ -13,7 +13,8 @@
     "build": "tsc -b",
     "test": "jest --coverage",
     "lint": "eslint --ext .js,.ts",
-    "lint:fix": "eslint --fix --ext .js,.ts ."
+    "lint:fix": "eslint --fix --ext .js,.ts .",
+    "db:up": "yarn prisma migrate deploy --schema=../../prisma/schema.prisma"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

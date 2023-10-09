@@ -1370,6 +1370,7 @@ __metadata:
     eslint-plugin-vue: ^9.6.0
     express: ^4.18.1
     jest: ^27.5.1
+    myprisma: "file:../../prisma"
     prettier: ^2.7.1
     sass: ^1.32.7
     vee-validate: ^4.5.11
@@ -6533,14 +6534,27 @@ __metadata:
 
 "myprisma@file:../../prisma::locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi":
   version: 0.0.0
-  resolution: "myprisma@file:../../prisma#../../prisma::hash=2d0bcf&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
+  resolution: "myprisma@file:../../prisma#../../prisma::hash=19aada&locator=%40briefly%2Fapi%40workspace%3Apackages%2Fapi"
   dependencies:
     "@prisma/client": 5.2.0
     prisma: 5.2.0
     typescript: ^4.6.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9
-  checksum: fe66a971402f48fba61e21a4b9e7aeba9ee7891d8b13a504caaa0bb79e4a27d3354d3bd7867ea5a385f473775a506abe888e9e1c8891e1c59349b77674f3e88d
+  checksum: f2e6659abf81541d87f73d607344e2cec37eb706b7a534e302a1abe97f061c87e2ebb2ab2d853eba0190092028d549a8ce495799af04c5de3e4118ab1dd91183
+  languageName: node
+  linkType: hard
+
+"myprisma@file:../../prisma::locator=%40briefly%2Ffront%40workspace%3Apackages%2Ffront":
+  version: 0.0.0
+  resolution: "myprisma@file:../../prisma#../../prisma::hash=19aada&locator=%40briefly%2Ffront%40workspace%3Apackages%2Ffront"
+  dependencies:
+    "@prisma/client": 5.2.0
+    prisma: 5.2.0
+    typescript: ^4.6.2
+    zod: 3.21.1
+    zod-prisma-types: 2.7.9
+  checksum: f2e6659abf81541d87f73d607344e2cec37eb706b7a534e302a1abe97f061c87e2ebb2ab2d853eba0190092028d549a8ce495799af04c5de3e4118ab1dd91183
   languageName: node
   linkType: hard
 
