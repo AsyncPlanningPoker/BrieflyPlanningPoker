@@ -1,8 +1,8 @@
 import { Unauthorized } from '../error/error';
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import * as auth from './authorization';
 
-function handler(req: Request, res: Response, next: any) {
+function handler(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization;
   const isValid = token?.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : false;
 
@@ -13,7 +13,7 @@ function handler(req: Request, res: Response, next: any) {
     } else {
       throw new Unauthorized('Invalid token');
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 }

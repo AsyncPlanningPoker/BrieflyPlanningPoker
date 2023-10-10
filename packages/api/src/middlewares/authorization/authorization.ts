@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 function create(user: string, role: string, expiresIn = 3600) {
-  return jwt.sign({ user: user, role: role }, process.env.SECRET!, {
-    expiresIn: expiresIn,
-  });
+  return jwt.sign({ user, role }, process.env.SECRET!, { expiresIn });
 }
 
 function verify(token: string): any {

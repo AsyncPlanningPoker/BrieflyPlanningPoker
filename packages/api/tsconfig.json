@@ -15,12 +15,12 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": [
     "./src/**/*.ts",
   ],
   "references": [
-    { "path": "../store" },
+    { "path": "../prisma" },
   ]
 }
