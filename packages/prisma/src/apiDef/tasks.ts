@@ -114,19 +114,7 @@ const messageEndpoint = makeEndpoint({
     responseDescription: ""
 });
 
-// const addUsersEndpoint = makeEndpoint({
-//     method: 'post',
-//     path: '/:taskId/users',
-//     response: tasks.delUsersSchemaRes,
-//     parameters: [taskIdParams, addUsersBodyParams],
-//     alias: 'addUserstask',
-//     description: 'Add users to a task',
-//     responseDescription: ""
-// });
-
-
-
 const tasksAPI = makeApi([findEndpoint, deactivateEndpoint, deleteEndpoint, voteEndpoint, messageEndpoint]);
 
 export default tasksAPI;
-export type tasksAPI = typeof tasksAPI;
+export type TasksAPI = typeof tasksAPI;
