@@ -32,15 +32,15 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCo
 
 export const SquadScalarFieldEnumSchema = z.enum(['id','name','maxRounds','percentual','enabled','updatedAt','createdAt']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','name','email','password','enabled','updatedAt','createdAt']);
+export const UserScalarFieldEnumSchema = z.enum(['name','email','password','enabled','updatedAt','createdAt']);
 
-export const UsersOnSquadsScalarFieldEnumSchema = z.enum(['userId','squadId','enabled','updatedAt','createdAt']);
+export const UsersOnSquadsScalarFieldEnumSchema = z.enum(['userEmail','squadId','enabled','updatedAt','createdAt']);
 
 export const TaskScalarFieldEnumSchema = z.enum(['id','squadId','name','description','maxRounds','currentRound','percentual','points','finished','active','enabled','updatedAt','createdAt']);
 
-export const MessageScalarFieldEnumSchema = z.enum(['id','taskId','userId','round','message','createdAt']);
+export const MessageScalarFieldEnumSchema = z.enum(['id','taskId','userEmail','round','message','createdAt']);
 
-export const VoteScalarFieldEnumSchema = z.enum(['taskId','userId','round','points','createdAt']);
+export const VoteScalarFieldEnumSchema = z.enum(['taskId','userEmail','round','points','createdAt']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -56,13 +56,13 @@ export const NullsOrderSchema = z.enum(['first','last']);
 /////////////////////////////////////////
 
 export const SquadSchema = z.object({
-  // omitted: id: z.string().uuid(),
+  id: z.string().uuid(),
   name: z.string(),
   maxRounds: z.number().int(),
   percentual: z.union([z.number(),z.string(),DecimalJSLikeSchema,]).refine((v) => isValidDecimalInput(v), { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Squad']",  }),
   enabled: z.boolean(),
-  // omitted: updatedAt: z.coerce.date(),
-  // omitted: createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
 })
 
 export type Squad = z.infer<typeof SquadSchema>
@@ -79,10 +79,10 @@ export type SquadPartial = z.infer<typeof SquadPartialSchema>
 //------------------------------------------------------
 
 export const SquadOptionalDefaultsSchema = SquadSchema.merge(z.object({
-  // omitted: id: z.string().uuid().optional(),
+  id: z.string().uuid().optional(),
   enabled: z.boolean().optional(),
-  // omitted: updatedAt: z.coerce.date().optional(),
-  // omitted: createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date().optional(),
 }))
 
 export type SquadOptionalDefaults = z.infer<typeof SquadOptionalDefaultsSchema>
@@ -92,13 +92,12 @@ export type SquadOptionalDefaults = z.infer<typeof SquadOptionalDefaultsSchema>
 /////////////////////////////////////////
 
 export const UserSchema = z.object({
-  // omitted: id: z.string().uuid(),
   name: z.string(),
   email: z.string().email(),
   password: z.string(),
   enabled: z.boolean(),
-  // omitted: updatedAt: z.coerce.date(),
-  // omitted: createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
 })
 
 export type User = z.infer<typeof UserSchema>
@@ -115,10 +114,9 @@ export type UserPartial = z.infer<typeof UserPartialSchema>
 //------------------------------------------------------
 
 export const UserOptionalDefaultsSchema = UserSchema.merge(z.object({
-  // omitted: id: z.string().uuid().optional(),
   enabled: z.boolean().optional(),
-  // omitted: updatedAt: z.coerce.date().optional(),
-  // omitted: createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date().optional(),
 }))
 
 export type UserOptionalDefaults = z.infer<typeof UserOptionalDefaultsSchema>
@@ -128,11 +126,11 @@ export type UserOptionalDefaults = z.infer<typeof UserOptionalDefaultsSchema>
 /////////////////////////////////////////
 
 export const UsersOnSquadsSchema = z.object({
-  userId: z.string(),
+  userEmail: z.string().email(),
   squadId: z.string(),
   enabled: z.boolean(),
-  // omitted: updatedAt: z.coerce.date(),
-  // omitted: createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
 })
 
 export type UsersOnSquads = z.infer<typeof UsersOnSquadsSchema>
@@ -150,8 +148,8 @@ export type UsersOnSquadsPartial = z.infer<typeof UsersOnSquadsPartialSchema>
 
 export const UsersOnSquadsOptionalDefaultsSchema = UsersOnSquadsSchema.merge(z.object({
   enabled: z.boolean().optional(),
-  // omitted: updatedAt: z.coerce.date().optional(),
-  // omitted: createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date().optional(),
 }))
 
 export type UsersOnSquadsOptionalDefaults = z.infer<typeof UsersOnSquadsOptionalDefaultsSchema>
@@ -161,19 +159,19 @@ export type UsersOnSquadsOptionalDefaults = z.infer<typeof UsersOnSquadsOptional
 /////////////////////////////////////////
 
 export const TaskSchema = z.object({
-  // omitted: id: z.string().uuid(),
+  id: z.string().uuid(),
   squadId: z.string(),
   name: z.string(),
   description: z.string().nullable(),
   maxRounds: z.number().int(),
-  // omitted: currentRound: z.number().int(),
+  currentRound: z.number().int(),
   percentual: z.union([z.number(),z.string(),DecimalJSLikeSchema,]).refine((v) => isValidDecimalInput(v), { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Task']",  }),
-  // omitted: points: z.number().int().nullable(),
+  points: z.number().int().nullable(),
   finished: z.boolean(),
   active: z.boolean(),
   enabled: z.boolean(),
-  // omitted: updatedAt: z.coerce.date(),
-  // omitted: createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
 })
 
 export type Task = z.infer<typeof TaskSchema>
@@ -190,15 +188,15 @@ export type TaskPartial = z.infer<typeof TaskPartialSchema>
 //------------------------------------------------------
 
 export const TaskOptionalDefaultsSchema = TaskSchema.merge(z.object({
-  // omitted: id: z.string().uuid().optional(),
+  id: z.string().uuid().optional(),
   maxRounds: z.number().int().optional(),
-  // omitted: currentRound: z.number().int().optional(),
+  currentRound: z.number().int().optional(),
   percentual: z.union([z.number(),z.string(),DecimalJSLikeSchema,]).refine((v) => isValidDecimalInput(v), { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Task']",  }).optional(),
   finished: z.boolean().optional(),
   active: z.boolean().optional(),
   enabled: z.boolean().optional(),
-  // omitted: updatedAt: z.coerce.date().optional(),
-  // omitted: createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date().optional(),
 }))
 
 export type TaskOptionalDefaults = z.infer<typeof TaskOptionalDefaultsSchema>
@@ -208,12 +206,12 @@ export type TaskOptionalDefaults = z.infer<typeof TaskOptionalDefaultsSchema>
 /////////////////////////////////////////
 
 export const MessageSchema = z.object({
-  // omitted: id: z.string().uuid(),
+  id: z.string().uuid(),
   taskId: z.string(),
-  userId: z.string(),
-  // omitted: round: z.number().int(),
+  userEmail: z.string().email(),
+  round: z.number().int(),
   message: z.string(),
-  // omitted: createdAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
 })
 
 export type Message = z.infer<typeof MessageSchema>
@@ -230,9 +228,9 @@ export type MessagePartial = z.infer<typeof MessagePartialSchema>
 //------------------------------------------------------
 
 export const MessageOptionalDefaultsSchema = MessageSchema.merge(z.object({
-  // omitted: id: z.string().uuid().optional(),
-  // omitted: round: z.number().int().optional(),
-  // omitted: createdAt: z.coerce.date().optional(),
+  id: z.string().uuid().optional(),
+  round: z.number().int().optional(),
+  createdAt: z.coerce.date().optional(),
 }))
 
 export type MessageOptionalDefaults = z.infer<typeof MessageOptionalDefaultsSchema>
@@ -243,10 +241,10 @@ export type MessageOptionalDefaults = z.infer<typeof MessageOptionalDefaultsSche
 
 export const VoteSchema = z.object({
   taskId: z.string(),
-  userId: z.string(),
-  // omitted: round: z.number().int(),
+  userEmail: z.string().email(),
+  round: z.number().int(),
   points: z.number().int(),
-  // omitted: createdAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
 })
 
 export type Vote = z.infer<typeof VoteSchema>
@@ -263,8 +261,8 @@ export type VotePartial = z.infer<typeof VotePartialSchema>
 //------------------------------------------------------
 
 export const VoteOptionalDefaultsSchema = VoteSchema.merge(z.object({
-  // omitted: round: z.number().int().optional(),
-  // omitted: createdAt: z.coerce.date().optional(),
+  round: z.number().int().optional(),
+  createdAt: z.coerce.date().optional(),
 }))
 
 export type VoteOptionalDefaults = z.infer<typeof VoteOptionalDefaultsSchema>

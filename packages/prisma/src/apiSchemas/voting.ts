@@ -16,7 +16,7 @@ export const messageSchemaRes = MessageSchema.strict();
 
 
 // Tipos
-export type VoteSchemaReq = typeof voteSchemaReq;
-export type VoteSchemaRes = typeof voteSchemaRes;
-export type MessageSchemaReq = typeof messageSchemaReq;
-export type MessageSchemaRes = typeof messageSchemaRes;
+export type VoteSchemaReq = z.infer<typeof voteSchemaReq>;
+export type VoteSchemaRes = z.infer<typeof voteSchemaRes>;
+export type MessageSchemaReq = z.infer<typeof messageSchemaReq>;
+export type MessageSchemaRes = z.infer<typeof messageSchemaRes>;

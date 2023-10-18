@@ -48,3 +48,17 @@ export const delUsersSchemaReq = z.object({}).strict();
 
 /** Esquema para sair de um squad - response */
 export const delUsersSchemaRes = createSchemaRes;
+
+// Tipos
+export type CreateSchemaReq = z.infer<typeof createSchemaReq>;
+export type CreateSchemaRes = z.infer<typeof createSchemaRes>;
+export type FindSchemaReq = z.infer<typeof findSchemaReq>;
+export type FindSchemaRes = z.infer<typeof findSchemaRes>;
+export type FindAllSchemaReq = z.infer<typeof findAllSchemaReq>;
+export type FindAllSchemaRes = z.infer<typeof findAllSchemaRes>;
+export type UpdateSchemaReq = z.infer<typeof updateSchemaReq>;
+export type UpdateSchemaRes = z.infer<typeof updateSchemaRes>;
+export type AddUsersSchemaReq = z.infer<typeof addUsersSchemaReq>;
+export type AddUsersSchemaRes = z.infer<typeof addUsersSchemaRes>;
+export type DelUsersSchemaReq = z.infer<typeof delUsersSchemaReq>;
+export type DelUsersSchemaRes = z.infer<typeof delUsersSchemaRes>;

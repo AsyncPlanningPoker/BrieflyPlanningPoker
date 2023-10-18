@@ -2,7 +2,11 @@ import { UserSchema, UserOptionalDefaultsSchema } from "../generated/zod";
 import { z } from "zod";
 
 /** Esquema para endpoint de criacao - request */
-export const createSchemaReq = UserOptionalDefaultsSchema.strict();
+export const createSchemaReq = UserOptionalDefaultsSchema
+    .omit({
+        createdAt: true,
+        updatedAt: true
+    }).strict();
 
 /** Esquema para endpoint de criacao - response */
 export const createSchemaRes = UserSchema.strict();
@@ -24,19 +28,24 @@ export const deleteSchemaReq = z.object({}).strict();
 export const deleteSchemaRes = createSchemaRes;
 
 /** Esquema para endpoint de atualizacao - request */
-export const updateSchemaReq = UserOptionalDefaultsSchema.extend({oldPassword: z.string()}).partial().strict();
+export const updateSchemaReq = UserOptionalDefaultsSchema
+    .extend({oldPassword: z.string()})
+    .omit({
+        createdAt: true,
+        updatedAt: true
+    }).partial().strict();
 
 /** Esquema para endpoint de atualizacao - request */
 export const updateSchemaRes = createSchemaRes;
 
 // Tipos
 
-export type CreateSchemaReq = typeof createSchemaReq;
-export type CreateSchemaRes = typeof createSchemaRes;
-export type LoginSchemaReq = typeof loginSchemaReq;
-export type LoginSchemaRes = typeof loginSchemaRes;
-export type DeleteSchemaReq = typeof deleteSchemaReq;
-export type DeleteSchemaRes = typeof deleteSchemaRes;
-export type UpdateSchemaReq = typeof updateSchemaReq;
-export type UpdateSchemaRes = typeof updateSchemaRes;
+export type CreateSchemaReq = z.infer<typeof createSchemaReq>;
+export type CreateSchemaRes = z.infer<typeof createSchemaRes>;
+export type LoginSchemaReq = z.infer<typeof loginSchemaReq>;
+export type LoginSchemaRes = z.infer<typeof loginSchemaRes>;
+export type DeleteSchemaReq = z.infer<typeof deleteSchemaReq>;
+export type DeleteSchemaRes = z.infer<typeof deleteSchemaRes>;
+export type UpdateSchemaReq = z.infer<typeof updateSchemaReq>;
+export type UpdateSchemaRes = z.infer<typeof updateSchemaRes>;
 

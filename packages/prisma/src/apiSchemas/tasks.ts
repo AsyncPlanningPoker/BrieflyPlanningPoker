@@ -45,13 +45,13 @@ export const deleteSchemaReq = z.object({}).strict();
 export const deleteSchemaRes = createSchemaRes;
 
 // Tipos
-export type CreateSchemaReq = typeof createSchemaReq;
-export type CreateSchemaRes = typeof createSchemaRes;
-export type FindSchemaReq = typeof findSchemaReq;
-export type FindSchemaRes = typeof findSchemaRes;
-export type FindAllSchemaReq = typeof findAllSchemaReq;
-export type FindAllSchemaRes = typeof findAllSchemaRes;
-export type DeactivateSchemaReq = typeof deactivateSchemaReq;
-export type DeactivateSchemaRes = typeof deactivateSchemaRes;
-export type DeleteSchemaReq = typeof deleteSchemaReq;
-export type DeleteSchemaRes = typeof deleteSchemaRes;
+export type CreateSchemaReq = z.infer<typeof createSchemaReq>;
+export type CreateSchemaRes = z.infer<typeof createSchemaRes>;
+export type FindSchemaReq = z.infer<typeof findSchemaReq>;
+export type FindSchemaRes = z.infer<typeof findSchemaRes>;
+export type FindAllSchemaReq = z.infer<typeof findAllSchemaReq>;
+export type FindAllSchemaRes = z.infer<typeof findAllSchemaRes>;
+export type DeactivateSchemaReq = z.infer<typeof deactivateSchemaReq>;
+export type DeactivateSchemaRes = z.infer<typeof deactivateSchemaRes>;
+export type DeleteSchemaReq = z.infer<typeof deleteSchemaReq>;
+export type DeleteSchemaRes = z.infer<typeof deleteSchemaRes>;
