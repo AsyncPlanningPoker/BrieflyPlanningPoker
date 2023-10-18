@@ -121,7 +121,7 @@
   </Form>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
@@ -131,28 +131,14 @@ import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 
-export default {
-  name: 'FSquad',
+const props = withDefaults(defineProps<{ update: boolean }>(), { update: false });
 
-  components: {
-    BButton,
-    BInput,
-    BInputField,
-    Form,
-  },
-};
-</script>
+const emit = defineEmits<{
+  (event: 'close'): any
+}>();
 
-<script setup>
-const props = defineProps({
-  update: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const emit = defineEmits(['close']);
 const store = useStore();
+
 const squad = computed(() => {
   return store.getters.getSquadActive;
 });

@@ -29,7 +29,7 @@
   </Form>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
@@ -38,22 +38,10 @@ import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 
-export default {
-  name: 'FAddUser',
 
-  components: {
-    BButton,
-    BInput,
-    BInputField,
-    Form,
-  },
-};
-</script>
-
-<script setup>
 const store = useStore();
 
-function onSubmit(values) {
+function onSubmit(values: any) {
   store.dispatch('addUser', values.email);
   /* eslint-disable no-undef */
   email.value = null;

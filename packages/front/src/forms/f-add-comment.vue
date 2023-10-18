@@ -18,34 +18,25 @@
   </Form>
 </template>
 
-<script>
+<script setup lang="ts">
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
 
 import BInputField from '../components/b-input-field.vue';
 import BTextArea from '../components/b-text-area.vue';
+import { ref } from 'vue';
 
-export default {
-  name: 'FAddComment',
+const form = ref<HTMLFormElement | null>(null);
+  
+function onKeyup() {
+  form.value?.$el.dispatchEvent(new Event('submit', { cancelable: true }));
+}
 
-  components: {
-    BInputField,
-    BTextArea,
-    Form,
-  },
+const emit = defineEmits<{
+  (event: 'comment'): any
+}>();
 
-  methods: {
-    onKeyup() {
-      this.$refs.form.$el.dispatchEvent(new Event('submit', { cancelable: true }));
-    },
-  },
-};
-</script>
-
-<script setup>
-const emit = defineEmits(['comment']);
-
-function onSubmit(event) {
+function onSubmit(event: any) {
   emit('comment', event.addComment);
   /* eslint-disable no-undef */
   addComment.value = null;

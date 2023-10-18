@@ -54,42 +54,21 @@
   </BModal>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref } from 'vue';
 
 import BModal from '../components/b-modal.vue';
 import BTask from '../components/b-task.vue';
 import BText from '../components/b-text.vue';
 import FTask from '../forms/f-task.vue';
+import type { Task } from '@/interfaces';
 
-export default {
-  name: 'BTaskContainer',
+const props = defineProps<{
+  title: string,
+  active: boolean
+  tasks: Task[]
+}>();
 
-  components: {
-    BModal,
-    BTask,
-    BText,
-    FTask,
-  },
-
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      required: true,
-    },
-    tasks: {
-      type: Array,
-      required: true,
-    },
-  },
-};
-</script>
-
-<script setup>
 const showModal = ref(false);
 const toggleModal = () => {
   showModal.value = !showModal.value;

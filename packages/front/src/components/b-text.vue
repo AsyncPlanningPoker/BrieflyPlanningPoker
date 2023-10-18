@@ -12,34 +12,18 @@
   </component>
 </template>
 
-<script>
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
-
-export default {
-  name: 'BText',
-
-  props: {
-    align: {
-      type: String,
-      default: '',
-      validator: shouldBeOneOf(['', 'left', 'center', 'right']),
-    },
-    color: {
-      type: String,
-      default: undefined,
-      validator: shouldBeOneOf(['primary', 'accent', 'white', 'gray-10', 'gray-20', 'gray-30', 'black', 'link', 'error', 'success']),
-    },
-    size: {
-      type: String,
-      default: 'medium',
-      validator: shouldBeOneOf(['small', 'medium', 'large', 'giant']),
-    },
-    tag: {
-      type: String,
-      default: 'span',
-    },
-  },
-};
+<script setup lang="ts">
+const props = withDefaults(
+    defineProps<{
+    align: '' | 'left' | 'center' | 'right',
+    color?: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
+    size: 'small' | 'medium' | 'large' | 'giant',
+    tag: string
+  }>(), {
+    align: '',
+    size: 'medium',
+    tag: 'span'
+  });
 </script>
 
 <style scoped lang="scss">

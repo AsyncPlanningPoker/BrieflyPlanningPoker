@@ -9,7 +9,7 @@
         class="b-task__name"
         size="medium"
         tag="strong"
-        @click="toggleExpandedTaskModal(task.task, false)"
+        @click="toggleExpandedTaskModal(task.id, false)"
       >
         {{ task.name }}
       </BText>
@@ -111,67 +111,48 @@
   </BModal>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useStore } from 'vuex';
 
 import BModal from '../components/b-modal.vue';
 import BTaskExpanded from '../components/b-task-expanded.vue';
 import BText from '../components/b-text.vue';
 
 import FConfirmation from '../forms/f-confirmation.vue';
+import type { Task } from '@/interfaces';
+import { squadStore, taskStore } from '@/stores';
 
-export default {
-  name: 'BTask',
+const props = withDefaults(defineProps<{
+  task: Task
+  active: boolean
+}>(), { active: true });
 
-  components: {
-    BModal,
-    BTaskExpanded,
-    BText,
-    FConfirmation,
-  },
+const squadS = squadStore();
+const taskS = taskStore();
 
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      default: true,
-    },
-  },
-};
-</script>
+const squadId = computed(() => squadS.getActiveId);
 
-<script setup>
-const store = useStore();
-
-const squadId = computed(() => store.getters.getActiveId);
-
-const taskId = ref(null);
+const taskId = ref<string | null>(null);
 
 const expandedTaskModal = ref(false);
 
-function toggleExpandedTaskModal(task, refresh) {
-  taskId.value = task;
-  if (refresh) {
-    store.dispatch('gatherTasks', squadId.value);
-  }
-
-  expandedTaskModal.value = !expandedTaskModal.value;
-}
+const deleteModal = ref(false);
 
 const archiveModal = ref(false);
+
+function toggleExpandedTaskModal(task: string, refresh: boolean) {
+  taskId.value = task;
+  if (refresh)
+    taskS.gatherTasks(taskId.value);
+  expandedTaskModal.value = !expandedTaskModal.value;
+}
 
 function toggleArchiveModal() {
   archiveModal.value = !archiveModal.value;
 }
 
-const deleteModal = ref(false);
-
 function toggleDeleteModal() {
-  deleteModal.value = !deleteModal.value;
+  deleteModal.value =!deleteModal.value;
 }
 </script>
 

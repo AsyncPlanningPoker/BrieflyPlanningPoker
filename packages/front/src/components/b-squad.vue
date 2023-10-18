@@ -8,7 +8,7 @@
           size="giant"
           @click="toggleUpdateModal"
         >
-          {{ squad.squad }}
+          {{ squad.name }}
         </BText>
       </div>
 
@@ -28,7 +28,7 @@
             color="white"
             size="giant"
           >
-            {{ squad.currentMaxRounds }}
+            {{ squad.maxRounds }}
           </BText>
         </div>
 
@@ -42,7 +42,7 @@
             color="white"
             size="giant"
           >
-            {{ squad.currentPercentual }}
+            {{ squad.percentual }}
           </BText>
         </div>
         <div
@@ -79,7 +79,7 @@
     </div>
 
     <BDivisor
-      v-if="squad.squad"
+      v-if="squad"
       :button="true"
       color="primary"
       @action="toggleInfo"
@@ -107,44 +107,25 @@
   </BModal>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
 
-import BBadge from '../components/b-badge.vue';
-import BDivisor from '../components/b-divisor.vue';
-import BModal from '../components/b-modal.vue';
-import BText from '../components/b-text.vue';
+import FAddUser from '@/forms/f-add-user.vue';
+import FLeave from '@/forms/f-leave.vue';
+import FSquad from '@/forms/f-squad.vue';
+import { userStore } from '@/stores';
+import type { Squad } from '@/interfaces';
 
-import FAddUser from '../forms/f-add-user.vue';
-import FLeave from '../forms/f-leave.vue';
-import FSquad from '../forms/f-squad.vue';
+import BBadge from './b-badge.vue';
+import BDivisor from './b-divisor.vue';
+import BModal from './b-modal.vue';
+import BText from './b-text.vue';
 
-export default {
-  name: 'BSquad',
+const props = defineProps<{ squad: Squad }>();
 
-  components: {
-    BBadge,
-    BDivisor,
-    BModal,
-    BText,
-    FAddUser,
-    FLeave,
-    FSquad,
-  },
+const user = userStore();
 
-  props: {
-    squad: {
-      type: Object,
-      required: true,
-    },
-  },
-};
-</script>
-
-<script setup>
-const store = useStore();
-const actualUser = computed(() => store.getters.getUserEmail);
+const actualUser = computed(() => user.userEmail);
 
 const moreInfo = ref(false);
 const toggleInfo = () => {
@@ -156,9 +137,9 @@ const toggleUpdateModal = () => {
   updateModal.value = !updateModal.value;
 };
 
-const email = ref(String);
+const email = ref("");
 const leaveModal = ref(false);
-const toggleLeaveModal = (user) => {
+const toggleLeaveModal = (user: string) => {
   (email.value = user), (leaveModal.value = !leaveModal.value);
 };
 </script>
@@ -265,3 +246,4 @@ const toggleLeaveModal = (user) => {
   row-gap: var(--unit-0200);
 }
 </style>
+../interfaces

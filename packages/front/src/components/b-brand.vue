@@ -20,11 +20,7 @@
   </a>
 </template>
 
-<script>
-export default {
-  name: 'BBrand',
-};
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .b-brand__container {

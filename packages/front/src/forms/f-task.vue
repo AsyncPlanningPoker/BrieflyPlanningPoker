@@ -42,7 +42,7 @@
   </Form>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useStore } from 'vuex';
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
@@ -52,21 +52,7 @@ import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BTextArea from '../components/b-text-area.vue';
 
-export default {
-  name: 'FTask',
-
-  components: {
-    BButton,
-    BInput,
-    BInputField,
-    BTextArea,
-    Form,
-  },
-};
-</script>
-
-<script setup>
-const emit = defineEmits(['close']);
+const emit = defineEmits<{ (event: 'close'): any }>();
 const store = useStore();
 
 function onSubmit(values) {

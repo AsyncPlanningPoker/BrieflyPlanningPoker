@@ -14,44 +14,18 @@
   </div>
 </template>
 
-<script>
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
+<script setup lang="ts">
 
-export default {
-  name: 'BInput',
-
-  props: {
-    max: {
-      type: Number,
-      default: undefined,
-    },
-    min: {
-      type: Number,
-      default: undefined,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      default: undefined,
-    },
-    step: {
-      type: Number,
-      default: undefined,
-    },
-    type: {
-      type: String,
-      default: 'text',
-      validator: shouldBeOneOf(['email', 'number', 'password', 'text']),
-    },
-    value: {
-      type: [String, Number],
-      default: undefined,
-    },
-  },
-};
+const props = withDefaults(
+  defineProps<{
+    max?: number,
+    min?: number,
+    name: string,
+    placeholder?: string,
+    step?: number,
+    type: 'email' | 'number' | 'password' | 'text',
+    value?: string | number
+  }>(), { type: "text" });
 </script>
 
 <style scoped lang="scss">
