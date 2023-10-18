@@ -1,47 +1,51 @@
-import { NextFunction, Request, Response } from 'express';
 import { prisma, squads } from '@briefly/prisma';
+import context, { type Context } from '../context'
+import { type ZodiosRequestHandler, zodiosRouter } from '@zodios/express';
+import { type ZodiosPathsByMethod } from '@zodios/core';
+import { type Method } from './utils';
+import { SquadsAPI } from '@briefly/prisma/dist/apiDef/squads';
 
-async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+
+type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI, M>> =
+  ZodiosRequestHandler<SquadsAPI, Context, M, Path>;
+
+const create: SquadsHandler<"post", ""> = async (req, res, next) => {
   try {
-    const data = squads.createSchema.parse(req.body);
-    return prisma.squad
-      .create({
-        data,
-      })
-      .then((obj) => res.status(201).json(obj));
+    const data = req.body;
+    const squad = await prisma.squad.create({data});
+    return res.status(201).json(squad);
   } catch (error: unknown) {
     next(error);
   }
 }
 
-async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const id: string = req.params.squadId as string;
+const find: SquadsHandler<"get", "/:squadId"> = async (req, res, next) => {
+  const id = req.params.squadId as string;
 
   try {
-    return await prisma.squad
+    const squad = await prisma.squad
       .findUniqueOrThrow({
         where: { id },
         include: {
-          users: {
-            select: {
-              user: {
-                select: { email: true },
-              },
-            },
-          },
-          tasks: {
-            select: { id: true },
-          },
-        },
-      })
-      .then((obj) => res.status(200).json(obj));
+          users: { select: { user: { select: {
+            email: true,
+            name: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}},
+          tasks: true
+        }
+      });
+      return res.status(200).json(squad);
   } catch (error: unknown) {
     next(error);
   }
 }
 
-async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const email: string = req.query.user as string;
+const findAll: SquadsHandler<"get", ""> = (req, res, next) => {
+  if 
+  const email = req.user.email;
   try {
     return await prisma.squad
       .findMany({
@@ -64,7 +68,7 @@ async function findAll(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
-async function update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+const update: SquadsHandler = (req, res, next) => {
   const id: string = req.params.squadId as string;
 
   try {
@@ -80,7 +84,7 @@ async function update(req: Request, res: Response, next: NextFunction): Promise<
   }
 }
 
-async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+const addUsers: SquadsHandler = (req, res, next) => {
   const id: string = req.params.squadId as string;
 
   try {
@@ -105,7 +109,7 @@ async function addUsers(req: Request, res: Response, next: NextFunction): Promis
   }
 }
 
-async function delUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+const delUsers: SquadsHandler = (req, res, next) => {
   const squadId: string = req.params.squadId as string;
   const email: string = req.query.email as string;
 

@@ -2,8 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "typeRoots" : ["../../node_modules/@types", "./src/@types"],
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "composite": true,
     "target": "esnext",
     "module": "commonjs",
@@ -16,11 +15,12 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noEmitOnError": true,
   },
   "include": [
     "./src/**/*.ts",
   ],
   "references": [
-    { "path": "../prisma" },
+    {"path": "../prisma"}
   ]
 }

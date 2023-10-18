@@ -1,14 +1,24 @@
+// import { Response, Request, NextFunction } from 'express';
+import { ZodiosHandler, ZodiosRequestHandler } from '@zodios/express';
 import { Unauthorized } from '../error/error';
-import { Response, Request, NextFunction } from 'express';
 import * as auth from './authorization';
+// import { pluginToken } from '@zodios/plugins';
+import { type ApiDef } from '@briefly/prisma/src/apiDef';
+import { type Context } from 'context';
+import { ZodiosPathsByMethod } from '@zodios/core';
+import { type Method } from 'routes/utils';
 
-function handler(req: Request, res: Response, next: NextFunction) {
+type Path = ZodiosPathsByMethod<ApiDef, Method>;
+
+export type ZodiosMiddleware = ZodiosRequestHandler<ApiDef, Context, Method, Path>
+
+const handler: ZodiosMiddleware = (req, res, next) => {
   const token = req.headers.authorization;
-  const isValid = token?.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : false;
+  const isValid = token?.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : undefined;
 
   try {
     if (isValid?.role === 'login') {
-      req.query.user = isValid.user;
+      req.user = { email: isValid.user };
       next();
     } else {
       throw new Unauthorized('Invalid token');
