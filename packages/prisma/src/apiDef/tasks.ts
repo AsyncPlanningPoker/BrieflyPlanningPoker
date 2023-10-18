@@ -1,5 +1,5 @@
 import { makeEndpoint, makeApi, type ZodiosEndpointParameter } from '@zodios/core';
-import { tasks, squads } from '../apiSchemas'
+import { tasks, voting } from '../apiSchemas'
 import { z } from 'zod';
 
 // const addUsersSchema = z.object({
@@ -18,12 +18,12 @@ const taskIdParams: ZodiosEndpointParameter<string> = {
     schema: z.string().uuid()
 };
 
-const createBodyParams: ZodiosEndpointParameter<tasks.CreateSchemaReq> = {
-    name: 'Create',
-    type: 'Body',
-    description: 'Input task details',
-    schema: tasks.createSchemaReq
-};
+// const createBodyParams: ZodiosEndpointParameter<tasks.CreateSchemaReq> = {
+//     name: 'Create',
+//     type: 'Body',
+//     description: 'Input task details',
+//     schema: tasks.createSchemaReq
+// };
 
 // const findBodyParams: ZodiosEndpointParameter<tasks.FindSchemaReq> = {
 //     name: 'Find',
@@ -32,91 +32,101 @@ const createBodyParams: ZodiosEndpointParameter<tasks.CreateSchemaReq> = {
 //     schema: tasks.findSchemaReq
 // };
 
-const updateBodyParams: ZodiosEndpointParameter<tasks.UpdateSchemaReq> = {
-    name: 'Update',
+// const updateBodyParams: ZodiosEndpointParameter<tasks.UpdateSchemaReq> = {
+//     name: 'Update',
+//     type: 'Body',
+//     description: 'Input task details (optional)',
+//     schema: tasks.updateSchemaReq
+// };
+
+const voteBodyParams: ZodiosEndpointParameter<voting.VoteSchemaReq> = {
+    name: 'Vote',
     type: 'Body',
-    description: 'Input task details (optional)',
-    schema: tasks.updateSchemaReq
+    description: 'A object containing the number of points of the users vote',
+    schema: voting.voteSchemaReq
 };
 
-const addUsersBodyParams: ZodiosEndpointParameter<AddUsersSchema> = {
-    name: 'Email',
+const messageBodyParams: ZodiosEndpointParameter<voting.MessageSchemaReq> = {
+    name: 'Message',
     type: 'Body',
-    description: 'The email of the user to add and a boolean field indicating if the user is the owner of the task',
-    schema: addUsersSchema
+    description: 'A object containing the users message',
+    schema: voting.messageSchemaReq
 };
 
-const deleteUsersQueryParams: ZodiosEndpointParameter<string> = {
-    name: 'Email',
-    type: 'Query',
-    description: 'The email of the user',
-    schema: z.string().email()
-};
+// const deleteUsersQueryParams: ZodiosEndpointParameter<string> = {
+//     name: 'Email',
+//     type: 'Query',
+//     description: 'The email of the user',
+//     schema: z.string().email()
+// };
+
 
 // Endpoints
 
-const createEndpoint = makeEndpoint({
-    method: 'post',
-    path: '',
-    response: tasks.createSchemaRes,
-    parameters: [createBodyParams],
-    description: 'Create an task',
-    responseDescription: "The created task"
-});
-
-const findAllEndpoint = makeEndpoint({
-    method: 'get',
-    path: '',
-    response: tasks.findAllSchemaRes,
-    // parameters: [taskIdParams],
-    description: 'List all tasks that the current user is a part of',
-    responseDescription: "A list of tasks"
-});
 
 const findEndpoint = makeEndpoint({
     method: 'get',
     path: '/:taskId',
     response: tasks.findSchemaRes,
     parameters: [taskIdParams],
+    alias: 'findTask',
     description: 'Display information about a specific task',
     responseDescription: "A task"
 });
 
-const updateEndpoint = makeEndpoint({
+const deactivateEndpoint = makeEndpoint({
     method: 'put',
     path: '/:taskId',
-    response: tasks.updateSchemaRes,
-    parameters: [updateBodyParams],
-    description: 'Update an task',
-    responseDescription: "The updated task"
+    response: tasks.deactivateSchemaRes,
+    parameters: [taskIdParams],
+    alias: 'deactivateTask',
+    description: 'Deactivate a task',
+    responseDescription: "The deactivated task"
 });
 
-const addUsersEndpoint = makeEndpoint({
-    method: 'post',
-    path: '/:taskId/users',
-    response: tasks.delUsersSchemaRes,
-    parameters: [taskIdParams, addUsersBodyParams],
-    description: 'Add users to a task',
-    responseDescription: ""
-});
-
-const deleteUsersEndpoint = makeEndpoint({
+const deleteEndpoint = makeEndpoint({
     method: 'delete',
-    path: '/:taskId/users',
-    response: tasks.delUsersSchemaRes,
-    parameters: [taskIdParams, deleteUsersQueryParams],
-    description: 'Remove users from a task',
+    path: '/:taskId',
+    response: tasks.deleteSchemaRes,
+    parameters: [taskIdParams],
+    alias: 'deleteTask',
+    description: 'Delete a task',
+    responseDescription: "The deleted task"
+});
+
+const voteEndpoint = makeEndpoint({
+    method: 'post',
+    path: '/:taskId/votes',
+    response: voting.voteSchemaRes,
+    parameters: [taskIdParams, voteBodyParams],
+    alias: 'voteTask',
+    description: 'Submit a vote to a task',
     responseDescription: ""
 });
 
-const tasksAPI = makeApi([
-    createEndpoint,
-    findAllEndpoint,
-    findEndpoint,
-    updateEndpoint,
-    addUsersEndpoint,
-    deleteUsersEndpoint
-]);
+const messageEndpoint = makeEndpoint({
+    method: 'post',
+    path: '/:taskId/messages',
+    response: voting.messageSchemaRes,
+    parameters: [taskIdParams, messageBodyParams],
+    alias: 'messageTask',
+    description: 'Submit a message to a task',
+    responseDescription: ""
+});
+
+// const addUsersEndpoint = makeEndpoint({
+//     method: 'post',
+//     path: '/:taskId/users',
+//     response: tasks.delUsersSchemaRes,
+//     parameters: [taskIdParams, addUsersBodyParams],
+//     alias: 'addUserstask',
+//     description: 'Add users to a task',
+//     responseDescription: ""
+// });
+
+
+
+const tasksAPI = makeApi([findEndpoint, deactivateEndpoint, deleteEndpoint, voteEndpoint, messageEndpoint]);
 
 export default tasksAPI;
 export type tasksAPI = typeof tasksAPI;

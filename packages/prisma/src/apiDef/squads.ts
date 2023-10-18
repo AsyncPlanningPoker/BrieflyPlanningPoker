@@ -53,6 +53,13 @@ const deleteUsersQueryParams: ZodiosEndpointParameter<string> = {
     schema: z.string().email()
 };
 
+const createTaskBodyParams: ZodiosEndpointParameter<tasks.CreateSchemaReq> = {
+    name: 'Create task',
+    type: 'Body',
+    description: 'Input squad details',
+    schema: tasks.createSchemaReq
+};
+
 // Endpoints
 
 const createEndpoint = makeEndpoint({
@@ -60,6 +67,7 @@ const createEndpoint = makeEndpoint({
     path: '',
     response: squads.createSchemaRes,
     parameters: [createBodyParams],
+    alias: 'createSquad',
     description: 'Create an squad',
     responseDescription: "The created squad"
 });
@@ -69,6 +77,7 @@ const findAllEndpoint = makeEndpoint({
     path: '',
     response: squads.findAllSchemaRes,
     // parameters: [squadIdParams],
+    alias: 'findAllSquads',
     description: 'List all squads that the current user is a part of',
     responseDescription: "A list of squads"
 });
@@ -78,6 +87,7 @@ const findEndpoint = makeEndpoint({
     path: '/:squadId',
     response: squads.findSchemaRes,
     parameters: [squadIdParams],
+    alias: 'findSquad',
     description: 'Display information about a specific squad',
     responseDescription: "A squad"
 });
@@ -86,7 +96,8 @@ const updateEndpoint = makeEndpoint({
     method: 'put',
     path: '/:squadId',
     response: squads.updateSchemaRes,
-    parameters: [updateBodyParams],
+    parameters: [squadIdParams, updateBodyParams],
+    alias: 'updateSquad',
     description: 'Update an squad',
     responseDescription: "The updated squad"
 });
@@ -96,6 +107,7 @@ const addUsersEndpoint = makeEndpoint({
     path: '/:squadId/users',
     response: squads.delUsersSchemaRes,
     parameters: [squadIdParams, addUsersBodyParams],
+    alias: 'addUsersSquad',
     description: 'Add users to a squad',
     responseDescription: ""
 });
@@ -105,9 +117,30 @@ const deleteUsersEndpoint = makeEndpoint({
     path: '/:squadId/users',
     response: squads.delUsersSchemaRes,
     parameters: [squadIdParams, deleteUsersQueryParams],
+    alias: 'delUsersSquad',
     description: 'Remove users from a squad',
     responseDescription: ""
 });
+
+const createTaskEndpoint = makeEndpoint({
+    method: 'post',
+    path: '/:squadId/tasks',
+    response: tasks.createSchemaRes,
+    parameters: [squadIdParams, createTaskBodyParams],
+    alias: 'createTaskSquad',
+    description: 'Create a task and add it to a specific squad',
+    responseDescription: "The created task"
+});
+
+const findAllTasksEndpoint = makeEndpoint({
+    method: 'get',
+    path: '/:squadId/tasks',
+    response: tasks.findAllSchemaRes,
+    parameters: [squadIdParams],
+    description: 'List all tasks belonging to a specific squad',
+    responseDescription: "A list of tasks"
+});
+
 
 const squadsAPI = makeApi([
     createEndpoint,
@@ -115,7 +148,9 @@ const squadsAPI = makeApi([
     findEndpoint,
     updateEndpoint,
     addUsersEndpoint,
-    deleteUsersEndpoint
+    deleteUsersEndpoint,
+    createTaskEndpoint,
+    findAllTasksEndpoint
 ]);
 
 export default squadsAPI;

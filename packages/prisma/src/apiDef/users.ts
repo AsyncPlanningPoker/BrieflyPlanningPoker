@@ -38,6 +38,7 @@ const createEndpoint = makeEndpoint({
     path: '',
     response: users.createSchemaRes,
     parameters: [createBodyParams],
+    alias: 'createUser',
     description: 'Create an user',
     responseDescription: "The created user"
 });
@@ -47,6 +48,7 @@ const loginEndpoint = makeEndpoint({
     path: '/login',
     response: users.loginSchemaRes,
     parameters: [loginBodyParams],
+    alias: 'loginUser',
     description: 'Authenticate an user',
     responseDescription: "A JWT Bearer auth token"
 });
@@ -56,6 +58,7 @@ const deleteEndpoint = makeEndpoint({
     path: '',
     response: users.deleteSchemaRes,
     // parameters: [deleteBodyParams],
+    alias: 'deleteUser',
     description: 'Delete an user',
     responseDescription: "The deleted user"
 });
@@ -65,6 +68,7 @@ const updateEndpoint = makeEndpoint({
     path: '',
     response: users.updateSchemaRes,
     parameters: [updateBodyParams],
+    alias: 'updateUser',
     description: 'Update an user',
     responseDescription: "The updated user"
 });
