@@ -2,7 +2,7 @@ import { ZodError } from 'zod';
 import { BadRequest, CustomError } from './error';
 import { Response } from 'express';
 
-function handler(error: CustomError | Error, res: Response): Response<any> {
+async function handler(error: CustomError | Error, res: Response): Promise<Response> {
   if (error instanceof CustomError) {
     return res.status(error.getCode()).json({
       status: error.message ?? 'error',

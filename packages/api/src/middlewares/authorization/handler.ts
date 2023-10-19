@@ -1,19 +1,12 @@
-// import { Response, Request, NextFunction } from 'express';
-import { ZodiosHandler, ZodiosRequestHandler } from '@zodios/express';
 import { Unauthorized } from '../error/error';
 import * as auth from './authorization';
-// import { pluginToken } from '@zodios/plugins';
-import { type ApiDef } from '@briefly/prisma/src/apiDef';
-import { type Context } from 'context';
-import { ZodiosPathsByMethod } from '@zodios/core';
-import { type Method } from 'routes/utils';
+import type { ZodiosNextFunction, ZodiosRequest, ZodiosResponse } from '../../utils/types';
+import { Request } from 'express';
 
-type Path = ZodiosPathsByMethod<ApiDef, Method>;
 
-export type ZodiosMiddleware = ZodiosRequestHandler<ApiDef, Context, Method, Path>
-
-const handler: ZodiosMiddleware = (req, res, next) => {
+function handler (req: ZodiosRequest, res: ZodiosResponse, next: ZodiosNextFunction): void {
   const token = req.headers.authorization;
+
   const isValid = token?.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : undefined;
 
   try {
@@ -28,4 +21,9 @@ const handler: ZodiosMiddleware = (req, res, next) => {
   }
 }
 
-export { handler };
+function mustAuth (req: Request, res: any, next: ZodiosNextFunction): void {
+  if(!("user" in req)) next(new Unauthorized("You must log-in!"));
+  else next();
+}
+
+export { handler, mustAuth };

@@ -1,38 +1,30 @@
-import { type prismaClientType } from '../../utils';
+import { type PrismaClient } from '../../utils';
 import { voteIncludeSelect, messageIncludeSelect } from '../../../utils'
 
-const getCommentExtension = (prismaClient: prismaClientType) => {
+const getCommentExtension = (prismaClient: PrismaClient) => {
     return async function comment(id: string, email:string, message: string) {
 
-        const { currentRound } = await prismaClient.task.findUniqueOrThrow({
-            where: { id },
-            select: {
-                currentRound: true
-            }
-        });
-    
-        return await prismaClient.task.update({
-            where: { id },
-            data: {
-                messages: {
-                    create: {
-                        user: {
-                            connect: { email }
-                        },
-                        message,
-                        round: currentRound
-                    }
+        return await prismaClient.$transaction(async (tx) => {
+            const { currentRound } = await tx.task.findUniqueOrThrow({
+                where: { id },
+                select: { currentRound: true }
+            });
+        
+            return await tx.task.update({
+                where: { id },
+                data: { messages: { create: {
+                    user: { connect: { email }},
+                    message,
+                    round: currentRound
+                }}},
+                include: {
+                    votes: {
+                        select: voteIncludeSelect,
+                        where: { round: { equals: currentRound } }
+                    },
+                    messages: { select: messageIncludeSelect}
                 }
-            },
-            include: {
-                votes: {
-                    select: voteIncludeSelect,
-                    where: { round: { equals: currentRound } }
-                },
-                messages: {
-                    select: messageIncludeSelect,
-                }
-            }
+            });
         });
     }
 }

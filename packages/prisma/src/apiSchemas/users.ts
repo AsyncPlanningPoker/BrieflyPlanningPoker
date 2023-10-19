@@ -9,7 +9,7 @@ export const createSchemaReq = UserOptionalDefaultsSchema
     }).strict();
 
 /** Esquema para endpoint de criacao - response */
-export const createSchemaRes = UserSchema.strict();
+export const createSchemaRes = UserSchema.omit({ password: true }).strict();
 
 /** Esquema para endpoint de login - request */
 export const loginSchemaReq = UserOptionalDefaultsSchema.pick({ email: true, password: true }).strict();
@@ -29,11 +29,11 @@ export const deleteSchemaRes = createSchemaRes;
 
 /** Esquema para endpoint de atualizacao - request */
 export const updateSchemaReq = UserOptionalDefaultsSchema
-    .extend({oldPassword: z.string()})
+    .extend({ oldPassword: z.string().optional() })
     .omit({
         createdAt: true,
         updatedAt: true
-    }).partial().strict();
+    }).strict();
 
 /** Esquema para endpoint de atualizacao - request */
 export const updateSchemaRes = createSchemaRes;

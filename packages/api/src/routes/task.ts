@@ -1,96 +1,82 @@
-import { NextFunction, Response } from 'express';
 import { prisma, tasks } from '@briefly/prisma';
-import { squadReqType, taskReqType } from './utils';
+import context, { type Context } from '../context'
+import { type ZodiosRequestHandler } from '@zodios/express';
+import type { Method, ZodiosPathsByMethod } from '@zodios/core';
+import tasksAPI, { type TasksAPI } from '@briefly/prisma/dist/apiDef/tasks';
+import { Unauthorized } from 'middlewares/error';
 
-async function findAll(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId: string = req.params.squadId;
+type TasksHandler<M extends Method, Path extends ZodiosPathsByMethod<TasksAPI, M>> =
+  ZodiosRequestHandler<TasksAPI, Context, M, Path>;
+
+const tasksRouter = context.router(tasksAPI);
+
+const find: TasksHandler<"get", "/:taskId"> = async (req, res, next) => {
+  const taskId: string = req.params.taskId as string;
   try {
-    return await prisma.task
-      .findMany({
-        where: { squadId },
-        select: { id: true, name: true, points: true },
-      })
-      .then((obj) => res.status(200).json(obj));
+    const task = await prisma.task.findUniqueOrThrow({ where: { id: taskId } });
+    return res.status(200).json(task);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function create(req: squadReqType, res: Response, next: NextFunction): Promise<Response | void> {
+const deactivate: TasksHandler<"put", "/:taskId"> = async (req, res, next) => {
+  const taskId: string = req.params.taskId as string;
   try {
-    const data = tasks.createSchema.parse({
-      ...req.body,
-      squadId: req.params.squadId,
+    const task = await prisma.task.update({
+      where: { id: taskId },
+      data: { active: false }
     });
-    return await prisma.task
-      .create({
-        data,
-      })
-      .then((obj) => res.status(201).json(obj));
+    return res.status(200).json(task);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function find(req: taskReqType, res: Response, next: NextFunction): Promise<Response | void> {
+const del: TasksHandler<"delete", "/:taskId"> = async (req, res, next) => {
+  const taskId: string = req.params.taskId as string;
   try {
-    return await prisma.task
-      .findUniqueOrThrow({
-        where: { id: req.params.taskId },
-        include: {
-          votes: {
-            select: {
-              user: {
-                select: { email: true },
-              },
-              points: true,
-              round: true,
-              createdAt: true,
-            },
-          },
-          messages: {
-            select: {
-              user: {
-                select: { email: true },
-              },
-              message: true,
-              round: true,
-              createdAt: true,
-            },
-          },
-        },
-      })
-      .then((obj) => res.status(200).json(obj));
+    const task = await prisma.task.delete({ where: { id: taskId } });
+    return res.status(200).json(task);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function deactivate(req: taskReqType, res: Response, next: NextFunction): Promise<Response | void> {
-  const id: string = req.params.taskId;
+const vote: TasksHandler<"post", "/:taskId/votes"> = async (req, res, next) => {
+  if(! req.user)
+    throw new Unauthorized("You must be logged in to do this action!");
+
+  const taskId: string = req.params.taskId as string;
+  const email = req.user.email;
+  const { points } = req.body;
   try {
-    return await prisma.task
-      .update({
-        where: { id },
-        data: { active: false, finished: true },
-      })
-      .then((obj) => res.status(200).json(obj));
+    const task = await prisma.task.vote(taskId, email, points);
+    return res.status(201).json(task);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function deleteTask(req: taskReqType, res: Response, next: NextFunction): Promise<Response | void> {
-  const id: string = req.params.taskId;
+const message: TasksHandler<"post", "/:taskId/messages"> = async (req, res, next) => {
+  if(! req.user)
+    throw new Unauthorized("You must be logged in to do this action!");
+
+  const taskId: string = req.params.taskId as string;
+  const email = req.user.email;
+  const { message } = req.body;
   try {
-    return await prisma.task
-      .delete({
-        where: { id },
-      })
-      .then((obj) => res.status(200).json(obj));
+    const task = await prisma.task.comment(taskId, email, message);
+    return res.status(201).json(task);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-export { create, deactivate, deleteTask, find, findAll };
+tasksRouter.get("/:taskId", find);
+tasksRouter.put("/:taskId", deactivate);
+tasksRouter.delete("/:taskId", del);
+tasksRouter.post("/:taskId/votes", vote);
+tasksRouter.post("/:taskId/messages", message);
+
+export default tasksRouter;

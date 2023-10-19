@@ -1,35 +1,35 @@
-import { makeEndpoint, makeApi, type ZodiosEndpointParameter } from '@zodios/core';
+import { makeEndpoint, makeApi, type ZodiosEndpointParameter, ZodiosBodyByPath, makeParameters } from '@zodios/core';
 import { users } from '../apiSchemas'
 
 // Parameters
 
-const createBodyParams: ZodiosEndpointParameter<users.CreateSchemaReq> = {
+const createBodyParams = makeParameters([{
     name: 'Create',
     type: 'Body',
     description: 'Input user details',
     schema: users.createSchemaReq
-};
+}]);
 
-const loginBodyParams: ZodiosEndpointParameter<users.LoginSchemaReq> = {
+const loginBodyParams = makeParameters([{
     name: 'Login',
     type: 'Body',
     description: 'Input credentials',
     schema: users.loginSchemaReq
-};
+}]);
 
-const deleteBodyParams: ZodiosEndpointParameter<users.DeleteSchemaReq> = {
+const deleteBodyParams = makeParameters([{
     name: 'Delete',
     type: 'Body',
     description: '',
     schema: users.deleteSchemaReq
-};
+}]);
 
-const updateBodyParams: ZodiosEndpointParameter<users.UpdateSchemaReq> = {
+const updateBodyParams = makeParameters([{
     name: 'Update',
     type: 'Body',
     description: 'Input user details (optional)',
     schema: users.updateSchemaReq
-};
+}]);
 
 // Endpoints
 
@@ -37,7 +37,7 @@ const createEndpoint = makeEndpoint({
     method: 'post',
     path: '',
     response: users.createSchemaRes,
-    parameters: [createBodyParams],
+    parameters: createBodyParams,
     alias: 'createUser',
     description: 'Create an user',
     responseDescription: "The created user"
@@ -47,7 +47,7 @@ const loginEndpoint = makeEndpoint({
     method: 'post',
     path: '/login',
     response: users.loginSchemaRes,
-    parameters: [loginBodyParams],
+    parameters: loginBodyParams,
     alias: 'loginUser',
     description: 'Authenticate an user',
     responseDescription: "A JWT Bearer auth token"
@@ -67,11 +67,12 @@ const updateEndpoint = makeEndpoint({
     method: 'put',
     path: '',
     response: users.updateSchemaRes,
-    parameters: [updateBodyParams],
+    parameters: updateBodyParams,
     alias: 'updateUser',
     description: 'Update an user',
     responseDescription: "The updated user"
 });
+
 
 const usersAPI = makeApi([createEndpoint, loginEndpoint, deleteEndpoint, updateEndpoint]);
 

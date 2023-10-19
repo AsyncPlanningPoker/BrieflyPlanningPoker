@@ -4,12 +4,13 @@ import * as dotenv from 'dotenv';
 import { expand } from 'dotenv-expand'
 import morgan from 'morgan';
 import cors from 'cors';
-import type { Express } from 'express';
 import context, { type Context } from 'context';
 import { CustomError, handler as errorHandler } from './middlewares/error';
 import routes from './routes';
 import { ZodiosApp, zodiosApp } from '@zodios/express';
 import apiDef, { type ApiDef } from '@briefly/prisma/dist/apiDef';
+import { AnyZodiosRequestOptions } from '@zodios/core';
+import { handler } from 'middlewares/authorization';
 
 function listen(): void {
   if (require.main === module) {
@@ -32,28 +33,24 @@ function setExit(): void {
 function setMiddlewares() {
   app.use(morgan('tiny'));
   app.use(cors());
-
-  // app.use(
-  //   bodyParser.urlencoded({
-  //     extended: true,
-  //   })
-  // );
-
-  // app.use(express.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(express.json());
+  app.use(handler);
   app.use(routes);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
+  app.use((err: Error | CustomError, req: Request, res: Response, next: NextFunction) => {
     errorHandler(err, res);
   });
 }
 
+
 expand(dotenv.config());
-const expressApp = express();
 const port = process.env.PORT ?? 8000;
+
+const app: ZodiosApp<ApiDef, Context> = zodiosApp(apiDef, { context });
 
 setMiddlewares();
 setExit();
 listen();
-const app: ZodiosApp<ApiDef, Context> = zodiosApp(apiDef, { context });
 
 export default app ;
