@@ -28,6 +28,26 @@ const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 })
 .$extends(taskExtensions)
 .$extends({
+    query:{
+        user: {
+            async $allOperations( { args, query } ){
+                if('data' in args){
+                    // Um único registro
+                    if(args.data instanceof Array) {
+                        for(const datum of args.data)
+                            datum.password = await crypt.create(datum.password);
+                    } else {
+                        if(args.data.password){
+                            if(typeof args.data.password === 'string')
+                                args.data.password = await crypt.create(args.data.password);
+                            else args.data.password.set = await crypt.create(args.data.password.set ?? "");
+                        }
+                    }
+                }
+                return await query(args);
+            }
+        }
+    },
     model: {
         user:{
             /** 
@@ -40,35 +60,7 @@ const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
                 const user = await Prisma.getExtensionContext(this)
                     .$parent.user.findUniqueOrThrow({ where: { email } });
                 
-                return crypt.compare(password, user.password);
-            }
-        }
-    }
-})
-.$extends({
-    result: {
-        user: {
-            password: {
-                needs: {},
-                compute(){
-                    return undefined
-                }
-            }
-        }
-    },
-    query: {
-        user: {
-            async $allOperations({ args, query }){
-                const data = await query(args);
-                if(! data) return undefined;
-
-                if (data instanceof Object && 'password' in data)
-                    delete data.password;
-                else if (data instanceof Array)
-                    for(const datum of data)
-                        if('password' in datum) delete datum.password;  
-
-                return data;
+                return await crypt.compare(password, user.password);
             }
         }
     }

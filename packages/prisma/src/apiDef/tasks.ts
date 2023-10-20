@@ -1,68 +1,32 @@
-import { makeEndpoint, makeApi, type ZodiosEndpointParameter, makeParameters } from '@zodios/core';
-import { tasks, voting } from '../apiSchemas'
+import { makeEndpoint, makeApi, makeParameters } from '@zodios/core';
+import { tasks } from '../apiSchemas'
 import { z } from 'zod';
-
-// const addUsersSchema = z.object({
-//     email: z.string().email(),
-//     owner: z.boolean().default(false)
-// }).strict();
-
-// type AddUsersSchema = z.input<typeof addUsersSchema>
 
 // Parameters
 
 const taskIdParams = makeParameters([{
-    name: 'Find',
+    name: 'taskId',
     type: 'Path',
     description: 'The unique identifier of the task',
     schema: z.string().uuid()
 }]);
 
-// const createBodyParams: ZodiosEndpointParameter<tasks.CreateSchemaReq> = {
-//     name: 'Create',
-//     type: 'Body',
-//     description: 'Input task details',
-//     schema: tasks.createSchemaReq
-// };
-
-// const findBodyParams: ZodiosEndpointParameter<tasks.FindSchemaReq> = {
-//     name: 'Find',
-//     type: 'Body',
-//     description: 'Input credentials',
-//     schema: tasks.findSchemaReq
-// };
-
-// const updateBodyParams: ZodiosEndpointParameter<tasks.UpdateSchemaReq> = {
-//     name: 'Update',
-//     type: 'Body',
-//     description: 'Input task details (optional)',
-//     schema: tasks.updateSchemaReq
-// };
-
 const voteBodyParams = makeParameters([{
     name: 'Vote',
     type: 'Body',
     description: 'A object containing the number of points of the users vote',
-    schema: voting.voteSchemaReq
+    schema: tasks.voteSchemaReq
 }]);
 
 const messageBodyParams = makeParameters([{
     name: 'Message',
     type: 'Body',
     description: 'A object containing the users message',
-    schema: voting.messageSchemaReq
+    schema: tasks.messageSchemaReq
 }]);
-
-// const deleteUsersQueryParams: ZodiosEndpointParameter<string> = {
-//     name: 'Email',
-//     type: 'Query',
-//     description: 'The email of the user',
-//     schema: z.string().email()
-// };
 
 
 // Endpoints
-
 
 const findEndpoint = makeEndpoint({
     method: 'get',
@@ -97,7 +61,7 @@ const deleteEndpoint = makeEndpoint({
 const voteEndpoint = makeEndpoint({
     method: 'post',
     path: '/:taskId/votes',
-    response: voting.voteSchemaRes,
+    response: tasks.voteSchemaRes,
     parameters: [...taskIdParams, ...voteBodyParams],
     alias: 'voteTask',
     description: 'Submit a vote to a task',
@@ -107,7 +71,7 @@ const voteEndpoint = makeEndpoint({
 const messageEndpoint = makeEndpoint({
     method: 'post',
     path: '/:taskId/messages',
-    response: voting.messageSchemaRes,
+    response: tasks.messageSchemaRes,
     parameters: [...taskIdParams, ...messageBodyParams],
     alias: 'messageTask',
     description: 'Submit a message to a task',

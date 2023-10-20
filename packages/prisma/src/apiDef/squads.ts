@@ -1,5 +1,5 @@
-import { makeEndpoint, makeApi, type ZodiosEndpointParameter, makeParameters } from '@zodios/core';
-import { squads, tasks } from '../apiSchemas'
+import { makeEndpoint, makeApi, makeParameters } from '@zodios/core';
+import { squads } from '../apiSchemas'
 import { z } from 'zod';
 
 const addUsersSchema = z.object({
@@ -12,7 +12,7 @@ type AddUsersSchema = z.input<typeof addUsersSchema>
 // Parameters
 
 const squadIdParams = makeParameters([{
-    name: 'Find',
+    name: 'squadId',
     type: 'Path',
     description: 'The unique identifier of the squad',
     schema: z.string().uuid()
@@ -24,13 +24,6 @@ const createBodyParams = makeParameters([{
     description: 'Input squad details',
     schema: squads.createSchemaReq
 }]);
-
-// const findBodyParams= makeParameters([{
-//     name: 'Find',
-//     type: 'Body',
-//     description: 'Input credentials',
-//     schema: squads.findSchemaReq
-// }]);
 
 const updateBodyParams = makeParameters([{
     name: 'Update',
@@ -57,8 +50,9 @@ const createTaskBodyParams = makeParameters([{
     name: 'Create task',
     type: 'Body',
     description: 'Input squad details',
-    schema: tasks.createSchemaReq
+    schema: squads.createTaskSchemaReq
 }]);
+
 
 // Endpoints
 
@@ -125,7 +119,7 @@ const deleteUsersEndpoint = makeEndpoint({
 const createTaskEndpoint = makeEndpoint({
     method: 'post',
     path: '/:squadId/tasks',
-    response: tasks.createSchemaRes,
+    response: squads.createTaskSchemaRes,
     parameters: [...squadIdParams, ...createTaskBodyParams],
     alias: 'createTaskSquad',
     description: 'Create a task and add it to a specific squad',
@@ -135,7 +129,7 @@ const createTaskEndpoint = makeEndpoint({
 const findAllTasksEndpoint = makeEndpoint({
     method: 'get',
     path: '/:squadId/tasks',
-    response: tasks.findAllSchemaRes,
+    response: squads.findAllTasksSchemaRes,
     parameters: squadIdParams,
     description: 'List all tasks belonging to a specific squad',
     responseDescription: "A list of tasks"

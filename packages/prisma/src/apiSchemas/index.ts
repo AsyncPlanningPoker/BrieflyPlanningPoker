@@ -5,4 +5,3 @@
 export * as users from './users';
 export * as squads from './squads';
 export * as tasks from './tasks';
-export * as voting from './voting';

@@ -1,4 +1,5 @@
-import { SquadOptionalDefaultsSchema, SquadPartialSchema, SquadSchema } from "../generated/zod";
+import { findSchemaRes as findTaskSchemaRes } from "./tasks";
+import { SquadOptionalDefaultsSchema, SquadPartialSchema, SquadSchema, TaskOptionalDefaultsSchema, TaskSchema } from "../generated/zod";
 import { z } from "zod";
 
 /** Esquema para criacao de squads - request */
@@ -49,6 +50,28 @@ export const delUsersSchemaReq = z.object({}).strict();
 /** Esquema para sair de um squad - response */
 export const delUsersSchemaRes = createSchemaRes;
 
+/** Esquema para criacao de uma task - request */
+export const createTaskSchemaReq = TaskOptionalDefaultsSchema.omit({
+    squadId: true,
+    currentRound: true,
+    enabled: true,
+    finished: true,
+    id: true,
+    points: true
+}).strict();
+
+/** Esquema para criacao de uma task - response */
+export const createTaskSchemaRes = TaskSchema.strict();
+
+/**
+ * Esquema para listar todas as tasks de uma squad - request **(vazio)**
+ * 
+ * Nao sei se precisa...*/
+export const findAllTasksSchemaReq = z.object({}).strict();
+
+/** Esquema para listar todas as tasks - response */
+export const findAllTasksSchemaRes = z.array(findTaskSchemaRes.omit({ votes: true, messages: true }));
+
 // Tipos
 export type CreateSchemaReq = z.infer<typeof createSchemaReq>;
 export type CreateSchemaRes = z.infer<typeof createSchemaRes>;
@@ -62,3 +85,7 @@ export type AddUsersSchemaReq = z.infer<typeof addUsersSchemaReq>;
 export type AddUsersSchemaRes = z.infer<typeof addUsersSchemaRes>;
 export type DelUsersSchemaReq = z.infer<typeof delUsersSchemaReq>;
 export type DelUsersSchemaRes = z.infer<typeof delUsersSchemaRes>;
+export type CreateTaskSchemaReq = z.infer<typeof createTaskSchemaReq>;
+export type CreateTaskSchemaRes = z.infer<typeof createTaskSchemaRes>;
+export type FindAllTasksSchemaReq = z.infer<typeof findAllTasksSchemaReq>;
+export type FindAllTasksSchemaRes = z.infer<typeof findAllTasksSchemaRes>;

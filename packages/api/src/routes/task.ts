@@ -1,9 +1,9 @@
-import { prisma, tasks } from '@briefly/prisma';
+import { prisma } from '@briefly/prisma';
 import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import tasksAPI, { type TasksAPI } from '@briefly/prisma/dist/apiDef/tasks';
-import { Unauthorized } from 'middlewares/error';
+import { mustAuth } from '../middlewares/authorization';
 
 type TasksHandler<M extends Method, Path extends ZodiosPathsByMethod<TasksAPI, M>> =
   ZodiosRequestHandler<TasksAPI, Context, M, Path>;
@@ -11,9 +11,15 @@ type TasksHandler<M extends Method, Path extends ZodiosPathsByMethod<TasksAPI, M
 const tasksRouter = context.router(tasksAPI);
 
 const find: TasksHandler<"get", "/:taskId"> = async (req, res, next) => {
-  const taskId: string = req.params.taskId as string;
+  const { taskId } = req.params;
   try {
-    const task = await prisma.task.findUniqueOrThrow({ where: { id: taskId } });
+    const task = await prisma.task.findUniqueOrThrow({
+      where: { id: taskId },
+      include: {
+        messages: true,
+        votes: true
+      }
+    });
     return res.status(200).json(task);
   } catch (error: unknown) {
     next(error);
@@ -21,11 +27,15 @@ const find: TasksHandler<"get", "/:taskId"> = async (req, res, next) => {
 };
 
 const deactivate: TasksHandler<"put", "/:taskId"> = async (req, res, next) => {
-  const taskId: string = req.params.taskId as string;
+  const { taskId } = req.params;
   try {
     const task = await prisma.task.update({
       where: { id: taskId },
-      data: { active: false }
+      data: { active: false },
+      include: {
+        messages: true,
+        votes: true
+      }
     });
     return res.status(200).json(task);
   } catch (error: unknown) {
@@ -34,9 +44,15 @@ const deactivate: TasksHandler<"put", "/:taskId"> = async (req, res, next) => {
 };
 
 const del: TasksHandler<"delete", "/:taskId"> = async (req, res, next) => {
-  const taskId: string = req.params.taskId as string;
+  const { taskId } = req.params;
   try {
-    const task = await prisma.task.delete({ where: { id: taskId } });
+    const task = await prisma.task.delete({
+      where: { id: taskId },
+      include: {
+        messages: true,
+        votes: true
+      }
+    });
     return res.status(200).json(task);
   } catch (error: unknown) {
     next(error);
@@ -44,11 +60,8 @@ const del: TasksHandler<"delete", "/:taskId"> = async (req, res, next) => {
 };
 
 const vote: TasksHandler<"post", "/:taskId/votes"> = async (req, res, next) => {
-  if(! req.user)
-    throw new Unauthorized("You must be logged in to do this action!");
-
-  const taskId: string = req.params.taskId as string;
-  const email = req.user.email;
+  const { taskId } = req.params;
+  const { email } = req.user;
   const { points } = req.body;
   try {
     const task = await prisma.task.vote(taskId, email, points);
@@ -59,11 +72,9 @@ const vote: TasksHandler<"post", "/:taskId/votes"> = async (req, res, next) => {
 };
 
 const message: TasksHandler<"post", "/:taskId/messages"> = async (req, res, next) => {
-  if(! req.user)
-    throw new Unauthorized("You must be logged in to do this action!");
 
-  const taskId: string = req.params.taskId as string;
-  const email = req.user.email;
+  const { taskId } = req.params;
+  const { email } = req.user;
   const { message } = req.body;
   try {
     const task = await prisma.task.comment(taskId, email, message);
@@ -73,6 +84,7 @@ const message: TasksHandler<"post", "/:taskId/messages"> = async (req, res, next
   }
 };
 
+tasksRouter.use(mustAuth);
 tasksRouter.get("/:taskId", find);
 tasksRouter.put("/:taskId", deactivate);
 tasksRouter.delete("/:taskId", del);

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "echo \"Building project @briefly/prisma...\" && tsc -b --verbose",
     "prisma:up": "echo \"Generating prisma artifacts...\" && yarn prisma generate && yarn build",
-    "db:up": "yarn prisma migrate deploy"
+    "db:up": "yarn prisma migrate dev --name=init"
   },
   "dependencies": {
     "@prisma/client": "5.2.0",

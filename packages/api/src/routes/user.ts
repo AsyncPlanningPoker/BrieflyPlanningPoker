@@ -1,12 +1,12 @@
 import { Unauthorized } from '../middlewares/error/error';
 import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
-import { prisma, users as usersSchemas } from '@briefly/prisma';
+import { prisma } from '@briefly/prisma';
 import usersAPI, { type UsersAPI } from '@briefly/prisma/dist/apiDef/users';
 import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
-import { mustAuth } from 'middlewares/authorization';
+import { mustAuth } from '../middlewares/authorization';
 
 type UsersHandler<M extends Method, Path extends ZodiosPathsByMethod<UsersAPI, M>> =
   ZodiosRequestHandler<UsersAPI, Context, M, Path>;
@@ -46,7 +46,12 @@ const update: UsersHandler<"put", ""> = async (req, res, next) => {
       }
       if (! await prisma.user.authenticate(email, data.oldPassword))
         throw new Unauthorized('Wrong password');
+
     }
+
+    if(data.oldPassword)
+      delete data.oldPassword;
+
     const user = await prisma.user
     .update({
       data,

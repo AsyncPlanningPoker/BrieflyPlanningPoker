@@ -29,11 +29,11 @@ export const deleteSchemaRes = createSchemaRes;
 
 /** Esquema para endpoint de atualizacao - request */
 export const updateSchemaReq = UserOptionalDefaultsSchema
-    .extend({ oldPassword: z.string().optional() })
+    .extend({ oldPassword: z.string() })
     .omit({
         createdAt: true,
         updatedAt: true
-    }).strict();
+    }).partial().strict();
 
 /** Esquema para endpoint de atualizacao - request */
 export const updateSchemaRes = createSchemaRes;

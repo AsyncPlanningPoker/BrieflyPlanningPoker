@@ -1,4 +1,4 @@
-import { makeEndpoint, makeApi, type ZodiosEndpointParameter, ZodiosBodyByPath, makeParameters } from '@zodios/core';
+import { makeEndpoint, makeApi, makeParameters } from '@zodios/core';
 import { users } from '../apiSchemas'
 
 // Parameters

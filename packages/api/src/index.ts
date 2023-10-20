@@ -4,13 +4,12 @@ import * as dotenv from 'dotenv';
 import { expand } from 'dotenv-expand'
 import morgan from 'morgan';
 import cors from 'cors';
-import context, { type Context } from 'context';
+import context, { type Context } from './context';
 import { CustomError, handler as errorHandler } from './middlewares/error';
 import routes from './routes';
 import { ZodiosApp, zodiosApp } from '@zodios/express';
 import apiDef, { type ApiDef } from '@briefly/prisma/dist/apiDef';
-import { AnyZodiosRequestOptions } from '@zodios/core';
-import { handler } from 'middlewares/authorization';
+import { handler } from './middlewares/authorization';
 
 function listen(): void {
   if (require.main === module) {
@@ -47,7 +46,7 @@ function setMiddlewares() {
 expand(dotenv.config());
 const port = process.env.PORT ?? 8000;
 
-const app: ZodiosApp<ApiDef, Context> = zodiosApp(apiDef, { context });
+const app: ZodiosApp<ApiDef, Context> = context.app(apiDef);
 
 setMiddlewares();
 setExit();
