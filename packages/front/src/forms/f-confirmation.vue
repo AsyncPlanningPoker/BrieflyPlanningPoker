@@ -22,32 +22,19 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
-export default {
-  name: 'FConfirmation',
+const props = withDefaults(defineProps<{
+  action: string,
+  message?: string
+}>(), { action: 'Confirm' });
 
-  components: {
-    BButton,
-    BText,
-  },
-
-  props: {
-    action: {
-      type: String,
-      default: 'Confirm',
-    },
-    message: {
-      type: String,
-      default: undefined,
-      required: true,
-    },
-  },
-
-  emits: ['close', 'confirm'],
-};
+const emits = defineEmits<{
+  (event: 'close'): any,
+  (event: 'confirm'): any
+}>();
 </script>
 
 <style lang="scss" scoped>

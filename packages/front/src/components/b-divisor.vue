@@ -21,29 +21,18 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { defineEmits, ref } from 'vue';
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
 
-export default {
-  name: 'BDivisor',
+const props = withDefaults(
+  defineProps<{
+    button: boolean,
+    color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
+  }>(), { color: 'black', button: false });
 
-  props: {
-    button: {
-      type: Boolean,
-      default: false,
-    },
-    color: {
-      type: String,
-      default: 'black',
-      validator: shouldBeOneOf(['primary', 'white', 'gray-10', 'gray-20', 'gray-30', 'black']),
-    },
-  },
-};
-</script>
-
-<script setup>
-const emit = defineEmits(['action']);
+const emit = defineEmits<{
+  (event: 'action'): void
+}>();
 
 const toggled = ref(false);
 const toggle = () => {

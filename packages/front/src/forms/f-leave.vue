@@ -31,31 +31,18 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useStore } from 'vuex';
 
 import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
-export default {
-  name: 'FLeave',
+const emit = defineEmits<{
+  (event: 'close'): any
+}>();
 
-  components: {
-    BButton,
-    BText,
-  },
-};
-</script>
-
-<script setup>
-const emit = defineEmits(['close']);
 const store = useStore();
-const props = defineProps({
-  email: {
-    type: String,
-    default: undefined,
-  },
-});
+const props = defineProps<{ email?: string }>();
 
 function confirm() {
   if (props.email) {
@@ -63,7 +50,6 @@ function confirm() {
   } else {
     store.dispatch('delYourself');
   }
-
   emit('close');
 }
 </script>

@@ -12,27 +12,14 @@
   </button>
 </template>
 
-<script>
+<script setup lang="ts">
 import BText from '../components/b-text.vue';
 
-export default {
-  name: 'BCard',
-
-  components: {
-    BText,
-  },
-
-  props: {
-    active: {
-      type: Boolean,
-      default: true,
-    },
-    value: {
-      type: Number,
-      default: undefined,
-    },
-  },
-};
+const props = withDefaults(
+  defineProps<{
+    active: boolean,
+    value?: number,
+  }>(), { active: true });
 </script>
 
 <style lang="scss" scoped>

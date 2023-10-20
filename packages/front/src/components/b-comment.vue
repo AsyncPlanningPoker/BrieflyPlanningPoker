@@ -60,39 +60,17 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import BText from '../components/b-text.vue';
 
-export default {
-  name: 'BComment',
-
-  components: {
-    BText,
-  },
-
-  props: {
-    author: {
-      type: String,
-      required: true,
-    },
-    date: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-    },
-    content: {
-      type: [String, Number],
-      required: true,
-    },
-    hidden: {
-      type: Boolean,
-      default: false,
-    },
-  },
-};
+const props = withDefaults(
+  defineProps<{
+    author: string,
+    date: string,
+    type: string,
+    content: string | number,
+    hidden: boolean
+  }>(), { hidden: true });
 </script>
 
 <style lang="scss" scoped>

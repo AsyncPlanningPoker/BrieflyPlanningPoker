@@ -1,136 +1,84 @@
 import { Unauthorized } from '../middlewares/error/error';
 import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
-import * as crypt from '../utils/crypt';
-import { NextFunction, Request, Response } from 'express';
-import { prisma, users } from '@briefly/prisma';
+import { prisma } from '@briefly/prisma';
+import usersAPI, { type UsersAPI } from '@briefly/prisma/dist/apiDef/users';
+import context, { type Context } from '../context'
+import { type ZodiosRequestHandler } from '@zodios/express';
+import type { Method, ZodiosPathsByMethod } from '@zodios/core';
+import { mustAuth } from '../middlewares/authorization';
 
-async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+type UsersHandler<M extends Method, Path extends ZodiosPathsByMethod<UsersAPI, M>> =
+  ZodiosRequestHandler<UsersAPI, Context, M, Path>;
+
+const usersRouter = context.router(usersAPI);
+
+const create: UsersHandler<"post", ""> = async (req, res, next) => {
   try {
-    return await users.createSchema
-      .transform(async (user) => {
-        user.password = await crypt.create(user.password);
-        return user;
-      })
-      .parseAsync(req.body)
-      .then((data) => prisma.user.create({ data, select: { name: true, email: true } }))
-      .then((obj) => res.status(201).json(obj));
+    const data = req.body;
+    const user = await prisma.user.create({ data });
+    return res.status(201).json(user);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function login(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+const login: UsersHandler<"post", "/login"> = async (req, res, next) => {
   try {
-    const { password, email } = users.loginSchema
-      .pick({
-        email: true,
-        password: true,
-      })
-      .strict()
-      .parse(req.body);
-    const realPassword = (
-      await prisma.user.findUniqueOrThrow({
-        select: { password: true },
-        where: { email },
-      })
-    ).password;
-    if (await crypt.compare(password, realPassword)) {
-      return res.status(200).json({
-        token: auth.create(email, 'login'),
-      });
-    }
+    const { password, email } = req.body;
+    if (await prisma.user.authenticate(email, password))
+      return res.status(200).json({ token: auth.create(email, 'login') });
+    
     throw new Unauthorized('Invalid credentials');
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-// async function passRecovery(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-//   const email = req.body.email;
-//   const db = req.app.get('userDbStore');
-//   const user = await db.findByEmail(email);
-//   const token = user ? auth.create(email, 'pass-recovery', 300) : auth.create('inexistentAccount', 'inexistentAccount', 0);
-//   await send({ to: email, subject: 'BRIEFLY - Password Recovery', message: `Hey, did you ask for a password recovery?\n\nThis is your link ${req.body.url}${token}` })
-//     .then(() => {
-//       return res.status(200).json({});
-//     })
-//     .catch((error: any) => {
-//       return next(error);
-//     });
-// }
-
-// async function passUpdate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-//   const password = await crypt.create(req.body.password);
-//   const token = req.body.token;
-//   const db = req.app.get('userDbStore');
-//   const verify = auth.verify(token.replace('Bearer', '').trim());
-
-//   try {
-//     if (verify?.role === 'pass-recovery') {
-//       await db.updatePassByEmail(verify.user, { password: password, updatedAt: new Date() });
-//       return res.sendStatus(200);
-//     } else {
-//       throw new Unauthorized('your link is invalid or has expired');
-//     }
-//   } catch (error: any) {
-//     next(error);
-//   }
-// }
-
-async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+const update: UsersHandler<"put", ""> = async (req, res, next) => {
   try {
-    const email: string = req.query.user as string;
-    return await prisma.user
+    const data = req.body;
+    const { email } = req.user;
+
+    if (data.password) {
+      if (! data.oldPassword) {
+        throw new Unauthorized('Must supply current password');
+      }
+      if (! await prisma.user.authenticate(email, data.oldPassword))
+        throw new Unauthorized('Wrong password');
+
+    }
+
+    if(data.oldPassword)
+      delete data.oldPassword;
+
+    const user = await prisma.user
+    .update({
+      data,
+      where: { email }
+    });
+  return res.status(200).json(user);
+} catch (error: unknown) {
+  next(error);
+}
+};
+
+const del: UsersHandler<"delete", ""> = async (req, res, next) => {
+  try {
+    const { email } = req.user
+    const user = await prisma.user
       .delete({
         where: { email },
       })
-      .then((obj) => res.status(200).json(obj));
+    return res.status(200).json(user);
   } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  try {
-    const { data, extraArgs } = users.updateSchema.parse(req.body);
-    const oldEmail = req.query.user as string;
+usersRouter.post("", create);
+usersRouter.put("", mustAuth, update);
+usersRouter.delete("", mustAuth, del);
+usersRouter.post("/login", login);
 
-    if (data.password) {
-      if (!extraArgs.oldPassword) {
-        throw new Unauthorized('Must supply current password');
-      }
-      const { password } = await prisma.user.findUniqueOrThrow({
-        select: { password: true },
-        where: { email: oldEmail },
-      });
-
-      if (await crypt.compare(extraArgs.oldPassword, password)) {
-        data.password = await crypt.create(data.password as string);
-      } else {
-        throw new Unauthorized('Wrong password');
-      }
-    }
-
-    return prisma.user
-      .update({
-        data,
-        where: { email: oldEmail },
-        select: {
-          name: true,
-          email: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      })
-      .then((user) => res.status(200).json(user))
-      .catch((e: unknown) => {
-        throw e;
-      });
-  } catch (error: unknown) {
-    next(error);
-  }
-}
-
-export { create, login, updateUser, deleteUser };
-// export { create, login, passRecovery, passUpdate, updateUser, deleteUser };
+export default usersRouter;

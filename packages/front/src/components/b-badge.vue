@@ -15,18 +15,11 @@
   </div>
 </template>
 
-<script>
-import BText from '../components/b-text.vue';
-
-export default {
-  name: 'BBadge',
-
-  components: {
-    BText,
-  },
-
-  emits: ['action'],
-};
+<script setup lang="ts">
+import BText from './b-text.vue';
+const emit = defineEmits<{
+  (event: 'action'): any 
+}>();
 </script>
 
 <style lang="scss" scoped>

@@ -7,38 +7,23 @@
     }"
     :type="type"
   >
-    {{ this.value.toUpperCase() }}
+    {{ value.toUpperCase() }}
   </button>
 </template>
 
-<script>
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
+<script setup lang="ts">
 
-export default {
-  name: 'BButton',
-
-  props: {
-    size: {
-      type: String,
-      default: 'medium',
-      validator: shouldBeOneOf(['small', 'medium']),
-    },
-    type: {
-      type: String,
-      default: 'button',
-      validator: shouldBeOneOf(['button', 'reset', 'submit']),
-    },
-    value: {
-      type: String,
-      required: true,
-    },
-    variant: {
-      type: String,
-      default: 'primary',
-      validator: shouldBeOneOf(['primary', 'transparent', 'inverted']),
-    },
-  },
-};
+  const props = withDefaults(defineProps<{
+    size?: 'small' | 'medium',
+    value?: string,
+    type: 'button' | 'reset' | 'submit',
+    variant?: 'primary' | 'transparent' | 'inverted'
+  }>(), {
+    size: "medium",
+    value: "",
+    type: "button",
+    variant: "primary"
+  });
 </script>
 
 <style scoped lang="scss">

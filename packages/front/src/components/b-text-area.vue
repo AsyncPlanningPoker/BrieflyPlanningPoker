@@ -10,25 +10,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'BTextArea',
-
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      default: undefined,
-    },
-    row: {
-      type: Number,
-      default: undefined,
-    },
-  },
-};
+<script setup lang="ts">
+const props = defineProps<{
+  name: string
+  placeholder?: string,
+  row?: number
+}>();
 </script>
 
 <style scoped lang="scss">
