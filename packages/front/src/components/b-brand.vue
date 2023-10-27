@@ -6,14 +6,14 @@
     <div class="b-brand__logo-one">
       <img
         class="b-brand__image"
-        src="../assets/brand-icon-circle.png"
+        src="../assets/images/brand-icon-circle.png"
         alt="brand-logo-circle"
       >
     </div>
     <div class="b-brand__logo-two">
       <img
         class="b-brand__image"
-        src="../assets/brand-icon-rectangle.png"
+        src="../assets/images/brand-icon-rectangle.png"
         alt="brand-logo-rectangle"
       >
     </div>

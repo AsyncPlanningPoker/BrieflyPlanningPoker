@@ -1,13 +1,13 @@
 <template>
   <div class="b-comment">
-    <template v-if="type == 'vote'">
+    <template v-if="tasks.isVote(action)">
       <BText
         align="left"
         color="primary"
         size="medium"
       >
-        {{ `[${date}] ` }}
-        {{ author }}
+        {{ `[${action.createdAt}] ` }}
+        {{ action.userEmail }}
       </BText>
 
       <BText
@@ -16,7 +16,7 @@
         color="primary"
         size="medium"
       >
-        {{ ` voted ${content}` }}
+        {{ ` voted ${action.points}` }}
       </BText>
 
       <BText
@@ -35,8 +35,8 @@
         color="primary"
         size="medium"
       >
-        {{ `[${date}] ` }}
-        {{ author }}:
+        {{ `[${action.createdAt}] ` }}
+        {{ action.userEmail }}:
       </BText>
 
       <BText
@@ -45,7 +45,7 @@
         color="gray-20"
         size="medium"
       >
-        {{ content }}
+        {{ action.message }}
       </BText>
 
       <BText
@@ -61,14 +61,12 @@
 </template>
 
 <script setup lang="ts">
+import { tasks } from '@briefly/prisma/src/apiSchemas';
 import BText from '../components/b-text.vue';
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    author: string,
-    date: string,
-    type: string,
-    content: string | number,
+    action: tasks.Action
     hidden: boolean
   }>(), { hidden: true });
 </script>

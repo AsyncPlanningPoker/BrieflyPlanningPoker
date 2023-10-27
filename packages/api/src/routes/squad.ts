@@ -11,9 +11,16 @@ type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI,
 const squadsRouter = context.router(squadsAPI);
 
 const create: SquadsHandler<"post", ""> = async (req, res, next) => {
+  const data = req.body;
+
   try {
-    const data = req.body;
-    const squad = await prisma.squad.create({data});
+    const squad = await prisma.squad.create({
+      data,
+      include: {
+        users: { select: { user: true }},
+        tasks: true
+      }
+    });
     return res.status(201).json(squad);
   } catch (error: unknown) {
     next(error);
@@ -28,13 +35,7 @@ const find: SquadsHandler<"get", "/:squadId"> = async (req, res, next) => {
       .findUniqueOrThrow({
         where: { id },
         include: {
-          users: { select: { user: { select: {
-            email: true,
-            name: true,
-            enabled: true,
-            createdAt: true,
-            updatedAt: true
-          }}}},
+          users: { select: { user: true }},
           tasks: true
         }
       });
@@ -46,6 +47,7 @@ const find: SquadsHandler<"get", "/:squadId"> = async (req, res, next) => {
 
 const findAll: SquadsHandler<"get", ""> = async(req, res, next) => {
   const { email } = req.user;
+
   try {
     const squads = await prisma.squad
       .findMany({
@@ -77,6 +79,10 @@ const update: SquadsHandler<"put", "/:squadId"> = async(req, res, next) => {
       .update({
         where: { id },
         data,
+        include: {
+          users: { select: { user: true }},
+          tasks: true
+        }
       })
     return res.status(200).json(squad);
   } catch (error: unknown) {
@@ -102,6 +108,10 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
             },
           },
         },
+        include: {
+          users: { select: { user: true }},
+          tasks: true
+        }
       });
     return res.status(201).json(squad);
   } catch (error: unknown) {
@@ -116,7 +126,11 @@ const delUsers: SquadsHandler<"delete", "/:squadId/users"> = async (req, res, ne
   try {
     const squad = await prisma.squad.update({
       where: { id: squadId },
-      data: { users: { disconnect: { userEmail_squadId: { userEmail: email, squadId }}}}
+      data: { users: { disconnect: { userEmail_squadId: { userEmail: email, squadId }}}},
+      include: {
+        users: { select: { user: true }},
+        tasks: true
+      }
     })
 
     return res.status(200).json(squad);
@@ -131,25 +145,20 @@ const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, ne
   try {
     const task = await prisma.$transaction(async (tx) => {
       const task = await tx.task.create({ data });
+      
       await tx.squad.update({
         where: { id: squadId },
-        data: { tasks: { connect: { id: task.id }}}
+        data: { tasks: { connect: { id: task.id }}},
+        include: {
+          users: { select: { user: true }},
+          tasks: true
+        }
       });
       return task;
     });
     return res.status(201).json(task)
   } catch(error: unknown){
     next(error);
-  }
-};
-
-const findAllTasks: SquadsHandler<"get", "/:squadId/tasks"> = async (req, res, next) => {
-  const { squadId } = req.params;
-  try {
-    const tasks = await prisma.task.findMany({ where: { squadId } });
-    return res.status(200).json(tasks);
-  } catch (error: unknown) {
-    next(error)
   }
 };
 
@@ -161,6 +170,5 @@ squadsRouter.put("/:squadId", update);
 squadsRouter.post("/:squadId/users", addUsers);
 squadsRouter.delete("/:squadId/users", delUsers);
 squadsRouter.post("/:squadId/tasks", createTask);
-squadsRouter.get("/:squadId/tasks", findAllTasks);
 
 export default squadsRouter;

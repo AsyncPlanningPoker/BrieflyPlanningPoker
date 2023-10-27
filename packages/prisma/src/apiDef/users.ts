@@ -40,7 +40,7 @@ const createEndpoint = makeEndpoint({
     parameters: createBodyParams,
     alias: 'createUser',
     description: 'Create an user',
-    responseDescription: "The created user"
+    responseDescription: "A JWT Bearer auth token for the newly created user"
 });
 
 const loginEndpoint = makeEndpoint({

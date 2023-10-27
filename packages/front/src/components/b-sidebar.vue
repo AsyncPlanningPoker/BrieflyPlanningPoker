@@ -2,11 +2,11 @@
   <div class="b-sidebar">
     <div
       class="b-sidebar__logo-wrapper"
-      @click="squadS.squadActive = {}, $router.push({ name: 'Home' })"
+      @click="squadS.squadActive = undefined, $router.push({ name: 'Home' })"
     >
       <img
         class="b-sidebar__image"
-        src="../assets/square-logo-80.png"
+        src="../assets/images/square-logo-80.png"
         alt="brand-logo"
       >
     </div>

@@ -17,9 +17,9 @@
 
 <script setup lang="ts">
 import BText from './b-text.vue';
-const emit = defineEmits<{
-  (event: 'action'): any 
-}>();
+
+defineEmits<{ (event: 'action'): any }>();
+
 </script>
 
 <style lang="scss" scoped>

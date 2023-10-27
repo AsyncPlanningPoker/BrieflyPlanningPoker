@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TaskOptionalDefaultsSchema, TaskSchema, VoteSchema, MessageSchema } from "../generated/zod";
+import { TaskSchema, VoteSchema, MessageSchema } from "../generated/zod";
 
 /**
  * Esquema para listar uma task - request **(vazio)**
@@ -55,3 +55,18 @@ export type VoteSchemaReq = z.infer<typeof voteSchemaReq>;
 export type VoteSchemaRes = z.infer<typeof voteSchemaRes>;
 export type MessageSchemaReq = z.infer<typeof messageSchemaReq>;
 export type MessageSchemaRes = z.infer<typeof messageSchemaRes>;
+export type Vote = FindSchemaRes["votes"][number];
+export type Message = FindSchemaRes["messages"][number];
+
+/** Type to represent either a vote or a message in a task */
+export type Action = Vote | Message;
+
+/** Type guard */
+export function isVote(action: Action): action is Vote{
+    return "points" in action;
+}
+
+/** Type guard */
+export function isMessage(action: Action): action is Message{
+    return "message" in action;
+}

@@ -69,7 +69,7 @@
 
       <div class="b-squad__users-container">
         <BBadge
-          v-for="(user, index) in squad.users.filter((x) => x.email !== actualUser)"
+          v-for="({ user }, index) in squad.users.filter((x) => x.user.email !== actualUser)"
           :key="index"
           @action="toggleLeaveModal(user.email)"
         >
@@ -114,14 +114,14 @@ import FAddUser from '@/forms/f-add-user.vue';
 import FLeave from '@/forms/f-leave.vue';
 import FSquad from '@/forms/f-squad.vue';
 import { userStore } from '@/stores';
-import type { Squad } from '@/interfaces';
 
 import BBadge from './b-badge.vue';
 import BDivisor from './b-divisor.vue';
 import BModal from './b-modal.vue';
 import BText from './b-text.vue';
+import type { squads } from '@briefly/prisma/src/apiSchemas';
 
-const props = defineProps<{ squad: Squad }>();
+defineProps<{ squad: squads.FindSchemaRes }>();
 
 const user = userStore();
 

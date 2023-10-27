@@ -17,7 +17,7 @@ const create: UsersHandler<"post", ""> = async (req, res, next) => {
   try {
     const data = req.body;
     const user = await prisma.user.create({ data });
-    return res.status(201).json(user);
+    return res.status(201).json({ token: auth.create(data.email, 'login') });
   } catch (error: unknown) {
     next(error);
   }

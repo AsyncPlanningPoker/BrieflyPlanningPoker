@@ -1,12 +1,20 @@
 import { findSchemaRes as findTaskSchemaRes } from "./tasks";
 import { SquadOptionalDefaultsSchema, SquadPartialSchema, SquadSchema, TaskOptionalDefaultsSchema, TaskSchema } from "../generated/zod";
+import { updateSchemaRes as userSchema } from "./users";
 import { z } from "zod";
 
 /** Esquema para criacao de squads - request */
 export const createSchemaReq = SquadOptionalDefaultsSchema.strict();
 
 /** Esquema para criacao de squads - response */
-export const createSchemaRes = SquadSchema.strict();
+export const createSchemaRes = SquadSchema.extend({
+    users: z.array(z.object({
+        user: userSchema
+    })),
+    tasks: z.array(findTaskSchemaRes.omit({
+        votes: true, messages: true, squadId: true
+    }))
+}).strict();
 
 /**
  * Esquema para listar squads - request **(vazio)**
@@ -26,7 +34,7 @@ export const findSchemaRes = createSchemaRes;
 export const findAllSchemaReq = z.object({}).strict();
 
 /** Esquema para listar squads - response */
-export const findAllSchemaRes = z.array(createSchemaRes);
+export const findAllSchemaRes = z.array(createSchemaRes.omit({ tasks: true, users: true }));
 
 /** Esquema para update de squads - request */
 export const updateSchemaReq = SquadPartialSchema.strict();
@@ -35,7 +43,7 @@ export const updateSchemaReq = SquadPartialSchema.strict();
 export const updateSchemaRes = createSchemaRes;
 
 /** Esquema para adicionar um usuario a uma squad - request */
-export const addUsersSchemaReq = z.object({email: z.string().email(),owner: z.boolean()}).strict();
+export const addUsersSchemaReq = z.object({ email: z.string().email(), owner: z.boolean().default(false) }).strict();
 
 /** Esquema para adicionar um usuario a uma squad - response */
 export const addUsersSchemaRes = createSchemaRes;
@@ -51,26 +59,15 @@ export const delUsersSchemaReq = z.object({}).strict();
 export const delUsersSchemaRes = createSchemaRes;
 
 /** Esquema para criacao de uma task - request */
-export const createTaskSchemaReq = TaskOptionalDefaultsSchema.omit({
-    squadId: true,
-    currentRound: true,
-    enabled: true,
-    finished: true,
-    id: true,
-    points: true
+export const createTaskSchemaReq = TaskOptionalDefaultsSchema.pick({
+    name: true,
+    description: true,
+    maxRounds: true,
+    percentual: true
 }).strict();
 
 /** Esquema para criacao de uma task - response */
 export const createTaskSchemaRes = TaskSchema.strict();
-
-/**
- * Esquema para listar todas as tasks de uma squad - request **(vazio)**
- * 
- * Nao sei se precisa...*/
-export const findAllTasksSchemaReq = z.object({}).strict();
-
-/** Esquema para listar todas as tasks - response */
-export const findAllTasksSchemaRes = z.array(findTaskSchemaRes.omit({ votes: true, messages: true }));
 
 // Tipos
 export type CreateSchemaReq = z.infer<typeof createSchemaReq>;
@@ -87,5 +84,3 @@ export type DelUsersSchemaReq = z.infer<typeof delUsersSchemaReq>;
 export type DelUsersSchemaRes = z.infer<typeof delUsersSchemaRes>;
 export type CreateTaskSchemaReq = z.infer<typeof createTaskSchemaReq>;
 export type CreateTaskSchemaRes = z.infer<typeof createTaskSchemaRes>;
-export type FindAllTasksSchemaReq = z.infer<typeof findAllTasksSchemaReq>;
-export type FindAllTasksSchemaRes = z.infer<typeof findAllTasksSchemaRes>;

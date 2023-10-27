@@ -1,33 +1,33 @@
 import { defineStore } from 'pinia';
-import { api } from '../services/api';
+import api from '../services/api';
 import router from '../router/index';
 import { userStore } from './user';
 
 interface State {
-  confirmPassword: string,
-  email: string,
-  errorMessage: string,
   name: string,
+  email: string,
   password: string,
+  confirmPassword: string,
+  errorMessage: string,
 }
 
 const user = userStore()
 
 const signUpStore = defineStore('signUpStore',{
   state: (): State => ({
-    confirmPassword: '',
-    email: '',
-    errorMessage: '',
     name: '',
-    password: ''
+    email: '',
+    password: '',
+    confirmPassword: '',
+    errorMessage: ''
   }),
 
   actions: {
     register() {
       api
-        .post('user', { name: this.name, email: this.email, password: this.password })
+        .createUser(this)
         .then((res) => {
-          const token = res.data.token;
+          const { token } = res;
           user.updateUserToken(token)
           user.updateUserEmail(this.email)
           router.push('/');

@@ -14,5 +14,16 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  optimizeDeps:{
+    exclude: ['.prisma/client/index-browser']
+  },
+  build: {
+    commonjsOptions: {
+      exclude: [
+        '.prisma/client/index-browser'
+      ],
+      include: []
+    }
   }
 })

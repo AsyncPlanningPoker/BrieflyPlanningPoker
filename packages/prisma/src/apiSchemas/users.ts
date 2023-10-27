@@ -9,23 +9,13 @@ export const createSchemaReq = UserOptionalDefaultsSchema
     }).strict();
 
 /** Esquema para endpoint de criacao - response */
-export const createSchemaRes = UserSchema.omit({ password: true }).strict();
+export const createSchemaRes = z.object({ token: z.string() }).strict();
 
 /** Esquema para endpoint de login - request */
 export const loginSchemaReq = UserOptionalDefaultsSchema.pick({ email: true, password: true }).strict();
 
 /** Esquema para endpoint de login - response */
-export const loginSchemaRes = z.object({ token: z.string() }).strict();
-
-/** 
- * Esquema para endpoint de exclusao - request 
- * 
- * Nao sei se precisa...
- */
-export const deleteSchemaReq = z.object({}).strict();
-
-/** Esquema para endpoint de exclusao - response */
-export const deleteSchemaRes = createSchemaRes;
+export const loginSchemaRes = createSchemaRes;
 
 /** Esquema para endpoint de atualizacao - request */
 export const updateSchemaReq = UserOptionalDefaultsSchema
@@ -36,7 +26,18 @@ export const updateSchemaReq = UserOptionalDefaultsSchema
     }).partial().strict();
 
 /** Esquema para endpoint de atualizacao - request */
-export const updateSchemaRes = createSchemaRes;
+export const updateSchemaRes = UserSchema.omit({ password: true }).strict();
+
+/** 
+ * Esquema para endpoint de exclusao - request 
+ * 
+ * Nao sei se precisa...
+ */
+export const deleteSchemaReq = z.object({}).strict();
+
+/** Esquema para endpoint de exclusao - response */
+export const deleteSchemaRes = updateSchemaRes;
+
 
 // Tipos
 

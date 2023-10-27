@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import BContainer from './b-container.vue';
-const props = defineProps<{
+defineProps<{
   open: boolean,
   color?: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black',
 }>();

@@ -1,7 +1,6 @@
-import axios, { type AxiosResponse } from 'axios';
-import { Zodios, mergeApis } from '@zodios/core';
-
-import { usersAPI } from './users';
+import axios from 'axios';
+import { Zodios } from '@zodios/core';
+import apiDef from '@briefly/prisma/src/apiDef'
 
 const envVars = import.meta.env;
 
@@ -25,15 +24,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// const finalAPI = mergeApis({
-//   '/users': usersAPI
-// });
+const apiClient = new Zodios(apiDef, { axiosInstance: api });
 
-// const APIClient = new Zodios(finalAPI, { axiosInstance: api });
-// const a = APIClient.createUser({
-//   name: 'Joao',
-//   email: 'jp@tst.com',
-//   password: 'cu'
-// });
-
-export { api };
+export default apiClient;

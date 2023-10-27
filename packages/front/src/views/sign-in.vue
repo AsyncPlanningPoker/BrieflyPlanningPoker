@@ -3,41 +3,32 @@
     <BBrand />
 
     <BContainer color="gray-30">
-      <Form
+      <form
         class="sign-in__form"
-        :validation-schema="schema"
         @submit="onSubmit"
         @invalid-submit="onInvalidSubmit"
       >
-        <BInputField
-          label="E-mail"
-          name="email"
-        >
-          <BInput
+        <BInput
+        label="E-mail"
             name="email"
             type="email"
             @input="updateEmail"
           />
-        </BInputField>
 
-        <BInputField
-          label="Password"
+        <BInput
+        label="Password"
           :link="['/password_reset', 'forgot password?']"
-          name="password"
-        >
-          <BInput
             name="password"
             type="password"
             @input="updatePassword"
           />
-        </BInputField>
 
         <BText
           class="error"
           size="small"
           tag="div"
         >
-          {{ this.$store.state.signIn.errorMessage }}
+          {{ signIn.errorMessage }}
         </BText>
 
         <BButton
@@ -64,7 +55,6 @@ import BBrand from '../components/b-brand.vue';
 import BButton from '../components/b-button.vue';
 import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
 import { ref } from 'vue';
 import { signInStore } from '@/stores';
@@ -91,10 +81,6 @@ function updatePassword(passwordInput: Event & { target: HTMLInputElement }) {
   signIn.password = passwordInput.target.value;
 }
 
-const schema = Yup.object().shape({
-  email: Yup.string().email().required(),
-  password: Yup.string().min(6).trim().noWhitespace().required(),
-});
 </script>
 
 <style scoped lang="scss">

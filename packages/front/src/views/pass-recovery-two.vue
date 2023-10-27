@@ -1,4 +1,7 @@
 <template>
+  NAO USE
+</template>
+<!-- <template>
   <div class="pass-recovery-two">
     <BBrand />
 
@@ -107,4 +110,4 @@ const schema = Yup.object().shape({
   row-gap: var(--unit-0200);
   width: 280px;
 }
-</style>
+</style> -->

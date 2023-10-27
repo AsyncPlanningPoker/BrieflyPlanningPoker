@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { api } from '../services/api';
+import { users } from '@briefly/prisma/src/apiSchemas';
+import api from '../services/api';
 
 interface State {
   userToken: string,
@@ -9,12 +10,17 @@ interface State {
 };
 
 const userStore = defineStore('userStore',{
-  state: (): State => ({
-    userToken: JSON.parse(localStorage.getItem('userToken') ?? ''),
-    userEmail: JSON.parse(localStorage.getItem('userEmail') ?? ''),
+  state: (): State => {
+    const token = localStorage.getItem('userToken');
+    const userToken = token ? JSON.parse(token) : "";
+    const email = localStorage.getItem('userEmail');
+    const userEmail = email ? JSON.parse(email) : "";
+    return ({
+    userToken,
+    userEmail,
     errorMessage: '',
     success: false,
-  }),
+  })},
   
   actions: {
     updateUserToken(token: string) {
@@ -34,11 +40,11 @@ const userStore = defineStore('userStore',{
       localStorage.removeItem('userEmail');
     },
 
-    async updateYourself(payload: any) {
+    async updateYourself(payload: users.UpdateSchemaReq) {
       this.errorMessage = '';
       this.success = false;
       try {
-        await api.put('user', payload);
+        await api.updateUser(payload);
         this.success = true;
       } catch (err: any) {
         const errorMessage = err.response?.data?.message;
@@ -53,7 +59,7 @@ const userStore = defineStore('userStore',{
     },
 
     async deleteYourself() {
-      await api.delete('user');
+      await api.deleteUser(undefined);
       this.logout();
     },
   },
