@@ -24,11 +24,12 @@
 <script setup lang="ts">
 import { defineEmits, ref } from 'vue';
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     button: boolean,
     color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
-  }>(), { color: 'black', button: false });
+  }>(), { color: 'black', button: false }
+);
 
 const emit = defineEmits<{
   (event: 'action'): void

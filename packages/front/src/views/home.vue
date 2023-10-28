@@ -55,9 +55,9 @@ const squadS = squadStore();
 const tasksS = taskStore();
 
 const squad = computed(() => {
-  const id = squadS.getActiveId;
-  if (id) tasksS.gatherTasks(id);
-  return id;
+  const activeSquad = squadS.squadActive;
+  if (activeSquad) tasksS.gatherTasks();
+  return activeSquad;
 });
 
 const activeTasks = computed(() => tasksS.enabledTasks);

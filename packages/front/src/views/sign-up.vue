@@ -1,142 +1,79 @@
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
   <div class="sign-up">
     <BBrand />
-
     <BContainer color="gray-30">
-      <Form
-        class="sign-up__form"
-        :validation-schema="schema"
-        @submit="onSubmit"
-        @invalid-submit="onInvalidSubmit"
-      >
-        <BInputField
-          label="Name"
-          name="name"
-        >
-          <BInput
-            name="name"
-            type="text"
-            @input="updateName"
-          />
-        </BInputField>
-
-        <BInputField
-          label="E-mail"
-          name="email"
-        >
-          <BInput
-            name="email"
-            type="email"
-            @input="updateEmail"
-          />
-        </BInputField>
-
-        <BInputField
-          label="Password"
-          name="password"
-        >
-          <BInput
-            name="password"
-            type="password"
-            @input="updatePassword"
-          />
-        </BInputField>
-
-        <BInputField
-          label="Confirm password"
-          name="confirmPassword"
-        >
-          <BInput
-            name="confirmPassword"
-            type="password"
-            @input="updateConfirmPassword"
-          />
-        </BInputField>
-
-        <BText
-          class="error"
-          size="small"
-          tag="div"
-        >
-          {{ signUp.errorMessage }}
+      <BForm class="sign-up__form" :schema=schema :onSubmit=onSubmit ref="signUpForm">
+        <BInput name="name" label="Nome" type="text" />
+        <BInput name="email" label="E-mail" type="email" />
+        <BInput name="password" label="Password" type="password"/>
+        <BInput name="confirmPassword" label="Confirm password" type="password"/>
+        <BText class="error" size="small" tag="div">
         </BText>
 
         <div class="sign-up__buttons-container">
-          <BButton
-            variant="transparent"
-            value="return"
-            @click="$router.push('signin')"
-          />
-
-          <BButton
-            class="sign-up__create-button"
-            type="submit"
-            value="create"
-            ref="submitButton"
-          />
+          <BButton variant="transparent" value="return" @click="$router.push('signin')"/>
+          <BButton class="sign-up__create-button" :disabled="!signUpForm?.valid" type="submit"
+          value="create" ref="submitButton" />
         </div>
-      </Form>
+      </BForm>
     </BContainer>
 
-    <BText
-      class="sign-up__terms"
-      size="small"
-      tag="p"
-    >
+    <BText class="sign-up__terms" size="small" tag="p">
       By creating an account, you agree to the <a href="#">Terms of Service</a>.
     </BText>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, toValue } from 'vue';
 import BBrand from '../components/b-brand.vue';
 import BButton from '../components/b-button.vue';
 import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
 import BText from '../components/b-text.vue';
-import { signUpStore } from '@/stores';
-import { ref } from 'vue';
+import BForm from '@/components/b-form.vue';
+import { z } from 'zod';
+import api from '@/services/api';
+import { type ComponentExposed } from 'vue-component-type-helpers'
+import { userStore } from '@/stores';
+import { userSchemas } from '@briefly/apidef';
 
-const submitButton = ref<HTMLButtonElement | null>(null);
+const user = userStore();
 
-const signUp = signUpStore();
-
-function onSubmit() {
-  signUp.register();
+const signUpForm = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
+  
+async function onSubmit() {
+  const data = toValue(toValue(signUpForm.value?.validatedData));
+  console.warn(data);
+  if(! data) return;
+  try{
+    const { token } = await api.createUser(data);
+    user.updateUserToken(token);
+  } catch(e: unknown){
+    console.error(e);
+  }
 }
 
-function onInvalidSubmit() {
-  submitButton.value?.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('invalid');
-  }, 1000);
-}
+  const schema = userSchemas.createSchemaReq.omit({ enabled: true }).extend({
+    confirmPassword: z.string()
+  }).strict().refine(
+    (val) => val.password == val.confirmPassword,
+    { 
+      message: "The passwords must match!",
+      path: ["confirmPassword"]
+    }).transform((val) => {
+      const v: Partial<typeof val> = val;
+      delete v.confirmPassword;
+      return v as userSchemas.CreateSchemaReq
+    });
 
-function updateName({ target }: Event & { target: HTMLInputElement }) {
-  signUp.name = target.value;
-}
-
-function updateEmail({ target }: Event & { target: HTMLInputElement }) {
-  signUp.email = target.value;
-}
-
-function updatePassword({ target }: Event & { target: HTMLInputElement }) {
-  signUp.password = target.value;
-}
-
-function updateConfirmPassword({ target }: Event & { target: HTMLInputElement }) {
-  signUp.confirmPassword = target.value;
-}
-
-const schema = Yup.object().shape({
-  name: Yup.string().max(55).required(),
-  email: Yup.string().email().required(),
-  password: Yup.string().min(6).trim().noWhitespace().required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'passwords do not match')
-    .required(),
-});
+// function onInvalidSubmit() {
+//   submitButton.value?.classList.add('invalid');
+//   setTimeout(() => {
+//     submitButton.value?.classList.remove('invalid');
+//   }, 1000);
+// }
 </script>
 
 <style scoped lang="scss">

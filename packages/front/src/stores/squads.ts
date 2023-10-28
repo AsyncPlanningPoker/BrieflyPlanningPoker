@@ -1,16 +1,13 @@
 import { defineStore } from 'pinia';
 
-import { api } from '../services/api';
+import api from '../services/api';
 import router from '../router';
 import { userStore } from './user';
-
-type Squad = {
-  id?: string
-};
+import { squadSchemas } from '@briefly/apidef';
 
 interface State {
-  squadList: Squad[],
-  squadActive: Squad,
+  squadList: squadSchemas.FindAllSchemaRes,
+  squadActive: squadSchemas.FindSchemaRes | undefined,
 };
 
 const user = userStore();
@@ -18,84 +15,95 @@ const user = userStore();
 const squadStore =  defineStore('squadStore', {
   state: (): State => ({
     squadList: [],
-    squadActive: {},
+    squadActive: undefined,
   }),
 
   getters: {
-    getActiveId(): string{
-      return this.squadActive.id ?? '';
+    activeId: (state) => {
+      return state.squadActive?.id ?? '';
     },
   },
 
   actions: {
     async gatherSquadList() {
       await api
-        .get('squad')
+        .findAllSquads()
         .then((res) => {
-          return this.squadList = res.data;
+          return this.squadList = res;
         })
         .catch(() => {
           return router.push('signin');
         });
     },
 
-    async gatherSquad(id: string) {
-      const { data } = await api.get(`squad/${id}`);
-      this.squadActive =  data;
+    async gatherSquad(squadId: string) {
+      const data = await api.findSquad({ params: { squadId }});
+      this.squadActive = data;
     },
 
-    async addUser(payload: string) {
-      const id = this.getActiveId;
-      await api.post(`squad/${id}/users`, { email: payload, owner: true })
+    async addUser(email: string) {
+      const squadId = this.activeId;
+      const squad = await api.addUsersSquad({ email }, { params: { squadId }})
       .catch((error) => {
         throw error;
       });
-      await this.gatherSquad(id);
+      this.squadActive = squad;
     },
 
-    async addYourself(id: string) {
+    async addYourself(squadId: string) {
       const email = user.userEmail;
-      await api.post(`squad/${id}/users`, { email: email, owner: true })
+      const squad = await api.addUsersSquad({ email, owner: false }, { params: { squadId }})
       .catch((error) => {
         throw error;
       });
-      await this.gatherSquad(id);
+      this.squadActive = squad;
     },
 
-    async delUser(payload: string) {
-      const id = this.getActiveId;
-      await api.delete(`squad/${id}/users?email=${payload}`).catch((error) => {
+    async delUser(email: string) {
+      const squadId = this.activeId;
+      const squad = await api.delUsersSquad(
+        undefined,
+        {
+          params: { squadId },
+          queries: { email }
+        })
+      .catch((error) => {
         throw error;
       });
-      await this.gatherSquad(id);
+      this.squadActive = squad;
     },
 
     async delYourself() {
-      const id = this.getActiveId;
+      const squadId = this.activeId;
       const email = user.userEmail;
-      await api.delete(`squad/${id}/users?email=${email}`)
+      const squad = await api.delUsersSquad(
+        undefined,
+        {
+          params: { squadId },
+          queries: { email }
+        })
       .catch((error) => {
         throw error;
       });
-      await this.gatherSquadList();
-      this.squadActive = {};
+      this.squadActive = squad;
     },
 
-    async addSquad(payload: Squad) {
-      const { data } = await api.post('squad', payload)
+    async addSquad(payload: any) {
+      const { id } = await api.createSquad(payload)
       .catch((error) => {
         throw error;
       });
-      await this.addYourself(data.id);
+      await this.addYourself(id);
       await this.gatherSquadList();
     },
 
-    async updateSquad(payload: Squad) {
-      const id = this.getActiveId;
-      await api.put(`squad/${id}`, payload).catch((error) => {
+    async updateSquad(payload: any) {
+      const squadId = this.activeId;
+      const squad = await api.updateSquad(payload, { params: { squadId } })
+      .catch((error) => {
         throw error;
       });
-      await this.gatherSquad(id);
+      this.squadActive = squad;
     },
   }
 });

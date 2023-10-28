@@ -1,7 +1,6 @@
 <template>
-  <Form
+  <form
     class="f-add-user"
-    :validation-schema="schema"
     @submit="onSubmit"
     @invalid-submit="onInvalidSubmit"
   >
@@ -24,45 +23,39 @@
         size="small"
         type="submit"
         value="send"
+        ref="submitButton"
       />
     </div>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex';
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
-
 import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
+import { ref } from 'vue';
+import { squadStore } from '@/stores';
 
+const submitButton = ref<HTMLButtonElement | null>(null);
 
-const store = useStore();
+const squad = squadStore();
 
 function onSubmit(values: any) {
-  store.dispatch('addUser', values.email);
-  /* eslint-disable no-undef */
-  email.value = null;
-  const submitButton = document.querySelector('.f-add-user__button');
-  submitButton.classList.add('valid');
+  squad.addUser(values.email);
+  // email.value = null;
+  submitButton.value?.classList.add('valid');
   setTimeout(() => {
-    submitButton.classList.remove('valid');
+    submitButton.value?.classList.remove('valid');
   }, 1000);
 }
 
 function onInvalidSubmit() {
-  const submitButton = document.querySelector('.f-add-user__button');
-  submitButton.classList.add('invalid');
+  submitButton.value?.classList.add('invalid');
   setTimeout(() => {
-    submitButton.classList.remove('invalid');
+    submitButton.value?.classList.remove('invalid');
   }, 1000);
 }
 
-const schema = Yup.object().shape({
-  email: Yup.string().email('this e-mail does not seem valid').required(),
-});
 </script>
 
 <style lang="scss" scoped>

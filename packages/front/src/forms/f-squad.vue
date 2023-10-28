@@ -1,8 +1,7 @@
 <template>
-  <Form
+  <form
     v-if="!update"
     class="f-squad"
-    :validation-schema="schema"
     @submit="onSubmit"
     @invalid-submit="onInvalidSubmit"
   >
@@ -60,39 +59,38 @@
   <Form
     v-else
     class="f-squad"
-    :validation-schema="schema"
     @submit="onSubmit"
     @invalid-submit="onInvalidSubmit"
   >
     <BInputField
       label="Squad name"
       name="squadName"
-      :initial="squad.squad"
+      :initial="squad.squadActive?.name"
     >
       <BInput
         name="squadName"
         type="text"
-        :value="squad.squad"
+        :value="squad.squadActive?.name"
       />
     </BInputField>
 
     <BInputField
       label="Max rounds"
       name="maxRounds"
-      :initial="squad.currentMaxRounds"
+      :initial="squad.squadActive?.maxRounds"
     >
       <BInput
         name="maxRounds"
         :min="1"
         type="number"
-        :value="squad.currentMaxRounds"
+        :value="squad.squadActive?.maxRounds"
       />
     </BInputField>
 
     <BInputField
       label="Percentual"
       name="percentual"
-      :initial="squad.currentPercentual"
+      :initial="squad.squadActive?.percentual"
     >
       <BInput
         name="percentual"
@@ -101,7 +99,7 @@
         placeholder="0.25"
         :step="0.1"
         type="number"
-        :value="squad.currentPercentual"
+        :value="squad.squadActive?.percentual"
       />
     </BInputField>
 
@@ -116,70 +114,47 @@
         class="f-squad__button"
         type="submit"
         value="update"
+        ref="submitButton"
       />
     </div>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
+import { ref } from 'vue';
 
 import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
+import { squadStore } from '@/stores';
 
 const props = withDefaults(defineProps<{ update: boolean }>(), { update: false });
 
-const emit = defineEmits<{
-  (event: 'close'): any
-}>();
+const emit = defineEmits<{ (event: 'close'): void }>();
 
-const store = useStore();
+const squad = squadStore();
 
-const squad = computed(() => {
-  return store.getters.getSquadActive;
-});
+const submitButton = ref<HTMLButtonElement | null>(null);
 
-function onSubmit(values) {
+function onSubmit(values: any) {
   const newSquad = {
     name: values.squadName,
     currentMaxRounds: values.maxRounds,
     currentPercentual: values.percentual,
   };
 
-  if (!props.update) {
-    store.dispatch('addSquad', newSquad);
-  } else {
-    store.dispatch('updateSquad', newSquad);
-  }
+  if (!props.update) squad.addSquad(newSquad);
+  else squad.updateSquad(newSquad);
 
   emit('close');
 }
 
 function onInvalidSubmit() {
-  const submitButton = document.querySelector('.f-squad__button');
-  submitButton.classList.add('invalid');
+  submitButton.value?.classList.add('invalid');
   setTimeout(() => {
-    submitButton.classList.remove('invalid');
+    submitButton.value?.classList.remove('invalid');
   }, 1000);
 }
-
-const schema = Yup.object().shape({
-  squadName: Yup.string().max(25).required(),
-  maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
-  percentual: Yup.number()
-    .typeError('percentual must be a number')
-    .required()
-    .positive()
-    .min(0)
-    .max(1)
-    .test((number) => {
-      return Number.isInteger(number * 10 ** 2);
-    }),
-});
 </script>
 
 <style lang="scss" scoped>

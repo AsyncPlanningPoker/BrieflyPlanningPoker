@@ -1,7 +1,6 @@
 {
   "name": "@briefly/prisma",
   "version": "1.0.0",
-  "packageManager": "yarn@3.2.0",
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,

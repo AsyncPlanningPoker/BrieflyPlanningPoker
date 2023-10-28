@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import BText from '../components/b-text.vue';
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     active: boolean,
     value?: number,

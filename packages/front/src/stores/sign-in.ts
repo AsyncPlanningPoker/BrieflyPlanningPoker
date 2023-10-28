@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { api } from '../services/api';
+import api from '../services/api';
 import router from '../router/index';
 import { userStore } from './user';
 
@@ -21,9 +21,9 @@ const signInStore = defineStore('signInStore',{
   actions: {
     async login() {
       await api
-        .post('user/login', { email: this.email, password: this.password })
+        .loginUser(this)
         .then((res) => {
-          const token = res.data.token;
+          const { token } = res;
           user.updateUserToken(token)
           user.updateUserEmail(this.email)
           router.push('/');

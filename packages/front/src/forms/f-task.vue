@@ -1,7 +1,6 @@
 <template>
-  <Form
+  <form
     class="f-task"
-    :validation-schema="schema"
     @submit="onSubmit"
     @invalid-submit="onInvalidSubmit"
   >
@@ -43,40 +42,35 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex';
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
-
 import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
 import BInputField from '../components/b-input-field.vue';
 import BTextArea from '../components/b-text-area.vue';
+import { ref } from 'vue';
+import { taskStore } from '@/stores';
 
-const emit = defineEmits<{ (event: 'close'): any }>();
-const store = useStore();
+const emit = defineEmits<{ (event: 'close'): void }>();
 
-function onSubmit(values) {
+const task = taskStore();
+
+function onSubmit(values: any) {
   const newTask = {
     name: values.taskTitle,
     description: values.taskDescription,
   };
-  store.dispatch('addTask', newTask);
+  task.addTask(newTask)
 
   emit('close');
 }
 
+const submitButton = ref<HTMLButtonElement | null>(null);
+
 function onInvalidSubmit() {
-  const submitButton = document.querySelector('.f-task__button');
-  submitButton.classList.add('invalid');
+  submitButton.value?.classList.add('invalid');
   setTimeout(() => {
-    submitButton.classList.remove('invalid');
+    submitButton.value?.classList.remove('invalid');
   }, 1000);
 }
-
-const schema = Yup.object().shape({
-  taskTitle: Yup.string().max(85).required(),
-  taskDescription: Yup.string().max(300),
-});
 </script>
 
 <style lang="scss" scoped>

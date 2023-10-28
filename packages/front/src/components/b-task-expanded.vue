@@ -16,7 +16,7 @@
       size="giant"
       tag="h1"
     >
-      {{ task.name }}
+      {{ task?.name }}
     </BText>
 
     <BText
@@ -25,7 +25,7 @@
       color="gray-30"
       size="medium"
     >
-      {{ task.description }}
+      {{ task?.description }}
     </BText>
 
     <div
@@ -33,7 +33,7 @@
       class="b-task-expanded__wrapper b-task-expanded__comments"
     >
       <template
-        v-for="[round, actions] in rounds"
+        v-for="(actions, round) in rounds"
         :key="round"
       >
         <BText
@@ -52,11 +52,8 @@
         >
           <BComment
             v-if="action.round === round"
-            :author="action.user.email"
-            :content="action.content"
-            :date="formatDate(action.date)"
-            :type="action.type"
-            :hidden="action.round == task.currentRound"
+            :action="action"
+            :hidden="!!task && action.round == task.currentRound"
           />
         </template>
       </template>
@@ -87,50 +84,54 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, type Ref } from 'vue';
 
-import { api } from '@/services/api';
+import api  from '@/services/api';
 import FAddComment from '@/forms/f-add-comment.vue';
-import type { Message, Task, Vote } from '@/interfaces';
 
 import BButton from './b-button.vue';
 import BCard from './b-card.vue';
 import BComment from './b-comment.vue';
 import BDivisor from './b-divisor.vue';
 import BText from './b-text.vue';
+import { taskSchemas } from '@briefly/apidef';
+import { userStore } from '@/stores';
 
+const user = userStore();
 
-const emit = defineEmits<{ (event: 'close'): void }>();
+defineEmits<{ (event: 'close'): void }>();
 
 const props = defineProps<{
   taskId: string
   squadId: string
 }>();
 
-let task: Task;
-let rounds = new Map<number, (Vote|Message)[]>();
-let fibonacci = [1, 2, 3, 5, 8, 13];
-let votable = true;
-let finished = false;
-let actualRound = 0;
-
-const formatDate = computed(() => {
-  return (date: string) => {
-    return new Date(date)
-      .toLocaleDateString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-        day: '2-digit',
-        month: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      }
-    );
-  };
+const task: Ref<taskSchemas.FindSchemaRes | null> = ref(null);
+const fibonacci = [1, 2, 3, 5, 8, 13];
+const rounds = computed(() => {
+  if(! task.value) return [];
+  const ret = new Array<
+    taskSchemas.Action[]
+  >(task.value.currentRound - 1);
+  for(let i = 0; i < task.value.currentRound; i++){
+    ret[i] = [...task.value.votes, ...task.value.messages]
+      .filter((action) => action.round == i - 1)
+      .sort((i1, i2) => i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds());
+  }
+  return ret;
 });
 
+const votable = ref<boolean>(
+  !!task.value && task.value.active &&
+  rounds.value[task.value.currentRound]
+    .some((action) => taskSchemas.isVote(action) && action.userEmail == user.userEmail));
+
+const finished = ref<boolean>(!!task.value && task.value.finished);
+
 async function vote(points: number) {
-  if (votable) {
-    await api.post(`/tasks/${props.taskId}/vote`, { points })
+  if (task.value) {
+    const taskId = task.value.id;
+    await api.voteTask( { points }, { params: { taskId }})
       .catch((err: any) => {
         console.log(err.response.data.message);
       });
@@ -139,31 +140,25 @@ async function vote(points: number) {
 }
 
 async function comment(message: string) {
-  await api.post(`/tasks/${props.taskId}/message`, { message })
-    .catch((err: any) => {
-      console.log(err.response.data.message);
-    });
-  load();
+  if(task.value){
+    const taskId = task.value.id;
+    await api.messageTask({ message }, { params: { taskId }})
+      .catch((err: any) => {
+        console.log(err.response.data.message);
+      });
+    load();
+  }
 }
 
 async function load() {
-  await api
-    .get(`/squad/${props.squadId}/task/${props.taskId}`)
-    .then((res: any) => {
-      task = res.data;
-      rounds = [...new Set(task.actions.map((e) => e.round))];
-      finished = !task.finished;
-      task.actions.every((x) => (votable = eligible(x)));
-    })
-    .catch((err) => {
-      console.log(err.response.data.message);
-    });
+  try {
+    const data = await api.findTask({ params: { taskId: props.taskId } });
+    task.value = data;
+  } catch (error: unknown){
+    console.log(error)
+  }
   const box = document.getElementById('comment-box');
   box?.scroll({ top: box.scrollHeight, behavior: 'smooth' });
-}
-
-function eligible(person: any) {
-  return !(person.type === 'vote' && person.currentRound === true && person.email === userEmail.value);
 }
 
 onMounted(() => {

@@ -61,12 +61,12 @@ import BModal from '../components/b-modal.vue';
 import BTask from '../components/b-task.vue';
 import BText from '../components/b-text.vue';
 import FTask from '../forms/f-task.vue';
-import type { Task } from '@/interfaces';
+import { squadSchemas } from '@briefly/apidef';
 
-const props = defineProps<{
+defineProps<{
   title: string,
   active: boolean
-  tasks: Task[]
+  tasks: squadSchemas.FindSchemaRes["tasks"]
 }>();
 
 const showModal = ref(false);

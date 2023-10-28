@@ -1,5 +1,5 @@
-export *  from './pass-recovery-one';
-export *  from './pass-recovery-two';
+// export *  from './pass-recovery-one';
+// export *  from './pass-recovery-two';
 export *  from './sign-in';
 export *  from './sign-up';
 export *  from './squads';

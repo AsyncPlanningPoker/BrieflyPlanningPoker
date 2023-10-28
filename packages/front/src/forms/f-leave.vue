@@ -32,24 +32,22 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex';
 
+import { squadStore } from '@/stores';
 import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
 const emit = defineEmits<{
-  (event: 'close'): any
+  (event: 'close'): void
 }>();
 
-const store = useStore();
 const props = defineProps<{ email?: string }>();
 
+const squad = squadStore();
+
 function confirm() {
-  if (props.email) {
-    store.dispatch('delUser', props.email);
-  } else {
-    store.dispatch('delYourself');
-  }
+  if (props.email) squad.delUser(props.email);
+  else squad.delYourself();
   emit('close');
 }
 </script>

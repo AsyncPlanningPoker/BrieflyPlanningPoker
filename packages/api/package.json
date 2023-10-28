@@ -1,7 +1,6 @@
 {
   "name": "@briefly/api",
   "version": "1.0.0",
-  "packageManager": "yarn@3.6.4",
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,
@@ -35,6 +34,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@briefly/apidef": "workspace:^",
     "@briefly/prisma": "workspace:^",
     "@zodios/core": "^10.9.6",
     "@zodios/express": "^10.6.1",

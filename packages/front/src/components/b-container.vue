@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-  const props = withDefaults(defineProps<{
-    color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
-  }>(),{ color: 'black' });
+withDefaults(defineProps<{
+  color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
+}>(),{ color: 'black' });
 </script>
 
 <style scoped lang="scss">

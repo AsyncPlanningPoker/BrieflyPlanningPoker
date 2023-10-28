@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia';
-import { api } from '../services/api';
+import { squadSchemas } from '@briefly/apidef';
+
+import api from '../services/api';
 import { squadStore } from './squads';
 
-interface Task {
-  id?: string
-};
 
 interface State {
-  enabledTasks: Task[],
-  disabledTasks: Task[],
+  enabledTasks: squadSchemas.FindSchemaRes["tasks"],
+  disabledTasks: squadSchemas.FindSchemaRes["tasks"],
 };
 
 const squad = squadStore();
@@ -20,37 +19,51 @@ const taskStore =  defineStore('taskStore', {
   }),
 
   actions: {
-    async gatherTasks(squadId: string) {
-      const { data } = await api.get(`/squad/${squadId}/task`);
-      this.enabledTasks = data.active;
-      this.disabledTasks = data.unactive;
+    async gatherTasks() {
+      const tasks = squad.squadActive?.tasks;
+      this.enabledTasks = tasks?.filter((task) => task.active) ?? [];
+      this.disabledTasks = tasks?.filter((task) => task.active) ?? [];
     },
 
-    async addTask(payload: Task) {
-      const squadId = squad.getActiveId;
-      await api.post(`/squad/${squadId}/task`, payload)
+    async addTask(payload: squadSchemas.CreateTaskSchemaReq) {
+      const squadId = squad.activeId;
+      const newTask = await api.createTaskSquad(payload, { params: { squadId }})
       .catch((error) => {
         throw error;
       });
-      await this.gatherTasks(squadId);
+
+      if(squad.squadActive)
+        squad.squadActive.tasks = squad.squadActive.tasks
+          .concat([newTask]);
+
+      await this.gatherTasks();
     },
 
     async disableTask(taskId: string) {
-      const squadId = squad.getActiveId;
-      await api.put(`/tasks/${taskId}/deactive`)
+      const disabledTask = await api.deactivateTask(undefined, { params: { taskId } })
       .catch((error) => {
         throw error;
       });
-      await this.gatherTasks(squadId);
+
+      if(squad.squadActive)
+        squad.squadActive.tasks = squad.squadActive.tasks
+          .filter(({ id }) => disabledTask.id != id)
+          .concat([disabledTask]);
+
+      await this.gatherTasks();
     },
 
     async deleteTask(taskId: string) {
-      const squadId = squad.getActiveId;
-      await api.delete(`/tasks/${taskId}`)
+      const deletedTask = await api.deleteTask(undefined, { params: { taskId } })
       .catch((error) => {
         throw error;
       });
-      await this.gatherTasks(squadId);
+
+      if(squad.squadActive)
+        squad.squadActive.tasks = squad.squadActive.tasks
+          .filter(({ id }) => deletedTask.id != id);
+
+      await this.gatherTasks();
     },
   }
 });

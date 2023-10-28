@@ -1,8 +1,8 @@
 import { Unauthorized } from '../middlewares/error/error';
 import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
-import { prisma } from '@briefly/prisma';
-import usersAPI, { type UsersAPI } from '@briefly/prisma/dist/apiDef/users';
+import prisma from '@briefly/prisma';
+import { usersAPI, type UsersAPI } from '@briefly/apidef';
 import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
@@ -17,7 +17,7 @@ const create: UsersHandler<"post", ""> = async (req, res, next) => {
   try {
     const data = req.body;
     const user = await prisma.user.create({ data });
-    return res.status(201).json(user);
+    return res.status(201).json({ token: auth.create(data.email, 'login') });
   } catch (error: unknown) {
     next(error);
   }

@@ -13,17 +13,18 @@
 
 <script setup lang="ts">
 
-  const props = withDefaults(defineProps<{
-    size?: 'small' | 'medium',
-    value?: string,
-    type: 'button' | 'reset' | 'submit',
-    variant?: 'primary' | 'transparent' | 'inverted'
-  }>(), {
-    size: "medium",
-    value: "",
-    type: "button",
-    variant: "primary"
-  });
+withDefaults(defineProps<{
+  size?: 'small' | 'medium',
+  value?: string,
+  type: 'button' | 'reset' | 'submit',
+  variant?: 'primary' | 'transparent' | 'inverted'
+}>(), {
+  size: "medium",
+  value: "",
+  type: "button",
+  variant: "primary"
+});
+
 </script>
 
 <style scoped lang="scss">

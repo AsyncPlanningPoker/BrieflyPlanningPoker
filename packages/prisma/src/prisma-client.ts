@@ -2,11 +2,6 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import taskExtensions from './extensions/models/task';
 import * as crypt from './extensions/crypt'
 
-// const tasksWithVotes = Prisma.validator<Prisma.TaskDefaultArgs>()({include: { votes: {
-//     select: { user: { select: {email: true} }, points: true, createdAt: true, round: true }
-// } }});
-// type TasksWithVotes = Prisma.TaskGetPayload<typeof tasksWithVotes>
-
 const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 .$extends({
     query: {

@@ -14,5 +14,16 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  optimizeDeps:{
+    include: ['@briefly/apidef']
+  },
+  build: {
+    commonjsOptions: {
+      include: [
+        /@briefly\/apidef/,
+        /node_modules/
+      ],
+    }
   }
 })

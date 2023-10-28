@@ -18,39 +18,27 @@
 
     <main>
       <BContainer class="user-profile__form-container">
-        <Form
+        <form
           @submit="onSubmit"
-          :validation-schema="schema"
         >
-          <BInputField
-            label="Old Password"
-            name="oldPassword"
-          >
-            <BInput
+          <BInput
+          label="Old Password"
               name="oldPassword"
               type="password"
             />
-          </BInputField>
 
-          <BInputField
-            label="New Password"
-            name="newPassword"
-          >
-            <BInput
+          <BInput
+          label="New Password"
               name="newPassword"
               type="password"
             />
-          </BInputField>
 
-          <BInputField
-            label="Confirm Password"
-            name="confirmPassword"
-          >
-            <BInput
+          <BInput
+          label="Confirm Password"
               name="confirmPassword"
               type="password"
             />
-          </BInputField>
+
           <BText
             v-if="user.errorMessage"
             color="error"
@@ -91,7 +79,6 @@ import { ref } from 'vue';
 import BButton from '../components/b-button.vue';
 import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
 import BModal from '../components/b-modal.vue';
 import BSidebar from '../components/b-sidebar.vue';
 import BText from '../components/b-text.vue';
@@ -105,13 +92,7 @@ const deleteAccountModal = ref(false);
 const showDeleteAccountModal = () => deleteAccountModal.value = true;
 const hideDeleteAccountModal = () => deleteAccountModal.value = false;
 
-const schema = Yup.object().shape({
-  oldPassword: Yup.string().required('Old password is required.'),
-  newPassword: Yup.string().required('New password is required.'),
-  confirmPassword: Yup.string().required('Confirm password is required.').oneOf([Yup.ref('newPassword'), null], 'Confirm password must be equal the new password.'),
-});
-
-function onSubmit(values: { newPassword: string, oldPassword: string }) {
+function onSubmit(values: any) {
   user.updateYourself(values);
 }
 

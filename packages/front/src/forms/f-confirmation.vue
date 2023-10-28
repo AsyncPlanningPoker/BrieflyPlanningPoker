@@ -26,14 +26,14 @@
 import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   action: string,
   message?: string
 }>(), { action: 'Confirm' });
 
-const emits = defineEmits<{
-  (event: 'close'): any,
-  (event: 'confirm'): any
+defineEmits<{
+  (event: 'close'): void,
+  (event: 'confirm'): void
 }>();
 </script>
 

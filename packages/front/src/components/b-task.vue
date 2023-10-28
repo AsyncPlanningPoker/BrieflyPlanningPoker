@@ -80,9 +80,9 @@
     :open="expandedTaskModal"
   >
     <BTaskExpanded
-      :task-id="taskId"
+      :task-id="task.id"
       :squad-id="squadId"
-      @close="toggleExpandedTaskModal(taskId, true)"
+      @close="toggleExpandedTaskModal(task.id, true)"
     />
   </BModal>
 
@@ -94,7 +94,7 @@
       action="archive"
       message="Are you sure you want to archive this task? This action is IRREVERSIBLE"
       @close="toggleArchiveModal()"
-      @confirm="store.dispatch('disableTask', task.task), toggleArchiveModal()"
+      @confirm="taskS.deleteTask(task.id), toggleArchiveModal()"
     />
   </BModal>
 
@@ -106,7 +106,7 @@
       action="delete"
       message="Are you sure you want to delete this task? This action is IRREVERSIBLE"
       @close="toggleDeleteModal()"
-      @confirm="store.dispatch('deleteTask', task.task), toggleDeleteModal()"
+      @confirm="taskS.deleteTask(task.id), toggleDeleteModal()"
     />
   </BModal>
 </template>
@@ -119,20 +119,18 @@ import BTaskExpanded from '../components/b-task-expanded.vue';
 import BText from '../components/b-text.vue';
 
 import FConfirmation from '../forms/f-confirmation.vue';
-import type { Task } from '@/interfaces';
 import { squadStore, taskStore } from '@/stores';
+import { squadSchemas } from '@briefly/apidef';
 
-const props = withDefaults(defineProps<{
-  task: Task
+withDefaults(defineProps<{
+  task: squadSchemas.FindSchemaRes["tasks"][number]
   active: boolean
 }>(), { active: true });
 
 const squadS = squadStore();
 const taskS = taskStore();
 
-const squadId = computed(() => squadS.getActiveId);
-
-const taskId = ref<string | null>(null);
+const squadId = computed(() => squadS.activeId);
 
 const expandedTaskModal = ref(false);
 
@@ -141,9 +139,7 @@ const deleteModal = ref(false);
 const archiveModal = ref(false);
 
 function toggleExpandedTaskModal(task: string, refresh: boolean) {
-  taskId.value = task;
-  if (refresh)
-    taskS.gatherTasks(taskId.value);
+  if (refresh) taskS.gatherTasks();
   expandedTaskModal.value = !expandedTaskModal.value;
 }
 
@@ -152,7 +148,7 @@ function toggleArchiveModal() {
 }
 
 function toggleDeleteModal() {
-  deleteModal.value =!deleteModal.value;
+  deleteModal.value = !deleteModal.value;
 }
 </script>
 
