@@ -2,7 +2,7 @@
   "name": "@briefly/front",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "yarn@3.6.3",
+  "packageManager": "yarn@4.0.0",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -14,7 +14,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@briefly/prisma": "workspace:^",
+    "@briefly/apidef": "workspace:^",
     "@zodios/core": "^10.9.6",
     "axios": "^1.5.1",
     "pinia": "^2.1.6",

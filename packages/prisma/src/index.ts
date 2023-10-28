@@ -1,2 +1,2 @@
-export { default as prisma} from './prisma-client'; 
-export * from './apiSchemas';
+import prisma from "./prisma-client";
+export default prisma;

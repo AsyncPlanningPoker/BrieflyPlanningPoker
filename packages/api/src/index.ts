@@ -8,7 +8,7 @@ import context, { type Context } from './context';
 import { CustomError, handler as errorHandler } from './middlewares/error';
 import routes from './routes';
 import { ZodiosApp, zodiosApp } from '@zodios/express';
-import apiDef, { type ApiDef } from '@briefly/prisma/dist/apiDef';
+import { apiDef, type ApiDef } from '@briefly/apidef';
 import { handler } from './middlewares/authorization';
 
 function listen(): void {

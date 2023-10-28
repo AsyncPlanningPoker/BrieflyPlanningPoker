@@ -4,7 +4,7 @@ generator client {
 
 generator zod {
   provider                         = "zod-prisma-types"
-  output                           = "./src/generated/zod"
+  output                           = "../apidef/src/generated/zod"
   createInputTypes                 = false // default is true
   addIncludeType                   = false // default is true
   addSelectType                    = false // default is true

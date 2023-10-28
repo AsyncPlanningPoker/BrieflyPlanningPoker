@@ -1,0 +1,18 @@
+{
+  "name": "@briefly/apidef",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.0.0",
+  "private": true,
+  "main": "dist/index",
+  "scripts": {
+    "build": "tsc -b --verbose"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@zodios/core": "^10.9.6",
+    "zod": "3.21.1"
+  }
+}

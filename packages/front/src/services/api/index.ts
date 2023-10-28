@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Zodios } from '@zodios/core';
-import apiDef from '@briefly/prisma/src/apiDef'
+import { apiDef } from '@briefly/apidef'
 
 const envVars = import.meta.env;
 

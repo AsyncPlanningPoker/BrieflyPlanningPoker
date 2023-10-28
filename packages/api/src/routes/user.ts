@@ -1,8 +1,8 @@
 import { Unauthorized } from '../middlewares/error/error';
 import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
-import { prisma } from '@briefly/prisma';
-import usersAPI, { type UsersAPI } from '@briefly/prisma/dist/apiDef/users';
+import prisma from '@briefly/prisma';
+import { usersAPI, type UsersAPI } from '@briefly/apidef';
 import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
