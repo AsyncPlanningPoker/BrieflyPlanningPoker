@@ -1,7 +1,6 @@
 {
   "name": "@briefly/apidef",
   "version": "1.0.0",
-  "packageManager": "yarn@4.0.0",
   "private": true,
   "main": "dist/index",
   "scripts": {

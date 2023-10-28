@@ -120,17 +120,17 @@ import BText from '../components/b-text.vue';
 
 import FConfirmation from '../forms/f-confirmation.vue';
 import { squadStore, taskStore } from '@/stores';
-import { squads } from '@briefly/prisma/src/apiSchemas';
+import { squadSchemas } from '@briefly/apidef';
 
 withDefaults(defineProps<{
-  task: squads.FindSchemaRes["tasks"][number]
+  task: squadSchemas.FindSchemaRes["tasks"][number]
   active: boolean
 }>(), { active: true });
 
 const squadS = squadStore();
 const taskS = taskStore();
 
-const squadId = computed(() => squadS.getActiveId);
+const squadId = computed(() => squadS.activeId);
 
 const expandedTaskModal = ref(false);
 

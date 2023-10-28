@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia';
-import { squads } from '@briefly/prisma/src/apiSchemas';
+import { squadSchemas } from '@briefly/apidef';
 
 import api from '../services/api';
 import { squadStore } from './squads';
 
 
 interface State {
-  enabledTasks: squads.FindSchemaRes["tasks"],
-  disabledTasks: squads.FindSchemaRes["tasks"],
+  enabledTasks: squadSchemas.FindSchemaRes["tasks"],
+  disabledTasks: squadSchemas.FindSchemaRes["tasks"],
 };
 
 const squad = squadStore();
@@ -25,7 +25,7 @@ const taskStore =  defineStore('taskStore', {
       this.disabledTasks = tasks?.filter((task) => task.active) ?? [];
     },
 
-    async addTask(payload: squads.CreateTaskSchemaReq) {
+    async addTask(payload: squadSchemas.CreateTaskSchemaReq) {
       const squadId = squad.activeId;
       const newTask = await api.createTaskSquad(payload, { params: { squadId }})
       .catch((error) => {

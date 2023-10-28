@@ -16,14 +16,14 @@ export default defineConfig({
     }
   },
   optimizeDeps:{
-    exclude: ['.prisma/client/index-browser']
+    include: ['@briefly/apidef']
   },
   build: {
     commonjsOptions: {
-      exclude: [
-        '.prisma/client/index-browser'
+      include: [
+        /@briefly\/apidef/,
+        /node_modules/
       ],
-      include: []
     }
   }
 })

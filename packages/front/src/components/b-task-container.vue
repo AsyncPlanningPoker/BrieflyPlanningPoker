@@ -61,12 +61,12 @@ import BModal from '../components/b-modal.vue';
 import BTask from '../components/b-task.vue';
 import BText from '../components/b-text.vue';
 import FTask from '../forms/f-task.vue';
-import { squads } from '@briefly/prisma/src/apiSchemas';
+import { squadSchemas } from '@briefly/apidef';
 
 defineProps<{
   title: string,
   active: boolean
-  tasks: squads.FindSchemaRes["tasks"]
+  tasks: squadSchemas.FindSchemaRes["tasks"]
 }>();
 
 const showModal = ref(false);

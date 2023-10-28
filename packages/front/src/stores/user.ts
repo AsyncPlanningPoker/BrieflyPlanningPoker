@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { users } from '@briefly/prisma/src/apiSchemas';
+import { userSchemas } from '@briefly/apidef';
 import api from '../services/api';
 
 interface State {
@@ -40,7 +40,7 @@ const userStore = defineStore('userStore',{
       localStorage.removeItem('userEmail');
     },
 
-    async updateYourself(payload: users.UpdateSchemaReq) {
+    async updateYourself(payload: userSchemas.UpdateSchemaReq) {
       this.errorMessage = '';
       this.success = false;
       try {

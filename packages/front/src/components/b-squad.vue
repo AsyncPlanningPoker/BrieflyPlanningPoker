@@ -119,9 +119,9 @@ import BBadge from './b-badge.vue';
 import BDivisor from './b-divisor.vue';
 import BModal from './b-modal.vue';
 import BText from './b-text.vue';
-import type { squads } from '@briefly/prisma/src/apiSchemas';
+import type { squadSchemas } from '@briefly/apidef';
 
-defineProps<{ squad: squads.FindSchemaRes }>();
+defineProps<{ squad: squadSchemas.FindSchemaRes }>();
 
 const user = userStore();
 

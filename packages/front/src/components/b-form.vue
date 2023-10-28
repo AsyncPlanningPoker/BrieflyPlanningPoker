@@ -1,10 +1,10 @@
 <template>
-<form @submit="onSubmit">
+<form @submit.prevent="onSubmit">
     <slot />
 </form>
 </template>
 
-<script setup lang="ts" generic="Schema extends z.AnyZodObject | z.ZodEffects<z.AnyZodObject>">
+<script setup lang="ts" generic="Schema extends z.ZodTypeAny">
 import { ZodError, z } from 'zod';
 import { computed, provide, ref, toRef, watch} from 'vue';
 
@@ -12,6 +12,9 @@ import { computed, provide, ref, toRef, watch} from 'vue';
         schema: Schema,
         onSubmit(): any
     }>();
+
+    /** The keys of the data object */
+    const keys = getZodObjectKeys(props.schema);
 
     /** Data references to be provided to child inputs */
     const data = ref<Record<string, any>>({});
@@ -21,18 +24,24 @@ import { computed, provide, ref, toRef, watch} from 'vue';
     
     const validatedData = ref<z.infer<Schema> | undefined>();
     watch(data, () => {
+        const issues: z.ZodIssue[] = [];
+        for(const key of keys){
+            if(typeof data.value[key] === 'string' && data.value[key] == '')
+                issues.push({ code: "too_small", path: [key], inclusive: true,
+                type: 'string', minimum: 1, message: "Required" });
+        }
         try{
             validatedData.value = props.schema.parse(data.value);
             for(const key in errors.value)
-                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                 errors.value[key] = "";
+            if(issues.length > 0) throw new ZodError([]);
         } catch(e: unknown){
-            if(e instanceof ZodError){
+            if(isZodError(e)){
+                e.issues = e.issues.concat(issues);
                 for(const key in errors.value){
                     const issue = e.issues
                         .find((issue) => issue.path
                             .find((path) => path == key));
-                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                     errors.value[key] = issue?.message ?? '';
                 }
             } else console.error(e);
@@ -43,10 +52,8 @@ import { computed, provide, ref, toRef, watch} from 'vue';
     const valid = computed(() => !!validatedData.value);
 
     defineExpose({ valid, validatedData });
-    
-    const sc = getZodObject(props.schema);
 
-    for(const field in sc.shape) {
+    for(const field of keys) {
         data.value[field] = "";
         errors.value[field] = "";
         provide(`Data: ${field}`, toRef(data.value, field));
@@ -59,9 +66,13 @@ function isZodObject(obj: any): obj is z.AnyZodObject{
     return ("shape" in obj);
 }
 
-function getZodObject<T extends z.AnyZodObject | z.ZodEffects<z.AnyZodObject>>(obj: T): z.AnyZodObject{
-    if(isZodObject(obj)) return obj;
-    return getZodObject(obj._def.schema);
+function getZodObjectKeys<T extends z.ZodTypeAny>(obj: T): string[]{
+    if(isZodObject(obj))
+        return obj.keyof().options; 
+    return getZodObjectKeys(obj._def.schema);
+}
+function isZodError(e: unknown): e is ZodError{
+    return (!!e) && (typeof e === 'object') && ('name' in e) && (e.name === 'ZodError');
 }
 </script>
   

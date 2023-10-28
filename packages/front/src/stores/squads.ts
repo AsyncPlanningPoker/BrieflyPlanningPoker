@@ -3,11 +3,11 @@ import { defineStore } from 'pinia';
 import api from '../services/api';
 import router from '../router';
 import { userStore } from './user';
-import { squads } from '@briefly/prisma/src/apiSchemas';
+import { squadSchemas } from '@briefly/apidef';
 
 interface State {
-  squadList: squads.FindAllSchemaRes,
-  squadActive: squads.FindSchemaRes | undefined,
+  squadList: squadSchemas.FindAllSchemaRes,
+  squadActive: squadSchemas.FindSchemaRes | undefined,
 };
 
 const user = userStore();

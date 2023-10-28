@@ -2,7 +2,6 @@
 <template>
   <div class="sign-up">
     <BBrand />
-    {{ signUpForm?.validatedData }}
     <BContainer color="gray-30">
       <BForm class="sign-up__form" :schema=schema :onSubmit=onSubmit ref="signUpForm">
         <BInput name="name" label="Nome" type="text" />
@@ -38,30 +37,35 @@ import { z } from 'zod';
 import api from '@/services/api';
 import { type ComponentExposed } from 'vue-component-type-helpers'
 import { userStore } from '@/stores';
+import { userSchemas } from '@briefly/apidef';
 
 const user = userStore();
 
 const signUpForm = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
   
 async function onSubmit() {
-  const data = toValue(signUpForm)?.validatedData;
+  const data = toValue(toValue(signUpForm.value?.validatedData));
+  console.warn(data);
   if(! data) return;
-  const { token } = await api.createUser(data);
-  user.updateUserToken(token);
+  try{
+    const { token } = await api.createUser(data);
+    user.updateUserToken(token);
+  } catch(e: unknown){
+    console.error(e);
+  }
 }
-  
-  const zodReqstring = z.string().min(1, "Required");
 
-  const schema = z.object({
-    name: zodReqstring,
-    email: zodReqstring.email(),
-    password: zodReqstring,
-    confirmPassword: zodReqstring
+  const schema = userSchemas.createSchemaReq.omit({ enabled: true }).extend({
+    confirmPassword: z.string()
   }).strict().refine(
     (val) => val.password == val.confirmPassword,
     { 
       message: "The passwords must match!",
-      path: ["password", "confirmPassword"]
+      path: ["confirmPassword"]
+    }).transform((val) => {
+      const v: Partial<typeof val> = val;
+      delete v.confirmPassword;
+      return v as userSchemas.CreateSchemaReq
     });
 
 // function onInvalidSubmit() {

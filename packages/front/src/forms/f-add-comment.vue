@@ -21,8 +21,5 @@ const emit = defineEmits<{
 
 function onSubmit(event: any) {
   emit('comment', event.addComment);
-  /* eslint-disable no-undef */
-  // addComment.value = null;
-  // addComment.blur();
 }
 </script>

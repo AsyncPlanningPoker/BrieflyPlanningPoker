@@ -1,7 +1,6 @@
 {
   "name": "@briefly/api",
   "version": "1.0.0",
-  "packageManager": "yarn@4.0.0",
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,

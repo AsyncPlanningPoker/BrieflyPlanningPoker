@@ -1,6 +1,6 @@
 <template>
   <div class="b-comment">
-    <template v-if="tasks.isVote(action)">
+    <template v-if="taskSchemas.isVote(action)">
       <BText
         align="left"
         color="primary"
@@ -61,12 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import { tasks } from '@briefly/prisma/src/apiSchemas';
+import { taskSchemas } from '@briefly/apidef';
 import BText from '../components/b-text.vue';
 
 withDefaults(
   defineProps<{
-    action: tasks.Action
+    action: taskSchemas.Action
     hidden: boolean
   }>(), { hidden: true });
 </script>

@@ -94,7 +94,7 @@ import BCard from './b-card.vue';
 import BComment from './b-comment.vue';
 import BDivisor from './b-divisor.vue';
 import BText from './b-text.vue';
-import { tasks } from '@briefly/prisma/src/apiSchemas';
+import { taskSchemas } from '@briefly/apidef';
 import { userStore } from '@/stores';
 
 const user = userStore();
@@ -106,12 +106,12 @@ const props = defineProps<{
   squadId: string
 }>();
 
-const task: Ref<tasks.FindSchemaRes | null> = ref(null);
+const task: Ref<taskSchemas.FindSchemaRes | null> = ref(null);
 const fibonacci = [1, 2, 3, 5, 8, 13];
 const rounds = computed(() => {
   if(! task.value) return [];
   const ret = new Array<
-    tasks.Action[]
+    taskSchemas.Action[]
   >(task.value.currentRound - 1);
   for(let i = 0; i < task.value.currentRound; i++){
     ret[i] = [...task.value.votes, ...task.value.messages]
@@ -124,7 +124,7 @@ const rounds = computed(() => {
 const votable = ref<boolean>(
   !!task.value && task.value.active &&
   rounds.value[task.value.currentRound]
-    .some((action) => tasks.isVote(action) && action.userEmail == user.userEmail));
+    .some((action) => taskSchemas.isVote(action) && action.userEmail == user.userEmail));
 
 const finished = ref<boolean>(!!task.value && task.value.finished);
 
