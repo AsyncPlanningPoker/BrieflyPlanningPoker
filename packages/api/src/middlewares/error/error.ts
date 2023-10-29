@@ -1,5 +1,5 @@
 class CustomError extends Error {
-  public message = 'Internal Several Error';
+  public message = 'Internal Server Error';
   public json?: any[];
 
   constructor(message?: string, json?: any[]) {

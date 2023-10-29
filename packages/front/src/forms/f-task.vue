@@ -1,75 +1,36 @@
 <template>
-  <form
-    class="f-task"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Task title"
-      name="taskTitle"
-    >
-      <BInput
-        name="taskTitle"
-        placeholder="Title"
-        type="text"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Task description"
-      name="taskDescription"
-    >
-      <BTextArea
-        name="taskDescription"
-        placeholder="Description (optional)"
-      />
-    </BInputField>
+  <BForm class="f-task" @submit="onSubmit" :schema="schema">
+    <BInput label="Task title" name="taskTitle" placeholder="Title" type="text" />
+    <BTextArea label="Task description" name="taskDescription" placeholder="Description (optional)" />
 
     <div class="f-task__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        class="f-task__button"
-        type="submit"
-        value="create"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton class="f-task__button" type="submit" value="create" />
     </div>
-  </Form>
+  </BForm>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
-import BTextArea from '../components/b-text-area.vue';
-import { ref } from 'vue';
 import { taskStore } from '@/stores';
+import BForm from '@/components/b-form.vue';
+import type { ComponentExposed } from 'vue-component-type-helpers';
+import { squadSchemas } from '@briefly/apidef';
 
 const emit = defineEmits<{ (event: 'close'): void }>();
 
 const task = taskStore();
 
-function onSubmit(values: any) {
-  const newTask = {
-    name: values.taskTitle,
-    description: values.taskDescription,
-  };
-  task.addTask(newTask)
+const schema = squadSchemas.createTaskSchemaReq;
 
+const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
+
+function onSubmit() {
+  const newTask = form.value?.validatedData;
+  if(newTask) task.addTask(newTask);
   emit('close');
-}
-
-const submitButton = ref<HTMLButtonElement | null>(null);
-
-function onInvalidSubmit() {
-  submitButton.value?.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('invalid');
-  }, 1000);
 }
 </script>
 

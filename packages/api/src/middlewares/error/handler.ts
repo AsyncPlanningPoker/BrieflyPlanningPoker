@@ -1,6 +1,6 @@
+import { Response } from 'express';
 import { ZodError } from 'zod';
 import { BadRequest, CustomError } from './error';
-import { Response } from 'express';
 
 async function handler(error: CustomError | Error, res: Response): Promise<Response> {
   if (error instanceof CustomError) {

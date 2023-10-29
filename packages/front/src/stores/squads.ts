@@ -41,18 +41,18 @@ const squadStore =  defineStore('squadStore', {
       this.squadActive = data;
     },
 
-    async addUser(email: string) {
+    async addUser({email, owner = false}: {email: string, owner?: boolean}) {
       const squadId = this.activeId;
-      const squad = await api.addUsersSquad({ email }, { params: { squadId }})
+      const squad = await api.addUsersSquad({ email, owner }, { params: { squadId }})
       .catch((error) => {
         throw error;
       });
       this.squadActive = squad;
     },
 
-    async addYourself(squadId: string) {
+    async addYourself({squadId, owner = false}: {squadId: string, owner?: boolean}) {
       const email = user.userEmail;
-      const squad = await api.addUsersSquad({ email, owner: false }, { params: { squadId }})
+      const squad = await api.addUsersSquad({ email, owner }, { params: { squadId }})
       .catch((error) => {
         throw error;
       });
@@ -88,16 +88,16 @@ const squadStore =  defineStore('squadStore', {
       this.squadActive = squad;
     },
 
-    async addSquad(payload: any) {
+    async addSquad(payload: squadSchemas.CreateSchemaReq) {
       const { id } = await api.createSquad(payload)
       .catch((error) => {
         throw error;
       });
-      await this.addYourself(id);
+      await this.addYourself({ squadId: id, owner: true });
       await this.gatherSquadList();
     },
 
-    async updateSquad(payload: any) {
+    async updateSquad(payload: squadSchemas.UpdateSchemaReq) {
       const squadId = this.activeId;
       const squad = await api.updateSquad(payload, { params: { squadId } })
       .catch((error) => {

@@ -4,71 +4,30 @@
       <BSidebar />
     </aside>
 
-    <BModal
-      color="gray-30"
-      :open="deleteAccountModal"
-    >
-      <FConfirmation
-        action="delete"
-        message="Are you sure you want to delete your account?"
-        @close="hideDeleteAccountModal"
-        @confirm="onDelete"
-      />
+    <BModal color="gray-30" :open="deleteAccountModal">
+      <FConfirmation action="delete" message="Are you sure you want to delete your account?"
+        @close="hideDeleteAccountModal" @confirm="onDelete" />
     </BModal>
-
     <main>
       <BContainer class="user-profile__form-container">
-        <form
-          @submit="onSubmit"
-        >
-          <BInput
-          label="Old Password"
-              name="oldPassword"
-              type="password"
-            />
+        <BForm @submit="onSubmit" :schema="schema">
+          <BInput label="Name" name="name" type="text" />
+          <BInput label="Old password" name="oldPassword" type="password" />
+          <BInput label="New password" name="password" type="password" />
+          <BInput label="Confirm the new password" name="confirmPassword" type="password" />
 
-          <BInput
-          label="New Password"
-              name="newPassword"
-              type="password"
-            />
-
-          <BInput
-          label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-            />
-
-          <BText
-            v-if="user.errorMessage"
-            color="error"
-            size="small"
-            tag="div"
-          >
+          <BText v-if="user.errorMessage" color="error" size="small" tag="div">
             {{ user.errorMessage }}
           </BText>
-          <BText
-            v-if="user.success"
-            color="success"
-            size="small"
-            tag="div"
-          >
+          <BText v-if="user.success" color="success" size="small" tag="div">
             Saved.
           </BText>
+
           <div class="user-profile__form-buttons">
-            <BButton
-              size="medium"
-              variant="transparent"
-              value="Delete Account"
-              @click="showDeleteAccountModal"
-            />
-            <BButton
-              size="medium"
-              type="submit"
-              value="Save"
-            />
+            <BButton size="medium" variant="transparent" value="Delete Account" @click="showDeleteAccountModal" />
+            <BButton size="medium" type="submit" value="Save" />
           </div>
-        </Form>
+        </BForm>
       </BContainer>
     </main>
   </div>
@@ -85,15 +44,20 @@ import BText from '../components/b-text.vue';
 import router from '../router';
 import FConfirmation from '../forms/f-confirmation.vue';
 import { userStore } from '@/stores';
+import BForm from '@/components/b-form.vue';
+import { userSchemas } from '@briefly/apidef';
+import type { ComponentExposed } from 'vue-component-type-helpers';
 
 const user = userStore();
-
+const schema = userSchemas.updateSchemaReq.omit({ email: true, enabled: true });
+const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
 const deleteAccountModal = ref(false);
 const showDeleteAccountModal = () => deleteAccountModal.value = true;
 const hideDeleteAccountModal = () => deleteAccountModal.value = false;
 
-function onSubmit(values: any) {
-  user.updateYourself(values);
+function onSubmit() {
+  const data = form.value?.validatedData;
+  if(data) user.updateYourself(data);
 }
 
 async function onDelete() {

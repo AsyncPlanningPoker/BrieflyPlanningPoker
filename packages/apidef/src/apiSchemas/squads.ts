@@ -1,7 +1,7 @@
+import { z } from "zod";
 import { findSchemaRes as findTaskSchemaRes } from "./tasks";
 import { SquadOptionalDefaultsSchema, SquadPartialSchema, SquadSchema, TaskOptionalDefaultsSchema, TaskSchema } from "../generated/zod";
 import { updateSchemaRes as userSchema } from "./users";
-import { z } from "zod";
 
 /** Esquema para criacao de squads - request */
 export const createSchemaReq = SquadOptionalDefaultsSchema.strict();

@@ -4,7 +4,7 @@ services:
 
   front:
     container_name: front
-    image: node:18
+    image: node:20
     working_dir: /front
     command: make front-startup
     ports:
@@ -16,7 +16,7 @@ services:
 
   api:
     container_name: api
-    image: node:18 
+    image: node:20 
     working_dir: /app
     command: make api-startup
     ports:

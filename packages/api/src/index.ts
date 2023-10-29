@@ -1,22 +1,21 @@
+import { ZodiosApp, zodiosApp } from '@zodios/express';
 import express, { NextFunction, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 import { expand } from 'dotenv-expand'
 import morgan from 'morgan';
 import cors from 'cors';
+import { apiDef, type ApiDef } from '@briefly/apidef';
+
 import context, { type Context } from './context';
 import { CustomError, handler as errorHandler } from './middlewares/error';
 import routes from './routes';
-import { ZodiosApp, zodiosApp } from '@zodios/express';
-import { apiDef, type ApiDef } from '@briefly/apidef';
 import { handler } from './middlewares/authorization';
 
 function listen(): void {
-  if (require.main === module) {
-    app.listen(port, () => {
-      console.log(`BrieflyPlanningPoker app  listening at ${port} port`);
-    });
-  }
+  app.listen(port, () => {
+    console.log(`BrieflyPlanningPoker app  listening at ${port} port`);
+  });
 }
 
 function setExit(): void {

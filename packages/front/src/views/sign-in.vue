@@ -1,51 +1,19 @@
 <template>
   <div class="sign-in">
     <BBrand />
-
     <BContainer color="gray-30">
-      <form
-        class="sign-in__form"
-        @submit="onSubmit"
-        @invalid-submit="onInvalidSubmit"
-      >
-        <BInput
-        label="E-mail"
-            name="email"
-            type="email"
-            @input="updateEmail"
-          />
-
-        <BInput
-        label="Password"
-          :link="['/password_reset', 'forgot password?']"
-            name="password"
-            type="password"
-            @input="updatePassword"
-          />
-
-        <BText
-          class="error"
-          size="small"
-          tag="div"
-        >
-          {{ signIn.errorMessage }}
+      <BForm class="sign-in__form" @submit="onSubmit" :schema="schema">
+        <BInput label="E-mail" name="email" type="email" />
+        <BInput label="Password" :link="['/password_reset', 'forgot password?']" name="password" type="password" />
+        <BText class="error" size="small" tag="div">
+          {{ errorMessage }}
         </BText>
-
-        <BButton
-          class="sign-in__login-button"
-          type="submit"
-          value="login"
-        />
-      </Form>
+        <BButton class="sign-in__login-button" type="submit" value="login" />
+      </BForm>
     </BContainer>
 
     <BContainer color="gray-30">
-      <BButton
-        class="sign-in__registry-button"
-        size="small"
-        value="create an account"
-        @click="$router.push('signup')"
-      />
+      <BButton class="sign-in__registry-button" size="small" value="create an account" @click="$router.push('signup')" />
     </BContainer>
   </div>
 </template>
@@ -57,30 +25,30 @@ import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BText from '../components/b-text.vue';
 import { ref } from 'vue';
-import { signInStore } from '@/stores';
+import { userStore } from '@/stores';
+import apiClient from '@/services/api';
+import { userSchemas } from '@briefly/apidef';
+import BForm from '@/components/b-form.vue';
+import type { ComponentExposed } from 'vue-component-type-helpers';
 
-const submitButton = ref<HTMLButtonElement | null>(null);
-const signIn = signInStore();
+const schema = userSchemas.loginSchemaReq;
+const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
+const user = userStore();
+const errorMessage = ref<string>("");
 
-function onSubmit() {
-  signIn.login();
+async function onSubmit() {
+  const data = form.value?.validatedData;
+  if(data){
+    try{
+      const { token } = await apiClient.loginUser(data);
+      errorMessage.value = "";
+      user.updateUserEmail(data.email);
+      user.updateUserToken(token);
+    } catch (e: unknown){
+      errorMessage.value = e as string;
+    }
+  }
 }
-
-function onInvalidSubmit() {
-  submitButton.value?.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('invalid');
-  }, 1000);
-}
-
-function updateEmail(emailInput: Event & { target: HTMLInputElement }) {
-  signIn.email = emailInput.target.value;
-}
-
-function updatePassword(passwordInput: Event & { target: HTMLInputElement }) {
-  signIn.password = passwordInput.target.value;
-}
-
 </script>
 
 <style scoped lang="scss">
