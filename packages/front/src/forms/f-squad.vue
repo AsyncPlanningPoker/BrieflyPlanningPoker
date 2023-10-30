@@ -1,6 +1,6 @@
 <template>
   <BForm v-if="!update" class="f-squad" @submit="onSubmit" :schema="schema" ref="form">
-    <BInput label="Squad name" name="squadName" placeholder="Name" type="text" />
+    <BInput label="Squad name" name="name" placeholder="Name" type="text" />
     <BInput label="Max rounds" name="maxRounds" :min="1" placeholder="3" type="number" />
     <BInput label="Percentual" name="percentual" :max="1" :min="0" placeholder="0.25" :step="0.1" type="number" />
 
@@ -11,7 +11,7 @@
   </BForm>
 
   <BForm v-else class="f-squad" @submit="onSubmit" :schema="schema" ref="form">
-    <BInput :initial="squad.squadActive?.name" label="Squad name" name="squadName" type="text" />
+    <BInput :initial="squad.squadActive?.name" label="Squad name" name="name" type="text" />
     <BInput :initial="squad.squadActive?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
     <BInput :initial="squad.squadActive?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
       placeholder="0.25" :step="0.1" type="number" />
@@ -45,13 +45,15 @@ const schema = props.update ? squadSchemas.updateSchemaReq : squadSchemas.create
 
 const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
 
-function onSubmit() {
+async function onSubmit() {
   const newSquad = form.value?.validatedData;
   if(newSquad){
-    if (isCreate(newSquad, props.update)) squad.addSquad(newSquad);
+    if (isCreate(newSquad, props.update)){
+      await squad.addSquad(newSquad);
+    }
     else squad.updateSquad(newSquad);
-}
-  emit('close');
+    emit('close');
+  } else console.error("No squad data!");
 }
 </script>
 

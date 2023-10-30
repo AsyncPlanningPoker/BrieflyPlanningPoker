@@ -11,30 +11,15 @@
       </div>
 
       <div class="home__section">
-        <BTaskContainer
-          title="Active"
-          :active="true"
-          :tasks="activeTasks"
-        />
+        <BTaskContainer title="Active" :active="true" :tasks="activeTasks" />
       </div>
-
       <div class="home__section">
-        <BTaskContainer
-          title="Archived"
-          :active="false"
-          :tasks="archivedTasks"
-        />
+        <BTaskContainer title="Archived" :active="false" :tasks="archivedTasks" />
       </div>
     </main>
 
-    <main
-      v-else
-      class="home__blank"
-    >
-      <BText
-        color="gray-30"
-        size="giant"
-      >
+    <main v-else class="home__blank">
+      <BText color="gray-30" size="giant" >
         Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻
       </BText>
     </main>

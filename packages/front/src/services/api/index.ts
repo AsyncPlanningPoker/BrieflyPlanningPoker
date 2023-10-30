@@ -5,14 +5,20 @@ import { apiDef } from '@briefly/apidef'
 const envVars = import.meta.env;
 
 const api = axios.create({
-  baseURL: envVars.DEV ? envVars.VITE_DEV_API_URL : envVars.VITE_PROD_API_URL,
+  baseURL: "http://localhost:8000",
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+api.interceptors.response.use((val) => {
+  console.log(val);
+  return val;
+})
+
 api.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('userToken') ?? '')}`;
+  const userToken = localStorage.getItem('userToken');
+  if(userToken) config.headers.Authorization = `Bearer ${JSON.parse(userToken)}`;
 
   if (config.data) {
     const data = { ...config.data };

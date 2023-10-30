@@ -20,6 +20,7 @@
   "devDependencies": {
     "prisma": "5.2.0",
     "ts-node": "^10.9.1",
+    "tsx": "^3.14.0",
     "typescript": "^5.2.2",
     "zod-prisma-types": "2.7.9"
   }

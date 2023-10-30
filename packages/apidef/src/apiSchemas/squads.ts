@@ -4,7 +4,7 @@ import { SquadOptionalDefaultsSchema, SquadPartialSchema, SquadSchema, TaskOptio
 import { updateSchemaRes as userSchema } from "./users";
 
 /** Esquema para criacao de squads - request */
-export const createSchemaReq = SquadOptionalDefaultsSchema.strict();
+export const createSchemaReq = SquadOptionalDefaultsSchema.omit({ id: true, enabled: true, createdAt: true, updatedAt: true }).strict();
 
 /** Esquema para criacao de squads - response */
 export const createSchemaRes = SquadSchema.extend({

@@ -598,6 +598,7 @@ __metadata:
     bcryptjs: ^2.4.3
     prisma: 5.2.0
     ts-node: ^10.9.1
+    tsx: ^3.14.0
     typescript: ^5.2.2
     zod: 3.21.1
     zod-prisma-types: 2.7.9
@@ -2863,7 +2864,6 @@ __metadata:
   resolution: "briefly@workspace:."
   dependencies:
     dotenv: ^16.0.2
-    ts-node: ^10.9.1
   languageName: unknown
   linkType: soft
 

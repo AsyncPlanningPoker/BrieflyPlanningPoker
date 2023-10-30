@@ -26,44 +26,50 @@ const taskStore =  defineStore('taskStore', {
     },
 
     async addTask(payload: squadSchemas.CreateTaskSchemaReq) {
-      const squadId = squad.activeId;
-      const newTask = await api.createTaskSquad(payload, { params: { squadId }})
-      .catch((error) => {
-        throw error;
-      });
+      try{
+        const squadId = squad.activeId;
+        const newTask = await api.createTaskSquad(payload, { params: { squadId }});
 
-      if(squad.squadActive)
-        squad.squadActive.tasks = squad.squadActive.tasks
-          .concat([newTask]);
+        if(squad.squadActive)
+          squad.squadActive.tasks = squad.squadActive.tasks
+            .concat([newTask]);
 
-      await this.gatherTasks();
+        await this.gatherTasks();
+      } catch (e: unknown) {
+        console.error(e)
+        // router.push('signin');
+      }
     },
 
     async disableTask(taskId: string) {
-      const disabledTask = await api.deactivateTask(undefined, { params: { taskId } })
-      .catch((error) => {
-        throw error;
-      });
+      try{
+        const disabledTask = await api.deactivateTask(undefined, { params: { taskId } });
 
-      if(squad.squadActive)
-        squad.squadActive.tasks = squad.squadActive.tasks
-          .filter(({ id }) => disabledTask.id != id)
-          .concat([disabledTask]);
+        if(squad.squadActive)
+          squad.squadActive.tasks = squad.squadActive.tasks
+            .filter(({ id }) => disabledTask.id != id)
+            .concat([disabledTask]);
 
-      await this.gatherTasks();
+        await this.gatherTasks();
+      } catch (e: unknown) {
+        console.error(e)
+        // router.push('signin');
+      }
     },
 
     async deleteTask(taskId: string) {
-      const deletedTask = await api.deleteTask(undefined, { params: { taskId } })
-      .catch((error) => {
-        throw error;
-      });
+      try{
+        const deletedTask = await api.deleteTask(undefined, { params: { taskId } });
 
-      if(squad.squadActive)
-        squad.squadActive.tasks = squad.squadActive.tasks
-          .filter(({ id }) => deletedTask.id != id);
+        if(squad.squadActive)
+          squad.squadActive.tasks = squad.squadActive.tasks
+            .filter(({ id }) => deletedTask.id != id);
 
-      await this.gatherTasks();
+        await this.gatherTasks();
+      } catch (e: unknown) {
+        console.error(e)
+        // router.push('signin');
+      }
     },
   }
 });

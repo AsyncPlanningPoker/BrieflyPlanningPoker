@@ -2,7 +2,7 @@
   <div class="sign-in">
     <BBrand />
     <BContainer color="gray-30">
-      <BForm class="sign-in__form" @submit="onSubmit" :schema="schema">
+      <BForm class="sign-in__form" @submit="onSubmit" :schema="schema" ref="form">
         <BInput label="E-mail" name="email" type="email" />
         <BInput label="Password" :link="['/password_reset', 'forgot password?']" name="password" type="password" />
         <BText class="error" size="small" tag="div">
@@ -30,6 +30,8 @@ import apiClient from '@/services/api';
 import { userSchemas } from '@briefly/apidef';
 import BForm from '@/components/b-form.vue';
 import type { ComponentExposed } from 'vue-component-type-helpers';
+import { AxiosError } from 'axios';
+import router from '@/router';
 
 const schema = userSchemas.loginSchemaReq;
 const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
@@ -44,10 +46,15 @@ async function onSubmit() {
       errorMessage.value = "";
       user.updateUserEmail(data.email);
       user.updateUserToken(token);
+      router.push("/");
     } catch (e: unknown){
-      errorMessage.value = e as string;
+      if(e instanceof AxiosError){
+        if(e.response?.status == 401) 
+          errorMessage.value = "Invalid credentials"
+          console.error(e.message);
+      } else console.error(e);
     }
-  }
+  } else console.error("No data!");
 }
 </script>
 

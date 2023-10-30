@@ -14,10 +14,6 @@ async function handler(error: CustomError | Error, res: Response): Promise<Respo
     return handler(new BadRequest(error.message, error.issues), res);
   }
 
-  // if (error instanceof PrismaClientKnownRequestError) {
-    
-  // }
-
   console.error(error.message);
   return res.status(500).json({
     status: 'error',

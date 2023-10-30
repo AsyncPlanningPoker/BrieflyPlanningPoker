@@ -23,19 +23,17 @@ const signUpStore = defineStore('signUpStore',{
   }),
 
   actions: {
-    register() {
-      api
-        .createUser(this)
-        .then((res) => {
-          const { token } = res;
-          user.updateUserToken(token)
-          user.updateUserEmail(this.email)
-          router.push('/');
-        })
-        .catch((err) => {
-          this.errorMessage = err.response.data.message;
-        });
-    },
+    async register() {
+      try{
+        const { token } = await api.createUser(this);
+        user.updateUserToken(token);
+        user.updateUserEmail(this.email);
+        router.push('/');
+      } catch (e: any){
+        this.errorMessage = e.response.data.message;
+        // router.push("/signin");
+      }
+    }
   }
 });
 

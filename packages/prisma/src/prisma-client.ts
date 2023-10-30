@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import taskExtensions from './extensions/models/task';
 import * as crypt from './extensions/crypt'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 .$extends({
@@ -52,10 +53,18 @@ const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
              * @returns {boolean}
              */
             async authenticate(email: string, password: string): Promise<boolean>{
-                const user = await Prisma.getExtensionContext(this)
-                    .$parent.user.findUniqueOrThrow({ where: { email } });
-                
-                return await crypt.compare(password, user.password);
+                try{
+                    const user = await Prisma.getExtensionContext(this)
+                        .$parent.user.findUniqueOrThrow({ where: { email } });
+                    
+                    return await crypt.compare(password, user.password);
+                } catch(e: unknown){
+                    if(e instanceof PrismaClientKnownRequestError && e.code == 'P2025'){
+                        console.error(`Error: ${e.message}`);
+                        return false;
+                    } 
+                    throw e;
+                }
             }
         }
     }

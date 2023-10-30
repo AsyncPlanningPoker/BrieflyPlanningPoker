@@ -38,6 +38,7 @@ import api from '@/services/api';
 import { type ComponentExposed } from 'vue-component-type-helpers'
 import { userStore } from '@/stores';
 import { userSchemas } from '@briefly/apidef';
+import router from '@/router';
 
 const user = userStore();
 
@@ -45,11 +46,12 @@ const signUpForm = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined
   
 async function onSubmit() {
   const data = toValue(toValue(signUpForm.value?.validatedData));
-  console.warn(data);
   if(! data) return;
   try{
     const { token } = await api.createUser(data);
+    user.updateUserEmail(data.email);
     user.updateUserToken(token);
+    router.push('/');
   } catch(e: unknown){
     console.error(e);
   }
