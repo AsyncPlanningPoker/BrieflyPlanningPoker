@@ -1,22 +1,8 @@
 <template>
-  <div
-    class="b-divisor"
-    :class="`b-divisor--${color}`"
-  >
-    <div
-      v-if="button"
-      class="b-divisor__button"
-      :class="`b-divisor__button--${color}`"
-      @click="toggle"
-    >
-      <font-awesome-icon
-        v-show="!toggled"
-        icon="fa-solid fa-circle-chevron-down"
-      />
-      <font-awesome-icon
-        v-show="toggled"
-        icon="fa-solid fa-circle-chevron-up"
-      />
+  <div class="b-divisor" :class="`b-divisor--${color}`">
+    <div v-if="button" class="b-divisor__button" :class="`b-divisor__button--${color}`" @click="toggle">
+      <font-awesome-icon v-show="!toggled" icon="fa-solid fa-circle-chevron-down" />
+      <font-awesome-icon v-show="toggled" icon="fa-solid fa-circle-chevron-up" />
     </div>
   </div>
 </template>
@@ -28,12 +14,10 @@ withDefaults(
   defineProps<{
     button: boolean,
     color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
-  }>(), { color: 'black', button: false }
+}>(), { color: 'black', button: false }
 );
 
-const emit = defineEmits<{
-  (event: 'action'): void
-}>();
+const emit = defineEmits<{ (event: 'action'): void }>();
 
 const toggled = ref(false);
 const toggle = () => {

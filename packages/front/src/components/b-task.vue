@@ -1,113 +1,47 @@
 <template>
-  <div
-    class="b-task"
-    :class="active ? 'b-task--active' : 'b-task--archived'"
-  >
+  <div class="b-task" :class="active ? 'b-task--active' : 'b-task--archived'">
     <div class="b-task__name-wrapper">
-      <BText
-        align="left"
-        class="b-task__name"
-        size="medium"
-        tag="strong"
-        @click="toggleExpandedTaskModal(task.id, false)"
-      >
+      <BText align="left" class="b-task__name" size="medium" tag="strong"
+        @click="toggleExpandedTaskModal(task.id, false)">
         {{ task.name }}
       </BText>
     </div>
-
     <div class="b-task__info-wrapper">
-      <div
-        v-if="task.finished"
-        class="b-task__round"
-      >
-        <font-awesome-icon
-          v-if="!!task.points"
-          class="b-task__icon"
-          icon="fa-solid fa-circle-check"
-        />
-        <font-awesome-icon
-          v-else
-          class="b-task__icon"
-          icon="fa-solid fa-circle-xmark"
-        />
-
-        <BText
-          align="right"
-          size="large"
-          tag="p"
-        >
+      <div v-if="task.finished" class="b-task__round">
+        <font-awesome-icon v-if="!!task.points" class="b-task__icon" icon="fa-solid fa-circle-check" />
+        <font-awesome-icon v-else class="b-task__icon" icon="fa-solid fa-circle-xmark" />
+        <BText align="right" size="large" tag="p">
           {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : 'incomplete' }}
         </BText>
       </div>
-
-      <div
-        v-else
-        class="b-task__round"
-      >
-        <font-awesome-icon
-          class="b-task__icon"
-          icon="fa-solid fa-arrow-rotate-right"
-        />
-
-        <BText
-          align="right"
-          size="large"
-          tag="p"
-        >
+      <div v-else class="b-task__round">
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
+        <BText align="right" size="large" tag="p">
           {{ `${task.currentRound || 1} / ${task.maxRounds}` }}
         </BText>
       </div>
 
       <div class="b-task__buttons">
-        <font-awesome-icon
-          v-if="active"
-          class="b-task__icon"
-          icon="fa-solid fa-lock"
-          @click="toggleArchiveModal()"
-        />
-
-        <font-awesome-icon
-          class="b-task__icon"
-          icon="fa-solid fa-trash-can"
-          @click="toggleDeleteModal()"
-        />
+        <font-awesome-icon v-if="active" class="b-task__icon" icon="fa-solid fa-lock" @click="toggleArchiveModal()" />
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-trash-can" @click="toggleDeleteModal()" />
       </div>
     </div>
   </div>
 
-  <BModal
-    color="gray-10"
-    :open="expandedTaskModal"
-  >
-    <BTaskExpanded
-      :task-id="task.id"
-      :squad-id="squadId"
-      @close="toggleExpandedTaskModal(task.id, true)"
-    />
+  <BModal color="gray-10" :open="expandedTaskModal">
+    <BTaskExpanded :task-id="task.id" :squad-id="squadId" @close="toggleExpandedTaskModal(task.id, true)" />
   </BModal>
 
-  <BModal
-    color="gray-30"
-    :open="archiveModal"
-  >
-    <FConfirmation
-      action="archive"
-      message="Are you sure you want to archive this task? This action is IRREVERSIBLE"
-      @close="toggleArchiveModal()"
-      @confirm="taskS.deleteTask(task.id), toggleArchiveModal()"
-    />
+  <BModal color="gray-30" :open="archiveModal">
+    <FConfirmation action="archive"
+      message="Are you sure you want to archive this task? This action is IRREVERSIBLE" 
+      @close="toggleArchiveModal()" @confirm="taskS.deleteTask(task.id), toggleArchiveModal()" />
   </BModal>
 
-  <BModal
-    color="gray-30"
-    :open="deleteModal"
-  >
-    <FConfirmation
-      action="delete"
+  <BModal color="gray-30" :open="deleteModal">
+    <FConfirmation action="delete"
       message="Are you sure you want to delete this task? This action is IRREVERSIBLE"
-      @close="toggleDeleteModal()"
-      @confirm="taskS.deleteTask(task.id), toggleDeleteModal()"
-    />
+      @close="toggleDeleteModal()" @confirm="taskS.deleteTask(task.id), toggleDeleteModal()" />
   </BModal>
 </template>
 

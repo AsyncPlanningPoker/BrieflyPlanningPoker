@@ -1,12 +1,6 @@
 <template>
-  <button
-    class="b-button"
-    :class="{
-      'b-button--small': size === 'small',
-      [`b-button--${variant}`]: variant,
-    }"
-    :type="type"
-  >
+  <button class="b-button" :class="{ 'b-button--small': size === 'small', [`b-button--${variant}`]: variant }"
+    :type="type">
     {{ value.toUpperCase() }}
   </button>
 </template>

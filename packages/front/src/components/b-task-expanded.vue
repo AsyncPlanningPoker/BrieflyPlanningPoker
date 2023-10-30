@@ -1,83 +1,32 @@
 <template>
   <div class="b-task-expanded">
     <div class="b-task-expanded__leave-wrapper">
-      <BButton
-        size="small"
-        variant="inverted"
-        value="x"
-        @click="$emit('close')"
-      />
+      <BButton size="small" variant="inverted" value="x" @click="$emit('close')" />
     </div>
-
-    <BText
-      align="center"
-      class="b-task-expanded__title"
-      color="black"
-      size="giant"
-      tag="h1"
-    >
+    <BText align="center" class="b-task-expanded__title" color="black" size="giant" tag="h1">
       {{ task?.name }}
     </BText>
-
-    <BText
-      align="left"
-      class="b-task-expanded__wrapper"
-      color="gray-30"
-      size="medium"
-    >
+    <BText align="left" class="b-task-expanded__wrapper" color="gray-30" size="medium">
       {{ task?.description }}
     </BText>
-
-    <div
-      id="comment-box"
-      class="b-task-expanded__wrapper b-task-expanded__comments"
-    >
-      <template
-        v-for="(actions, round) in rounds"
-        :key="round"
-      >
-        <BText
-          align="center"
-          color="gray-20"
-          size="medium"
-        >
+    <div id="comment-box" class="b-task-expanded__wrapper b-task-expanded__comments" >
+      <template v-for="(actions, round) in rounds" :key="round">
+        <BText align="center" color="gray-20" size="medium">
           Round: {{ round }}
         </BText>
-
         <BDivisor color="gray-20" />
-
-        <template
-          v-for="action in actions"
-          :key="action.date"
-        >
-          <BComment
-            v-if="action.round === round"
-            :action="action"
-            :hidden="!!task && action.round == task.currentRound"
-          />
+        <template v-for="action in actions" :key="action.date">
+          <BComment v-if="action.round === round" :action="action"
+            :hidden="!!task && action.round == task.currentRound" />
         </template>
       </template>
     </div>
-
-    <div
-      v-if="finished"
-      class="b-task-expanded__wrapper"
-    >
+    <div v-if="finished" class="b-task-expanded__wrapper">
       <FAddComment @comment="comment" />
     </div>
-
-    <div
-      v-if="finished"
-      class="b-task-expanded__wrapper"
-    >
+    <div v-if="finished" class="b-task-expanded__wrapper">
       <div class="b-task-expanded__card-container">
-        <BCard
-          v-for="fibo in fibonacci"
-          :active="votable"
-          :key="fibo"
-          :value="fibo"
-          @click="vote(fibo)"
-        />
+        <BCard v-for="fibo in fibonacci" :active="votable" :key="fibo" :value="fibo" @click="vote(fibo)" />
       </div>
     </div>
   </div>

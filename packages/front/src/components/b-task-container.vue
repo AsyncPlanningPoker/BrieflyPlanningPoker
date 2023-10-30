@@ -1,55 +1,20 @@
 <template>
-  <BText
-    align="left"
-    color="white"
-    size="giant"
-    tag="h1"
-  >
+  <BText align="left" color="white" size="giant" tag="h1">
     {{ title }}
   </BText>
-
-  <BText
-    v-if="active"
-    align="left"
-    class="b-task-container__link"
-    color="link"
-    size="medium"
-    tag="span"
-    @click="toggleModal"
-  >
+  <BText v-if="active" align="left" class="b-task-container__link" color="link"
+    size="medium" tag="span" @click="toggleModal">
     create new task
   </BText>
-
-  <div
-    v-if="tasks.length > 0"
-    class="b-task-container__wrapper"
-  >
-    <BTask
-      v-for="(task, index) in tasks"
-      :active="active"
-      :key="index"
-      :task="task"
-    />
+  <div v-if="tasks.length > 0" class="b-task-container__wrapper">
+    <BTask v-for="(task, index) in tasks" :active="active" :key="index" :task="task" />
   </div>
-
-  <div
-    v-else
-    class="b-task-container__empty"
-  >
-    <BText
-      align="center"
-      color="gray-20"
-      size="large"
-      tag="p"
-    >
+  <div v-else class="b-task-container__empty">
+    <BText align="center" color="gray-20" size="large" tag="p">
       there are no tasks here (⊙︿⊙ ✿)
     </BText>
   </div>
-
-  <BModal
-    color="gray-20"
-    :open="showModal"
-  >
+  <BModal color="gray-20" :open="showModal" >
     <FTask @close="toggleModal" />
   </BModal>
 </template>

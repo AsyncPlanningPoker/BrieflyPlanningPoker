@@ -1,13 +1,9 @@
 <template>
-  <component
-    :is="tag"
-    class="b-text"
-    :class="{
+  <component :is="tag" class="b-text" :class="{
       [`b-text--${align}`]: align,
       [`b-text--${color}`]: color,
-      [`b-text--${size}`]: size,
-    }"
-  >
+      [`b-text--${size}`]: size
+  }">
     <slot />
   </component>
 </template>

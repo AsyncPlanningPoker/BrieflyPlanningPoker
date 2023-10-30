@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="b-container"
-    :class="`b-container--${color}`"
-  >
+  <div class="b-container" :class="`b-container--${color}`">
     <slot />
   </div>
 </template>
