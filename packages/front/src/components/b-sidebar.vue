@@ -41,12 +41,6 @@ const showModal = ref(false);
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };
-
-onMounted(() => {
-  console.log("Montei a porra da sidebar");
-  squadS.gatherSquadList()
-    .catch((e) => console.error(e));
-});
 </script>
 
 <style lang="scss" scoped>

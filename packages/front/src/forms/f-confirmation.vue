@@ -15,7 +15,7 @@ import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
 withDefaults(defineProps<{
-  action: string,
+  action?: string,
   message?: string
 }>(), { action: 'Confirm' });
 

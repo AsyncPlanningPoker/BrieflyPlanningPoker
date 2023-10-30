@@ -33,7 +33,7 @@ import { squadStore } from '@/stores';
 import type { ComponentExposed } from 'vue-component-type-helpers';
 import { squadSchemas } from '@briefly/apidef';
 
-const props = withDefaults(defineProps<{ update: boolean }>(), { update: false });
+const props = withDefaults(defineProps<{ update?: boolean }>(), { update: false });
 
 const emit = defineEmits<{ (event: 'close'): void }>();
 

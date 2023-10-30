@@ -41,20 +41,15 @@ import { userSchemas } from '@briefly/apidef';
 import router from '@/router';
 
 const user = userStore();
-
 const signUpForm = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
   
 async function onSubmit() {
-  const data = toValue(toValue(signUpForm.value?.validatedData));
-  if(! data) return;
-  try{
-    const { token } = await api.createUser(data);
-    user.updateUserEmail(data.email);
-    user.updateUserToken(token);
-    router.push('/');
-  } catch(e: unknown){
-    console.error(e);
+  const data = toValue(signUpForm.value?.validatedData);
+  if(data){
+    user.register(data);
+    router.push("/");
   }
+  else console.error("No data!");
 }
 
   const schema = userSchemas.createSchemaReq.omit({ enabled: true }).extend({

@@ -26,35 +26,23 @@ import BInput from '../components/b-input.vue';
 import BText from '../components/b-text.vue';
 import { ref } from 'vue';
 import { userStore } from '@/stores';
-import apiClient from '@/services/api';
 import { userSchemas } from '@briefly/apidef';
 import BForm from '@/components/b-form.vue';
 import type { ComponentExposed } from 'vue-component-type-helpers';
-import { AxiosError } from 'axios';
 import router from '@/router';
 
 const schema = userSchemas.loginSchemaReq;
 const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
 const user = userStore();
-const errorMessage = ref<string>("");
+const errorMessage = user.errorMessage;
 
 async function onSubmit() {
   const data = form.value?.validatedData;
-  if(data){
-    try{
-      const { token } = await apiClient.loginUser(data);
-      errorMessage.value = "";
-      user.updateUserEmail(data.email);
-      user.updateUserToken(token);
-      router.push("/");
-    } catch (e: unknown){
-      if(e instanceof AxiosError){
-        if(e.response?.status == 401) 
-          errorMessage.value = "Invalid credentials"
-          console.error(e.message);
-      } else console.error(e);
-    }
-  } else console.error("No data!");
+  if(data) {
+    user.login(data);
+    router.push("/");
+  }
+  else console.error("No data!");
 }
 </script>
 

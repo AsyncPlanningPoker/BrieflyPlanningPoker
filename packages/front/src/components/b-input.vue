@@ -31,7 +31,7 @@ import BText from './b-text.vue';
 
  const props = withDefaults(defineProps<{
     name: string
-    color: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
+    color?: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
     initial?: string | number | { d: number[]; e: number; s: number; toFixed: () => string },
     label: string
     link?: [string, string],
@@ -39,7 +39,7 @@ import BText from './b-text.vue';
     min?: number,
     placeholder?: string,
     step?: number,
-    type: 'email' | 'number' | 'password' | 'text' | 'textarea',
+    type?: 'email' | 'number' | 'password' | 'text' | 'textarea',
     row?: number
   }>(), { color: 'white', type: 'text'});
   

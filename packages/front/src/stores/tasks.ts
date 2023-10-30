@@ -3,74 +3,63 @@ import { squadSchemas } from '@briefly/apidef';
 
 import api from '../services/api';
 import { squadStore } from './squads';
-
-
-interface State {
-  enabledTasks: squadSchemas.FindSchemaRes["tasks"],
-  disabledTasks: squadSchemas.FindSchemaRes["tasks"],
-};
+import { ref } from 'vue';
 
 const squad = squadStore();
+const taskStore =  defineStore('taskStore', () => {
+  
+  const enabledTasks =  ref<squadSchemas.FindSchemaRes["tasks"]>([]);
+  const disabledTasks = ref<squadSchemas.FindSchemaRes["tasks"]>([]);
 
-const taskStore =  defineStore('taskStore', {
-  state: (): State => ({
-    enabledTasks: [],
-    disabledTasks: [],
-  }),
+  async function gatherTasks() {
+    const tasks = squad.activeSquad?.tasks;
+    enabledTasks.value = tasks?.filter((task) => task.active) ?? [];
+    disabledTasks.value = tasks?.filter((task) => task.active) ?? [];
+  }
 
-  actions: {
-    async gatherTasks() {
-      const tasks = squad.squadActive?.tasks;
-      this.enabledTasks = tasks?.filter((task) => task.active) ?? [];
-      this.disabledTasks = tasks?.filter((task) => task.active) ?? [];
-    },
+  async function addTask(payload: squadSchemas.CreateTaskSchemaReq) {
+    try{
+      const squadId = squad.activeId;
+      if(! squadId) throw new Error("No squad is active!");
+      const newTask = await api.createTaskSquad(payload, { params: { squadId }});
+      if(squad.activeSquad)
+        squad.activeSquad.tasks = squad.activeSquad.tasks
+          .concat([newTask]);
 
-    async addTask(payload: squadSchemas.CreateTaskSchemaReq) {
-      try{
-        const squadId = squad.activeId;
-        const newTask = await api.createTaskSquad(payload, { params: { squadId }});
+      await gatherTasks();
+    } catch (e: unknown) {
+      console.error(e)
+      // router.push('signin');
+    }
+  }
 
-        if(squad.squadActive)
-          squad.squadActive.tasks = squad.squadActive.tasks
-            .concat([newTask]);
+  async function disableTask(taskId: string) {
+    try{
+      const disabledTask = await api.deactivateTask(undefined, { params: { taskId } });
 
-        await this.gatherTasks();
-      } catch (e: unknown) {
-        console.error(e)
-        // router.push('signin');
-      }
-    },
+      if(squad.activeSquad)
+        squad.activeSquad.tasks = squad.activeSquad.tasks
+          .filter(({ id }) => disabledTask.id != id)
+          .concat([disabledTask]);
 
-    async disableTask(taskId: string) {
-      try{
-        const disabledTask = await api.deactivateTask(undefined, { params: { taskId } });
+      await gatherTasks();
+    } catch (e: unknown) {
+      console.error(e)
+      // router.push('signin');
+    }
+  }
 
-        if(squad.squadActive)
-          squad.squadActive.tasks = squad.squadActive.tasks
-            .filter(({ id }) => disabledTask.id != id)
-            .concat([disabledTask]);
-
-        await this.gatherTasks();
-      } catch (e: unknown) {
-        console.error(e)
-        // router.push('signin');
-      }
-    },
-
-    async deleteTask(taskId: string) {
-      try{
-        const deletedTask = await api.deleteTask(undefined, { params: { taskId } });
-
-        if(squad.squadActive)
-          squad.squadActive.tasks = squad.squadActive.tasks
-            .filter(({ id }) => deletedTask.id != id);
-
-        await this.gatherTasks();
-      } catch (e: unknown) {
-        console.error(e)
-        // router.push('signin');
-      }
-    },
+  async function deleteTask(taskId: string) {
+    try{
+      const deletedTask = await api.deleteTask(undefined, { params: { taskId } });
+      if(squad.activeSquad)
+        squad.activeSquad.tasks = squad.activeSquad.tasks
+          .filter(({ id }) => deletedTask.id != id);
+      await gatherTasks();
+    } catch (e: unknown) {
+      console.error(e)
+      // router.push('signin');
+    }
   }
 });
 

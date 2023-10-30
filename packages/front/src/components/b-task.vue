@@ -58,7 +58,7 @@ import { squadSchemas } from '@briefly/apidef';
 
 withDefaults(defineProps<{
   task: squadSchemas.FindSchemaRes["tasks"][number]
-  active: boolean
+  active?: boolean
 }>(), { active: true });
 
 const squadS = squadStore();

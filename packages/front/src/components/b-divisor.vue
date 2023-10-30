@@ -12,8 +12,8 @@ import { defineEmits, ref } from 'vue';
 
 withDefaults(
   defineProps<{
-    button: boolean,
-    color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
+    button?: boolean,
+    color?: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
 }>(), { color: 'black', button: false }
 );
 

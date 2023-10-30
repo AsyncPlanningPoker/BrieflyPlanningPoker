@@ -33,7 +33,7 @@
 import { taskSchemas } from '@briefly/apidef';
 import BText from '../components/b-text.vue';
 
-withDefaults(defineProps<{ action: taskSchemas.Action, hidden: boolean }>(), { hidden: true });
+withDefaults(defineProps<{ action: taskSchemas.Action, hidden?: boolean }>(), { hidden: true });
 </script>
 
 <style lang="scss" scoped>

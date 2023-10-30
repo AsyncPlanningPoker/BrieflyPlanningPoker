@@ -10,7 +10,7 @@
 withDefaults(defineProps<{
   size?: 'small' | 'medium',
   value?: string,
-  type: 'button' | 'reset' | 'submit',
+  type?: 'button' | 'reset' | 'submit',
   variant?: 'primary' | 'transparent' | 'inverted'
 }>(), {
   size: "medium",
