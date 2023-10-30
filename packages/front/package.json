@@ -14,6 +14,10 @@
   },
   "dependencies": {
     "@briefly/apidef": "workspace:^",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-regular-svg-icons": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/vue-fontawesome": "latest-3",
     "@zodios/core": "^10.9.6",
     "axios": "^1.5.1",
     "pinia": "^2.1.6",
