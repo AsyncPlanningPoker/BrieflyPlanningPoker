@@ -1,7 +1,10 @@
 <template>
-  <BForm class="f-task" @submit="onSubmit" :schema="schema">
-    <BInput label="Task title" name="taskTitle" placeholder="Title" type="text" />
-    <BTextArea label="Task description" name="taskDescription" placeholder="Description (optional)" />
+  <BForm class="f-task" @submit="onSubmit" :schema="schema" ref="form">
+    <BInput label="Task title" name="name" placeholder="Title" type="text" />
+    <BInput label="Task description" name="description" placeholder="Description (optional)" type="textarea"/>
+    <BInput :initial="squad.activeSquad?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
+    <BInput :initial="squad.activeSquad?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
+    placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-task__buttons-container">
       <BButton variant="transparent" value="cancel" @click="$emit('close')" />
@@ -11,26 +14,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import BButton from '../components/b-button.vue';
-import BInput from '../components/b-input.vue';
-import { taskStore } from '@/stores';
-import BForm from '@/components/b-form.vue';
-import type { ComponentExposed } from 'vue-component-type-helpers';
+import type { z } from 'zod';
 import { squadSchemas } from '@briefly/apidef';
+import BButton from '@/components/b-button.vue';
+import BInput from '@/components/b-input.vue';
+import { squadStore, taskStore } from '@/stores';
+import BForm from '@/components/b-form.vue';
 
 const emit = defineEmits<{ (event: 'close'): void }>();
 
+const squad = squadStore();
 const task = taskStore();
 
 const schema = squadSchemas.createTaskSchemaReq;
 
-const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
-
-function onSubmit() {
-  const newTask = form.value?.validatedData;
-  if(newTask) task.addTask(newTask);
-  emit('close');
+async function onSubmit(data: z.infer<typeof schema>){
+    await task.addTask(data);
+    emit('close');
 }
 </script>
 

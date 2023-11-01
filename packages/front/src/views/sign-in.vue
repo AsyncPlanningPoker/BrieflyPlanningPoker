@@ -2,11 +2,11 @@
   <div class="sign-in">
     <BBrand />
     <BContainer color="gray-30">
-      <BForm class="sign-in__form" @submit="onSubmit" :schema="schema" ref="form">
+      <BForm class="sign-in__form" @submit="onSubmit" :schema="schema">
         <BInput label="E-mail" name="email" type="email" />
         <BInput label="Password" :link="['/password_reset', 'forgot password?']" name="password" type="password" />
         <BText class="error" size="small" tag="div">
-          {{ errorMessage }}
+          {{ user.errorMessage }}
         </BText>
         <BButton class="sign-in__login-button" type="submit" value="login" />
       </BForm>
@@ -24,25 +24,18 @@ import BButton from '../components/b-button.vue';
 import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BText from '../components/b-text.vue';
-import { ref } from 'vue';
 import { userStore } from '@/stores';
 import { userSchemas } from '@briefly/apidef';
 import BForm from '@/components/b-form.vue';
-import type { ComponentExposed } from 'vue-component-type-helpers';
 import router from '@/router';
+import type { z } from 'zod';
 
 const schema = userSchemas.loginSchemaReq;
-const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
 const user = userStore();
-const errorMessage = user.errorMessage;
 
-async function onSubmit() {
-  const data = form.value?.validatedData;
-  if(data) {
-    user.login(data);
-    router.push("/");
-  }
-  else console.error("No data!");
+async function onSubmit(data: z.infer<typeof schema>) {
+  await user.login(data);
+  router.push("/");
 }
 </script>
 

@@ -47,6 +47,12 @@ const createTaskBodyParams = makeParameters([{
     schema: squads.createTaskSchemaReq
 }]);
 
+const taskQueryParams = makeParameters([{
+    name: 'active',
+    type: 'Query',
+    description: 'Are the target tasks active? If present, filter by the value provided. If absent, retrieve all tasks.',
+    schema: z.boolean().optional()
+}]);
 
 // Endpoints
 
@@ -67,7 +73,7 @@ const findAllEndpoint = makeEndpoint({
     // parameters: [squadIdParams],
     alias: 'findAllSquads',
     description: 'List all squads that the current user is a part of',
-    responseDescription: "A list of squads, not including its tasks or users"
+    responseDescription: "A list of squads, not including their users"
 });
 
 const findEndpoint = makeEndpoint({
@@ -77,7 +83,7 @@ const findEndpoint = makeEndpoint({
     parameters: squadIdParams,
     alias: 'findSquad',
     description: 'Display information about a specific squad',
-    responseDescription: "A squad, including its tasks and users"
+    responseDescription: "A squad, including its users"
 });
 
 const updateEndpoint = makeEndpoint({
@@ -110,6 +116,16 @@ const deleteUsersEndpoint = makeEndpoint({
     responseDescription: "The squad with the updated info"
 });
 
+const listTasksEndpoint = makeEndpoint({
+    method: 'get',
+    path: '/:squadId/tasks',
+    response: squads.listTasksSchemaRes,
+    parameters: [...squadIdParams, ...taskQueryParams],
+    alias: 'listTasksSquad',
+    description: 'Display a list of tasks',
+    responseDescription: "All the tasks of a particular squad"
+});
+
 const createTaskEndpoint = makeEndpoint({
     method: 'post',
     path: '/:squadId/tasks',
@@ -127,6 +143,7 @@ const squadsAPI = makeApi([
     updateEndpoint,
     addUsersEndpoint,
     deleteUsersEndpoint,
+    listTasksEndpoint,
     createTaskEndpoint
 ]);
 

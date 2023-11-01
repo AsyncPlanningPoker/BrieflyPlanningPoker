@@ -1,43 +1,51 @@
 <template>
-<form @submit.prevent="onSubmit">
+<form @submit.prevent="submit" @keyup.enter="submit">
     <slot />
 </form>
 </template>
 
 <script setup lang="ts" generic="Schema extends z.ZodTypeAny">
 import { ZodError, z } from 'zod';
-import { computed, provide, ref, toRef, watch} from 'vue';
+import { computed, provide, ref, toRef, watch } from 'vue';
+import { onMounted } from 'vue';
+
+    const formRef = ref<HTMLFormElement | undefined>();
 
     const props = defineProps<{
         schema: Schema,
-        onSubmit(): any
+        onSubmit: (data: z.infer<Schema>) => void | Promise<void>
     }>();
 
     /** The keys of the data object */
     const keys = getZodObjectKeys(props.schema);
+
+    async function submit(){
+        if(validatedData.value) await props.onSubmit(validatedData.value);
+        else console.error("No data!");
+        if(data.value)
+            for(const key in data.value)
+                data.value[key] = "";
+    }
 
     /** Data references to be provided to child inputs */
     const data = ref<Record<string, any>>({});
 
     /** Error references. Must be provided as readonly to child inputs */
     const errors = ref<Record<string, string>>({});
-    
+
+    const mainError = ref<string | undefined>();
+
     const validatedData = ref<z.infer<Schema> | undefined>();
+
     watch(data, () => {
-        const issues: z.ZodIssue[] = [];
-        for(const key of keys){
-            if(typeof data.value[key] === 'string' && data.value[key] == '')
-                issues.push({ code: "too_small", path: [key], inclusive: true,
-                type: 'string', minimum: 1, message: "Required" });
-        }
         try{
             validatedData.value = props.schema.parse(data.value);
             for(const key in errors.value)
                 errors.value[key] = "";
-            if(issues.length > 0) throw new ZodError([]);
+            mainError.value = undefined;
         } catch(e: unknown){
             if(isZodError(e)){
-                e.issues = e.issues.concat(issues);
+                mainError.value = e.message;
                 for(const key in errors.value){
                     const issue = e.issues
                         .find((issue) => issue.path
@@ -50,8 +58,6 @@ import { computed, provide, ref, toRef, watch} from 'vue';
     }, {deep: true});
 
     const valid = computed(() => !!validatedData.value);
-
-    defineExpose({ valid, validatedData });
 
     for(const field of keys) {
         data.value[field] = "";

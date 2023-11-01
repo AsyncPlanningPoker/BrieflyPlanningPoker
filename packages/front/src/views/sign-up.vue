@@ -3,7 +3,7 @@
   <div class="sign-up">
     <BBrand />
     <BContainer color="gray-30">
-      <BForm class="sign-up__form" :schema=schema :onSubmit=onSubmit ref="signUpForm">
+      <BForm class="sign-up__form" :schema=schema :onSubmit=onSubmit>
         <BInput name="name" label="Nome" type="text" />
         <BInput name="email" label="E-mail" type="email" />
         <BInput name="password" label="Password" type="password"/>
@@ -13,7 +13,7 @@
 
         <div class="sign-up__buttons-container">
           <BButton variant="transparent" value="return" @click="$router.push('signin')"/>
-          <BButton class="sign-up__create-button" :disabled="!signUpForm?.valid" type="submit"
+          <BButton class="sign-up__create-button" type="submit"
           value="create" ref="submitButton" />
         </div>
       </BForm>
@@ -34,43 +34,29 @@ import BInput from '../components/b-input.vue';
 import BText from '../components/b-text.vue';
 import BForm from '@/components/b-form.vue';
 import { z } from 'zod';
-import api from '@/services/api';
-import { type ComponentExposed } from 'vue-component-type-helpers'
 import { userStore } from '@/stores';
 import { userSchemas } from '@briefly/apidef';
 import router from '@/router';
 
 const user = userStore();
-const signUpForm = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
   
-async function onSubmit() {
-  const data = toValue(signUpForm.value?.validatedData);
-  if(data){
-    user.register(data);
-    router.push("/");
-  }
-  else console.error("No data!");
+async function onSubmit(data: z.infer<typeof schema>) {
+  await user.register(data);
+  router.push("/");
 }
 
-  const schema = userSchemas.createSchemaReq.omit({ enabled: true }).extend({
-    confirmPassword: z.string()
-  }).strict().refine(
-    (val) => val.password == val.confirmPassword,
-    { 
-      message: "The passwords must match!",
-      path: ["confirmPassword"]
-    }).transform((val) => {
-      const v: Partial<typeof val> = val;
-      delete v.confirmPassword;
-      return v as userSchemas.CreateSchemaReq
-    });
-
-// function onInvalidSubmit() {
-//   submitButton.value?.classList.add('invalid');
-//   setTimeout(() => {
-//     submitButton.value?.classList.remove('invalid');
-//   }, 1000);
-// }
+const schema = userSchemas.createSchemaReq.omit({ enabled: true }).extend({
+  confirmPassword: z.string()
+}).strict().refine(
+  (val) => val.password == val.confirmPassword,
+  { 
+    message: "The passwords must match!",
+    path: ["confirmPassword"]
+  }).transform((val) => {
+    const v: Partial<typeof val> = val;
+    delete v.confirmPassword;
+    return v as userSchemas.CreateSchemaReq
+  });
 </script>
 
 <style scoped lang="scss">

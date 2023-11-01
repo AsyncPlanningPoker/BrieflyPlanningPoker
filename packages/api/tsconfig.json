@@ -20,6 +20,7 @@
     "./src/**/*.ts",
   ],
   "references": [
-    {"path": "../prisma"}
+    {"path": "../prisma"},
+    {"path": "../apidef"}
   ]
 }

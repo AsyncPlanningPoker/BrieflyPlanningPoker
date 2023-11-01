@@ -13,7 +13,6 @@ const squadStore =  defineStore('squadStore', () => {
   
   const squadList = ref<squadSchemas.FindAllSchemaRes>([]);
   const activeSquad = ref<squadSchemas.FindSchemaRes | undefined>();
-
   const activeId = computed(() => activeSquad.value?.id);
   
   async function gatherSquadList() {

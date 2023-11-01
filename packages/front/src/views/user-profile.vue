@@ -19,7 +19,7 @@
           <BText v-if="user.errorMessage" color="error" size="small" tag="div">
             {{ user.errorMessage }}
           </BText>
-          <BText v-if="user.success" color="success" size="small" tag="div">
+          <BText v-else color="success" size="small" tag="div">
             Saved.
           </BText>
 
@@ -46,18 +46,17 @@ import FConfirmation from '../forms/f-confirmation.vue';
 import { userStore } from '@/stores';
 import BForm from '@/components/b-form.vue';
 import { userSchemas } from '@briefly/apidef';
-import type { ComponentExposed } from 'vue-component-type-helpers';
+import type { z } from 'zod';
 
 const user = userStore();
 const schema = userSchemas.updateSchemaReq.omit({ email: true, enabled: true });
-const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
+
 const deleteAccountModal = ref(false);
 const showDeleteAccountModal = () => deleteAccountModal.value = true;
 const hideDeleteAccountModal = () => deleteAccountModal.value = false;
 
-function onSubmit() {
-  const data = form.value?.validatedData;
-  if(data) user.updateYourself(data);
+async function onSubmit(data: z.infer<typeof schema>) {
+  await user.updateYourself(data);
 }
 
 async function onDelete() {

@@ -16,19 +16,15 @@ import { ref } from 'vue';
 import { squadStore } from '@/stores';
 import BForm from '@/components/b-form.vue';
 import { squadSchemas } from '@briefly/apidef';
-import type { ComponentExposed } from 'vue-component-type-helpers';
 
 const submitButton = ref<HTMLButtonElement | null>(null);
-
-const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
 
 const squad = squadStore();
 
 const schema = squadSchemas.addUsersSchemaReq.omit({ owner: true });
 
-function onSubmit() {
-  const data = form.value?.validatedData;
-  if(data) squad.addUser(data);
+async function onSubmit(data: { email: string }) {
+  await squad.addUser(data);
 }
 </script>
 

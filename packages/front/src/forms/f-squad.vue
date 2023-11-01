@@ -1,5 +1,5 @@
 <template>
-  <BForm v-if="!update" class="f-squad" @submit="onSubmit" :schema="schema" ref="form">
+  <BForm v-if="!update" class="f-squad" @submit="onSubmit" :schema="schema">
     <BInput label="Squad name" name="name" placeholder="Name" type="text" />
     <BInput label="Max rounds" name="maxRounds" :min="1" placeholder="3" type="number" />
     <BInput label="Percentual" name="percentual" :max="1" :min="0" placeholder="0.25" :step="0.1" type="number" />
@@ -10,10 +10,10 @@
     </div>
   </BForm>
 
-  <BForm v-else class="f-squad" @submit="onSubmit" :schema="schema" ref="form">
-    <BInput :initial="squad.squadActive?.name" label="Squad name" name="name" type="text" />
-    <BInput :initial="squad.squadActive?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
-    <BInput :initial="squad.squadActive?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
+  <BForm v-else class="f-squad" @submit="onSubmit" :schema="schema">
+    <BInput :initial="squad.activeSquad?.name" label="Squad name" name="name" type="text" />
+    <BInput :initial="squad.activeSquad?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
+    <BInput :initial="squad.activeSquad?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
       placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-squad__buttons-container">
@@ -25,13 +25,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { squadSchemas } from '@briefly/apidef';
 
-import BButton from '../components/b-button.vue';
-import BInput from '../components/b-input.vue';
+import BButton from '@/components/b-button.vue';
+import BInput from '@/components/b-input.vue';
 import BForm from '@/components/b-form.vue';
 import { squadStore } from '@/stores';
-import type { ComponentExposed } from 'vue-component-type-helpers';
-import { squadSchemas } from '@briefly/apidef';
+import type { z } from 'zod';
 
 const props = withDefaults(defineProps<{ update?: boolean }>(), { update: false });
 
@@ -43,17 +43,12 @@ const submitButton = ref<HTMLButtonElement | null>(null);
 
 const schema = props.update ? squadSchemas.updateSchemaReq : squadSchemas.createSchemaReq
 
-const form = ref<ComponentExposed<typeof BForm<typeof schema>> | undefined>();
-
-async function onSubmit() {
-  const newSquad = form.value?.validatedData;
-  if(newSquad){
-    if (isCreate(newSquad, props.update)){
-      await squad.addSquad(newSquad);
+async function onSubmit(data: z.infer<typeof schema>){
+    if (isCreate(data, props.update)){
+      await squad.addSquad(data);
     }
-    else squad.updateSquad(newSquad);
+    else squad.updateSquad(data);
     emit('close');
-  } else console.error("No squad data!");
 }
 </script>
 

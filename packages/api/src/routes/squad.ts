@@ -23,21 +23,7 @@ const create: SquadsHandler<"post", ""> = async (req, res, next) => {
           enabled: true,
           createdAt: true,
           updatedAt: true
-        }}}},
-        tasks: { select: {
-          name: true,
-          active: true,
-          createdAt: true,
-          currentRound: true,
-          description: true,
-          enabled: true,
-          finished: true,
-          id: true,
-          maxRounds: true,
-          percentual: true,
-          points: true,
-          updatedAt: true
-        }}
+        }}}}
       }
     });
     return res.status(201).json(squad);
@@ -60,21 +46,7 @@ const find: SquadsHandler<"get", "/:squadId"> = async (req, res, next) => {
             enabled: true,
             createdAt: true,
             updatedAt: true
-          }}}},
-          tasks: { select: {
-            name: true,
-            active: true,
-            createdAt: true,
-            currentRound: true,
-            description: true,
-            enabled: true,
-            finished: true,
-            id: true,
-            maxRounds: true,
-            percentual: true,
-            points: true,
-            updatedAt: true
-          }}
+          }}}}
         }
       });
       return res.status(200).json(squad);
@@ -113,21 +85,7 @@ const update: SquadsHandler<"put", "/:squadId"> = async(req, res, next) => {
             enabled: true,
             createdAt: true,
             updatedAt: true
-          }}}},
-          tasks: { select: {
-            name: true,
-            active: true,
-            createdAt: true,
-            currentRound: true,
-            description: true,
-            enabled: true,
-            finished: true,
-            id: true,
-            maxRounds: true,
-            percentual: true,
-            points: true,
-            updatedAt: true
-          }}
+          }}}}
         }
       })
     return res.status(200).json(squad);
@@ -161,21 +119,7 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
             enabled: true,
             createdAt: true,
             updatedAt: true
-          }}}},
-          tasks: { select: {
-            name: true,
-            active: true,
-            createdAt: true,
-            currentRound: true,
-            description: true,
-            enabled: true,
-            finished: true,
-            id: true,
-            maxRounds: true,
-            percentual: true,
-            points: true,
-            updatedAt: true
-          }}
+          }}}}
         }
       });
     return res.status(201).json(squad);
@@ -199,21 +143,7 @@ const delUsers: SquadsHandler<"delete", "/:squadId/users"> = async (req, res, ne
           enabled: true,
           createdAt: true,
           updatedAt: true
-        }}}},
-        tasks: { select: {
-          name: true,
-          active: true,
-          createdAt: true,
-          currentRound: true,
-          description: true,
-          enabled: true,
-          finished: true,
-          id: true,
-          maxRounds: true,
-          percentual: true,
-          points: true,
-          updatedAt: true
-        }}
+        }}}}
       }
     })
 
@@ -222,6 +152,19 @@ const delUsers: SquadsHandler<"delete", "/:squadId/users"> = async (req, res, ne
     next(error);
   }
 }
+
+const findAllTasks: SquadsHandler<"get", "/:squadId/tasks"> = async (req, res, next) => {
+  const { squadId } = req.params;
+  const { active } = req.query;
+  try {
+    const tasks = await prisma.task.findMany({ where: { squadId, active }});
+    console.error("MEU CU");
+    console.error(tasks);
+    return res.status(200).json(tasks)
+  } catch(error: unknown){
+    next(error);
+  }
+};
 
 const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, next) => {
   const { squadId } = req.params;
@@ -232,17 +175,7 @@ const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, ne
       
       await tx.squad.update({
         where: { id: squadId },
-        data: { tasks: { connect: { id: task.id }}},
-        include: {
-          users: { select: { user: { select: {
-            name: true,
-            email: true,
-            enabled: true,
-            createdAt: true,
-            updatedAt: true
-          }}}},
-          tasks: true
-        }
+        data: { tasks: { connect: { id: task.id }}}
       });
       return task;
     });
@@ -259,6 +192,7 @@ squadsRouter.get("/:squadId", find);
 squadsRouter.put("/:squadId", update);
 squadsRouter.post("/:squadId/users", addUsers);
 squadsRouter.delete("/:squadId/users", delUsers);
+squadsRouter.get("/:squadId/tasks", findAllTasks);
 squadsRouter.post("/:squadId/tasks", createTask);
 
 export default squadsRouter;

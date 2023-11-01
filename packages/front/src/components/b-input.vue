@@ -11,11 +11,11 @@
 
     <div @blur="handleBlur">
       <div v-if="type === 'textarea'" class="b-text-area__wrapper">
-        <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" />
+        <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" v-model="model" />
       </div>
       <div v-else class="b-input__wrapper">
         <input class="b-input" :id="name" :max="max" :min="min" :name="name"
-          :placeholder="placeholder" :step="step" :type="type" v-model="value" />
+          :placeholder="placeholder" :step="step" :type="type" v-model="model" />
       </div>
     </div>
 
@@ -28,6 +28,7 @@
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';
 import BText from './b-text.vue';
+import { onMounted } from 'vue';
 
  const props = withDefaults(defineProps<{
     name: string
@@ -43,13 +44,16 @@ import BText from './b-text.vue';
     row?: number
   }>(), { color: 'white', type: 'text'});
   
-  const value = inject<Ref<any>>(`Data: ${props.name}`);
+  const model = inject<Ref<any>>(`Data: ${props.name}`);
   const errorMessage = inject<Readonly<Ref<string>>>(`Error: ${props.name}`);
-  if(value?.value && props.initial) value.value = props.initial;
 
   function handleBlur(){
     return undefined;
   };
+
+  onMounted(()=>{
+    if(model && props.initial) model.value = props.initial;
+  });
   
 </script>
 

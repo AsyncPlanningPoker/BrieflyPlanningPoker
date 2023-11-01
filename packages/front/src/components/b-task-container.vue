@@ -31,10 +31,11 @@ import { squadSchemas } from '@briefly/apidef';
 defineProps<{
   title: string,
   active: boolean
-  tasks: squadSchemas.FindSchemaRes["tasks"]
+  tasks: squadSchemas.ListTasksSchemaRes
 }>();
 
 const showModal = ref(false);
+
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };

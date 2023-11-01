@@ -2,7 +2,7 @@
   <div class="b-task" :class="active ? 'b-task--active' : 'b-task--archived'">
     <div class="b-task__name-wrapper">
       <BText align="left" class="b-task__name" size="medium" tag="strong"
-        @click="toggleExpandedTaskModal(task.id, false)">
+        @click="taskS.gatherTask(task.id)">
         {{ task.name }}
       </BText>
     </div>
@@ -28,10 +28,6 @@
     </div>
   </div>
 
-  <BModal color="gray-10" :open="expandedTaskModal">
-    <BTaskExpanded :task-id="task.id" :squad-id="squadId" @close="toggleExpandedTaskModal(task.id, true)" />
-  </BModal>
-
   <BModal color="gray-30" :open="archiveModal">
     <FConfirmation action="archive"
       message="Are you sure you want to archive this task? This action is IRREVERSIBLE" 
@@ -46,36 +42,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import BModal from '../components/b-modal.vue';
-import BTaskExpanded from '../components/b-task-expanded.vue';
 import BText from '../components/b-text.vue';
 
 import FConfirmation from '../forms/f-confirmation.vue';
-import { squadStore, taskStore } from '@/stores';
+import { taskStore } from '@/stores';
 import { squadSchemas } from '@briefly/apidef';
 
 withDefaults(defineProps<{
-  task: squadSchemas.FindSchemaRes["tasks"][number]
+  task: squadSchemas.ListTasksSchemaRes[number]
   active?: boolean
 }>(), { active: true });
 
-const squadS = squadStore();
 const taskS = taskStore();
-
-const squadId = computed(() => squadS.activeId);
-
-const expandedTaskModal = ref(false);
 
 const deleteModal = ref(false);
 
 const archiveModal = ref(false);
-
-function toggleExpandedTaskModal(task: string, refresh: boolean) {
-  if (refresh) taskS.gatherTasks();
-  expandedTaskModal.value = !expandedTaskModal.value;
-}
 
 function toggleArchiveModal() {
   archiveModal.value = !archiveModal.value;

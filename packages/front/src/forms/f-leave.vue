@@ -27,9 +27,9 @@ const props = defineProps<{ email?: string }>();
 
 const squad = squadStore();
 
-function confirm() {
-  if (props.email) squad.delUser(props.email);
-  else squad.delYourself();
+async function confirm() {
+  if (props.email) await squad.delUser(props.email);
+  else await squad.delYourself();
   emit('close');
 }
 </script>

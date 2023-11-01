@@ -1,6 +1,6 @@
 <template>
   <div class="b-sidebar">
-    <div class="b-sidebar__logo-wrapper" @click="squadS.squadActive = undefined, $router.push({ name: 'Home' })">
+    <div class="b-sidebar__logo-wrapper" @click="squadS.activeSquad = undefined, $router.push({ name: 'Home' })">
       <img class="b-sidebar__image" src="../assets/images/square-logo-80.png" alt="brand-logo">
     </div>
     <BDivisor color="gray-30" />
@@ -14,7 +14,8 @@
       <BDivisor v-if="squads?.length > 0" color="gray-30" />
       <div v-if="squads?.length > 0" class="b-sidebar__squad-list">
         <div v-for="(squad, index) in squads.slice().reverse()" :key="index" class="b-sidebar__squad">
-          <BButton size="small" variant="transparent" :value="`${index + 1}`" @click="squadS.gatherSquad(squad.id ?? ''), $router.push({ name: 'Home' })" />
+          <BButton size="small" variant="transparent" :value="`${index + 1}`"
+            @click="squadS.gatherSquad(squad.id), $router.push({ name: 'Home' })" />
         </div>
       </div>
     </div>
@@ -26,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 
 import BButton from '../components/b-button.vue';
 import BDivisor from '../components/b-divisor.vue';

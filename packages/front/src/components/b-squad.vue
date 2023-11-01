@@ -65,18 +65,13 @@ import type { squadSchemas } from '@briefly/apidef';
 defineProps<{ squad: squadSchemas.FindSchemaRes }>();
 
 const user = userStore();
-
-const actualUser = computed(() => user.userEmail);
+const actualUser = computed(() => user.email);
 
 const moreInfo = ref(false);
-const toggleInfo = () => {
-  moreInfo.value = !moreInfo.value;
-};
+const toggleInfo = () => { moreInfo.value = !moreInfo.value };
 
 const updateModal = ref(false);
-const toggleUpdateModal = () => {
-  updateModal.value = !updateModal.value;
-};
+const toggleUpdateModal = () => { updateModal.value = !updateModal.value };
 
 const email = ref("");
 const leaveModal = ref(false);
