@@ -71,6 +71,12 @@ const taskStore =  defineStore('taskStore', () => {
       const taskId = activeTask.value?.id;
       if(! taskId) throw new Error("No task is active!");
       activeTask.value = await api.voteTask({ points }, { params: { taskId } });
+      
+      if(! activeTask.value.active){
+        enabledTasks.value = enabledTasks.value.filter((task) => task.id != activeTask.value?.id);
+        disabledTasks.value = disabledTasks.value.concat(activeTask.value);
+      }
+      
     } catch (e: unknown) {
       console.error(e)
       // router.push('signin');

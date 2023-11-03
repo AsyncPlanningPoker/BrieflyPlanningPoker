@@ -9,7 +9,7 @@
       </BText>
     </div>
 
-    <div @blur="handleBlur">
+    <div>
       <div v-if="type === 'textarea'" class="b-text-area__wrapper">
         <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" v-model="model" />
       </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, type Ref } from 'vue';
+import { inject, ref, type Ref } from 'vue';
 import BText from './b-text.vue';
 import { onMounted } from 'vue';
 
@@ -46,10 +46,6 @@ import { onMounted } from 'vue';
   
   const model = inject<Ref<any>>(`Data: ${props.name}`);
   const errorMessage = inject<Readonly<Ref<string>>>(`Error: ${props.name}`);
-
-  function handleBlur(){
-    return undefined;
-  };
 
   onMounted(()=>{
     if(model && props.initial) model.value = props.initial;

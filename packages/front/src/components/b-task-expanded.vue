@@ -17,7 +17,7 @@
         <BDivisor color="gray-20" />
         <template v-for="action in actions" :key="action.date">
           <BComment :action="action"
-            :hidden="!!task && action.round == task.currentRound" />
+            :hidden="isHidden(action)" />
         </template>
       </template>
     </div>
@@ -54,8 +54,6 @@ function message(message: string){
 
 defineEmits<{ (event: 'close'): void }>();
 
-
-
 const fibonacci = [1, 2, 3, 5, 8, 13];
 const rounds = computed(() => {
   if(! task.value) throw new Error("No active task!");
@@ -71,9 +69,16 @@ const rounds = computed(() => {
 const votable = computed(() => {
   if(! task.value) throw new Error("No active task!");
   const currentRound = rounds.value[task.value.currentRound];
-  if(! (task.value.active && currentRound)) return false;
-  return currentRound.some((action) => taskSchemas.isVote(action) && action.userEmail == user.email);
+  if(! currentRound) return true; 
+  if(! task.value.active) return false;
+  return ! currentRound.some((action) => taskSchemas.isVote(action) && action.userEmail == user.email);
 });
+
+function isHidden(action: taskSchemas.Action): boolean {
+  return !!task.value?.active &&
+    action.userEmail != user.email &&
+    action.round == task.value?.currentRound;
+}
 
 </script>
 

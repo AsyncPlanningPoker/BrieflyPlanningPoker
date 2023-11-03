@@ -2,7 +2,7 @@
   <div class="b-comment">
     <template v-if="taskSchemas.isVote(action)">
       <BText align="left" color="primary" size="medium">
-        {{ `[${action.createdAt}] ` }}
+        {{ `[${action.createdAt.toUTCString()}] ` }}
         {{ action.userEmail }}
       </BText>
       <BText v-if="!hidden" align="left" color="primary" size="medium">
@@ -16,7 +16,7 @@
 
     <template v-else>
       <BText align="left" color="primary" size="medium">
-        {{ `[${action.createdAt}] ` }}
+        {{ `[${action.createdAt.toUTCString()}] ` }}
         {{ action.userEmail }}:
       </BText>
       <BText v-if="!hidden" align="left" color="gray-20" size="medium">

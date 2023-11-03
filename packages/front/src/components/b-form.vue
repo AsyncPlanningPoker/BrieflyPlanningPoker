@@ -7,9 +7,6 @@
 <script setup lang="ts" generic="Schema extends z.ZodTypeAny">
 import { ZodError, z } from 'zod';
 import { computed, provide, ref, toRef, watch } from 'vue';
-import { onMounted } from 'vue';
-
-    const formRef = ref<HTMLFormElement | undefined>();
 
     const props = defineProps<{
         schema: Schema,
@@ -20,11 +17,14 @@ import { onMounted } from 'vue';
     const keys = getZodObjectKeys(props.schema);
 
     async function submit(){
-        if(validatedData.value) await props.onSubmit(validatedData.value);
+        touched.value = false;
+        if(validatedData.value) {
+            await props.onSubmit(validatedData.value);
+            if(data.value)
+                for(const key in data.value)
+                    data.value[key] = undefined;
+        }
         else console.error("No data!");
-        if(data.value)
-            for(const key in data.value)
-                data.value[key] = "";
     }
 
     /** Data references to be provided to child inputs */
@@ -35,9 +35,14 @@ import { onMounted } from 'vue';
 
     const mainError = ref<string | undefined>();
 
+    /** The type-safe validated data (if validation passes) */
     const validatedData = ref<z.infer<Schema> | undefined>();
 
+    /** Indicates whether the data have been altered since the last submit attempt or the creation of the form */
+    const touched = ref<boolean>(false);
+
     watch(data, () => {
+        touched.value = true;
         try{
             validatedData.value = props.schema.parse(data.value);
             for(const key in errors.value)
@@ -59,8 +64,10 @@ import { onMounted } from 'vue';
 
     const valid = computed(() => !!validatedData.value);
 
+    defineExpose({valid});
+
     for(const field of keys) {
-        data.value[field] = "";
+        data.value[field] = undefined;
         errors.value[field] = "";
         provide(`Data: ${field}`, toRef(data.value, field));
         provide(`Error: ${field}`, toRef(() => errors.value[field]));
