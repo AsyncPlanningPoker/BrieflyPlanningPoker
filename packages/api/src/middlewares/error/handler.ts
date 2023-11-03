@@ -1,6 +1,6 @@
+import { Response } from 'express';
 import { ZodError } from 'zod';
 import { BadRequest, CustomError } from './error';
-import { Response } from 'express';
 
 async function handler(error: CustomError | Error, res: Response): Promise<Response> {
   if (error instanceof CustomError) {
@@ -13,10 +13,6 @@ async function handler(error: CustomError | Error, res: Response): Promise<Respo
   if (error instanceof ZodError) {
     return handler(new BadRequest(error.message, error.issues), res);
   }
-
-  // if (error instanceof PrismaClientKnownRequestError) {
-    
-  // }
 
   console.error(error.message);
   return res.status(500).json({

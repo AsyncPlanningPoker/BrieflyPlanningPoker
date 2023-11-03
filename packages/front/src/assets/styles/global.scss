@@ -4,7 +4,7 @@
   font-style: normal;
   font-weight: 400;
   unicode-range: U+000-5FF;
-  src: local('Hammersmith One'), url(../fonts/HammersmithOne-Regular.ttf) format('truetype');
+  src: local('Hammersmith One'), url(@/assets/fonts/HammersmithOne-Regular.ttf) format('truetype');
 }
 
 a {

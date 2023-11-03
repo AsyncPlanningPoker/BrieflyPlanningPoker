@@ -12,7 +12,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src/', import.meta.url))
     }
   },
   optimizeDeps:{
@@ -21,9 +21,9 @@ export default defineConfig({
   build: {
     commonjsOptions: {
       include: [
-        /@briefly\/apidef/,
-        /node_modules/
+        '@briefly/apidef',
+        'node_modules'
       ],
-    }
-  }
+    },
+  },
 })

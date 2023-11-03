@@ -1,13 +1,9 @@
 <template>
-  <component
-    :is="tag"
-    class="b-text"
-    :class="{
+  <component :is="tag" class="b-text" :class="{
       [`b-text--${align}`]: align,
       [`b-text--${color}`]: color,
-      [`b-text--${size}`]: size,
-    }"
-  >
+      [`b-text--${size}`]: size
+  }">
     <slot />
   </component>
 </template>
@@ -15,10 +11,10 @@
 <script setup lang="ts">
 withDefaults(
     defineProps<{
-    align: '' | 'left' | 'center' | 'right',
+    align?: '' | 'left' | 'center' | 'right',
     color?: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
-    size: 'small' | 'medium' | 'large' | 'giant',
-    tag: string
+    size?: 'small' | 'medium' | 'large' | 'giant',
+    tag?: string
   }>(), {
     align: '',
     size: 'medium',

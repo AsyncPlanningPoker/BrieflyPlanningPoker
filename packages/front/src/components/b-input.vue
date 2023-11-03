@@ -9,13 +9,13 @@
       </BText>
     </div>
 
-    <div @blur="handleBlur">
+    <div>
       <div v-if="type === 'textarea'" class="b-text-area__wrapper">
-        <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" />
+        <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" v-model="model" />
       </div>
       <div v-else class="b-input__wrapper">
         <input class="b-input" :id="name" :max="max" :min="min" :name="name"
-          :placeholder="placeholder" :step="step" :type="type" v-model="value" />
+          :placeholder="placeholder" :step="step" :type="type" v-model="model" />
       </div>
     </div>
 
@@ -26,30 +26,30 @@
 </template>
 
 <script setup lang="ts">
-import { inject, type Ref } from 'vue';
+import { inject, ref, type Ref } from 'vue';
 import BText from './b-text.vue';
+import { onMounted } from 'vue';
 
  const props = withDefaults(defineProps<{
     name: string
-    color: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
-    initial?: string | number,
+    color?: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
+    initial?: string | number | { d: number[]; e: number; s: number; toFixed: () => string },
     label: string
     link?: [string, string],
     max?: number,
     min?: number,
     placeholder?: string,
     step?: number,
-    type: 'email' | 'number' | 'password' | 'text' | 'textarea',
+    type?: 'email' | 'number' | 'password' | 'text' | 'textarea',
     row?: number
   }>(), { color: 'white', type: 'text'});
   
-  const value = inject<Ref<any>>(`Data: ${props.name}`);
+  const model = inject<Ref<any>>(`Data: ${props.name}`);
   const errorMessage = inject<Readonly<Ref<string>>>(`Error: ${props.name}`);
-  if(value?.value && props.initial) value.value = props.initial;
 
-  function handleBlur(){
-    return undefined;
-  };
+  onMounted(()=>{
+    if(model && props.initial) model.value = props.initial;
+  });
   
 </script>
 

@@ -1,169 +1,84 @@
 <template>
   <div class="b-task-expanded">
     <div class="b-task-expanded__leave-wrapper">
-      <BButton
-        size="small"
-        variant="inverted"
-        value="x"
-        @click="$emit('close')"
-      />
+      <BButton size="small" variant="inverted" value="x" @click="$emit('close')" />
     </div>
-
-    <BText
-      align="center"
-      class="b-task-expanded__title"
-      color="black"
-      size="giant"
-      tag="h1"
-    >
+    <BText align="center" class="b-task-expanded__title" color="black" size="giant" tag="h1">
       {{ task?.name }}
     </BText>
-
-    <BText
-      align="left"
-      class="b-task-expanded__wrapper"
-      color="gray-30"
-      size="medium"
-    >
+    <BText align="left" class="b-task-expanded__wrapper" color="gray-30" size="medium">
       {{ task?.description }}
     </BText>
-
-    <div
-      id="comment-box"
-      class="b-task-expanded__wrapper b-task-expanded__comments"
-    >
-      <template
-        v-for="(actions, round) in rounds"
-        :key="round"
-      >
-        <BText
-          align="center"
-          color="gray-20"
-          size="medium"
-        >
-          Round: {{ round }}
+    <div id="comment-box" class="b-task-expanded__wrapper b-task-expanded__comments" >
+      <template v-for="(actions, round) in rounds" :key="round">
+        <BText align="center" color="gray-20" size="medium">
+          Round: {{ round + 1 }}
         </BText>
-
         <BDivisor color="gray-20" />
-
-        <template
-          v-for="action in actions"
-          :key="action.date"
-        >
-          <BComment
-            v-if="action.round === round"
-            :action="action"
-            :hidden="!!task && action.round == task.currentRound"
-          />
+        <template v-for="action in actions" :key="action.date">
+          <BComment :action="action"
+            :hidden="isHidden(action)" />
         </template>
       </template>
     </div>
-
-    <div
-      v-if="finished"
-      class="b-task-expanded__wrapper"
-    >
-      <FAddComment @comment="comment" />
+    <div v-if="! task?.finished" class="b-task-expanded__wrapper">
+      <FAddComment @comment="message" />
     </div>
-
-    <div
-      v-if="finished"
-      class="b-task-expanded__wrapper"
-    >
+    <div v-if="! task?.finished" class="b-task-expanded__wrapper">
       <div class="b-task-expanded__card-container">
-        <BCard
-          v-for="fibo in fibonacci"
-          :active="votable"
-          :key="fibo"
-          :value="fibo"
-          @click="vote(fibo)"
-        />
+        <BCard v-for="fibo in fibonacci" :active="votable" :key="fibo" :value="fibo" @click="taskS.vote(fibo)" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, type Ref } from 'vue';
+import { computed } from 'vue';
+import { taskSchemas } from '@briefly/apidef';
 
-import api  from '@/services/api';
 import FAddComment from '@/forms/f-add-comment.vue';
-
 import BButton from './b-button.vue';
 import BCard from './b-card.vue';
 import BComment from './b-comment.vue';
 import BDivisor from './b-divisor.vue';
 import BText from './b-text.vue';
-import { taskSchemas } from '@briefly/apidef';
-import { userStore } from '@/stores';
+import { taskStore, userStore } from '@/stores';
 
 const user = userStore();
+const taskS = taskStore();
+const task = computed(() => taskS.activeTask);
+
+function message(message: string){
+  console.log(message);
+}
 
 defineEmits<{ (event: 'close'): void }>();
 
-const props = defineProps<{
-  taskId: string
-  squadId: string
-}>();
-
-const task: Ref<taskSchemas.FindSchemaRes | null> = ref(null);
 const fibonacci = [1, 2, 3, 5, 8, 13];
 const rounds = computed(() => {
-  if(! task.value) return [];
-  const ret = new Array<
-    taskSchemas.Action[]
-  >(task.value.currentRound - 1);
+  if(! task.value) throw new Error("No active task!");
+  const ret = new Array<taskSchemas.Action[]>(task.value.currentRound);
   for(let i = 0; i < task.value.currentRound; i++){
     ret[i] = [...task.value.votes, ...task.value.messages]
-      .filter((action) => action.round == i - 1)
+      .filter((action) => action.round == i + 1)
       .sort((i1, i2) => i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds());
   }
   return ret;
 });
 
-const votable = ref<boolean>(
-  !!task.value && task.value.active &&
-  rounds.value[task.value.currentRound]
-    .some((action) => taskSchemas.isVote(action) && action.userEmail == user.userEmail));
-
-const finished = ref<boolean>(!!task.value && task.value.finished);
-
-async function vote(points: number) {
-  if (task.value) {
-    const taskId = task.value.id;
-    await api.voteTask( { points }, { params: { taskId }})
-      .catch((err: any) => {
-        console.log(err.response.data.message);
-      });
-    load();
-  }
-}
-
-async function comment(message: string) {
-  if(task.value){
-    const taskId = task.value.id;
-    await api.messageTask({ message }, { params: { taskId }})
-      .catch((err: any) => {
-        console.log(err.response.data.message);
-      });
-    load();
-  }
-}
-
-async function load() {
-  try {
-    const data = await api.findTask({ params: { taskId: props.taskId } });
-    task.value = data;
-  } catch (error: unknown){
-    console.log(error)
-  }
-  const box = document.getElementById('comment-box');
-  box?.scroll({ top: box.scrollHeight, behavior: 'smooth' });
-}
-
-onMounted(() => {
-  load();
+const votable = computed(() => {
+  if(! task.value) throw new Error("No active task!");
+  const currentRound = rounds.value[task.value.currentRound];
+  if(! currentRound) return true; 
+  if(! task.value.active) return false;
+  return ! currentRound.some((action) => taskSchemas.isVote(action) && action.userEmail == user.email);
 });
+
+function isHidden(action: taskSchemas.Action): boolean {
+  return !!task.value?.active &&
+    action.userEmail != user.email &&
+    action.round == task.value?.currentRound;
+}
 
 </script>
 

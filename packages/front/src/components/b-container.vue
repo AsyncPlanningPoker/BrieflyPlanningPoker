@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="b-container"
-    :class="`b-container--${color}`"
-  >
+  <div class="b-container" :class="`b-container--${color}`">
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 withDefaults(defineProps<{
-  color: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
+  color?: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
 }>(),{ color: 'black' });
 </script>
 

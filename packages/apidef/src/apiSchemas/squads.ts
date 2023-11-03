@@ -1,19 +1,14 @@
+import { z } from "zod";
 import { findSchemaRes as findTaskSchemaRes } from "./tasks";
 import { SquadOptionalDefaultsSchema, SquadPartialSchema, SquadSchema, TaskOptionalDefaultsSchema, TaskSchema } from "../generated/zod";
 import { updateSchemaRes as userSchema } from "./users";
-import { z } from "zod";
 
 /** Esquema para criacao de squads - request */
-export const createSchemaReq = SquadOptionalDefaultsSchema.strict();
+export const createSchemaReq = SquadOptionalDefaultsSchema.omit({ id: true, enabled: true, createdAt: true, updatedAt: true }).strict();
 
 /** Esquema para criacao de squads - response */
 export const createSchemaRes = SquadSchema.extend({
-    users: z.array(z.object({
-        user: userSchema
-    })),
-    tasks: z.array(findTaskSchemaRes.omit({
-        votes: true, messages: true, squadId: true
-    }))
+    users: z.array(z.object({ user: userSchema }))
 }).strict();
 
 /**
@@ -34,7 +29,7 @@ export const findSchemaRes = createSchemaRes;
 export const findAllSchemaReq = z.object({}).strict();
 
 /** Esquema para listar squads - response */
-export const findAllSchemaRes = z.array(createSchemaRes.omit({ tasks: true, users: true }));
+export const findAllSchemaRes = z.array(createSchemaRes.omit({ users: true }));
 
 /** Esquema para update de squads - request */
 export const updateSchemaReq = SquadPartialSchema.strict();
@@ -69,6 +64,9 @@ export const createTaskSchemaReq = TaskOptionalDefaultsSchema.pick({
 /** Esquema para criacao de uma task - response */
 export const createTaskSchemaRes = TaskSchema.strict();
 
+/** Esquema para listar tasks de uma squad - response */
+export const listTasksSchemaRes = z.array(createTaskSchemaRes);
+
 // Tipos
 export type CreateSchemaReq = z.infer<typeof createSchemaReq>;
 export type CreateSchemaRes = z.infer<typeof createSchemaRes>;
@@ -84,3 +82,4 @@ export type DelUsersSchemaReq = z.infer<typeof delUsersSchemaReq>;
 export type DelUsersSchemaRes = z.infer<typeof delUsersSchemaRes>;
 export type CreateTaskSchemaReq = z.infer<typeof createTaskSchemaReq>;
 export type CreateTaskSchemaRes = z.infer<typeof createTaskSchemaRes>;
+export type ListTasksSchemaRes = z.infer<typeof listTasksSchemaRes>;

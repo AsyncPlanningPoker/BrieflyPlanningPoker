@@ -5,8 +5,8 @@
     "baseUrl": "./src",
     "composite": true,
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -20,6 +20,7 @@
     "./src/**/*.ts",
   ],
   "references": [
-    {"path": "../prisma"}
+    {"path": "../prisma"},
+    {"path": "../apidef"}
   ]
 }

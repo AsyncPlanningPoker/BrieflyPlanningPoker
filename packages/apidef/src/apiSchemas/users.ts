@@ -1,5 +1,5 @@
-import { UserSchema, UserOptionalDefaultsSchema } from "../generated/zod";
 import { z } from "zod";
+import { UserSchema, UserOptionalDefaultsSchema } from "../generated/zod";
 
 /** Esquema para endpoint de criacao - request */
 export const createSchemaReq = UserOptionalDefaultsSchema

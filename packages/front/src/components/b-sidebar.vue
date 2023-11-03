@@ -1,68 +1,27 @@
 <template>
   <div class="b-sidebar">
-    <div
-      class="b-sidebar__logo-wrapper"
-      @click="squadS.squadActive = undefined, $router.push({ name: 'Home' })"
-    >
-      <img
-        class="b-sidebar__image"
-        src="../assets/images/square-logo-80.png"
-        alt="brand-logo"
-      >
+    <div class="b-sidebar__logo-wrapper" @click="squadS.activeSquad = undefined, $router.push({ name: 'Home' })">
+      <img class="b-sidebar__image" src="../assets/images/square-logo-80.png" alt="brand-logo">
     </div>
-
     <BDivisor color="gray-30" />
-
     <div class="b-sidebar__squad-wrapper">
       <div class="b-sidebar__new-squad-wrapper">
-        <BButton
-          size="small"
-          value="+"
-          @click="toggleModal"
-        />
-
-        <BModal
-          color="gray-30"
-          :open="showModal"
-        >
+        <BButton size="small" value="+" @click="toggleModal" />
+        <BModal color="gray-30" :open="showModal">
           <FSquad @close="toggleModal" />
         </BModal>
       </div>
-
-      <BDivisor
-        v-if="squads?.length > 0"
-        color="gray-30"
-      />
-
-      <div
-        v-if="squads?.length > 0"
-        class="b-sidebar__squad-list"
-      >
-        <div
-          v-for="(squad, index) in squads.slice().reverse()"
-          :key="index"
-          class="b-sidebar__squad"
-        >
-          <BButton
-            size="small"
-            variant="transparent"
-            :value="`${index + 1}`"
-            @click="squadS.gatherSquad(squad.id ?? ''), $router.push({ name: 'Home' })"
-          />
+      <BDivisor v-if="squads?.length > 0" color="gray-30" />
+      <div v-if="squads?.length > 0" class="b-sidebar__squad-list">
+        <div v-for="(squad, index) in squads.slice().reverse()" :key="index" class="b-sidebar__squad">
+          <BButton size="small" variant="transparent" :value="`${index + 1}`"
+            @click="squadS.gatherSquad(squad.id), $router.push({ name: 'Home' })" />
         </div>
       </div>
     </div>
-
     <BDivisor color="gray-30" />
-
-    <div
-      class="b-sidebar__user-wrapper"
-      @click="$router.push({ name: 'user-profile' })"
-    >
-      <font-awesome-icon
-        class="b-sidebar__user-image"
-        icon="fa-regular fa-user"
-      />
+    <div class="b-sidebar__user-wrapper" @click="$router.push({ name: 'user-profile' })">
+      <font-awesome-icon class="b-sidebar__user-image" icon="fa-regular fa-user" />
     </div>
   </div>
 </template>

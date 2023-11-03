@@ -1,51 +1,19 @@
 <template>
   <div class="sign-in">
     <BBrand />
-
     <BContainer color="gray-30">
-      <form
-        class="sign-in__form"
-        @submit="onSubmit"
-        @invalid-submit="onInvalidSubmit"
-      >
-        <BInput
-        label="E-mail"
-            name="email"
-            type="email"
-            @input="updateEmail"
-          />
-
-        <BInput
-        label="Password"
-          :link="['/password_reset', 'forgot password?']"
-            name="password"
-            type="password"
-            @input="updatePassword"
-          />
-
-        <BText
-          class="error"
-          size="small"
-          tag="div"
-        >
-          {{ signIn.errorMessage }}
+      <BForm class="sign-in__form" @submit="onSubmit" :schema="schema">
+        <BInput label="E-mail" name="email" type="email" />
+        <BInput label="Password" :link="['/password_reset', 'forgot password?']" name="password" type="password" />
+        <BText class="error" size="small" tag="div">
+          {{ user.errorMessage }}
         </BText>
-
-        <BButton
-          class="sign-in__login-button"
-          type="submit"
-          value="login"
-        />
-      </Form>
+        <BButton class="sign-in__login-button" type="submit" value="login" />
+      </BForm>
     </BContainer>
 
     <BContainer color="gray-30">
-      <BButton
-        class="sign-in__registry-button"
-        size="small"
-        value="create an account"
-        @click="$router.push('signup')"
-      />
+      <BButton class="sign-in__registry-button" size="small" value="create an account" @click="$router.push('signup')" />
     </BContainer>
   </div>
 </template>
@@ -56,31 +24,19 @@ import BButton from '../components/b-button.vue';
 import BContainer from '../components/b-container.vue';
 import BInput from '../components/b-input.vue';
 import BText from '../components/b-text.vue';
-import { ref } from 'vue';
-import { signInStore } from '@/stores';
+import { userStore } from '@/stores';
+import { userSchemas } from '@briefly/apidef';
+import BForm from '@/components/b-form.vue';
+import router from '@/router';
+import type { z } from 'zod';
 
-const submitButton = ref<HTMLButtonElement | null>(null);
-const signIn = signInStore();
+const schema = userSchemas.loginSchemaReq;
+const user = userStore();
 
-function onSubmit() {
-  signIn.login();
+async function onSubmit(data: z.infer<typeof schema>) {
+  await user.login(data);
+  router.push("/");
 }
-
-function onInvalidSubmit() {
-  submitButton.value?.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('invalid');
-  }, 1000);
-}
-
-function updateEmail(emailInput: Event & { target: HTMLInputElement }) {
-  signIn.email = emailInput.target.value;
-}
-
-function updatePassword(passwordInput: Event & { target: HTMLInputElement }) {
-  signIn.password = passwordInput.target.value;
-}
-
 </script>
 
 <style scoped lang="scss">

@@ -30,18 +30,18 @@ const router = createRouter({
         !localStorage.getItem('userToken') ? next('/signin') : next();
       },
     },
-    {
-      path: '/password_reset',
-      name: 'pass-recovery-one',
-      component: () => import('../views/pass-recovery-one.vue'),
-    },
-    {
-      path: '/confirm_reset',
-      name: 'pass-recovery-two',
-      component: () => import('../views/pass-recovery-two.vue'),
-      beforeEnter: (route) => !!route.query.token,
-      props: (route) => ({ token: route.query.token }),
-    },
+    // {
+    //   path: '/password_reset',
+    //   name: 'pass-recovery-one',
+    //   component: () => import('../views/pass-recovery-one.vue'),
+    // },
+    // {
+    //   path: '/confirm_reset',
+    //   name: 'pass-recovery-two',
+    //   component: () => import('../views/pass-recovery-two.vue'),
+    //   beforeEnter: (route) => !!route.query.token,
+    //   props: (route) => ({ token: route.query.token }),
+    // },
   ]
 })
 

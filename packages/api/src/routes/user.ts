@@ -1,12 +1,12 @@
-import { Unauthorized } from '../middlewares/error/error';
-import * as auth from '../middlewares/authorization/authorization';
 // import send from '../services/email';
 import prisma from '@briefly/prisma';
 import { usersAPI, type UsersAPI } from '@briefly/apidef';
-import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
+import { Unauthorized } from '../middlewares/error/error';
 import { mustAuth } from '../middlewares/authorization';
+import context, { type Context } from '../context'
+import * as auth from '../middlewares/authorization/authorization';
 
 type UsersHandler<M extends Method, Path extends ZodiosPathsByMethod<UsersAPI, M>> =
   ZodiosRequestHandler<UsersAPI, Context, M, Path>;

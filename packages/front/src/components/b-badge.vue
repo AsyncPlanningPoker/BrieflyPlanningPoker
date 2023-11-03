@@ -1,17 +1,9 @@
 <template>
   <div class="b-badge">
-    <BText
-      color="white"
-      size="medium"
-    >
+    <BText color="white" size="medium">
       <slot />
     </BText>
-
-    <font-awesome-icon
-      class="b-badge__xmark"
-      icon="fa-solid fa-xmark"
-      @click="$emit('action')"
-    />
+    <font-awesome-icon class="b-badge__xmark" icon="fa-solid fa-xmark" @click="$emit('action')" />
   </div>
 </template>
 

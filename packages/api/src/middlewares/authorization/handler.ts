@@ -1,7 +1,7 @@
+import { Request } from 'express';
 import { Unauthorized } from '../error/error';
 import * as auth from './authorization';
 import type { ZodiosNextFunction, ZodiosRequest, ZodiosResponse } from '../../utils/types';
-import { Request } from 'express';
 
 
 function handler (req: ZodiosRequest, res: ZodiosResponse, next: ZodiosNextFunction): void {

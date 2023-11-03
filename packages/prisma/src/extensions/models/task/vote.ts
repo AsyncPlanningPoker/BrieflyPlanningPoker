@@ -3,7 +3,11 @@ import { type Vote, voteIncludeSelect, messageIncludeSelect } from '../../../uti
 
 const getVoteExtension = (prismaClient: PrismaClient) => {
 
-    async function registerVoteAndUpdate(client: PrismaTransactionClient, id: string, vote: Vote, points?: number, nextRound: boolean = true){
+    async function registerVoteAndUpdate(client: PrismaTransactionClient, id: string, vote: Vote, points?: number, nextRound: boolean = false){
+        console.error("Vote details:");
+        console.error(vote);
+        console.error(`Points: ${points}`);
+        console.error(`NextRound?: ${nextRound}`);
 
         const extraArgs = points ? ({points, active: false, finished:true}) : {};
     
@@ -102,17 +106,20 @@ const getVoteExtension = (prismaClient: PrismaClient) => {
             const votes: Vote[] = task.votes
               .filter((vote) => vote.round == round)
               .concat(userVote);
+
+            console.error("The list of votes:");
+            console.error(votes);
         
             // Ainda há participantes para votar.
-            if(task.votes.length != task.squad.users.length - 1)
-                return registerVoteAndUpdate(tx, taskId, userVote, undefined, true);
+            if(votes.length != task.squad.users.length)
+                return registerVoteAndUpdate(tx, taskId, userVote);
         
             // A rodada deve ser finalizada
         
             /** Pontos finais */
            const finalPoints = calcFinalPoints(votes, round, task.maxRounds, task.percentual.toNumber());
         
-           return await registerVoteAndUpdate(tx, taskId, userVote, finalPoints);
+           return await registerVoteAndUpdate(tx, taskId, userVote, finalPoints, !finalPoints);
         });
     }
 }
@@ -132,7 +139,7 @@ function calcFinalPoints(votes: Vote[], currentRound: number, maxRounds: number,
 
     // Ao menos uma estimativa obteve o valor mínimo de aprovação?
     // TODO: verificar possivel bug.
-    if (orderedHist.some(([_, freq]) => minFreq))
+    if (orderedHist.some(([_, freq]) => freq >= minFreq))
         return orderedHist[0][0];
 
     // Chegamos ao numero maximo de rodadas?

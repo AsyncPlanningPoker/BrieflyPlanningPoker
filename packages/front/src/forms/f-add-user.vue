@@ -1,61 +1,31 @@
 <template>
-  <form
-    class="f-add-user"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
+  <BForm :schema="schema" class="f-add-user" @submit="onSubmit">
     <div>
-      <BInputField
-        label="Partner's e-mail"
-        name="email"
-      >
-        <BInput
-          name="email"
-          placeholder="fellow-worker@briefly.com"
-          type="email"
-        />
-      </BInputField>
+      <BInput label="Partner's e-mail" name="email" placeholder="fellow-worker@briefly.com" type="email" />
     </div>
-
     <div>
-      <BButton
-        class="f-add-user__button"
-        size="small"
-        type="submit"
-        value="send"
-        ref="submitButton"
-      />
+      <BButton class="f-add-user__button" size="small" type="submit" value="send" ref="submitButton" />
     </div>
-  </Form>
+  </BForm>
 </template>
 
 <script setup lang="ts">
 import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
 import { ref } from 'vue';
 import { squadStore } from '@/stores';
+import BForm from '@/components/b-form.vue';
+import { squadSchemas } from '@briefly/apidef';
 
 const submitButton = ref<HTMLButtonElement | null>(null);
 
 const squad = squadStore();
 
-function onSubmit(values: any) {
-  squad.addUser(values.email);
-  // email.value = null;
-  submitButton.value?.classList.add('valid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('valid');
-  }, 1000);
-}
+const schema = squadSchemas.addUsersSchemaReq.omit({ owner: true });
 
-function onInvalidSubmit() {
-  submitButton.value?.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('invalid');
-  }, 1000);
+async function onSubmit(data: { email: string }) {
+  await squad.addUser(data);
 }
-
 </script>
 
 <style lang="scss" scoped>

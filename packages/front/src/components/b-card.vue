@@ -1,12 +1,6 @@
 <template>
-  <button
-    class="b-card"
-    :class="active ? 'b-card--active' : 'b-card--disabled'"
-  >
-    <BText
-      align="center"
-      size="giant"
-    >
+  <button class="b-card" :class="active ? 'b-card--active' : 'b-card--disabled'">
+    <BText align="center" size="giant">
       {{ value }}
     </BText>
   </button>
@@ -15,11 +9,7 @@
 <script setup lang="ts">
 import BText from '../components/b-text.vue';
 
-withDefaults(
-  defineProps<{
-    active: boolean,
-    value?: number,
-  }>(), { active: true });
+withDefaults(defineProps<{ active?: boolean, value?: number }>(), { active: true });
 </script>
 
 <style lang="scss" scoped>

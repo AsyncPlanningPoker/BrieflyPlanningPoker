@@ -1,134 +1,39 @@
 <template>
-  <form
-    v-if="!update"
-    class="f-squad"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Squad name"
-      name="squadName"
-    >
-      <BInput
-        name="squadName"
-        placeholder="Name"
-        type="text"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Max rounds"
-      name="maxRounds"
-    >
-      <BInput
-        name="maxRounds"
-        :min="1"
-        placeholder="3"
-        type="number"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Percentual"
-      name="percentual"
-    >
-      <BInput
-        name="percentual"
-        :max="1"
-        :min="0"
-        placeholder="0.25"
-        :step="0.1"
-        type="number"
-      />
-    </BInputField>
+  <BForm v-if="!update" class="f-squad" @submit="onSubmit" :schema="schema">
+    <BInput label="Squad name" name="name" placeholder="Name" type="text" />
+    <BInput label="Max rounds" name="maxRounds" :min="1" placeholder="3" type="number" />
+    <BInput label="Percentual" name="percentual" :max="1" :min="0" placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-squad__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        class="f-squad__button"
-        type="submit"
-        value="create"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton class="f-squad__button" type="submit" value="create" />
     </div>
-  </Form>
-  <Form
-    v-else
-    class="f-squad"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Squad name"
-      name="squadName"
-      :initial="squad.squadActive?.name"
-    >
-      <BInput
-        name="squadName"
-        type="text"
-        :value="squad.squadActive?.name"
-      />
-    </BInputField>
+  </BForm>
 
-    <BInputField
-      label="Max rounds"
-      name="maxRounds"
-      :initial="squad.squadActive?.maxRounds"
-    >
-      <BInput
-        name="maxRounds"
-        :min="1"
-        type="number"
-        :value="squad.squadActive?.maxRounds"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Percentual"
-      name="percentual"
-      :initial="squad.squadActive?.percentual"
-    >
-      <BInput
-        name="percentual"
-        :max="1"
-        :min="0"
-        placeholder="0.25"
-        :step="0.1"
-        type="number"
-        :value="squad.squadActive?.percentual"
-      />
-    </BInputField>
+  <BForm v-else class="f-squad" @submit="onSubmit" :schema="schema">
+    <BInput :initial="squad.activeSquad?.name" label="Squad name" name="name" type="text" />
+    <BInput :initial="squad.activeSquad?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
+    <BInput :initial="squad.activeSquad?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
+      placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-squad__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        class="f-squad__button"
-        type="submit"
-        value="update"
-        ref="submitButton"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton class="f-squad__button" type="submit" value="update" ref="submitButton" />
     </div>
-  </Form>
+  </BForm>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { squadSchemas } from '@briefly/apidef';
 
-import BButton from '../components/b-button.vue';
-import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
+import BButton from '@/components/b-button.vue';
+import BInput from '@/components/b-input.vue';
+import BForm from '@/components/b-form.vue';
 import { squadStore } from '@/stores';
+import type { z } from 'zod';
 
-const props = withDefaults(defineProps<{ update: boolean }>(), { update: false });
+const props = withDefaults(defineProps<{ update?: boolean }>(), { update: false });
 
 const emit = defineEmits<{ (event: 'close'): void }>();
 
@@ -136,24 +41,23 @@ const squad = squadStore();
 
 const submitButton = ref<HTMLButtonElement | null>(null);
 
-function onSubmit(values: any) {
-  const newSquad = {
-    name: values.squadName,
-    currentMaxRounds: values.maxRounds,
-    currentPercentual: values.percentual,
-  };
+const schema = props.update ? squadSchemas.updateSchemaReq : squadSchemas.createSchemaReq
 
-  if (!props.update) squad.addSquad(newSquad);
-  else squad.updateSquad(newSquad);
-
-  emit('close');
+async function onSubmit(data: z.infer<typeof schema>){
+    if (isCreate(data, props.update)){
+      await squad.addSquad(data);
+    }
+    else squad.updateSquad(data);
+    emit('close');
 }
+</script>
 
-function onInvalidSubmit() {
-  submitButton.value?.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.value?.classList.remove('invalid');
-  }, 1000);
+<script lang="ts">
+function isCreate(obj: squadSchemas.CreateSchemaReq | squadSchemas.UpdateSchemaReq, update: boolean): obj is squadSchemas.CreateSchemaReq{
+  return !update;
+}
+function isUpdate(obj: squadSchemas.CreateSchemaReq | squadSchemas.UpdateSchemaReq, update: boolean): obj is squadSchemas.UpdateSchemaReq{
+  return update;
 }
 </script>
 

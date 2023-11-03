@@ -1,25 +1,24 @@
 <template>
-  <BForm ref="form" @submit="onSubmit">
-    <BInput label="Write a comment" color="gray-30" name="comment" type="textarea" @keyup.enter="onKeyup" />
+  <BForm :schema="schema" @submit="onSubmit">
+    <BInput label="Write a comment" color="gray-30" name="message" type="textarea"/>
   </BForm>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import BInput from '@/components/b-input.vue';
 import BForm from '@/components/b-form.vue';
+import { taskSchemas } from '@briefly/apidef';
+import { taskStore } from '@/stores';
 
-const form = ref<HTMLFormElement | null>(null);
-  
-function onKeyup() {
-  form.value?.$el.dispatchEvent(new Event('submit', { cancelable: true }));
-}
+const schema = taskSchemas.messageSchemaReq;
+const task = taskStore();
 
 const emit = defineEmits<{
   (event: 'comment', message: string): Promise<void>
 }>();
 
-function onSubmit(event: any) {
-  emit('comment', event.addComment);
+async function onSubmit(data : { message: string }) {
+  await task.comment(data.message);
+  emit('comment', data.message);
 }
 </script>

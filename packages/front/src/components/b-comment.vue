@@ -1,59 +1,28 @@
 <template>
   <div class="b-comment">
     <template v-if="taskSchemas.isVote(action)">
-      <BText
-        align="left"
-        color="primary"
-        size="medium"
-      >
-        {{ `[${action.createdAt}] ` }}
+      <BText align="left" color="primary" size="medium">
+        {{ `[${action.createdAt.toUTCString()}] ` }}
         {{ action.userEmail }}
       </BText>
-
-      <BText
-        v-if="!hidden"
-        align="left"
-        color="primary"
-        size="medium"
-      >
+      <BText v-if="!hidden" align="left" color="primary" size="medium">
         {{ ` voted ${action.points}` }}
       </BText>
 
-      <BText
-        v-else
-        align="left"
-        color="primary"
-        size="medium"
-      >
+      <BText v-else align="left" color="primary" size="medium">
         voted in the current round.
       </BText>
     </template>
 
     <template v-else>
-      <BText
-        align="left"
-        color="primary"
-        size="medium"
-      >
-        {{ `[${action.createdAt}] ` }}
+      <BText align="left" color="primary" size="medium">
+        {{ `[${action.createdAt.toUTCString()}] ` }}
         {{ action.userEmail }}:
       </BText>
-
-      <BText
-        v-if="!hidden"
-        align="left"
-        color="gray-20"
-        size="medium"
-      >
+      <BText v-if="!hidden" align="left" color="gray-20" size="medium">
         {{ action.message }}
       </BText>
-
-      <BText
-        v-else
-        align="left"
-        color="primary"
-        size="medium"
-      >
+      <BText v-else align="left" color="primary" size="medium">
         commented in the current round.
       </BText>
     </template>
@@ -64,11 +33,7 @@
 import { taskSchemas } from '@briefly/apidef';
 import BText from '../components/b-text.vue';
 
-withDefaults(
-  defineProps<{
-    action: taskSchemas.Action
-    hidden: boolean
-  }>(), { hidden: true });
+withDefaults(defineProps<{ action: taskSchemas.Action, hidden?: boolean }>(), { hidden: true });
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
+import { apiDef } from '@briefly/apidef'
 import squadsRouter from './squad';
 import tasksRouter from './task';
 import usersRouter from './user';
-import { apiDef } from '@briefly/apidef'
 import context from '../context';
 
 const routes = context.router(apiDef);

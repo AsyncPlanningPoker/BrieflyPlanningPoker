@@ -1,8 +1,8 @@
 import prisma from '@briefly/prisma';
-import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import { tasksAPI, type TasksAPI } from '@briefly/apidef';
+import context, { type Context } from '../context'
 import { mustAuth } from '../middlewares/authorization';
 
 type TasksHandler<M extends Method, Path extends ZodiosPathsByMethod<TasksAPI, M>> =

@@ -1,10 +1,11 @@
 {
   "name": "@briefly/apidef",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
-  "main": "dist/index",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc -b --verbose"
+    "build": "tsc -b --force --verbose"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

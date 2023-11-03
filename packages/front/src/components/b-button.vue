@@ -1,12 +1,6 @@
 <template>
-  <button
-    class="b-button"
-    :class="{
-      'b-button--small': size === 'small',
-      [`b-button--${variant}`]: variant,
-    }"
-    :type="type"
-  >
+  <button class="b-button" :class="{ 'b-button--small': size === 'small', [`b-button--${variant}`]: variant }"
+    :type="type">
     {{ value.toUpperCase() }}
   </button>
 </template>
@@ -16,7 +10,7 @@
 withDefaults(defineProps<{
   size?: 'small' | 'medium',
   value?: string,
-  type: 'button' | 'reset' | 'submit',
+  type?: 'button' | 'reset' | 'submit',
   variant?: 'primary' | 'transparent' | 'inverted'
 }>(), {
   size: "medium",

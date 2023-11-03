@@ -1,32 +1,14 @@
 <template>
   <div class="f-leave">
-    <BText
-      v-if="email"
-      align="left"
-      type="p"
-      size="large"
-    >
+    <BText v-if="email" align="left" type="p" size="large">
       Are you sure you want to remove {{ email }} from the squad?
     </BText>
-    <BText
-      v-else
-      align="left"
-      type="p"
-      size="large"
-    >
+    <BText v-else align="left" type="p" size="large">
       Are you sure you want to leave the squad?
     </BText>
     <div class="f-leave__buttons-container">
-      <BButton
-        variant="transparent"
-        value="no"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        value="yes"
-        @click="confirm"
-      />
+      <BButton variant="transparent" value="no" @click="$emit('close')" />
+      <BButton value="yes" @click="confirm" />
     </div>
   </div>
 </template>
@@ -45,9 +27,9 @@ const props = defineProps<{ email?: string }>();
 
 const squad = squadStore();
 
-function confirm() {
-  if (props.email) squad.delUser(props.email);
-  else squad.delYourself();
+async function confirm() {
+  if (props.email) await squad.delUser(props.email);
+  else await squad.delYourself();
   emit('close');
 }
 </script>

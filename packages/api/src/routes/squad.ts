@@ -1,8 +1,8 @@
 import prisma from '@briefly/prisma';
-import context, { type Context } from '../context'
 import { type ZodiosRequestHandler } from '@zodios/express';
 import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import { squadsAPI, type SquadsAPI } from '@briefly/apidef';
+import context, { type Context } from '../context'
 import { mustAuth } from '../middlewares/authorization';
 
 type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI, M>> =
@@ -17,8 +17,13 @@ const create: SquadsHandler<"post", ""> = async (req, res, next) => {
     const squad = await prisma.squad.create({
       data,
       include: {
-        users: { select: { user: true }},
-        tasks: true
+        users: { select: { user: { select: {
+          name: true,
+          email: true,
+          enabled: true,
+          createdAt: true,
+          updatedAt: true
+        }}}}
       }
     });
     return res.status(201).json(squad);
@@ -35,8 +40,13 @@ const find: SquadsHandler<"get", "/:squadId"> = async (req, res, next) => {
       .findUniqueOrThrow({
         where: { id },
         include: {
-          users: { select: { user: true }},
-          tasks: true
+          users: { select: { user: { select: {
+            name: true,
+            email: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}}
         }
       });
       return res.status(200).json(squad);
@@ -51,18 +61,7 @@ const findAll: SquadsHandler<"get", ""> = async(req, res, next) => {
   try {
     const squads = await prisma.squad
       .findMany({
-        where: {
-          users: {
-            some: {
-              user: { email },
-            },
-          },
-        },
-        include: {
-          tasks: {
-            select: { id: true, name: true, points: true },
-          },
-        },
+        where: { users: { some: { user: { email }}}}
       });
       return res.status(200).json(squads);
   } catch (error: unknown) {
@@ -80,8 +79,13 @@ const update: SquadsHandler<"put", "/:squadId"> = async(req, res, next) => {
         where: { id },
         data,
         include: {
-          users: { select: { user: true }},
-          tasks: true
+          users: { select: { user: { select: {
+            name: true,
+            email: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}}
         }
       })
     return res.status(200).json(squad);
@@ -109,8 +113,13 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
           },
         },
         include: {
-          users: { select: { user: true }},
-          tasks: true
+          users: { select: { user: { select: {
+            name: true,
+            email: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}}
         }
       });
     return res.status(201).json(squad);
@@ -128,8 +137,13 @@ const delUsers: SquadsHandler<"delete", "/:squadId/users"> = async (req, res, ne
       where: { id: squadId },
       data: { users: { disconnect: { userEmail_squadId: { userEmail: email, squadId }}}},
       include: {
-        users: { select: { user: true }},
-        tasks: true
+        users: { select: { user: { select: {
+          name: true,
+          email: true,
+          enabled: true,
+          createdAt: true,
+          updatedAt: true
+        }}}}
       }
     })
 
@@ -138,6 +152,19 @@ const delUsers: SquadsHandler<"delete", "/:squadId/users"> = async (req, res, ne
     next(error);
   }
 }
+
+const findAllTasks: SquadsHandler<"get", "/:squadId/tasks"> = async (req, res, next) => {
+  const { squadId } = req.params;
+  const { active } = req.query;
+  try {
+    const tasks = await prisma.task.findMany({ where: { squadId, active }});
+    console.error("MEU CU");
+    console.error(tasks);
+    return res.status(200).json(tasks)
+  } catch(error: unknown){
+    next(error);
+  }
+};
 
 const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, next) => {
   const { squadId } = req.params;
@@ -148,11 +175,7 @@ const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, ne
       
       await tx.squad.update({
         where: { id: squadId },
-        data: { tasks: { connect: { id: task.id }}},
-        include: {
-          users: { select: { user: true }},
-          tasks: true
-        }
+        data: { tasks: { connect: { id: task.id }}}
       });
       return task;
     });
@@ -169,6 +192,7 @@ squadsRouter.get("/:squadId", find);
 squadsRouter.put("/:squadId", update);
 squadsRouter.post("/:squadId/users", addUsers);
 squadsRouter.delete("/:squadId/users", delUsers);
+squadsRouter.get("/:squadId/tasks", findAllTasks);
 squadsRouter.post("/:squadId/tasks", createTask);
 
 export default squadsRouter;

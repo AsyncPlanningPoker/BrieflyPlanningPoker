@@ -11,58 +11,46 @@
       </div>
 
       <div class="home__section">
-        <BTaskContainer
-          title="Active"
-          :active="true"
-          :tasks="activeTasks"
-        />
+        <BTaskContainer title="Active" :active="true" :tasks="tasksS.enabledTasks" />
       </div>
-
       <div class="home__section">
-        <BTaskContainer
-          title="Archived"
-          :active="false"
-          :tasks="archivedTasks"
-        />
+        <BTaskContainer title="Archived" :active="false" :tasks="tasksS.disabledTasks" />
       </div>
     </main>
 
-    <main
-      v-else
-      class="home__blank"
-    >
-      <BText
-        color="gray-30"
-        size="giant"
-      >
+    <main v-else class="home__blank">
+      <BText color="gray-30" size="giant" >
         Hey, welcome! Let's poker... (╯°□°)╯︵ ┻━┻
       </BText>
     </main>
   </div>
+  <BModal v-if="tasksS.activeTask" color="gray-10" :open="true">
+    <BTaskExpanded :task=tasksS.activeTask @close="tasksS.activeTask = undefined" />
+  </BModal>
 </template>
 
 <script setup lang="ts">
 
 import { computed, onMounted } from 'vue';
 
-import BSidebar from '../components/b-sidebar.vue';
-import BSquad from '../components/b-squad.vue';
-import BTaskContainer from '../components/b-task-container.vue';
-import BText from '../components/b-text.vue';
+import BSidebar from '@/components/b-sidebar.vue';
+import BSquad from '@/components/b-squad.vue';
+import BTaskContainer from '@/components/b-task-container.vue';
+import BTaskExpanded from '@/components/b-task-expanded.vue';
+import BText from '@/components/b-text.vue';
+import BModal from '@/components/b-modal.vue';
 import { squadStore, taskStore } from '@/stores';
+import { watch } from 'vue';
 
 const squadS = squadStore();
+
 const tasksS = taskStore();
 
-const squad = computed(() => {
-  const activeSquad = squadS.squadActive;
-  if (activeSquad) tasksS.gatherTasks();
-  return activeSquad;
+squadS.$subscribe((mutation, state) => {
+  if(state.activeSquad) tasksS.gatherTasks();
 });
 
-const activeTasks = computed(() => tasksS.enabledTasks);
-
-const archivedTasks = computed(() => tasksS.disabledTasks);
+const squad = computed(() => squadS.activeSquad);
 
 onMounted(() => squadS.gatherSquadList());
 </script>
