@@ -521,8 +521,10 @@ __metadata:
     "@types/node": ^20.8.4
     "@types/nodemailer": ^6.4.11
     "@types/supertest": ^2.0.14
+    "@types/swagger-ui-express": ^4.1.5
     "@zodios/core": ^10.9.6
     "@zodios/express": ^10.6.1
+    "@zodios/openapi": ^10.5.0
     "@zodios/plugins": ^10.6.0
     bcryptjs: ^2.4.3
     concurrently: ^8.2.1
@@ -535,6 +537,7 @@ __metadata:
     morgan: ^1.10.0
     nodemailer: ^6.9.6
     supertest: ^6.3.3
+    swagger-ui-express: ^5.0.0
     ts-jest: ^29.1.1
     tsx: ^3.14.0
     typescript: ^5.2.2
@@ -1768,7 +1771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:^4.17.19":
+"@types/express@npm:*, @types/express@npm:^4.17.19":
   version: 4.17.20
   resolution: "@types/express@npm:4.17.20"
   dependencies:
@@ -1987,6 +1990,16 @@ __metadata:
   dependencies:
     "@types/superagent": "*"
   checksum: 89c1983662f0ab20969b3a6c44344397fd222d0f78b282619aabbe817f7c88a64210fd2b8b8f075ea22a27084e30ebc287bc5105619cbbf9af7f008e77f6eb93
+  languageName: node
+  linkType: hard
+
+"@types/swagger-ui-express@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "@types/swagger-ui-express@npm:4.1.5"
+  dependencies:
+    "@types/express": "*"
+    "@types/serve-static": "*"
+  checksum: 80242b3e30fce44388a274304ea36fc8492fb031fc2721657b71a6d95cb6e2da79b26c9a47c8a39a29f74c208a2a1051047c9828246658809a70bb84acdbb23c
   languageName: node
   linkType: hard
 
@@ -2485,6 +2498,19 @@ __metadata:
     express: 4.x
     zod: ^3.x
   checksum: 6517e2986903eeecd17304de1cd2af346e43cc6e5cdea1efd119c3b6cb12ce1a5c5683345269019ba8f4b60e097a27d996afd42d92acc296e9c9269bfb7e852b
+  languageName: node
+  linkType: hard
+
+"@zodios/openapi@npm:^10.5.0":
+  version: 10.5.0
+  resolution: "@zodios/openapi@npm:10.5.0"
+  dependencies:
+    openapi-types: 12.1.3
+    zod-to-json-schema: 3.19.1
+  peerDependencies:
+    "@zodios/core": ">=10.5.2 <11.0.0"
+    zod: ^3.x
+  checksum: 1bacab639cc491e3c4e2d42945e9d40e2e1819d2d803ff3fd6ca86ea07812249ff912d54757104787bf5a2472c05359bb254439d9237daab5fae91f596553139
   languageName: node
   linkType: hard
 
@@ -6480,6 +6506,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openapi-types@npm:12.1.3":
+  version: 12.1.3
+  resolution: "openapi-types@npm:12.1.3"
+  checksum: 7fa5547f87a58d2aa0eba6e91d396f42d7d31bc3ae140e61b5d60b47d2fd068b48776f42407d5a8da7280cf31195aa128c2fc285e8bb871d1105edee5647a0bb
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.3":
   version: 0.9.3
   resolution: "optionator@npm:0.9.3"
@@ -7669,6 +7702,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swagger-ui-dist@npm:>=5.0.0":
+  version: 5.9.1
+  resolution: "swagger-ui-dist@npm:5.9.1"
+  checksum: 4e5cf278ef1725b0770124ef4ecc9f75cb6fbab5d3e68aefffa024131aaf7b904514dc07000bb6b6ecdb606892fe5fa6e5f55d8fec978a838a18d25a010dab5b
+  languageName: node
+  linkType: hard
+
+"swagger-ui-express@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "swagger-ui-express@npm:5.0.0"
+  dependencies:
+    swagger-ui-dist: ">=5.0.0"
+  peerDependencies:
+    express: ">=4.0.0 || >=5.0.0-beta"
+  checksum: 565b89717315577785edc6d2f4df8ce83207baa2b714264170ffa677522d2103c184091e146b7cce7baf254e96116c5bb2cb1ab907dc1152fdead3090690983b
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -8604,6 +8655,15 @@ __metadata:
   bin:
     zod-prisma-types: dist/bin.js
   checksum: 16e7b43cca8d3df064412fa41565dd87d09839a2e39329bbd1f183e582b3e24a7efe9e0e5793eccce199a3dc007ad62830856c88db387a93c6e78eb4ba59fb80
+  languageName: node
+  linkType: hard
+
+"zod-to-json-schema@npm:3.19.1":
+  version: 3.19.1
+  resolution: "zod-to-json-schema@npm:3.19.1"
+  peerDependencies:
+    zod: ^3.19.0
+  checksum: 22c07668e3c28c9d7c9bd3ad04a354ea017b6fc8b4df77ed29d11e42c4c03181612319db374932a1f8b5c37ef861157938dced9d848cad5281ee1540a156995c
   languageName: node
   linkType: hard
 

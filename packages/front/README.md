@@ -1,6 +1,6 @@
-# front
+# @briefly/front
 
-This template should help get you started developing with Vue 3 in Vite.
+Front end application for the Briefly Planning Poker project
 
 ## Recommended IDE Setup
 
