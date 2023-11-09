@@ -41,6 +41,7 @@
     "@zodios/express": "^10.6.1",
     "@zodios/openapi": "^10.5.0",
     "@zodios/plugins": "^10.6.0",
+    "aws-sdk": "^2.1159.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

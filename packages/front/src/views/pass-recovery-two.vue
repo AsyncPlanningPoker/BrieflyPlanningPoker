@@ -39,7 +39,7 @@
           size="small"
           tag="div"
         >
-          {{ this.$store.state.passRecoveryTwo.errorMessage }}
+          {{ errorMessage }}
         </BText>
 
         <BButton
