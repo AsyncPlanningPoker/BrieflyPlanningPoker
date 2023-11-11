@@ -13,6 +13,6 @@
   },
   "dependencies": {
     "@zodios/core": "^10.9.6",
-    "zod": "3.21.1"
+    "zod": "^3.22.4"
   }
 }

@@ -12,16 +12,16 @@
     "db:up": "yarn prisma migrate dev --name=init"
   },
   "dependencies": {
-    "@prisma/client": "5.2.0",
+    "@prisma/client": "^5.5.2",
     "@zodios/core": "^10.9.6",
     "bcryptjs": "^2.4.3",
-    "zod": "3.21.1"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "prisma": "5.2.0",
+    "prisma": "^5.5.2",
     "ts-node": "^10.9.1",
     "tsx": "^3.14.0",
     "typescript": "^5.2.2",
-    "zod-prisma-types": "2.7.9"
+    "zod-prisma-types": "^3.1.4"
   }
 }
