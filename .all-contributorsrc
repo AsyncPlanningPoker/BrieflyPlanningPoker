@@ -17,18 +17,19 @@
       ]
     },
     {
-      "login": "bachiari",
-      "name": "bachiari",
-      "avatar_url": "https://avatars.githubusercontent.com/u/58713326?v=4",
-      "profile": "https://github.com/bachiari",
-      "login": "lineconquista",
-      "name": "Aline Conquista ",
-      "avatar_url": "https://avatars.githubusercontent.com/u/71647583?v=4",
-      "profile": "https://github.com/lineconquista",
       "login": "lulcca",
       "name": "lucca jacomassi",
       "avatar_url": "https://avatars.githubusercontent.com/u/56274210?v=4",
       "profile": "https://github.com/lulcca",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "igorney",
+      "name": "Igor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48994130?v=4",
+      "profile": "https://www.linkedin.com/in/igor-santos-ufabc/",
       "contributions": [
         "code"
       ]
