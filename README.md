@@ -1,6 +1,6 @@
 # Briefly Planning Poker - USP
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 # Briefly Planning Poker
 
@@ -76,11 +76,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-
 <table>
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jplukas"><img src="https://avatars.githubusercontent.com/u/8060581?v=4?s=100" width="100px;" alt="João Pedro Lukasavicus"/><br /><sub><b>João Pedro Lukasavicus</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=jplukas" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lineconquista"><img src="https://avatars.githubusercontent.com/u/71647583?v=4?s=100" width="100px;" alt="Aline Conquista "/><br /><sub><b>Aline Conquista </b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=lineconquista" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
