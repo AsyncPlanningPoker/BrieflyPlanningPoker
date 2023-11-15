@@ -1,6 +1,6 @@
 # Briefly Planning Poker - USP
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 # Briefly Planning Poker
 
@@ -81,8 +81,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jplukas"><img src="https://avatars.githubusercontent.com/u/8060581?v=4?s=100" width="100px;" alt="João Pedro Lukasavicus"/><br /><sub><b>João Pedro Lukasavicus</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=jplukas" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lulcca"><img src="https://avatars.githubusercontent.com/u/56274210?v=4?s=100" width="100px;" alt="lucca jacomassi"/><br /><sub><b>lucca jacomassi</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=lulcca" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeTrovoes"><img src="https://avatars.githubusercontent.com/u/25932176?v=4?s=100" width="100px;" alt="Leandro Trovões"/><br /><sub><b>Leandro Trovões</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=LeTrovoes" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/igor-santos-ufabc/"><img src="https://avatars.githubusercontent.com/u/48994130?v=4?s=100" width="100px;" alt="Igor"/><br /><sub><b>Igor</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=igorney" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/thenriique"><img src="https://avatars.githubusercontent.com/u/58703497?v=4?s=100" width="100px;" alt="Thiago Henrique"/><br /><sub><b>Thiago Henrique</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=thenriique" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
