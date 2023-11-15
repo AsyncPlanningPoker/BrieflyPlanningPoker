@@ -1,31 +1,10 @@
 import { z } from 'zod';
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 /////////////////////////////////////////
 // HELPER FUNCTIONS
 /////////////////////////////////////////
 
-// DECIMAL
-//------------------------------------------------------
-
-export const DecimalJsLikeSchema: z.ZodType<Prisma.DecimalJsLike> = z.object({
-  d: z.array(z.number()),
-  e: z.number(),
-  s: z.number(),
-  toFixed: z.function(z.tuple([]), z.string()),
-})
-
-export const DECIMAL_STRING_REGEX = /^(?:-?Infinity|NaN|-?(?:0[bB][01]+(?:\.[01]+)?(?:[pP][-+]?\d+)?|0[oO][0-7]+(?:\.[0-7]+)?(?:[pP][-+]?\d+)?|0[xX][\da-fA-F]+(?:\.[\da-fA-F]+)?(?:[pP][-+]?\d+)?|(?:\d+|\d*\.\d+)(?:[eE][-+]?\d+)?))$/;
-
-export const isValidDecimalInput =
-  (v?: null | string | number | Prisma.DecimalJsLike): v is string | number | Prisma.DecimalJsLike => {
-    if (v === undefined || v === null) return false;
-    return (
-      (typeof v === 'object' && 'd' in v && 'e' in v && 's' in v && 'toFixed' in v) ||
-      (typeof v === 'string' && DECIMAL_STRING_REGEX.test(v)) ||
-      typeof v === 'number'
-    )
-  };
 
 /////////////////////////////////////////
 // ENUMS
@@ -62,7 +41,7 @@ export const SquadSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   maxRounds: z.number().int(),
-  percentual: z.instanceof(Prisma.Decimal, { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Squad']"}),
+  percentual: z.number().step(0.05),
   enabled: z.boolean(),
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
@@ -168,7 +147,7 @@ export const TaskSchema = z.object({
   description: z.string().nullable(),
   maxRounds: z.number().int(),
   currentRound: z.number().int(),
-  percentual: z.instanceof(Prisma.Decimal, { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Task']"}),
+  percentual: z.number().step(0.05),
   points: z.number().int().nullable(),
   finished: z.boolean(),
   active: z.boolean(),
@@ -194,7 +173,7 @@ export const TaskOptionalDefaultsSchema = TaskSchema.merge(z.object({
   id: z.string().uuid().optional(),
   maxRounds: z.number().int().optional(),
   currentRound: z.number().int().optional(),
-  percentual: z.instanceof(Prisma.Decimal, { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Task']"}).optional(),
+  percentual: z.number().step(0.05).optional(),
   finished: z.boolean().optional(),
   active: z.boolean().optional(),
   enabled: z.boolean().optional(),

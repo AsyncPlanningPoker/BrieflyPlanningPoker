@@ -4,10 +4,6 @@ import { type Vote, voteIncludeSelect, messageIncludeSelect } from '../../../uti
 const getVoteExtension = (prismaClient: PrismaClient) => {
 
     async function registerVoteAndUpdate(client: PrismaTransactionClient, id: string, vote: Vote, points?: number, nextRound: boolean = false){
-        console.error("Vote details:");
-        console.error(vote);
-        console.error(`Points: ${points}`);
-        console.error(`NextRound?: ${nextRound}`);
 
         const extraArgs = points ? ({points, active: false, finished:true}) : {};
     
@@ -106,9 +102,6 @@ const getVoteExtension = (prismaClient: PrismaClient) => {
             const votes: Vote[] = task.votes
               .filter((vote) => vote.round == round)
               .concat(userVote);
-
-            console.error("The list of votes:");
-            console.error(votes);
         
             // Ainda há participantes para votar.
             if(votes.length != task.squad.users.length)
@@ -117,7 +110,7 @@ const getVoteExtension = (prismaClient: PrismaClient) => {
             // A rodada deve ser finalizada
         
             /** Pontos finais */
-           const finalPoints = calcFinalPoints(votes, round, task.maxRounds, task.percentual.toNumber());
+           const finalPoints = calcFinalPoints(votes, round, task.maxRounds, task.percentual);
         
            return await registerVoteAndUpdate(tx, taskId, userVote, finalPoints, !finalPoints);
         });

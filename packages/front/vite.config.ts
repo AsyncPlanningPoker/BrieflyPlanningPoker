@@ -16,14 +16,14 @@ export default defineConfig({
     }
   },
   optimizeDeps:{
-    include: ['@briefly/apidef']
+    // include: ['@briefly/apidef']
   },
   build: {
     commonjsOptions: {
-      include: [
-        '@briefly/apidef',
-        'node_modules'
-      ],
+      // include: [
+      //   '@briefly/apidef',
+      //   'node_modules'
+      // ],
     },
   },
 })
