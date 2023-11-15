@@ -61,3 +61,14 @@ To run only database: `docker compose up db`
 This command will create a new postgreSQL database using .env variables to set up password, username and database name.
 
 ### Development workflow
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
