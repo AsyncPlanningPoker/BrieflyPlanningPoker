@@ -64,6 +64,8 @@ This command will create a new postgreSQL database using .env variables to set u
 
 ## Contributors
 
+[![All Contributors](https://img.shields.io/github/all-contributors/BrieflyPlanningPokerES23/BrieflyPlanningPoker?color=ee8449&style=flat-square)](#contributors)
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
