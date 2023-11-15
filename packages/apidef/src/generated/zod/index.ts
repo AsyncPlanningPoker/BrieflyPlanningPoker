@@ -5,24 +5,6 @@ import type { Prisma } from '@prisma/client';
 // HELPER FUNCTIONS
 /////////////////////////////////////////
 
-// DECIMAL
-//------------------------------------------------------
-
-export const DecimalJSLikeSchema: z.ZodType<Prisma.DecimalJsLike> = z.object({ d: z.array(z.number()), e: z.number(), s: z.number(), toFixed: z.function().args().returns(z.string()), });
-
-export const DecimalJSLikeListSchema: z.ZodType<Prisma.DecimalJsLike[]> = z.object({ d: z.array(z.number()), e: z.number(), s: z.number(), toFixed: z.function().args().returns(z.string()), }).array();
-
-export const DECIMAL_STRING_REGEX = /^[0-9.,e+-bxffo_cp]+$|Infinity|NaN/;
-
-export const isValidDecimalInput =
-  (v?: null | string | number | Prisma.DecimalJsLike): v is string | number | Prisma.DecimalJsLike => {
-    if (v === undefined || v === null) return false;
-    return (
-      (typeof v === 'object' && 'd' in v && 'e' in v && 's' in v && 'toFixed' in v) ||
-      (typeof v === 'string' && DECIMAL_STRING_REGEX.test(v)) ||
-      typeof v === 'number'
-    )
-  };
 
 /////////////////////////////////////////
 // ENUMS
@@ -59,7 +41,7 @@ export const SquadSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   maxRounds: z.number().int(),
-  percentual: z.union([z.number(),z.string(),DecimalJSLikeSchema,]).refine((v) => isValidDecimalInput(v), { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Squad']",  }),
+  percentual: z.number().step(0.05),
   enabled: z.boolean(),
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
@@ -165,7 +147,7 @@ export const TaskSchema = z.object({
   description: z.string().nullable(),
   maxRounds: z.number().int(),
   currentRound: z.number().int(),
-  percentual: z.union([z.number(),z.string(),DecimalJSLikeSchema,]).refine((v) => isValidDecimalInput(v), { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Task']",  }),
+  percentual: z.number().step(0.05),
   points: z.number().int().nullable(),
   finished: z.boolean(),
   active: z.boolean(),
@@ -191,7 +173,7 @@ export const TaskOptionalDefaultsSchema = TaskSchema.merge(z.object({
   id: z.string().uuid().optional(),
   maxRounds: z.number().int().optional(),
   currentRound: z.number().int().optional(),
-  percentual: z.union([z.number(),z.string(),DecimalJSLikeSchema,]).refine((v) => isValidDecimalInput(v), { message: "Field 'percentual' must be a Decimal. Location: ['Models', 'Task']",  }).optional(),
+  percentual: z.number().step(0.05).optional(),
   finished: z.boolean().optional(),
   active: z.boolean().optional(),
   enabled: z.boolean().optional(),

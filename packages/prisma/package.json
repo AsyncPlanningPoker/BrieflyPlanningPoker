@@ -6,22 +6,25 @@
   "type": "module",
   "private": true,
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "echo \"Building project @briefly/prisma...\" && tsc -b --force --verbose",
-    "prisma:up": "echo \"Generating prisma artifacts...\" && yarn prisma generate && yarn build",
-    "db:up": "yarn prisma migrate dev --name=init"
+    "prisma:up": "echo \"Generating prisma artifacts...\" && prisma generate && yarn build",
+    "db:up": "yarn prisma migrate dev --name=init",
+    "postinstall": "echo \"Installed prisma\""
   },
   "dependencies": {
-    "@prisma/client": "5.2.0",
+    "@prisma/client": "^5.6.0",
     "@zodios/core": "^10.9.6",
     "bcryptjs": "^2.4.3",
-    "zod": "3.21.1"
+    "decimal.js": "^10.4.3",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "prisma": "5.2.0",
+    "prisma": "^5.6.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.14.0",
     "typescript": "^5.2.2",
-    "zod-prisma-types": "2.7.9"
+    "zod-prisma-types": "^3.1.5"
   }
 }

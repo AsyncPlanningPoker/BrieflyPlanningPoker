@@ -22,7 +22,7 @@ model Squad {
   id         String   @id @default(uuid()) @db.Uuid 
   name       String   @db.VarChar(25)
   maxRounds  Int
-  percentual Decimal  @db.Decimal(14, 2)
+  percentual Float    /// @zod.number.step(0.05)
   enabled    Boolean  @default(true)
   updatedAt  DateTime @updatedAt @db.Timestamptz(6) 
   createdAt  DateTime @default(now()) @db.Timestamptz(6) 
@@ -64,7 +64,7 @@ model Task {
   description  String?  @db.VarChar(300)
   maxRounds    Int      @default(0)
   currentRound Int      @default(1) 
-  percentual   Decimal  @db.Decimal(14, 2) @default(0)
+  percentual   Float    @default(0) /// @zod.number.step(0.05)
   points       Int?     
   finished     Boolean  @default(false)
   active       Boolean  @default(true)
