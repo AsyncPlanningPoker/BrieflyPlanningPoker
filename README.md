@@ -1,6 +1,6 @@
 # Briefly Planning Poker
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Briefly planning poker is an online Planning Poker/Scrum Poker tool that lets you estimate effort, time of development and other characteristics of your agile team tasks.
@@ -85,6 +85,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ingrid27"><img src="https://avatars.githubusercontent.com/u/38013208?v=4?s=100" width="100px;" alt="Ingrid Pacheco Batista"/><br /><sub><b>Ingrid Pacheco Batista</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=Ingrid27" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bachiari"><img src="https://avatars.githubusercontent.com/u/58713326?v=4?s=100" width="100px;" alt="bachiari"/><br /><sub><b>bachiari</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=bachiari" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lineconquista"><img src="https://avatars.githubusercontent.com/u/71647583?v=4?s=100" width="100px;" alt="Aline Conquista "/><br /><sub><b>Aline Conquista </b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=lineconquista" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeTrovoes"><img src="https://avatars.githubusercontent.com/u/25932176?v=4?s=100" width="100px;" alt="Leandro Trovões"/><br /><sub><b>Leandro Trovões</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=LeTrovoes" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
