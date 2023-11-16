@@ -1,6 +1,6 @@
 # Briefly Planning Poker
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Briefly planning poker is an online Planning Poker/Scrum Poker tool that lets you estimate effort, time of development and other characteristics of your agile team tasks.
@@ -88,6 +88,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeTrovoes"><img src="https://avatars.githubusercontent.com/u/25932176?v=4?s=100" width="100px;" alt="Leandro Trovões"/><br /><sub><b>Leandro Trovões</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=LeTrovoes" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/thenriique"><img src="https://avatars.githubusercontent.com/u/58703497?v=4?s=100" width="100px;" alt="Thiago Henrique"/><br /><sub><b>Thiago Henrique</b></sub></a><br /><a href="https://github.com/BrieflyPlanningPokerES23/BrieflyPlanningPoker/commits?author=thenriique" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
