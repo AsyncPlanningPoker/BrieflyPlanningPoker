@@ -13,6 +13,8 @@ import { CustomError, handler as errorHandler } from './middlewares/error';
 import routes from './routes';
 import { handler } from './middlewares/authorization';
 import { bearerAuthScheme, openApiBuilder } from '@zodios/openapi';
+const { createSession } = await import('better-sse');
+import { sse } from './sse';
 
 function listen(): void {
   app.listen(port, () => {
@@ -50,7 +52,14 @@ function setMiddlewares() {
 expand(dotenv.config());
 const port = process.env.PORT ?? 8000;
 
-const app: ZodiosApp<ApiDef, Context> = context.app(apiDef, {transform: true});
+const expressApp = express();
+
+expressApp.get("/sse", async (req, res, next) => {
+  const session = await createSession(req, res);
+  sse.register(session);
+});
+
+const app: ZodiosApp<ApiDef, Context> = context.app(apiDef, {transform: true, express: expressApp});
 
 const doc = openApiBuilder({
   title: "Briefly Planning Poker API",

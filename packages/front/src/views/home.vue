@@ -40,7 +40,6 @@ import BTaskExpanded from '@/components/b-task-expanded.vue';
 import BText from '@/components/b-text.vue';
 import BModal from '@/components/b-modal.vue';
 import { squadStore, taskStore } from '@/stores';
-import { watch } from 'vue';
 
 const squadS = squadStore();
 
@@ -52,7 +51,13 @@ squadS.$subscribe((mutation, state) => {
 
 const squad = computed(() => squadS.activeSquad);
 
-onMounted(() => squadS.gatherSquadList());
+onMounted(() => {
+  squadS.gatherSquadList();
+  const e = new EventSource('localhost:8000/sse');
+  e.addEventListener("register", ({data}) => {
+    console.log(data);
+  });
+});
 </script>
 
 <style lang="scss" scoped>
