@@ -3,7 +3,7 @@ import taskExtensions from './extensions/models/task';
 import * as crypt from './extensions/crypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
+const prisma = new PrismaClient({ log: ['warn', 'error'] })
 .$extends({
     query: {
         task: {

@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
 import { userSchemas } from '@briefly/apidef';
 import { AxiosError } from 'axios';
-import { readonly, ref } from 'vue';
-
+import { readonly, ref, watch } from 'vue';
 import api from '@/services/api';
-import { watch } from 'vue';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 const userStore = defineStore('userStore', () => {
   const storageToken = localStorage.getItem('userToken');
@@ -54,6 +53,27 @@ const userStore = defineStore('userStore', () => {
     email.value = '';
   }
 
+  function getEvents(){
+    fetchEventSource('http://localhost:8000/api/users/events', {
+      headers: {
+        'Authorization': `Bearer ${token.value}`
+      },
+      async onopen(response) {
+          console.log("Tentando!");
+          console.log(response);
+      },
+      onmessage(ev) {
+        console.log("Mensagem!");
+        ev.data =  ev.data ? JSON.parse(ev.data) : undefined;
+        console.log(ev);
+      },
+      onerror(err) {
+        console.error("ERRO!");
+        console.error(err);
+      },
+    })
+  }
+
   async function updateYourself(payload: userSchemas.UpdateSchemaReq) {
     try {
       const response = await api.updateUser(payload);
@@ -73,7 +93,7 @@ const userStore = defineStore('userStore', () => {
     logout();
   }
   return { email: readonly(email), errorMessage: readonly(errorMessage), login, logout,
-    register, updateYourself, deleteYourself }
+    register, updateYourself, deleteYourself, getEvents }
 });
 
 export { userStore };

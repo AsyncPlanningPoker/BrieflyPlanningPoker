@@ -7,6 +7,8 @@ import { Unauthorized } from '../middlewares/error/error';
 import { mustAuth } from '../middlewares/authorization';
 import context, { type Context } from '../context'
 import * as auth from '../middlewares/authorization/authorization';
+const { createSession } = await import ('better-sse');
+import { usersChannel } from 'sse';
 
 type UsersHandler<M extends Method, Path extends ZodiosPathsByMethod<UsersAPI, M>> =
   ZodiosRequestHandler<UsersAPI, Context, M, Path>;
@@ -76,10 +78,16 @@ const del: UsersHandler<"delete", ""> = async (req, res, next) => {
   }
 };
 
+const events: UsersHandler<'get', '/events'> = async (req, res, next) => {
+  const session = await createSession(req, res);
+  usersChannel.register(session);
+}
+
 usersRouter.post("", create);
 usersRouter.put("", mustAuth, update);
 usersRouter.delete("", mustAuth, del);
 usersRouter.post("/login", login);
+usersRouter.get("/events", mustAuth, events);
 
 export default usersRouter;
 

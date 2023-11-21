@@ -39,10 +39,9 @@ import BTaskContainer from '@/components/b-task-container.vue';
 import BTaskExpanded from '@/components/b-task-expanded.vue';
 import BText from '@/components/b-text.vue';
 import BModal from '@/components/b-modal.vue';
-import { squadStore, taskStore } from '@/stores';
+import { squadStore, taskStore, userStore } from '@/stores';
 
 const squadS = squadStore();
-
 const tasksS = taskStore();
 
 squadS.$subscribe((mutation, state) => {
@@ -51,12 +50,11 @@ squadS.$subscribe((mutation, state) => {
 
 const squad = computed(() => squadS.activeSquad);
 
+const user = userStore();
+
 onMounted(() => {
   squadS.gatherSquadList();
-  const e = new EventSource('localhost:8000/sse');
-  e.addEventListener("register", ({data}) => {
-    console.log(data);
-  });
+  user.getEvents();
 });
 </script>
 

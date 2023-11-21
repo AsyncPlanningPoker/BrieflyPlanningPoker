@@ -4,6 +4,7 @@ import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import { squadsAPI, type SquadsAPI } from '@briefly/apidef';
 import context, { type Context } from '../context'
 import { mustAuth } from '../middlewares/authorization';
+import { usersChannel } from 'sse';
 
 type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI, M>> =
   ZodiosRequestHandler<SquadsAPI, Context, M, Path>;
@@ -122,6 +123,7 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
           }}}}
         }
       });
+    usersChannel.broadcast(squad);
     return res.status(201).json(squad);
   } catch (error: unknown) {
     next(error);
@@ -158,8 +160,6 @@ const findAllTasks: SquadsHandler<"get", "/:squadId/tasks"> = async (req, res, n
   const { active } = req.query;
   try {
     const tasks = await prisma.task.findMany({ where: { squadId, active }});
-    console.error("MEU CU");
-    console.error(tasks);
     return res.status(200).json(tasks)
   } catch(error: unknown){
     next(error);

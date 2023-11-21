@@ -15,13 +15,6 @@ api.interceptors.request.use((config) => {
   const userToken = localStorage.getItem('userToken');
   if(userToken) config.headers.Authorization = `Bearer ${JSON.parse(userToken)}`;
 
-  // if (config.data) {
-  //   const data = { ...config.data };
-  //   Object.entries(data).forEach((d) => {
-  //     return (data[d[0]] = typeof d[1] === 'string' ? d[1].trim() : d[1]);
-  //   });
-  //   config.data = data;
-  // }
   return config;
 });
 
