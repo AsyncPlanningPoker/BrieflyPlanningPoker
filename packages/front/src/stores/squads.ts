@@ -6,10 +6,10 @@ import { userStore } from './user';
 import { squadSchemas } from '@briefly/apidef';
 import { AxiosError } from 'axios';
 import { computed, ref } from 'vue';
-import { readonly } from 'vue';
 
-const user = userStore();
 const squadStore =  defineStore('squadStore', () => {
+  
+  const user = userStore();
   
   const squadList = ref<squadSchemas.FindAllSchemaRes>([]);
   const activeSquad = ref<squadSchemas.FindSchemaRes | undefined>();
@@ -111,7 +111,7 @@ const squadStore =  defineStore('squadStore', () => {
     }
   }
 
-  return { squadList: readonly(squadList), activeSquad, activeId,
+  return { squadList, activeSquad, activeId,
     gatherSquadList, gatherSquad, addSquad, updateSquad, addUser, addYourself, delUser, delYourself }
 });
 

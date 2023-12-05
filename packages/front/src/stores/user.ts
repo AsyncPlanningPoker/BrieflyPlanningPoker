@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { readonly, ref, watch } from 'vue';
 import api from '@/services/api';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { squadStore } from '.';
 
 const userStore = defineStore('userStore', () => {
   const storageToken = localStorage.getItem('userToken');
@@ -11,6 +12,10 @@ const userStore = defineStore('userStore', () => {
   const token = ref<string | null>(storageToken && JSON.parse(storageToken));
   const email = ref<string | null>(storageEmail && JSON.parse(storageEmail));
   const errorMessage = ref<string | undefined>();
+
+  const squad = squadStore();
+  const events = new Map();
+  events.set("added-user", onAddedUser(squad));
 
   watch(token, (newToken) => {
     localStorage.removeItem('userToken');
@@ -65,7 +70,9 @@ const userStore = defineStore('userStore', () => {
       onmessage(ev) {
         console.log("Mensagem!");
         ev.data =  ev.data ? JSON.parse(ev.data) : undefined;
-        console.log(ev);
+        const eventDispatcher = events.get(ev.event);
+        console.log(eventDispatcher);
+        if(eventDispatcher) eventDispatcher(ev.data);
       },
       onerror(err) {
         console.error("ERRO!");
@@ -97,3 +104,7 @@ const userStore = defineStore('userStore', () => {
 });
 
 export { userStore };
+
+const onAddedUser = (squad: ReturnType<typeof squadStore>) => {
+  return (data: any) => {squad.squadList.push(data)};
+}

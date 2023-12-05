@@ -7,8 +7,7 @@ import { Unauthorized } from '../middlewares/error/error';
 import { mustAuth } from '../middlewares/authorization';
 import context, { type Context } from '../context'
 import * as auth from '../middlewares/authorization/authorization';
-const { createSession } = await import ('better-sse');
-import { usersChannel } from 'sse';
+import * as sse from 'sse';
 
 type UsersHandler<M extends Method, Path extends ZodiosPathsByMethod<UsersAPI, M>> =
   ZodiosRequestHandler<UsersAPI, Context, M, Path>;
@@ -48,11 +47,9 @@ const update: UsersHandler<"put", ""> = async (req, res, next) => {
       }
       if (! await prisma.user.authenticate(email, data.oldPassword))
         throw new Unauthorized('Wrong password');
-
     }
 
-    if(data.oldPassword)
-      delete data.oldPassword;
+    if(data.oldPassword) delete data.oldPassword;
 
     const user = await prisma.user
     .update({
@@ -79,8 +76,14 @@ const del: UsersHandler<"delete", ""> = async (req, res, next) => {
 };
 
 const events: UsersHandler<'get', '/events'> = async (req, res, next) => {
-  const session = await createSession(req, res);
-  usersChannel.register(session);
+  const { email } = req.user;
+  const session = await sse.cSession(email, req, res);
+  const { squads } = await prisma.user.findUniqueOrThrow({
+    select: { squads: { select: { squadId: true }}},
+    where: { email }
+  });
+
+  for(const { squadId } of squads) sse.register(squadId, session);
 }
 
 usersRouter.post("", create);

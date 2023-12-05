@@ -4,7 +4,7 @@ import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import { squadsAPI, type SquadsAPI } from '@briefly/apidef';
 import context, { type Context } from '../context'
 import { mustAuth } from '../middlewares/authorization';
-import { usersChannel } from 'sse';
+import * as sse from 'sse';
 
 type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI, M>> =
   ZodiosRequestHandler<SquadsAPI, Context, M, Path>;
@@ -13,7 +13,6 @@ const squadsRouter = context.router(squadsAPI);
 
 const create: SquadsHandler<"post", ""> = async (req, res, next) => {
   const data = req.body;
-
   try {
     const squad = await prisma.squad.create({
       data,
@@ -123,7 +122,14 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
           }}}}
         }
       });
-    usersChannel.broadcast(squad);
+
+    const addedUserSession = sse.getSession(email);
+    if(addedUserSession){
+      const channel = sse.register(squad.id, addedUserSession);
+      console.error(`Squad id: ${squad.id}`);
+      channel.broadcast(squad, "added-user");
+    }
+
     return res.status(201).json(squad);
   } catch (error: unknown) {
     next(error);

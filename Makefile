@@ -1,5 +1,4 @@
 api-startup:
-	yarn install
 	yarn db:up
 	cd packages/api && yarn start
 

@@ -5,13 +5,14 @@ import api from '../services/api';
 import { squadStore } from './squads';
 import { ref } from 'vue';
 
-const squad = squadStore();
 const taskStore =  defineStore('taskStore', () => {
   
+  const squad = squadStore();
+
   const enabledTasks =  ref<squadSchemas.ListTasksSchemaRes>([]);
   const disabledTasks = ref<squadSchemas.ListTasksSchemaRes>([]);
   const activeTask = ref<taskSchemas.FindSchemaRes | undefined>();
-
+  
   async function gatherTask(taskId: string){
     try {
       activeTask.value = await api.findTask({ params: { taskId }});
