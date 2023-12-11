@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { squadStore, taskStore } from '@/stores';
-import { squadSchemas, taskSchemas,  } from '@briefly/apidef';
+import { squadSchemas, taskSchemas } from '@briefly/apidef';
 
 const API_URL = 'http://localhost:8000/api/';
 
@@ -27,7 +27,7 @@ export function initialize(){
     const squad = squadStore();
     const task = taskStore();
 
-    const dispatchEvent = (evtName: string, data: any) => {
+    const dispatchEvent = (evtName: string, data: unknown) => {
         let valData: any;
         switch (evtName) {
             case "addedUser":

@@ -3,9 +3,10 @@ import { Zodios } from '@zodios/core';
 import { apiDef } from '@briefly/apidef'
 
 const envVars = import.meta.env;
+const API_URL = 'http://localhost:8000/api';
 
 const api = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -19,5 +20,4 @@ api.interceptors.request.use((config) => {
 });
 
 const apiClient = new Zodios(apiDef, { axiosInstance: api });
-
 export default apiClient;

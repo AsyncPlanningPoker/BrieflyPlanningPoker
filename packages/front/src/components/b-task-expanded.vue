@@ -61,15 +61,7 @@ const rounds = computed(() => {
   for(let i = 0; i < task.value.currentRound; i++){
     ret[i] = [...task.value.votes, ...task.value.messages]
       .filter((action) => action.round == i + 1)
-      .sort((i1, i2) => {
-        try {
-          return i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds();
-        } catch (error) {
-          console.error(error);
-          console.log(Object.getPrototypeOf(i1.createdAt));
-        }
-        return 0;
-      });
+      .sort((i1, i2) => i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds());
   }
   return ret;
 });
