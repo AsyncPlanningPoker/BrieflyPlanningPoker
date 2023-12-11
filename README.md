@@ -6,9 +6,9 @@
 Briefly planning poker is an online Planning Poker/Scrum Poker tool that lets you estimate effort, time of development and other characteristics of your agile team tasks.
 In it, you can:
  - **Create and manage agile squads**
- - **Create or import tasks, or user stories from other project management tools**
- - **Comment on and estimate different task measures such as story points, likeability, and etc in your product backlog**
- - **Integrate with other platforms to make your sprint planning sessions easier**
+ - **Create or import tasks, or user stories from other project management tools** *(soon)*
+ - **Comment on and estimate different task measures such as story points, likeability, and etc in your product backlog** *(soon)*
+ - **Integrate with other platforms to make your sprint planning sessions easier** *(soon)*
 
 ## Tech Stack
 
