@@ -1,5 +1,6 @@
 import { makeEndpoint, makeApi, makeParameters } from '@zodios/core';
 import { users } from '../apiSchemas'
+import { z } from 'zod';
 
 // Parameters
 
@@ -72,9 +73,20 @@ const updateEndpoint = makeEndpoint({
     description: 'Update an user',
     responseDescription: "The updated user"
 });
+const eventsParams = makeParameters([{
+    type: 'Header',
+    name: 'Accept',
+    schema: z.literal('text/event-stream')
+}]);
 
+const eventsEndpoint = makeEndpoint({
+    method: 'get',
+    path: "/events",
+    response: z.any(),
+    parameters: eventsParams
+});
 
-const usersAPI = makeApi([createEndpoint, loginEndpoint, deleteEndpoint, updateEndpoint]);
+const usersAPI = makeApi([createEndpoint, loginEndpoint, deleteEndpoint, updateEndpoint, eventsEndpoint]);
 
 export default usersAPI;
 export type UsersAPI = typeof usersAPI;

@@ -49,7 +49,7 @@ const taskS = taskStore();
 const task = computed(() => taskS.activeTask);
 
 function message(message: string){
-  console.log(message);
+  // console.log(message);
 }
 
 defineEmits<{ (event: 'close'): void }>();

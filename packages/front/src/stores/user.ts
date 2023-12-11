@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
 import { userSchemas } from '@briefly/apidef';
 import { AxiosError } from 'axios';
-import { readonly, ref } from 'vue';
-
+import { readonly, ref, watch } from 'vue';
 import api from '@/services/api';
-import { watch } from 'vue';
+import { squadStore } from '.';
 
 const userStore = defineStore('userStore', () => {
   const storageToken = localStorage.getItem('userToken');
@@ -12,6 +11,8 @@ const userStore = defineStore('userStore', () => {
   const token = ref<string | null>(storageToken && JSON.parse(storageToken));
   const email = ref<string | null>(storageEmail && JSON.parse(storageEmail));
   const errorMessage = ref<string | undefined>();
+
+  const squad = squadStore();
 
   watch(token, (newToken) => {
     localStorage.removeItem('userToken');

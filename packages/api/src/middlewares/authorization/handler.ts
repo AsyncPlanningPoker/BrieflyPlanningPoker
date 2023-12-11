@@ -6,6 +6,7 @@ import type { ZodiosNextFunction, ZodiosRequest, ZodiosResponse } from '../../ut
 
 function handler (req: ZodiosRequest, res: ZodiosResponse, next: ZodiosNextFunction): void {
   const token = req.headers.authorization;
+
   if(! token) return next();
 
   const isValid = token.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : undefined;

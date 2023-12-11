@@ -40,10 +40,9 @@ import BTaskExpanded from '@/components/b-task-expanded.vue';
 import BText from '@/components/b-text.vue';
 import BModal from '@/components/b-modal.vue';
 import { squadStore, taskStore } from '@/stores';
-import { watch } from 'vue';
+import { initialize } from '@/services/events';
 
 const squadS = squadStore();
-
 const tasksS = taskStore();
 
 squadS.$subscribe((mutation, state) => {
@@ -52,7 +51,10 @@ squadS.$subscribe((mutation, state) => {
 
 const squad = computed(() => squadS.activeSquad);
 
-onMounted(() => squadS.gatherSquadList());
+onMounted(() => {
+  squadS.gatherSquadList();
+  initialize();
+});
 </script>
 
 <style lang="scss" scoped>

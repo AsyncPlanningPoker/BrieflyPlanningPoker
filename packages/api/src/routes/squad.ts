@@ -4,6 +4,7 @@ import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import { squadsAPI, type SquadsAPI } from '@briefly/apidef';
 import context, { type Context } from '../context'
 import { mustAuth } from '../middlewares/authorization';
+import * as sse from 'sse';
 
 type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI, M>> =
   ZodiosRequestHandler<SquadsAPI, Context, M, Path>;
@@ -12,7 +13,6 @@ const squadsRouter = context.router(squadsAPI);
 
 const create: SquadsHandler<"post", ""> = async (req, res, next) => {
   const data = req.body;
-
   try {
     const squad = await prisma.squad.create({
       data,
@@ -87,7 +87,10 @@ const update: SquadsHandler<"put", "/:squadId"> = async(req, res, next) => {
             updatedAt: true
           }}}}
         }
-      })
+      });
+
+    const channel = sse.getChannel(id);
+    if(channel) channel.broadcast(squad, "squadUpdated");
     return res.status(200).json(squad);
   } catch (error: unknown) {
     next(error);
@@ -122,6 +125,13 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
           }}}}
         }
       });
+
+    const addedUserSession = sse.getSession(email);
+    if(addedUserSession){
+      const channel = sse.register(squad.id, addedUserSession);
+      channel.broadcast(squad, "addedUser");
+    }
+
     return res.status(201).json(squad);
   } catch (error: unknown) {
     next(error);
@@ -158,8 +168,6 @@ const findAllTasks: SquadsHandler<"get", "/:squadId/tasks"> = async (req, res, n
   const { active } = req.query;
   try {
     const tasks = await prisma.task.findMany({ where: { squadId, active }});
-    console.error("MEU CU");
-    console.error(tasks);
     return res.status(200).json(tasks)
   } catch(error: unknown){
     next(error);
@@ -179,6 +187,10 @@ const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, ne
       });
       return task;
     });
+  
+    const channel = sse.getChannel(squadId);
+    if(channel) channel.broadcast(task, "taskCreated");
+    
     return res.status(201).json(task)
   } catch(error: unknown){
     next(error);

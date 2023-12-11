@@ -50,7 +50,7 @@ function setMiddlewares() {
 expand(dotenv.config());
 const port = process.env.PORT ?? 8000;
 
-const app: ZodiosApp<ApiDef, Context> = context.app(apiDef, {transform: true});
+const app: ZodiosApp<ApiDef, Context> = context.app(apiDef, {transform: true });
 
 const doc = openApiBuilder({
   title: "Briefly Planning Poker API",
