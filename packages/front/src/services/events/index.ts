@@ -14,9 +14,7 @@ export function initialize(){
         headers: { 'Authorization': `Bearer ${JSON.parse(token)}` },
         onmessage(ev) {
             if(!ev.data) return;
-            console.log(ev);
-            ev.data = JSON.parse(ev.data);
-            dispatchEvent(ev.event, ev.data);
+            dispatchEvent(ev.event, JSON.parse(ev.data));
         },
         onerror(err) {
             console.error("ERRO!");
