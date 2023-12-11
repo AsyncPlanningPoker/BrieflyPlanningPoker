@@ -17,7 +17,6 @@ export function initialize(){
             dispatchEvent(ev.event, JSON.parse(ev.data));
         },
         onerror(err) {
-            console.error("ERRO!");
             console.error(err);
         },
     });
