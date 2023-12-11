@@ -4,11 +4,13 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { squadStore, taskStore } from '@/stores';
 import { squadSchemas, taskSchemas,  } from '@briefly/apidef';
 
+const API_URL = 'http://localhost:8000/api/';
+
 export function initialize(){
     const token = localStorage.getItem('userToken');
     if(!token) throw new Error("Nao autorizado!");
     console.log(`Token: ${token}`);
-    fetchEventSource('http://localhost:8000/api/users/events', {
+    fetchEventSource(`${API_URL}users/events`, {
         headers: { 'Authorization': `Bearer ${JSON.parse(token)}` },
         onmessage(ev) {
             if(!ev.data) return;
