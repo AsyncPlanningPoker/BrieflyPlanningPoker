@@ -4,6 +4,7 @@ import type { Method, ZodiosPathsByMethod } from '@zodios/core';
 import { tasksAPI, type TasksAPI } from '@briefly/apidef';
 import context, { type Context } from '../context'
 import { mustAuth } from '../middlewares/authorization';
+import * as sse from 'sse';
 
 type TasksHandler<M extends Method, Path extends ZodiosPathsByMethod<TasksAPI, M>> =
   ZodiosRequestHandler<TasksAPI, Context, M, Path>;
@@ -37,6 +38,10 @@ const deactivate: TasksHandler<"put", "/:taskId"> = async (req, res, next) => {
         votes: true
       }
     });
+
+    const channel = sse.getChannel(task.squadId);
+    if(channel) channel.broadcast(task, "taskUpdated");
+
     return res.status(200).json(task);
   } catch (error: unknown) {
     next(error);
@@ -65,6 +70,10 @@ const vote: TasksHandler<"post", "/:taskId/votes"> = async (req, res, next) => {
   const { points } = req.body;
   try {
     const task = await prisma.task.vote(taskId, email, points);
+
+    const channel = sse.getChannel(task.squadId);
+    if(channel) channel.broadcast(task, "taskUpdated");
+
     return res.status(201).json(task);
   } catch (error: unknown) {
     next(error);
@@ -78,6 +87,10 @@ const message: TasksHandler<"post", "/:taskId/messages"> = async (req, res, next
   const { message } = req.body;
   try {
     const task = await prisma.task.comment(taskId, email, message);
+
+    const channel = sse.getChannel(task.squadId);
+    if(channel) channel.broadcast(task, "taskUpdated");
+
     return res.status(201).json(task);
   } catch (error: unknown) {
     next(error);

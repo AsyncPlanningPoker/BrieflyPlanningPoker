@@ -3,14 +3,16 @@ import { squadSchemas, taskSchemas } from '@briefly/apidef';
 
 import api from '../services/api';
 import { squadStore } from './squads';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const taskStore =  defineStore('taskStore', () => {
   
   const squad = squadStore();
 
-  const enabledTasks =  ref<squadSchemas.ListTasksSchemaRes>([]);
-  const disabledTasks = ref<squadSchemas.ListTasksSchemaRes>([]);
+  const tasks = ref<squadSchemas.ListTasksSchemaRes>([]);
+  
+  const enabledTasks = computed(() => tasks.value.filter((task) => task.active));
+  const disabledTasks = computed(() => tasks.value.filter((task) => !task.active));
   const activeTask = ref<taskSchemas.FindSchemaRes | undefined>();
   
   async function gatherTask(taskId: string){
@@ -25,8 +27,7 @@ const taskStore =  defineStore('taskStore', () => {
     try {
       const squadId = squad.activeId;
       if(! squadId) throw new Error("No squad is active!");
-      enabledTasks.value = await api.listTasksSquad({params: { squadId }, queries: { active: true }});
-      disabledTasks.value = await api.listTasksSquad({params: { squadId }, queries: { active: false }});
+      tasks.value = await api.listTasksSquad({params: { squadId }});
     } catch (e: unknown) {
       console.error(e);
     }
@@ -37,7 +38,7 @@ const taskStore =  defineStore('taskStore', () => {
       const squadId = squad.activeId;
       if(! squadId) throw new Error("No squad is active!");
       const newTask = await api.createTaskSquad(payload, { params: { squadId }});
-      enabledTasks.value = enabledTasks.value.concat(newTask);
+      tasks.value = tasks.value.concat(newTask);
       await gatherTasks();
     } catch (e: unknown) {
       console.error(e)
@@ -48,8 +49,7 @@ const taskStore =  defineStore('taskStore', () => {
   async function disableTask(taskId: string) {
     try{
       const disabledTask = await api.deactivateTask(undefined, { params: { taskId } });
-      enabledTasks.value = enabledTasks.value.filter((task) => task.id != taskId);
-      disabledTasks.value = disabledTasks.value.concat(disabledTask);
+      tasks.value = enabledTasks.value.map((task) => (task.id == taskId) ? disabledTask : task);
     } catch (e: unknown) {
       console.error(e)
       // router.push('signin');
@@ -58,9 +58,8 @@ const taskStore =  defineStore('taskStore', () => {
 
   async function deleteTask(taskId: string) {
     try{
-      await api.deleteTask(undefined, { params: { taskId } });
-      enabledTasks.value = enabledTasks.value.filter((task) => task.id != taskId);
-      disabledTasks.value = disabledTasks.value.filter((task) => task.id != taskId);
+      const deletedTask = await api.deleteTask(undefined, { params: { taskId } });
+      tasks.value = tasks.value.filter((task) => task.id != taskId);
     } catch (e: unknown) {
       console.error(e)
       // router.push('signin');
@@ -71,12 +70,11 @@ const taskStore =  defineStore('taskStore', () => {
     try{
       const taskId = activeTask.value?.id;
       if(! taskId) throw new Error("No task is active!");
-      activeTask.value = await api.voteTask({ points }, { params: { taskId } });
+      const votedTask = await api.voteTask({ points }, { params: { taskId } });
+      activeTask.value = votedTask;
       
-      if(! activeTask.value.active){
-        enabledTasks.value = enabledTasks.value.filter((task) => task.id != activeTask.value?.id);
-        disabledTasks.value = disabledTasks.value.concat(activeTask.value);
-      }
+      if(! activeTask.value.active)
+        tasks.value = tasks.value.map((task) => (task.id != taskId) ? task : votedTask);
       
     } catch (e: unknown) {
       console.error(e)
@@ -94,7 +92,7 @@ const taskStore =  defineStore('taskStore', () => {
       // router.push('signin');
     }
   }
-  return { enabledTasks, disabledTasks, activeTask, gatherTask, gatherTasks, addTask, disableTask, deleteTask, vote, comment };
+  return { tasks, enabledTasks, disabledTasks, activeTask, gatherTask, gatherTasks, addTask, disableTask, deleteTask, vote, comment };
 });
 
 export { taskStore }

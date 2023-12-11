@@ -49,7 +49,7 @@ const taskS = taskStore();
 const task = computed(() => taskS.activeTask);
 
 function message(message: string){
-  console.log(message);
+  // console.log(message);
 }
 
 defineEmits<{ (event: 'close'): void }>();
@@ -61,7 +61,15 @@ const rounds = computed(() => {
   for(let i = 0; i < task.value.currentRound; i++){
     ret[i] = [...task.value.votes, ...task.value.messages]
       .filter((action) => action.round == i + 1)
-      .sort((i1, i2) => i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds());
+      .sort((i1, i2) => {
+        try {
+          return i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds();
+        } catch (error) {
+          console.error(error);
+          console.log(Object.getPrototypeOf(i1.createdAt));
+        }
+        return 0;
+      });
   }
   return ret;
 });

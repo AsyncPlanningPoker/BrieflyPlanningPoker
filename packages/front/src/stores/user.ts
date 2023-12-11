@@ -3,7 +3,6 @@ import { userSchemas } from '@briefly/apidef';
 import { AxiosError } from 'axios';
 import { readonly, ref, watch } from 'vue';
 import api from '@/services/api';
-import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { squadStore } from '.';
 
 const userStore = defineStore('userStore', () => {
@@ -14,8 +13,6 @@ const userStore = defineStore('userStore', () => {
   const errorMessage = ref<string | undefined>();
 
   const squad = squadStore();
-  const events = new Map();
-  events.set("added-user", onAddedUser(squad));
 
   watch(token, (newToken) => {
     localStorage.removeItem('userToken');
@@ -58,29 +55,6 @@ const userStore = defineStore('userStore', () => {
     email.value = '';
   }
 
-  function getEvents(){
-    fetchEventSource('http://localhost:8000/api/users/events', {
-      headers: {
-        'Authorization': `Bearer ${token.value}`
-      },
-      async onopen(response) {
-          console.log("Tentando!");
-          console.log(response);
-      },
-      onmessage(ev) {
-        console.log("Mensagem!");
-        ev.data =  ev.data ? JSON.parse(ev.data) : undefined;
-        const eventDispatcher = events.get(ev.event);
-        console.log(eventDispatcher);
-        if(eventDispatcher) eventDispatcher(ev.data);
-      },
-      onerror(err) {
-        console.error("ERRO!");
-        console.error(err);
-      },
-    })
-  }
-
   async function updateYourself(payload: userSchemas.UpdateSchemaReq) {
     try {
       const response = await api.updateUser(payload);
@@ -100,11 +74,7 @@ const userStore = defineStore('userStore', () => {
     logout();
   }
   return { email: readonly(email), errorMessage: readonly(errorMessage), login, logout,
-    register, updateYourself, deleteYourself, getEvents }
+    register, updateYourself, deleteYourself }
 });
 
 export { userStore };
-
-const onAddedUser = (squad: ReturnType<typeof squadStore>) => {
-  return (data: any) => {squad.squadList.push(data)};
-}

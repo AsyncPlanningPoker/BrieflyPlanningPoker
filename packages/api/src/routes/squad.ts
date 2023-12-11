@@ -87,7 +87,10 @@ const update: SquadsHandler<"put", "/:squadId"> = async(req, res, next) => {
             updatedAt: true
           }}}}
         }
-      })
+      });
+
+    const channel = sse.getChannel(id);
+    if(channel) channel.broadcast(squad, "squadUpdated");
     return res.status(200).json(squad);
   } catch (error: unknown) {
     next(error);
@@ -126,8 +129,7 @@ const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next
     const addedUserSession = sse.getSession(email);
     if(addedUserSession){
       const channel = sse.register(squad.id, addedUserSession);
-      console.error(`Squad id: ${squad.id}`);
-      channel.broadcast(squad, "added-user");
+      channel.broadcast(squad, "addedUser");
     }
 
     return res.status(201).json(squad);
@@ -185,6 +187,10 @@ const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, ne
       });
       return task;
     });
+  
+    const channel = sse.getChannel(squadId);
+    if(channel) channel.broadcast(task, "taskCreated");
+    
     return res.status(201).json(task)
   } catch(error: unknown){
     next(error);
