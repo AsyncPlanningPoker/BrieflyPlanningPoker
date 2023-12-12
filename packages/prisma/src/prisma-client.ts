@@ -54,8 +54,8 @@ const prisma = new PrismaClient({ log: ['warn', 'error'] })
              */
             async authenticate(email: string, password: string): Promise<boolean>{
                 try{
-                    const user = await Prisma.getExtensionContext(this)
-                        .$parent.user.findUniqueOrThrow({ where: { email } });
+                    const user = await Prisma.getExtensionContext(this).
+                    $parent.user.findUniqueOrThrow({ where: { email } });
                     
                     return await crypt.compare(password, user.password);
                 } catch(e: unknown){
@@ -71,3 +71,4 @@ const prisma = new PrismaClient({ log: ['warn', 'error'] })
 });
 
 export default prisma;
+export type PrismaExtended = typeof prisma;

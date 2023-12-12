@@ -22,7 +22,7 @@ const getCommentExtension = (prismaClient: PrismaClient) => {
                         select: voteIncludeSelect,
                         where: { round: { equals: currentRound } }
                     },
-                    messages: { select: messageIncludeSelect}
+                    messages: { select: messageIncludeSelect }
                 }
             });
         });
