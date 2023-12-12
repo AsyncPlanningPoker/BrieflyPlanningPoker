@@ -2,40 +2,7 @@ import type { PrismaClient, PrismaTransactionClient } from '../../utils';
 import { type Vote, voteIncludeSelect, messageIncludeSelect } from '../../../utils'
 
 const getVoteExtension = (prismaClient: PrismaClient) => {
-
-    async function registerVoteAndUpdate(client: PrismaTransactionClient, id: string, vote: Vote, points?: number, nextRound: boolean = false){
-
-        const extraArgs = points ? ({points, active: false, finished:true}) : {};
-    
-        return await client.task.update({
-            where: { id },
-            data: {
-                votes: {
-                    create: {
-                        user: {
-                            connect: { email: vote.user.email }
-                        },
-                        points: vote.points,
-                        round: vote.round
-                    }
-                },
-                currentRound: { increment: nextRound ? 1 : 0},
-                ...extraArgs
-            },
-            include: {
-                votes: {
-                    select: voteIncludeSelect,
-                    where: { round: { equals: vote.round } }
-                },
-                messages: {
-                    select: messageIncludeSelect,
-                }
-            }
-        });
-    }
-
     return async function vote(taskId: string, email: string, points: number){
-        
         return await prismaClient.$transaction(async (tx) => {
             /*
              * Lógica de voto em tarefa
@@ -117,7 +84,38 @@ const getVoteExtension = (prismaClient: PrismaClient) => {
     }
 }
 
-function calcFinalPoints(votes: Vote[], currentRound: number, maxRounds: number, minPercentual: number): number | undefined{
+async function registerVoteAndUpdate(client: PrismaTransactionClient, id: string, vote: Vote, points?: number, nextRound: boolean = false){
+
+    const extraArgs = points ? ({points, active: false, finished:true}) : {};
+
+    return await client.task.update({
+        where: { id },
+        data: {
+            votes: {
+                create: {
+                    user: {
+                        connect: { email: vote.user.email }
+                    },
+                    points: vote.points,
+                    round: vote.round
+                }
+            },
+            currentRound: { increment: nextRound ? 1 : 0},
+            ...extraArgs
+        },
+        include: {
+            votes: {
+                select: voteIncludeSelect,
+                where: { round: { equals: vote.round } }
+            },
+            messages: {
+                select: messageIncludeSelect,
+            }
+        }
+    });
+}
+
+export function calcFinalPoints(votes: Vote[], currentRound: number, maxRounds: number, minPercentual: number): number | undefined{
     /** Número mínimo de votos concordantes para termos um consenso.*/
     const minFreq = votes.length * minPercentual;
 

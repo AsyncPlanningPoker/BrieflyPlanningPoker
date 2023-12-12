@@ -46,7 +46,6 @@ describe('Comment extension', () => {
         mockedPrisma.$transaction.mockImplementation(async data => await data(prisma));
 
         const task = await commentFunction(id, email, message);
-        console.log(task);
         expect(task).toStrictEqual(val2);
     });
 });
