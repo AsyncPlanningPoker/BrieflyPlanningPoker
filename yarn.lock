@@ -3085,6 +3085,7 @@ __metadata:
   resolution: "briefly@workspace:."
   dependencies:
     dotenv: "npm:^16.0.2"
+    vitest: "npm:^1.0.4"
   languageName: unknown
   linkType: soft
 

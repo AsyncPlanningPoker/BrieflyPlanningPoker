@@ -118,7 +118,7 @@ async function registerVoteAndUpdate(client: PrismaTransactionClient, id: string
 export function calcFinalPoints(votes: Vote[], currentRound: number, maxRounds: number, minPercentual: number): number | undefined{
     /** Número mínimo de votos concordantes para termos um consenso.*/
     const minFreq = votes.length * minPercentual;
-
+    
     /** Histograma com pontos: frequência */
     const hist = new Map<number, number>();
     for(const vote of votes)
@@ -140,9 +140,9 @@ export function calcFinalPoints(votes: Vote[], currentRound: number, maxRounds: 
     // Caso contrario, a funcao retorna undefined.
 }
 
-function validatePoints(points: number): void {
+export function validatePoints(points: number): void {
     if (!Number.isInteger(points) || points < 0){
-        throw new Error("Points can't be negative!");
+        throw new Error("Points must be integer and non negative!");
     }
 }
 
