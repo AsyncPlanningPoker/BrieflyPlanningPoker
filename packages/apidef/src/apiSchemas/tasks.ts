@@ -7,10 +7,16 @@ import { TaskSchema, VoteSchema, MessageSchema } from "../generated/zod";
  * Nao sei se precisa...*/
 export const findSchemaReq = z.object({}).strict();
 
+const messageOrVoteSchema = z.object({
+    round: z.number().int(),
+    user: z.object({ email: z.string().email() }),
+    createdAt: z.coerce.date()
+});
+
 /** Esquema para listar uma task - response */
 export const findSchemaRes = TaskSchema.extend({
-    votes: z.array(VoteSchema.omit({taskId: true})),
-    messages: z.array(MessageSchema.omit({taskId: true, id: true}))
+    votes: z.array(messageOrVoteSchema.extend({ points: z.number().int() })),
+    messages: z.array(messageOrVoteSchema.extend({ message: z.string() }))
 }).strict();
 
 /**
