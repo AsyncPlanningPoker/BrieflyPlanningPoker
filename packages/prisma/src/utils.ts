@@ -14,7 +14,7 @@ export type Vote = messageOrVote & { points: number }
 export type Message = messageOrVote & { message: string }
 
 const messageOrVoteIncludeSelect = {
-    userEmail: true,
+    user: { select: { email: true }},
     round: true,
     createdAt: true,
 };

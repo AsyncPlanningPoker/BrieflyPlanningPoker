@@ -1,6 +1,7 @@
-import { describe, expect, test, vi, it } from 'vitest'
+import { describe, expect, test, vi, afterAll } from 'vitest'
 import prisma from '../../../prisma-client'
-import mockedPrisma from '../../../__mocks__/prisma-client'
+import { type TaskWithRelations, loadTasks, clearDb } from '../../../__mocks__/prisma-client'
+
 import voteExtension, { calcFinalPoints, validatePoints } from './vote';
 import type { Vote } from '../../../utils';
 
@@ -37,10 +38,10 @@ const voteFunction = voteExtension(prisma as any);
  */
 
 const now = new Date();
-const userEmail = 'test@email.com';
+const email = 'test@email.com';
 const points = 1;
 const currentRound = 1;
-const tasks: any = [
+const tasks: TaskWithRelations[] = [
     {
         id: 'inactive',
         active: false,
@@ -53,11 +54,11 @@ const tasks: any = [
         points: null,
         name: 'New task',
         squadId: 'foo',
-        squad: { users: [{ user: { email: userEmail }}]},
+        squad: { users: [{ user: { email } }]},
         maxRounds: 3,
         percentual: .85,
-        votes: [],
-        messages: []
+        messages: [],
+        votes: []
     },
     {
         id: 'not_member',
@@ -89,10 +90,10 @@ const tasks: any = [
         points: null,
         name: 'New task',
         squadId: 'foo',
-        squad: { users: [{ user: { email: userEmail }}]},
+        squad: { users: [{ user: { email }}]},
         maxRounds: 3,
         percentual: .85,
-        votes: [{ createdAt: now, points: 1, round: 1, user: { email: userEmail }}],
+        votes: [{ createdAt: now, points: 1, round: 1, user: { email } }],
         messages: []
     },
     {
@@ -107,7 +108,7 @@ const tasks: any = [
         points: null,
         name: 'New task',
         squadId: 'foo',
-        squad: { users: [{ user: { email: userEmail }}, { user: { email: 'another@email.com' }}]},
+        squad: { users: [{ user: { email: 'another@email.com' }}, { user: { email }}]},
         maxRounds: 3,
         percentual: .85,
         votes: [],
@@ -125,10 +126,10 @@ const tasks: any = [
         points: null,
         name: 'New task',
         squadId: 'foo',
-        squad: { users: [{ user: { email: userEmail }}, { user: { email: 'another@email.com' }}]},
+        squad: { users: [{ user: { email: 'another@email.com' }}, { user: { email }}]},
         maxRounds: 3,
         percentual: .85,
-        votes: [{ createdAt: now, points: 1, round: 1, user: { email: 'another@email.com' }}],
+        votes: [{ createdAt: now, points: 1, round: 1, user: { email: 'another@email.com' } }],
         messages: []
     },
     {
@@ -143,10 +144,10 @@ const tasks: any = [
         points: null,
         name: 'New task',
         squadId: 'foo',
-        squad: { users: [{ user: { email: userEmail }}, { user: { email: 'another@email.com' }}]},
+        squad: { users: [{ user: { email: 'another@email.com' }}, { user: { email }}]},
         maxRounds: 3,
         percentual: .85,
-        votes: [{ createdAt: now, points: 80, round: 1, user: { email: 'another@email.com' }}],
+        votes: [{ createdAt: now, points: 80, round: 1, user: { email: 'another@email.com' } }],
         messages: []
     },
     {
@@ -161,140 +162,134 @@ const tasks: any = [
         points: null,
         name: 'New task',
         squadId: 'foo',
-        squad: { users: [{ user: { email: userEmail }},
+        squad: { users:[
+            { user: { email }},
             { user: { email: 'another_one@email.com' }},
             { user: { email: 'another_two@email.com' }},
         ]},
         maxRounds: 1,
         percentual: .85,
         votes: [
-            { createdAt: now, points: 80, round: 1, user: { email: 'another_one@email.com' }},
-            { createdAt: now, points: 80, round: 1, user: { email: 'another_two@email.com' }},
+            { createdAt: now, points: 80, round: 1, user:{ email: 'another_one@email.com' }},
+            { createdAt: now, points: 80, round: 1, user:{ email: 'another_two@email.com' }},
         ],
         messages: []
     },
 ];
-const aggFields = ['votes', 'messages'];
 
-mockedPrisma.$transaction.mockImplementation(async data => await data(prisma));
-mockedPrisma.task.findUniqueOrThrow.mockImplementation(({ where, include, select }) => {
-    const retTask = tasks.find((task: any) => where.id == task.id);
-    if(! retTask) throw new Error(`Can't find task with id ${where.id}`);
-    if(include)
-        for(const key of aggFields)
-            if(!(key in include)) delete retTask[key as keyof typeof retTask];
+loadTasks(tasks);
+afterAll(() => clearDb());
 
-    if(select)
-        for(const key in retTask)
-            if(!(key in aggFields) && !(key in select)) delete retTask[key as keyof typeof retTask];
-    
-    return retTask as any;
-});
-mockedPrisma.task.update.mockImplementation(({ data, where }) => {
-    let newVote = {...data.votes?.create } as any;
-    if(Object.keys(newVote).length != 0){
-        newVote.userEmail = newVote.user.connect.email;
-        newVote.createdAt = now;
-        delete newVote.user;
-    } else newVote = undefined;
-    const increment = (data.currentRound as any)?.increment ?? 0;
-    const retTask = tasks.findIndex((task: any) => task.id == where.id);
-    if(retTask < -1) throw new Error(`Can't find task with id ${where.id}`);
-    console.log(tasks[retTask]);
-    const currentRound = tasks[retTask].currentRound + increment;
-    tasks[retTask] = {...tasks[retTask], ...data, currentRound, votes: tasks[retTask].votes.concat(newVote ?? []) };
-    return retTask;
-});
-
-describe('Voting: when a user, with', () => {
+describe('Voting: when a user, with', async () => {
     describe('an invalid vote format tries to vote in any task', () => {
-        it('should raise an error', () => {
-            expect(() => voteFunction('consensus', userEmail, -1)).rejects.toThrow();
-            expect(() => voteFunction('consensus', userEmail, 0.5)).rejects.toThrow();
+        test('should raise an error', () => {
+            expect(() => voteFunction('consensus', email, -1)).rejects.toThrow();
+            expect(() => voteFunction('consensus', email, 0.5)).rejects.toThrow();
         });
     });
     describe('a valid vote format', () => {
         describe('tries to vote in an inactive task', () => {
-            it('should raise an error', () => {
-                expect(() => voteFunction('inactive', userEmail, points)).rejects.toThrow();
+            test('should raise an error', () => {
+                expect(() => voteFunction('inactive', email, points)).rejects.toThrow();
             });
         });
         describe('tries to vote in an active task', () => {
             describe('which squad he is not a member of', () => {
-                it('should raise an error', () => {
-                    expect(() => voteFunction('not_member', userEmail, points)).rejects.toThrow();
+                test('should raise an error', () => {
+                    expect(() => voteFunction('not_member', email, points)).rejects.toThrow();
                 });
             });
             describe('which squad he is a member of', () => {
                 describe('while having already voted this round', () => {
-                    it('should raise an error', () => {
-                        expect(() => voteFunction('already_voted', userEmail, points)).rejects.toThrow();
+                    test('should raise an error', () => {
+                        expect(() => voteFunction('already_voted', email, points)).rejects.toThrow();
                     });
                 });
                 describe('while not having voted this round yet', () => {
                     describe('and somebody else still has to vote this round', async () => {
-                        await voteFunction('someone_left', userEmail, points);
+                        await voteFunction('someone_left', email, points);
                         const votedTask = await prisma.task.findUniqueOrThrow({
-                            where: { id: 'someone_left' }, include: { votes: true }});
-                        it('should register the user vote', async () => {
+                            where: { id: 'someone_left' },
+                            include: { votes: { select: {
+                                user: { select: { email: true }},
+                                round: true,
+                                points: true
+                            }}}});
+                        test('should register the user vote', async () => {
                             const userVote = votedTask.votes.find(
-                                (vote) => vote.userEmail == userEmail && vote.round == currentRound);
+                                (vote) => vote.user.email == email && vote.round == currentRound);
                             expect(userVote).toMatchObject({
                                 points,
-                                userEmail,
+                                user: { email },
                                 round: currentRound
                             });
                         });
                         describe('it should not change', () => {
-                            it('the tasks current round', () => expect(votedTask.currentRound).toBe(currentRound));
-                            it('the tasks status', () => expect(votedTask.active).toBe(true));
-                            it('the tasks points', () => expect(votedTask.points).toBeNull());
+                            test('the tasks current round', () => expect(votedTask.currentRound).toBe(currentRound));
+                            test('the tasks status', () => expect(votedTask.active).toBe(true));
+                            test('the tasks points', () => expect(votedTask.points).toBeNull());
                         });
                     });
                     describe('and everybody else has already voted this round', () => {
                         describe('and a consensus is to be reached', async () => {
-                            await voteFunction('consensus', userEmail, points);
+                            await voteFunction('consensus', email, points);
                             const votedTask = await prisma.task.findUniqueOrThrow({
-                                where: { id: 'consensus' }, include: { votes: true }});
-
-                            it('it should not change the current round', () => {
+                                where: { id: 'consensus' }, 
+                                include: { votes: { select: {
+                                    user: { select: { email: true }},
+                                    round: true,
+                                    points: true
+                                }}}});
+                            test('it should not change the current round', () => {
                                 expect(votedTask.currentRound).toBe(currentRound);
                             });
                             describe('it should set', () => {
-                                it('the tasks status to finished', () => {
+                                test('the tasks status to finished', () => {
                                     expect(votedTask.active).toBe(false);
                                     expect(votedTask.finished).toBe(true);
                                 });
-                                it('the tasks points to the the most picked option', () => {
+                                test('the tasks points to the the most picked option', () => {
                                     expect(votedTask.points).toBe(points);
                                 });
                             });
                         });
                         describe('but a consensus is not to be reached', () => {
                             describe('and the current round is not the last possible', async () => {
-                                await voteFunction('rounds_left', userEmail, points);
+                                await voteFunction('rounds_left', email, points);
                                 const votedTask = await prisma.task.findUniqueOrThrow({
-                                    where: { id: 'rounds_left' }, include: { votes: true }});
-                                it('should increment the current round by one', () => {
+                                    where: { id: 'rounds_left' },
+                                    include: { votes: { select: {
+                                        user: { select: { email: true }},
+                                        round: true,
+                                        points: true
+                                    }}}});
+
+                                test('should increment the current round by one', () => {
                                     expect(votedTask.currentRound).toBe(currentRound + 1);
                                 });
                                 describe('it should not change', () => {
-                                    it('the tasks status', () => expect(votedTask.active).toBe(true));
-                                    it('the tasks points', () => expect(votedTask.points).toBeNull());
+                                    test('the tasks status', () => expect(votedTask.active).toBe(true));
+                                    test('the tasks points', () => expect(votedTask.points).toBeNull());
                                 });
                             });
                             describe('and the current round is the last possible', async () => {
-                                await voteFunction('max_rounds', userEmail, points);
+                                await voteFunction('max_rounds', email, points);
                                 const votedTask = await prisma.task.findUniqueOrThrow({
-                                    where: { id: 'max_rounds' }, include: { votes: true }});
-                                it('it should not change the current round', () => {
+                                    where: { id: 'max_rounds' },
+                                    include: { votes: { select: {
+                                        user: { select: { email: true }},
+                                        round: true,
+                                        points: true
+                                    }}}});
+
+                                test('it should not change the current round', () => {
                                     expect(votedTask.currentRound).toBe(currentRound);
                                 });
-                                it('the tasks status to finished', () => {
+                                test('the tasks status to finished', () => {
                                     expect(votedTask.active).toBe(false);
                                     expect(votedTask.finished).toBe(true);
                                 });
-                                it('the tasks points to the the most picked option', () => {
+                                test('the tasks points to the the most picked option', () => {
                                     expect(votedTask.points).toBe(80);
                                 });
                             });
@@ -307,14 +302,14 @@ describe('Voting: when a user, with', () => {
 });
 
 describe('The "validatePoints" function', () => {
-    it('should return void if the number is a non negative integer', () => {
+    test('should return void if the number is a non negative integer', () => {
         expect(validatePoints(3)).toBeUndefined();
         expect(validatePoints(0)).toBeUndefined();
     });
-    it('should throw an error if the number is not an integer', () => {
+    test('should throw an error if the number is not an integer', () => {
         expect(() => validatePoints(.3)).toThrow();
     });
-    it('should throw an error if the number is negative', () => {
+    test('should throw an error if the number is negative', () => {
         expect(() => validatePoints(-1)).toThrow();
         expect(() => validatePoints(-0.5)).toThrow();
     });
@@ -330,15 +325,15 @@ describe('The "calcFinalPoints" function', () => {
     ];
     const currentRound = 1;
     describe('if a consensus has been reached', () => {
-        it('should return the points that have been picked most often', () => {
+        test('should return the points that have been picked most often', () => {
             expect(calcFinalPoints(votes, currentRound, 2, .6)).toBe(1);
         });
     });
     describe('if a consensus has not been reached', () => {
-        it('and the max number of rounds was reached, should return the points that were picked most often', () => {
+        test('and the max number of rounds was reached, should return the points that were picked most often', () => {
             expect(calcFinalPoints(votes, currentRound, 1, .8)).toBe(1);
         });
-        it('and the max number of rounds was not reached, should return undefined', () => {
+        test('and the max number of rounds was not reached, should return undefined', () => {
             expect(calcFinalPoints(votes, currentRound, 2, .8)).toBeUndefined();
         });
     });
