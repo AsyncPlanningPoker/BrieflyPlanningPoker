@@ -29,6 +29,6 @@ describe('[POST] /squads', () => {
         expect(res.body).toMatchObject({
             id: expect.any(String),
             ...squad
-        })
+        });
     });
 });
