@@ -9,7 +9,8 @@
   },
   "scripts": {
     "prep": "yarn install && yarn prisma:up",
-    "all": "yarn prep && yarn workspaces foreach install"
+    "all": "yarn prep && yarn workspaces foreach install",
+    "test:integration": "vitest -c ./vitest.config.integration.ts --run --coverage"
   },
   "workspaces": [
     "packages/*"
@@ -19,6 +20,10 @@
   },
   "packageManager": "yarn@4.0.2",
   "devDependencies": {
+    "@types/supertest": "^2.0.16",
+    "@vitest/coverage-istanbul": "^1.0.4",
+    "@vitest/coverage-v8": "^1.0.4",
+    "supertest": "^6.3.3",
     "vitest": "^1.0.4"
   }
 }

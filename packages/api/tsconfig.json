@@ -19,6 +19,7 @@
   "include": [
     "./src/**/*.ts",
   ],
+  "exclude": ["./src/**/*.test.ts",],
   "references": [
     {"path": "../prisma"},
     {"path": "../apidef"}
