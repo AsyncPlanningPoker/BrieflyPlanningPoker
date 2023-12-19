@@ -17,8 +17,8 @@ const find: TasksHandler<"get", "/:taskId"> = async (req, res, next) => {
     const task = await prisma.task.findUniqueOrThrow({
       where: { id: taskId },
       include: {
-        messages: true,
-        votes: true
+        messages: { select: { createdAt: true, message: true, round: true, user: { select: { email: true }}}},
+        votes: { select: { createdAt: true, points: true, round: true, user: { select: { email: true }}}}
       }
     });
     return res.status(200).json(task);
@@ -34,8 +34,8 @@ const deactivate: TasksHandler<"put", "/:taskId"> = async (req, res, next) => {
       where: { id: taskId },
       data: { active: false },
       include: {
-        messages: true,
-        votes: true
+        messages: { select: { createdAt: true, message: true, round: true, user: { select: { email: true }}}},
+        votes: { select: { createdAt: true, points: true, round: true, user: { select: { email: true }}}}
       }
     });
 
@@ -54,8 +54,8 @@ const del: TasksHandler<"delete", "/:taskId"> = async (req, res, next) => {
     const task = await prisma.task.delete({
       where: { id: taskId },
       include: {
-        messages: true,
-        votes: true
+        messages: { select: { createdAt: true, message: true, round: true, user: { select: { email: true }}}},
+        votes: { select: { createdAt: true, points: true, round: true, user: { select: { email: true }}}}
       }
     });
     return res.status(200).json(task);

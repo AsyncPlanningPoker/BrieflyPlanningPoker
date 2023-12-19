@@ -3,7 +3,13 @@ import taskExtensions from './extensions/models/task';
 import * as crypt from './extensions/crypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-const prisma = new PrismaClient({ log: ['warn', 'error'] })
+const envVars = process.env;
+
+const datasourceUrl = envVars.NODE_ENV == 'test' ?
+`postgres://${envVars.POSTGRES_USER}:${envVars.POSTGRES_PASSWORD}@localhost:5432/${envVars.POSTGRES_DB}` :
+undefined
+
+const prisma = new PrismaClient({log: ['warn', 'error'], datasourceUrl})
 .$extends({
     query: {
         task: {
@@ -54,8 +60,8 @@ const prisma = new PrismaClient({ log: ['warn', 'error'] })
              */
             async authenticate(email: string, password: string): Promise<boolean>{
                 try{
-                    const user = await Prisma.getExtensionContext(this)
-                        .$parent.user.findUniqueOrThrow({ where: { email } });
+                    const user = await Prisma.getExtensionContext(this).
+                    $parent.user.findUniqueOrThrow({ where: { email } });
                     
                     return await crypt.compare(password, user.password);
                 } catch(e: unknown){
@@ -71,3 +77,4 @@ const prisma = new PrismaClient({ log: ['warn', 'error'] })
 });
 
 export default prisma;
+export type PrismaExtended = typeof prisma;

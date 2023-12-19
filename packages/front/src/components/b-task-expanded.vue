@@ -71,12 +71,12 @@ const votable = computed(() => {
   const currentRound = rounds.value[task.value.currentRound];
   if(! currentRound) return true; 
   if(! task.value.active) return false;
-  return ! currentRound.some((action) => taskSchemas.isVote(action) && action.userEmail == user.email);
+  return ! currentRound.some((action) => taskSchemas.isVote(action) && action.user.email == user.email);
 });
 
 function isHidden(action: taskSchemas.Action): boolean {
   return !!task.value?.active &&
-    action.userEmail != user.email &&
+    action.user.email != user.email &&
     action.round == task.value?.currentRound;
 }
 
