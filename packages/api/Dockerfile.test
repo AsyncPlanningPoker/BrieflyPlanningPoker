@@ -1,0 +1,11 @@
+FROM node:18
+
+ADD . app/
+WORKDIR /app/
+ENV DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
+RUN yarn install
+RUN yarn prisma 
+
+ENTRYPOINT [ "/bin/sh", "cd packages/api/dist && node ./index.js" ]
+
+EXPOSE 8000

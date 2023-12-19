@@ -9,8 +9,7 @@ services:
     command: make api-startup
     ports:
       - 8000:8000
-    env_file:
-      - .env.test
+    env_file: .env.test
     volumes:
       - .:/app
     depends_on:
@@ -20,5 +19,6 @@ services:
     container_name: db
     image: postgres
     restart: always
-    env_file:
-      - .env.test
+    ports:
+      - 5432:5432
+    env_file: .env.test

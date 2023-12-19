@@ -4,4 +4,3 @@ api-startup:
 
 front-startup:
 	cd packages/front && yarn install && yarn start
-	
