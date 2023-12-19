@@ -1,7 +1,7 @@
 node_modules
-.env.test
 .env.dev
 .env.prod
+.env
 dist
 .DS_Store
 coverage
