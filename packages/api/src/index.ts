@@ -13,6 +13,7 @@ import { CustomError, handler as errorHandler } from './middlewares/error';
 import routes from './routes';
 import { handler } from './middlewares/authorization';
 import { bearerAuthScheme, openApiBuilder } from '@zodios/openapi';
+import { resolve } from 'path';
 
 function listen(): void {
   app.listen(port, () => {
@@ -46,8 +47,9 @@ function setMiddlewares() {
   app.use("/docs", setup(undefined, {swaggerUrl: "/docs/swagger.json"}));
 }
 
+const path = process.env.TEST_ENV ? resolve(process.cwd(), './.env.test') : undefined;
 
-expand(dotenv.config());
+expand(dotenv.config({ path }));
 const port = process.env.PORT ?? 8000;
 
 const app: ZodiosApp<ApiDef, Context> = context.app(apiDef, {transform: true });
