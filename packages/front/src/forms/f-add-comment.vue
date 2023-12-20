@@ -1,58 +1,24 @@
 <template>
-  <Form
-    ref="form"
-    :validation-schema="schema"
-    @submit="onSubmit"
-  >
-    <BInputField
-      color="gray-30"
-      label="Write a comment"
-      name="addComment"
-    >
-      <BTextArea
-        name="addComment"
-        type="text"
-        @keyup.enter="onKeyup"
-      />
-    </BInputField>
-  </Form>
+  <BForm :schema="schema" @submit="onSubmit">
+    <BInput label="Write a comment" color="gray-30" name="message" type="textarea"/>
+  </BForm>
 </template>
 
-<script>
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
+<script setup lang="ts">
+import BInput from '@/components/b-input.vue';
+import BForm from '@/components/b-form.vue';
+import { taskSchemas } from '@briefly/apidef';
+import { taskStore } from '@/stores';
 
-import BInputField from '../components/b-input-field.vue';
-import BTextArea from '../components/b-text-area.vue';
+const schema = taskSchemas.messageSchemaReq;
+const task = taskStore();
 
-export default {
-  name: 'FAddComment',
+const emit = defineEmits<{
+  (event: 'comment', message: string): Promise<void>
+}>();
 
-  components: {
-    BInputField,
-    BTextArea,
-    Form,
-  },
-
-  methods: {
-    onKeyup() {
-      this.$refs.form.$el.dispatchEvent(new Event('submit', { cancelable: true }));
-    },
-  },
-};
-</script>
-
-<script setup>
-const emit = defineEmits(['comment']);
-
-function onSubmit(event) {
-  emit('comment', event.addComment);
-  /* eslint-disable no-undef */
-  addComment.value = null;
-  addComment.blur();
+async function onSubmit(data : { message: string }) {
+  await task.comment(data.message);
+  emit('comment', data.message);
 }
-
-const schema = Yup.object().shape({
-  addComment: Yup.string().min(1).max(180).trim(),
-});
 </script>

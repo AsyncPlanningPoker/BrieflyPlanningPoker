@@ -1,49 +1,23 @@
 <template>
-  <div
-    class="b-divisor"
-    :class="`b-divisor--${color}`"
-  >
-    <div
-      v-if="button"
-      class="b-divisor__button"
-      :class="`b-divisor__button--${color}`"
-      @click="toggle"
-    >
-      <font-awesome-icon
-        v-show="!toggled"
-        icon="fa-solid fa-circle-chevron-down"
-      />
-      <font-awesome-icon
-        v-show="toggled"
-        icon="fa-solid fa-circle-chevron-up"
-      />
+  <div class="b-divisor" :class="`b-divisor--${color}`">
+    <div v-if="button" class="b-divisor__button" :class="`b-divisor__button--${color}`" @click="toggle">
+      <font-awesome-icon v-show="!toggled" icon="fa-solid fa-circle-chevron-down" />
+      <font-awesome-icon v-show="toggled" icon="fa-solid fa-circle-chevron-up" />
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { defineEmits, ref } from 'vue';
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
 
-export default {
-  name: 'BDivisor',
+withDefaults(
+  defineProps<{
+    button?: boolean,
+    color?: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
+}>(), { color: 'black', button: false }
+);
 
-  props: {
-    button: {
-      type: Boolean,
-      default: false,
-    },
-    color: {
-      type: String,
-      default: 'black',
-      validator: shouldBeOneOf(['primary', 'white', 'gray-10', 'gray-20', 'gray-30', 'black']),
-    },
-  },
-};
-</script>
-
-<script setup>
-const emit = defineEmits(['action']);
+const emit = defineEmits<{ (event: 'action'): void }>();
 
 const toggled = ref(false);
 const toggle = () => {

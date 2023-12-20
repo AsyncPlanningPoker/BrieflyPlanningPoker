@@ -1,0 +1,117 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "jplukas",
+      "name": "João Pedro Lukasavicus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8060581?v=4",
+      "profile": "https://github.com/jplukas",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lulcca",
+      "name": "lucca jacomassi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56274210?v=4",
+      "profile": "https://github.com/lulcca",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "igorney",
+      "name": "Igor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48994130?v=4",
+      "profile": "https://www.linkedin.com/in/igor-santos-ufabc/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rafaelhs-debug",
+      "name": "Rafael Henrique Siqueira Silva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55901457?v=4",
+      "profile": "http://linktree.com.br/new/RafaHenrique",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Ingrid27",
+      "name": "Ingrid Pacheco Batista",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38013208?v=4",
+      "profile": "https://github.com/Ingrid27",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bachiari",
+      "name": "bachiari",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58713326?v=4",
+      "profile": "https://github.com/bachiari",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lineconquista",
+      "name": "Aline Conquista ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/71647583?v=4",
+      "profile": "https://github.com/lineconquista",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LeTrovoes",
+      "name": "Leandro Trovões",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25932176?v=4",
+      "profile": "https://github.com/LeTrovoes",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "thenriique",
+      "name": "Thiago Henrique",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58703497?v=4",
+      "profile": "https://github.com/thenriique",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Will0890",
+      "name": "Will0890",
+      "avatar_url": "https://avatars.githubusercontent.com/u/138529252?v=4",
+      "profile": "https://github.com/Will0890",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "isamaues",
+      "name": "isamaues",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42849591?v=4",
+      "profile": "https://github.com/isamaues",
+      "contributions": [
+        "projectManagement",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "BrieflyPlanningPoker",
+  "projectOwner": "BrieflyPlanningPokerES23"
+}

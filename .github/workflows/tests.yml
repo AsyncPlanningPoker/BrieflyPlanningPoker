@@ -1,0 +1,22 @@
+name: Tests
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:                        
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Set up yarn
+        shell: bash
+        run: corepack enable
+        
+      - name: Install dependencies
+        shell: bash
+        run: yarn
+
+      - name: Run unit tests
+        shell: bash
+        run: yarn test:unit --run --coverage

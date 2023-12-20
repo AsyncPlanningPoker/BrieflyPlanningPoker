@@ -1,39 +1,32 @@
+import { ZodiosApp, zodiosApp } from '@zodios/express';
 import express, { NextFunction, Request, Response } from 'express';
-import { CustomError } from './middlewares/error/error';
-import * as error from './middlewares/error/handler';
-import { FactoryStore } from '@briefly/store';
 import bodyParser from 'body-parser';
-import routes from './routes/index';
 import * as dotenv from 'dotenv';
+import { expand } from 'dotenv-expand'
 import morgan from 'morgan';
 import cors from 'cors';
+import { serve, setup } from 'swagger-ui-express'
+import { apiDef, type ApiDef } from '@briefly/apidef';
+
+import context, { type Context } from './context';
+import { CustomError, handler as errorHandler } from './middlewares/error';
+import routes from './routes';
+import { handler } from './middlewares/authorization';
+import { bearerAuthScheme, openApiBuilder } from '@zodios/openapi';
+import { resolve } from 'path';
 
 function listen(): void {
-  if (require.main === module) {
-    app.listen(port, () => {
-      console.log(`BrieflyPlanningPoker app  listening at ${port} port`);
-    });
-  }
-}
-
-function setDb() {
-  const factory = new FactoryStore();
-  const { close, userDbStore, squadDbStore, taskDbStore, votingDbStore } = factory.createStores();
-  app.set('userDbStore', userDbStore);
-  app.set('squadDbStore', squadDbStore);
-  app.set('taskDbStore', taskDbStore);
-  app.set('votingDbStore', votingDbStore);
-  return close;
+  app.listen(port, () => {
+    console.log(`BrieflyPlanningPoker app  listening at ${port} port`);
+  });
 }
 
 function setExit(): void {
   process.on('SIGTERM', () => {
-    close();
     process.exit(0);
   });
 
   process.on('SIGINT', () => {
-    close();
     process.exit(0);
   });
 }
@@ -41,27 +34,38 @@ function setExit(): void {
 function setMiddlewares() {
   app.use(morgan('tiny'));
   app.use(cors());
-
-  app.use(
-    bodyParser.urlencoded({
-      extended: true,
-    })
-  );
-
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(express.json());
-  app.use(routes);
-  app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
-    error.handler(err, res);
+  app.use(handler);
+  app.use("/api", routes);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  app.use((err: Error | CustomError, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, res);
   });
+  app.use("/docs/swagger.json", (_, res) => res.json(doc));
+  app.use("/docs", serve);
+  app.use("/docs", setup(undefined, {swaggerUrl: "/docs/swagger.json"}));
 }
 
-dotenv.config();
-const app = express();
-const port = process.env.PORT || 8000;
-const close = setDb();
+const path = process.env.TEST_ENV ? resolve(process.cwd(), './.env.test') : undefined;
+
+expand(dotenv.config({ path }));
+const port = process.env.PORT ?? 8000;
+
+const app: ZodiosApp<ApiDef, Context> = context.app(apiDef, {transform: true });
+
+const doc = openApiBuilder({
+  title: "Briefly Planning Poker API",
+  version: "1.0.0",
+  description: "The API for the Briefly Planning Poker application"
+})
+  .addServer({url: "/api"})
+  .addSecurityScheme("Bearer token", bearerAuthScheme())
+  .addProtectedApi("Bearer token", apiDef)
+  .build()
 
 setMiddlewares();
 setExit();
 listen();
 
-export default app;
+export default app ;

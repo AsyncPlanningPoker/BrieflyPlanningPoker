@@ -1,194 +1,85 @@
 <template>
   <div class="b-task-expanded">
     <div class="b-task-expanded__leave-wrapper">
-      <BButton
-        size="small"
-        variant="inverted"
-        value="x"
-        @click="$emit('close')"
-      />
+      <BButton size="small" variant="inverted" value="x" @click="$emit('close')" />
     </div>
-
-    <BText
-      align="center"
-      class="b-task-expanded__title"
-      color="black"
-      size="giant"
-      tag="h1"
-    >
-      {{ task.task }}
+    <BText align="center" class="b-task-expanded__title" color="black" size="giant" tag="h1">
+      {{ task?.name }}
     </BText>
-
-    <BText
-      align="left"
-      class="b-task-expanded__wrapper"
-      color="gray-30"
-      size="medium"
-    >
-      {{ task.description }}
+    <BText align="left" class="b-task-expanded__wrapper" color="gray-30" size="medium">
+      {{ task?.description }}
     </BText>
-
-    <div
-      id="comment-box"
-      class="b-task-expanded__wrapper b-task-expanded__comments"
-    >
-      <template
-        v-for="round in rounds"
-        :key="round"
-      >
-        <BText
-          align="center"
-          color="gray-20"
-          size="medium"
-        >
-          Round: {{ round }}
+    <div id="comment-box" class="b-task-expanded__wrapper b-task-expanded__comments" >
+      <template v-for="(actions, round) in rounds" :key="round">
+        <BText align="center" color="gray-20" size="medium">
+          Round: {{ round + 1 }}
         </BText>
-
         <BDivisor color="gray-20" />
-
-        <template
-          v-for="action in task.actions"
-          :key="action.date"
-        >
-          <BComment
-            v-if="action.round === round"
-            :author="action.user"
-            :content="action.content"
-            :date="formatDate(action.date)"
-            :type="action.type"
-            :hidden="action.currentRound"
-          />
+        <template v-for="action in actions" :key="action.date">
+          <BComment :action="action"
+            :hidden="isHidden(action)" />
         </template>
       </template>
     </div>
-
-    <div
-      v-if="finished"
-      class="b-task-expanded__wrapper"
-    >
-      <FAddComment @comment="comment" />
+    <div v-if="! task?.finished" class="b-task-expanded__wrapper">
+      <FAddComment @comment="message" />
     </div>
-
-    <div
-      v-if="finished"
-      class="b-task-expanded__wrapper"
-    >
+    <div v-if="! task?.finished" class="b-task-expanded__wrapper">
       <div class="b-task-expanded__card-container">
-        <BCard
-          v-for="fibo in fibonacci"
-          :active="votable"
-          :key="fibo"
-          :value="fibo"
-          @click="vote(fibo)"
-        />
+        <BCard v-for="fibo in fibonacci" :active="votable" :key="fibo" :value="fibo" @click="taskS.vote(fibo)" />
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { useStore } from 'vuex';
-import { api } from '../services/api';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { taskSchemas } from '@briefly/apidef';
 
-import BButton from '../components/b-button.vue';
-import BCard from '../components/b-card.vue';
-import BComment from '../components/b-comment.vue';
-import BDivisor from '../components/b-divisor.vue';
-import BText from '../components/b-text.vue';
+import FAddComment from '@/forms/f-add-comment.vue';
+import BButton from './b-button.vue';
+import BCard from './b-card.vue';
+import BComment from './b-comment.vue';
+import BDivisor from './b-divisor.vue';
+import BText from './b-text.vue';
+import { taskStore, userStore } from '@/stores';
 
-import FAddComment from '../forms/f-add-comment.vue';
+const user = userStore();
+const taskS = taskStore();
+const task = computed(() => taskS.activeTask);
 
-export default {
-  name: 'BTaskExpanded',
+function message(message: string){
+  // console.log(message);
+}
 
-  components: {
-    BButton,
-    BCard,
-    BComment,
-    BDivisor,
-    BText,
-    FAddComment,
-  },
+defineEmits<{ (event: 'close'): void }>();
 
-  emits: ['close'],
+const fibonacci = [1, 2, 3, 5, 8, 13];
+const rounds = computed(() => {
+  if(! task.value) throw new Error("No active task!");
+  const ret = new Array<taskSchemas.Action[]>(task.value.currentRound);
+  for(let i = 0; i < task.value.currentRound; i++){
+    ret[i] = [...task.value.votes, ...task.value.messages]
+      .filter((action) => action.round == i + 1)
+      .sort((i1, i2) => i1.createdAt.getUTCMilliseconds() - i2.createdAt.getUTCMilliseconds());
+  }
+  return ret;
+});
 
-  props: {
-    taskId: {
-      type: String,
-      required: true,
-    },
-    squadId: {
-      type: String,
-      required: true,
-    },
-  },
+const votable = computed(() => {
+  if(! task.value) throw new Error("No active task!");
+  const currentRound = rounds.value[task.value.currentRound];
+  if(! currentRound) return true; 
+  if(! task.value.active) return false;
+  return ! currentRound.some((action) => taskSchemas.isVote(action) && action.user.email == user.email);
+});
 
-  data() {
-    return {
-      task: {},
-      rounds: [],
-      fibonacci: [1, 2, 3, 5, 8, 13],
-      votable: true,
-      finished: false,
-      actualRound: 0,
-    };
-  },
+function isHidden(action: taskSchemas.Action): boolean {
+  return !!task.value?.active &&
+    action.user.email != user.email &&
+    action.round == task.value?.currentRound;
+}
 
-  computed: {
-    userEmail() {
-      return useStore().getters.getUserEmail;
-    },
-
-    formatDate() {
-      return (date) => {
-        return new Date(date).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-      };
-    },
-  },
-
-  methods: {
-    async vote(point) {
-      if (this.votable) {
-        await api.post(`/squad/${this.squadId}/task/${this.taskId}/vote`, { points: point }).catch((err) => {
-          console.log(err.response.data.message);
-        });
-        this.load();
-      }
-    },
-
-    async comment(message) {
-      await api.post(`/squad/${this.squadId}/task/${this.taskId}/message`, { message: `${message}` }).catch((err) => {
-        console.log(err.response.data.message);
-      });
-      this.load();
-    },
-
-    async load() {
-      await api
-        .get(`/squad/${this.squadId}/task/${this.taskId}`)
-        .then((res) => {
-          this.task = res.data;
-          this.rounds = [...new Set(this.task.actions.map((e) => e.round))];
-          this.finished = !this.task.finished;
-          this.task.actions.every((x) => (this.votable = this.eligible(x)));
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-        });
-      const box = document.getElementById('comment-box');
-      box.scroll({ top: box.scrollHeight, behavior: 'smooth' });
-    },
-
-    eligible(person) {
-      return !(person.type === 'vote' && person.currentRound === true && person.email === this.userEmail);
-    },
-  },
-
-  mounted() {
-    this.userEmail;
-    this.load();
-  },
-};
 </script>
 
 <style lang="scss" scoped>

@@ -1,26 +1,13 @@
 <template>
-  <div
-    class="b-container"
-    :class="`b-container--${color}`"
-  >
+  <div class="b-container" :class="`b-container--${color}`">
     <slot />
   </div>
 </template>
 
-<script>
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
-
-export default {
-  name: 'BContainer',
-
-  props: {
-    color: {
-      type: String,
-      default: 'black',
-      validator: shouldBeOneOf(['primary', 'white', 'gray-10', 'gray-20', 'gray-30', 'black']),
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  color?: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black'
+}>(),{ color: 'black' });
 </script>
 
 <style scoped lang="scss">

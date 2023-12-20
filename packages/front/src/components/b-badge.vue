@@ -1,32 +1,17 @@
 <template>
   <div class="b-badge">
-    <BText
-      color="white"
-      size="medium"
-    >
+    <BText color="white" size="medium">
       <slot />
     </BText>
-
-    <font-awesome-icon
-      class="b-badge__xmark"
-      icon="fa-solid fa-xmark"
-      @click="$emit('action')"
-    />
+    <font-awesome-icon class="b-badge__xmark" icon="fa-solid fa-xmark" @click="$emit('action')" />
   </div>
 </template>
 
-<script>
-import BText from '../components/b-text.vue';
+<script setup lang="ts">
+import BText from './b-text.vue';
 
-export default {
-  name: 'BBadge',
+defineEmits<{ (event: 'action'): any }>();
 
-  components: {
-    BText,
-  },
-
-  emits: ['action'],
-};
 </script>
 
 <style lang="scss" scoped>

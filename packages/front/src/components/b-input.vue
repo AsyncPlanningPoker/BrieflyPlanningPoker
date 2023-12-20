@@ -1,60 +1,70 @@
 <template>
-  <div class="b-input__wrapper">
-    <input
-      class="b-input"
-      :id="name"
-      :max="max"
-      :min="min"
-      :name="name"
-      :placeholder="placeholder"
-      :step="step"
-      :type="type"
-      :value="value"
-    >
+  <div class="b-input-field">
+    <div class="b-input-field__label">
+      <BText :for="name" :color="color" tag="label">
+        {{ label }}
+      </BText>
+      <BText v-if="link" color="link" tabindex="-1" tag="a" :href="link[0]">
+        {{ link[1] }}
+      </BText>
+    </div>
+
+    <div>
+      <div v-if="type === 'textarea'" class="b-text-area__wrapper">
+        <textarea class="b-text-area" :id="name" :name="name" :placeholder="placeholder" :row="row" v-model="model" />
+      </div>
+      <div v-else class="b-input__wrapper">
+        <input class="b-input" :id="name" :max="max" :min="min" :name="name"
+          :placeholder="placeholder" :step="step" :type="type" v-model="model" />
+      </div>
+    </div>
+
+    <BText class="error" color="error" size="small" tag="div">
+      {{ errorMessage }}
+    </BText>
   </div>
 </template>
 
-<script>
-import { shouldBeOneOf } from 'vue-prop-validation-helper';
+<script setup lang="ts">
+import { inject, ref, type Ref } from 'vue';
+import BText from './b-text.vue';
+import { onMounted } from 'vue';
 
-export default {
-  name: 'BInput',
+ const props = withDefaults(defineProps<{
+    name: string
+    color?: 'primary' | 'accent' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black' | 'link' | 'error' | 'success',
+    initial?: string | number | { d: number[]; e: number; s: number; toFixed: () => string },
+    label: string
+    link?: [string, string],
+    max?: number,
+    min?: number,
+    placeholder?: string,
+    step?: number,
+    type?: 'email' | 'number' | 'password' | 'text' | 'textarea',
+    row?: number
+  }>(), { color: 'white', type: 'text'});
+  
+  const model = inject<Ref<any>>(`Data: ${props.name}`);
+  const errorMessage = inject<Readonly<Ref<string>>>(`Error: ${props.name}`);
 
-  props: {
-    max: {
-      type: Number,
-      default: undefined,
-    },
-    min: {
-      type: Number,
-      default: undefined,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      default: undefined,
-    },
-    step: {
-      type: Number,
-      default: undefined,
-    },
-    type: {
-      type: String,
-      default: 'text',
-      validator: shouldBeOneOf(['email', 'number', 'password', 'text']),
-    },
-    value: {
-      type: [String, Number],
-      default: undefined,
-    },
-  },
-};
+  onMounted(()=>{
+    if(model && props.initial) model.value = props.initial;
+  });
+  
 </script>
 
 <style scoped lang="scss">
+.b-input-field {
+  display: grid;
+  font-family: var(--font-family);
+  font-size: var(--unit-0400);
+  row-gap: var(--unit-0200);
+}
+
+.b-input-field__label {
+  display: flex;
+  justify-content: space-between;
+}
 .b-input {
   background-color: transparent;
   border: none;
@@ -70,6 +80,23 @@ export default {
   border-radius: var(--unit-0100);
   display: flex;
   height: var(--unit-1000);
+  justify-content: start;
+}
+
+.b-text-area {
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  padding: var(--unit-0200);
+  resize: vertical;
+  width: 100%;
+}
+
+.b-text-area__wrapper {
+  background-color: var(--color-white);
+  border-radius: var(--unit-0100);
+  display: flex;
   justify-content: start;
 }
 </style>

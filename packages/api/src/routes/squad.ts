@@ -1,136 +1,210 @@
-import { CustomError } from '../middlewares/error/error';
-import { NextFunction, Request, Response } from 'express';
-import { randomUUID } from 'crypto';
+import prisma from '@briefly/prisma';
+import { type ZodiosRequestHandler } from '@zodios/express';
+import type { Method, ZodiosPathsByMethod } from '@zodios/core';
+import { squadsAPI, type SquadsAPI } from '@briefly/apidef';
+import context, { type Context } from '../context'
+import { mustAuth } from '../middlewares/authorization';
+import * as sse from 'sse';
 
-async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squad = {
-    id: randomUUID(),
-    name: req.body.name,
-    currentMaxRounds: req.body.currentMaxRounds,
-    currentPercentual: req.body.currentPercentual,
-  };
+type SquadsHandler<M extends Method, Path extends ZodiosPathsByMethod<SquadsAPI, M>> =
+  ZodiosRequestHandler<SquadsAPI, Context, M, Path>;
 
-  const db = req.app.get('squadDbStore');
+const squadsRouter = context.router(squadsAPI);
 
+const create: SquadsHandler<"post", ""> = async (req, res, next) => {
+  const data = req.body;
   try {
-    await db
-      .create(squad)
-      .then(() => {
-        return res.status(201).json({ id: squad.id });
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const squad = await prisma.squad.create({
+      data,
+      include: {
+        users: { select: { user: { select: {
+          name: true,
+          email: true,
+          enabled: true,
+          createdAt: true,
+          updatedAt: true
+        }}}}
+      }
+    });
+    return res.status(201).json(squad);
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+const find: SquadsHandler<"get", "/:squadId"> = async (req, res, next) => {
+  const id = req.params.squadId;
+
+  try {
+    const squad = await prisma.squad
+      .findUniqueOrThrow({
+        where: { id },
+        include: {
+          users: { select: { user: { select: {
+            name: true,
+            email: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}}
+        }
+      });
+      return res.status(200).json(squad);
+  } catch (error: unknown) {
+    next(error);
+  }
+}
+
+const findAll: SquadsHandler<"get", ""> = async(req, res, next) => {
+  const { email } = req.user;
+
+  try {
+    const squads = await prisma.squad
+      .findMany({
+        where: { users: { some: { user: { email }}}}
+      });
+      return res.status(200).json(squads);
+  } catch (error: unknown) {
+    next(error);
+  }
+}
+
+const update: SquadsHandler<"put", "/:squadId"> = async(req, res, next) => {
+  const id = req.params.squadId;
+
+  try {
+    const data = req.body;
+    const squad = await prisma.squad
+      .update({
+        where: { id },
+        data,
+        include: {
+          users: { select: { user: { select: {
+            name: true,
+            email: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}}
+        }
+      });
+
+    const channel = sse.getChannel(id);
+    if(channel) channel.broadcast(squad, "squadUpdated");
+    return res.status(200).json(squad);
+  } catch (error: unknown) {
+    next(error);
+  }
+}
+
+const addUsers: SquadsHandler<"post", "/:squadId/users"> = async (req, res, next) => {
+  const id = req.params.squadId;
+
+  try {
+    const { email, owner } = req.body;
+    const squad =  await prisma.squad
+      .update({
+        where: { id },
+        data: {
+          users: {
+            create: {
+              user: {
+                connect: { email },
+              },
+              enabled: owner,
+            },
+          },
+        },
+        include: {
+          users: { select: { user: { select: {
+            name: true,
+            email: true,
+            enabled: true,
+            createdAt: true,
+            updatedAt: true
+          }}}}
+        }
+      });
+
+    const addedUserSession = sse.getSession(email);
+    if(addedUserSession){
+      const channel = sse.register(squad.id, addedUserSession);
+      channel.broadcast(squad, "addedUser");
+    }
+
+    return res.status(201).json(squad);
+  } catch (error: unknown) {
+    next(error);
+  }
+}
+
+const delUsers: SquadsHandler<"delete", "/:squadId/users"> = async (req, res, next) => {
   const { squadId } = req.params;
-  const db = req.app.get('squadDbStore');
+  const { email } = req.query;
 
   try {
-    await db
-      .find(squadId)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const squad = await prisma.squad.update({
+      where: { id: squadId },
+      data: { users: { disconnect: { userEmail_squadId: { userEmail: email, squadId }}}},
+      include: {
+        users: { select: { user: { select: {
+          name: true,
+          email: true,
+          enabled: true,
+          createdAt: true,
+          updatedAt: true
+        }}}}
+      }
+    })
+
+    return res.status(200).json(squad);
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const db = req.app.get('squadDbStore');
-  const { user } = req.query;
-
+const findAllTasks: SquadsHandler<"get", "/:squadId/tasks"> = async (req, res, next) => {
+  const { squadId } = req.params;
+  const { active } = req.query;
   try {
-    await db
-      .findAll(user)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const tasks = await prisma.task.findMany({ where: { squadId, active }});
+    return res.status(200).json(tasks)
+  } catch(error: unknown){
     next(error);
   }
-}
+};
 
-async function update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
-  const squad = {
-    name: req.body.name,
-    currentMaxRounds: req.body.currentMaxRounds,
-    currentPercentual: req.body.currentPercentual,
-  };
-
-  const db = req.app.get('squadDbStore');
-
+const createTask: SquadsHandler<"post", "/:squadId/tasks"> = async (req, res, next) => {
+  const { squadId } = req.params;
+  const data = {...req.body, squadId};
   try {
-    await db
-      .updateById(squadId, squad)
-      .then(() => {
-        return res.sendStatus(200);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
+    const task = await prisma.$transaction(async (tx) => {
+      const task = await tx.task.create({ data });
+      
+      await tx.squad.update({
+        where: { id: squadId },
+        data: { tasks: { connect: { id: task.id }}}
       });
-  } catch (error: any) {
+      return task;
+    });
+  
+    const channel = sse.getChannel(squadId);
+    if(channel) channel.broadcast(task, "taskCreated");
+    
+    return res.status(201).json(task)
+  } catch(error: unknown){
     next(error);
   }
-}
+};
 
-async function addUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
-  const { email, owner } = req.body;
+squadsRouter.use(mustAuth);
+squadsRouter.post("", create);
+squadsRouter.get("", findAll);
+squadsRouter.get("/:squadId", find);
+squadsRouter.put("/:squadId", update);
+squadsRouter.post("/:squadId/users", addUsers);
+squadsRouter.delete("/:squadId/users", delUsers);
+squadsRouter.get("/:squadId/tasks", findAllTasks);
+squadsRouter.post("/:squadId/tasks", createTask);
 
-  const db = req.app.get('squadDbStore');
-
-  try {
-    await db
-      .addSquadUsersByEmail(squadId, email, owner)
-      .then(async (created: any) => {
-        // if (created) {
-        //     if(!owner){
-        //       await send({ to: created.email, subject: 'invite', message: `${created.name}` }).catch((error: any) => {
-        //         return next(error);
-        //       });
-        //     }
-        //   }
-        return res.sendStatus(201);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
-    next(error);
-  }
-}
-
-async function delUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const squadId = req.params.squadId;
-  const email = req.query.email;
-
-  const db = req.app.get('squadDbStore');
-
-  try {
-    await db
-      .delSquadUserByEmail(squadId, email)
-      .then(() => {
-        return res.sendStatus(200);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
-    next(error);
-  }
-}
-
-export { create, find, findAll, update, addUsers, delUsers };
+export default squadsRouter;

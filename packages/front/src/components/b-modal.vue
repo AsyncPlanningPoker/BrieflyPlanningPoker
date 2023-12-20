@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="b-modal__external"
-    v-if="open"
-  >
+  <div class="b-modal__external" v-if="open">
     <div class="b-modal">
       <BContainer :color="color">
         <slot />
@@ -11,27 +8,12 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import BContainer from './b-container.vue';
-
-export default {
-  name: 'BModal',
-
-  components: {
-    BContainer,
-  },
-
-  props: {
-    open: {
-      type: Boolean,
-      required: true,
-    },
-    color: {
-      type: String,
-      default: undefined,
-    },
-  },
-};
+defineProps<{
+  open: boolean,
+  color?: 'primary' | 'white' | 'gray-10' | 'gray-20' | 'gray-30' | 'black',
+}>();
 </script>
 
 <style lang="scss" scoped>

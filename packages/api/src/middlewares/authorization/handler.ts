@@ -1,21 +1,31 @@
+import { Request } from 'express';
 import { Unauthorized } from '../error/error';
-import { Response, Request } from 'express';
 import * as auth from './authorization';
+import type { ZodiosNextFunction, ZodiosRequest, ZodiosResponse } from '../../utils/types';
 
-function handler(req: Request, res: Response, next: any) {
+
+function handler (req: ZodiosRequest, res: ZodiosResponse, next: ZodiosNextFunction): void {
   const token = req.headers.authorization;
-  const isValid = token?.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : false;
+
+  if(! token) return next();
+
+  const isValid = token.includes('Bearer') ? auth.verify(token.replace('Bearer', '').trim()) : undefined;
 
   try {
     if (isValid?.role === 'login') {
-      req.query.user = isValid.user;
+      req.user = { email: isValid.user };
       next();
     } else {
       throw new Unauthorized('Invalid token');
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 }
 
-export { handler };
+function mustAuth (req: Request, res: any, next: ZodiosNextFunction): void {
+  if(!("user" in req)) next(new Unauthorized("You must log-in!"));
+  else next();
+}
+
+export { handler, mustAuth };

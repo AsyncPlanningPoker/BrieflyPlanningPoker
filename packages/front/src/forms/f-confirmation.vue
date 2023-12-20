@@ -1,53 +1,28 @@
 <template>
   <div class="f-confirmation">
-    <BText
-      align="left"
-      type="p"
-      size="large"
-    >
+    <BText align="left" type="p" size="large">
       {{ message }}
     </BText>
     <div class="f-confirmation__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        :value="action"
-        @click="$emit('confirm')"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton :value="action" @click="$emit('confirm')"/>
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import BButton from '../components/b-button.vue';
 import BText from '../components/b-text.vue';
 
-export default {
-  name: 'FConfirmation',
+withDefaults(defineProps<{
+  action?: string,
+  message?: string
+}>(), { action: 'Confirm' });
 
-  components: {
-    BButton,
-    BText,
-  },
-
-  props: {
-    action: {
-      type: String,
-      default: 'Confirm',
-    },
-    message: {
-      type: String,
-      default: undefined,
-      required: true,
-    },
-  },
-
-  emits: ['close', 'confirm'],
-};
+defineEmits<{
+  (event: 'close'): void,
+  (event: 'confirm'): void
+}>();
 </script>
 
 <style lang="scss" scoped>

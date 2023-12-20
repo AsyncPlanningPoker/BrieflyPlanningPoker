@@ -1,96 +1,37 @@
 <template>
-  <Form
-    class="f-task"
-    :validation-schema="schema"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Task title"
-      name="taskTitle"
-    >
-      <BInput
-        name="taskTitle"
-        placeholder="Title"
-        type="text"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Task description"
-      name="taskDescription"
-    >
-      <BTextArea
-        name="taskDescription"
-        placeholder="Description (optional)"
-      />
-    </BInputField>
+  <BForm class="f-task" @submit="onSubmit" :schema="schema" ref="form">
+    <BInput label="Task title" name="name" placeholder="Title" type="text" />
+    <BInput label="Task description" name="description" placeholder="Description (optional)" type="textarea"/>
+    <BInput :initial="squad.activeSquad?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
+    <BInput :initial="squad.activeSquad?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
+    placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-task__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        class="f-task__button"
-        type="submit"
-        value="create"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton class="f-task__button" type="submit" value="create" />
     </div>
-  </Form>
+  </BForm>
 </template>
 
-<script>
-import { useStore } from 'vuex';
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
+<script setup lang="ts">
+import type { z } from 'zod';
+import { squadSchemas } from '@briefly/apidef';
+import BButton from '@/components/b-button.vue';
+import BInput from '@/components/b-input.vue';
+import { squadStore, taskStore } from '@/stores';
+import BForm from '@/components/b-form.vue';
 
-import BButton from '../components/b-button.vue';
-import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
-import BTextArea from '../components/b-text-area.vue';
+const emit = defineEmits<{ (event: 'close'): void }>();
 
-export default {
-  name: 'FTask',
+const squad = squadStore();
+const task = taskStore();
 
-  components: {
-    BButton,
-    BInput,
-    BInputField,
-    BTextArea,
-    Form,
-  },
-};
-</script>
+const schema = squadSchemas.createTaskSchemaReq;
 
-<script setup>
-const emit = defineEmits(['close']);
-const store = useStore();
-
-function onSubmit(values) {
-  const newTask = {
-    name: values.taskTitle,
-    description: values.taskDescription,
-  };
-  store.dispatch('addTask', newTask);
-
-  emit('close');
+async function onSubmit(data: z.infer<typeof schema>){
+    await task.addTask(data);
+    emit('close');
 }
-
-function onInvalidSubmit() {
-  const submitButton = document.querySelector('.f-task__button');
-  submitButton.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.classList.remove('invalid');
-  }, 1000);
-}
-
-const schema = Yup.object().shape({
-  taskTitle: Yup.string().max(85).required(),
-  taskDescription: Yup.string().max(300),
-});
 </script>
 
 <style lang="scss" scoped>

@@ -1,10 +1,8 @@
-import { ValidationError } from 'express-validator';
-
 class CustomError extends Error {
-  public message = 'Internal Several Error';
-  public json?: ValidationError[];
+  public message = 'Internal Server Error';
+  public json?: any[];
 
-  constructor(message?: string, json?: ValidationError[]) {
+  constructor(message?: string, json?: any[]) {
     super();
 
     this.message = message ?? this.message;

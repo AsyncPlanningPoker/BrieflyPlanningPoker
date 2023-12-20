@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider                         = "zod-prisma-types"
+  output                           = "../apidef/src/generated/zod"
+  createInputTypes                 = false // default is true
+  addIncludeType                   = false // default is true
+  addSelectType                    = false // default is true
+  validateWhereUniqueInput         = true // default is false
+  createOptionalDefaultValuesTypes = true // default is false
+  createPartialTypes               = true // default is false
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Squad {
+  id         String   @id @default(uuid()) @db.Uuid 
+  name       String   @db.VarChar(25)
+  maxRounds  Int
+  percentual Float    /// @zod.number.step(0.05)
+  enabled    Boolean  @default(true)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6) 
+  createdAt  DateTime @default(now()) @db.Timestamptz(6) 
+
+  users UsersOnSquads[]
+  tasks Task[]
+}
+
+model User {
+  name      String   @db.VarChar(55)
+  email     String   @id @db.VarChar(255) /// @zod.string.email()
+  password  String   @db.VarChar(255)
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6) 
+  createdAt DateTime @default(now()) @db.Timestamptz(6) 
+
+  squads   UsersOnSquads[]
+  messages Message[]
+  votes    Vote[]
+}
+
+model UsersOnSquads {
+  userEmail String   @db.VarChar(255) /// @zod.string.email()
+  squadId   String   @db.Uuid
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6) 
+  createdAt DateTime @default(now()) @db.Timestamptz(6) 
+
+  squad Squad @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user  User  @relation(fields: [userEmail], references: [email], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userEmail, squadId])
+}
+
+model Task {
+  id           String   @id @default(uuid()) @db.Uuid 
+  squadId      String   @db.Uuid
+  name         String   @db.VarChar(85)
+  description  String?  @db.VarChar(300)
+  maxRounds    Int      @default(0)
+  currentRound Int      @default(1) 
+  percentual   Float    @default(0) /// @zod.number.step(0.05)
+  points       Int?     
+  finished     Boolean  @default(false)
+  active       Boolean  @default(true)
+  enabled      Boolean  @default(true)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6) 
+  createdAt    DateTime @default(now()) @db.Timestamptz(6) 
+
+  squad Squad @relation(fields: [squadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  messages Message[]
+  votes    Vote[]
+}
+
+model Message {
+  id           String   @id @default(uuid()) @db.Uuid 
+  taskId       String   @db.Uuid
+  userEmail    String   @db.VarChar(255) /// @zod.string.email()
+  round        Int      @default(0) 
+  message      String   @db.VarChar(180)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6) 
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Vote {
+  taskId       String   @db.Uuid
+  userEmail    String   @db.VarChar(255) /// @zod.string.email()
+  round        Int      @default(0) 
+  points       Int
+  createdAt    DateTime @default(now()) @db.Timestamptz(6) 
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([taskId, userEmail, round])
+}

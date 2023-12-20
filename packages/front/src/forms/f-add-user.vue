@@ -1,80 +1,31 @@
 <template>
-  <Form
-    class="f-add-user"
-    :validation-schema="schema"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
+  <BForm :schema="schema" class="f-add-user" @submit="onSubmit">
     <div>
-      <BInputField
-        label="Partner's e-mail"
-        name="email"
-      >
-        <BInput
-          name="email"
-          placeholder="fellow-worker@briefly.com"
-          type="email"
-        />
-      </BInputField>
+      <BInput label="Partner's e-mail" name="email" placeholder="fellow-worker@briefly.com" type="email" />
     </div>
-
     <div>
-      <BButton
-        class="f-add-user__button"
-        size="small"
-        type="submit"
-        value="send"
-      />
+      <BButton class="f-add-user__button" size="small" type="submit" value="send" ref="submitButton" />
     </div>
-  </Form>
+  </BForm>
 </template>
 
-<script>
-import { useStore } from 'vuex';
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
-
+<script setup lang="ts">
 import BButton from '../components/b-button.vue';
 import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
+import { ref } from 'vue';
+import { squadStore } from '@/stores';
+import BForm from '@/components/b-form.vue';
+import { squadSchemas } from '@briefly/apidef';
 
-export default {
-  name: 'FAddUser',
+const submitButton = ref<HTMLButtonElement | null>(null);
 
-  components: {
-    BButton,
-    BInput,
-    BInputField,
-    Form,
-  },
-};
-</script>
+const squad = squadStore();
 
-<script setup>
-const store = useStore();
+const schema = squadSchemas.addUsersSchemaReq.omit({ owner: true });
 
-function onSubmit(values) {
-  store.dispatch('addUser', values.email);
-  /* eslint-disable no-undef */
-  email.value = null;
-  const submitButton = document.querySelector('.f-add-user__button');
-  submitButton.classList.add('valid');
-  setTimeout(() => {
-    submitButton.classList.remove('valid');
-  }, 1000);
+async function onSubmit(data: { email: string }) {
+  await squad.addUser(data);
 }
-
-function onInvalidSubmit() {
-  const submitButton = document.querySelector('.f-add-user__button');
-  submitButton.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.classList.remove('invalid');
-  }, 1000);
-}
-
-const schema = Yup.object().shape({
-  email: Yup.string().email('this e-mail does not seem valid').required(),
-});
 </script>
 
 <style lang="scss" scoped>

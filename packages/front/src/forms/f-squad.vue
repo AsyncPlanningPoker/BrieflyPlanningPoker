@@ -1,199 +1,64 @@
 <template>
-  <Form
-    v-if="!update"
-    class="f-squad"
-    :validation-schema="schema"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Squad name"
-      name="squadName"
-    >
-      <BInput
-        name="squadName"
-        placeholder="Name"
-        type="text"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Max rounds"
-      name="maxRounds"
-    >
-      <BInput
-        name="maxRounds"
-        :min="1"
-        placeholder="3"
-        type="number"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Percentual"
-      name="percentual"
-    >
-      <BInput
-        name="percentual"
-        :max="1"
-        :min="0"
-        placeholder="0.25"
-        :step="0.1"
-        type="number"
-      />
-    </BInputField>
+  <BForm v-if="!update" class="f-squad" @submit="onSubmit" :schema="schema">
+    <BInput label="Squad name" name="name" placeholder="Name" type="text" />
+    <BInput label="Max rounds" name="maxRounds" :min="1" placeholder="3" type="number" />
+    <BInput label="Percentual" name="percentual" :max="1" :min="0" placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-squad__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        class="f-squad__button"
-        type="submit"
-        value="create"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton class="f-squad__button" type="submit" value="create" />
     </div>
-  </Form>
-  <Form
-    v-else
-    class="f-squad"
-    :validation-schema="schema"
-    @submit="onSubmit"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <BInputField
-      label="Squad name"
-      name="squadName"
-      :initial="squad.squad"
-    >
-      <BInput
-        name="squadName"
-        type="text"
-        :value="squad.squad"
-      />
-    </BInputField>
+  </BForm>
 
-    <BInputField
-      label="Max rounds"
-      name="maxRounds"
-      :initial="squad.currentMaxRounds"
-    >
-      <BInput
-        name="maxRounds"
-        :min="1"
-        type="number"
-        :value="squad.currentMaxRounds"
-      />
-    </BInputField>
-
-    <BInputField
-      label="Percentual"
-      name="percentual"
-      :initial="squad.currentPercentual"
-    >
-      <BInput
-        name="percentual"
-        :max="1"
-        :min="0"
-        placeholder="0.25"
-        :step="0.1"
-        type="number"
-        :value="squad.currentPercentual"
-      />
-    </BInputField>
+  <BForm v-else class="f-squad" @submit="onSubmit" :schema="schema">
+    <BInput :initial="squad.activeSquad?.name" label="Squad name" name="name" type="text" />
+    <BInput :initial="squad.activeSquad?.maxRounds" label="Max rounds" name="maxRounds" :min="1" type="number" />
+    <BInput :initial="squad.activeSquad?.percentual" label="Percentual" name="percentual" :max="1" :min="0"
+      placeholder="0.25" :step="0.1" type="number" />
 
     <div class="f-squad__buttons-container">
-      <BButton
-        variant="transparent"
-        value="cancel"
-        @click="$emit('close')"
-      />
-
-      <BButton
-        class="f-squad__button"
-        type="submit"
-        value="update"
-      />
+      <BButton variant="transparent" value="cancel" @click="$emit('close')" />
+      <BButton class="f-squad__button" type="submit" value="update" ref="submitButton" />
     </div>
-  </Form>
+  </BForm>
 </template>
 
-<script>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-import { Form } from 'vee-validate';
-import * as Yup from 'yup';
+<script setup lang="ts">
+import { ref } from 'vue';
+import { squadSchemas } from '@briefly/apidef';
 
-import BButton from '../components/b-button.vue';
-import BInput from '../components/b-input.vue';
-import BInputField from '../components/b-input-field.vue';
+import BButton from '@/components/b-button.vue';
+import BInput from '@/components/b-input.vue';
+import BForm from '@/components/b-form.vue';
+import { squadStore } from '@/stores';
+import type { z } from 'zod';
 
-export default {
-  name: 'FSquad',
+const props = withDefaults(defineProps<{ update?: boolean }>(), { update: false });
 
-  components: {
-    BButton,
-    BInput,
-    BInputField,
-    Form,
-  },
-};
+const emit = defineEmits<{ (event: 'close'): void }>();
+
+const squad = squadStore();
+
+const submitButton = ref<HTMLButtonElement | null>(null);
+
+const schema = props.update ? squadSchemas.updateSchemaReq : squadSchemas.createSchemaReq
+
+async function onSubmit(data: z.infer<typeof schema>){
+    if (isCreate(data, props.update)){
+      await squad.addSquad(data);
+    }
+    else squad.updateSquad(data);
+    emit('close');
+}
 </script>
 
-<script setup>
-const props = defineProps({
-  update: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const emit = defineEmits(['close']);
-const store = useStore();
-const squad = computed(() => {
-  return store.getters.getSquadActive;
-});
-
-function onSubmit(values) {
-  const newSquad = {
-    name: values.squadName,
-    currentMaxRounds: values.maxRounds,
-    currentPercentual: values.percentual,
-  };
-
-  if (!props.update) {
-    store.dispatch('addSquad', newSquad);
-  } else {
-    store.dispatch('updateSquad', newSquad);
-  }
-
-  emit('close');
+<script lang="ts">
+function isCreate(obj: squadSchemas.CreateSchemaReq | squadSchemas.UpdateSchemaReq, update: boolean): obj is squadSchemas.CreateSchemaReq{
+  return !update;
 }
-
-function onInvalidSubmit() {
-  const submitButton = document.querySelector('.f-squad__button');
-  submitButton.classList.add('invalid');
-  setTimeout(() => {
-    submitButton.classList.remove('invalid');
-  }, 1000);
+function isUpdate(obj: squadSchemas.CreateSchemaReq | squadSchemas.UpdateSchemaReq, update: boolean): obj is squadSchemas.UpdateSchemaReq{
+  return update;
 }
-
-const schema = Yup.object().shape({
-  squadName: Yup.string().max(25).required(),
-  maxRounds: Yup.number().typeError('maxRounds must be a number').required().integer().min(1),
-  percentual: Yup.number()
-    .typeError('percentual must be a number')
-    .required()
-    .positive()
-    .min(0)
-    .max(1)
-    .test((number) => {
-      return Number.isInteger(number * 10 ** 2);
-    }),
-});
 </script>
 
 <style lang="scss" scoped>

@@ -1,174 +1,70 @@
 <template>
-  <div
-    class="b-task"
-    :class="active ? 'b-task--active' : 'b-task--archived'"
-  >
+  <div class="b-task" :class="active ? 'b-task--active' : 'b-task--archived'">
     <div class="b-task__name-wrapper">
-      <BText
-        align="left"
-        class="b-task__name"
-        size="medium"
-        tag="strong"
-        @click="toggleExpandedTaskModal(task.task, false)"
-      >
+      <BText align="left" class="b-task__name" size="medium" tag="strong"
+        @click="taskS.gatherTask(task.id)">
         {{ task.name }}
       </BText>
     </div>
-
     <div class="b-task__info-wrapper">
-      <div
-        v-if="task.finished"
-        class="b-task__round"
-      >
-        <font-awesome-icon
-          v-if="!!task.points"
-          class="b-task__icon"
-          icon="fa-solid fa-circle-check"
-        />
-        <font-awesome-icon
-          v-else
-          class="b-task__icon"
-          icon="fa-solid fa-circle-xmark"
-        />
-
-        <BText
-          align="right"
-          size="large"
-          tag="p"
-        >
+      <div v-if="task.finished" class="b-task__round">
+        <font-awesome-icon v-if="!!task.points" class="b-task__icon" icon="fa-solid fa-circle-check" />
+        <font-awesome-icon v-else class="b-task__icon" icon="fa-solid fa-circle-xmark" />
+        <BText align="right" size="large" tag="p">
           {{ task.points ? `${task.points} ${task.points > 1 ? 'points' : 'point'}` : 'incomplete' }}
         </BText>
       </div>
-
-      <div
-        v-else
-        class="b-task__round"
-      >
-        <font-awesome-icon
-          class="b-task__icon"
-          icon="fa-solid fa-arrow-rotate-right"
-        />
-
-        <BText
-          align="right"
-          size="large"
-          tag="p"
-        >
+      <div v-else class="b-task__round">
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-arrow-rotate-right" />
+        <BText align="right" size="large" tag="p">
           {{ `${task.currentRound || 1} / ${task.maxRounds}` }}
         </BText>
       </div>
 
       <div class="b-task__buttons">
-        <font-awesome-icon
-          v-if="active"
-          class="b-task__icon"
-          icon="fa-solid fa-lock"
-          @click="toggleArchiveModal()"
-        />
-
-        <font-awesome-icon
-          class="b-task__icon"
-          icon="fa-solid fa-trash-can"
-          @click="toggleDeleteModal()"
-        />
+        <font-awesome-icon v-if="active" class="b-task__icon" icon="fa-solid fa-lock" @click="toggleArchiveModal()" />
+        <font-awesome-icon class="b-task__icon" icon="fa-solid fa-trash-can" @click="toggleDeleteModal()" />
       </div>
     </div>
   </div>
 
-  <BModal
-    color="gray-10"
-    :open="expandedTaskModal"
-  >
-    <BTaskExpanded
-      :task-id="taskId"
-      :squad-id="squadId"
-      @close="toggleExpandedTaskModal(taskId, true)"
-    />
+  <BModal color="gray-30" :open="archiveModal">
+    <FConfirmation action="archive"
+      message="Are you sure you want to archive this task? This action is IRREVERSIBLE" 
+      @close="toggleArchiveModal()" @confirm="taskS.deleteTask(task.id), toggleArchiveModal()" />
   </BModal>
 
-  <BModal
-    color="gray-30"
-    :open="archiveModal"
-  >
-    <FConfirmation
-      action="archive"
-      message="Are you sure you want to archive this task? This action is IRREVERSIBLE"
-      @close="toggleArchiveModal()"
-      @confirm="store.dispatch('disableTask', task.task), toggleArchiveModal()"
-    />
-  </BModal>
-
-  <BModal
-    color="gray-30"
-    :open="deleteModal"
-  >
-    <FConfirmation
-      action="delete"
+  <BModal color="gray-30" :open="deleteModal">
+    <FConfirmation action="delete"
       message="Are you sure you want to delete this task? This action is IRREVERSIBLE"
-      @close="toggleDeleteModal()"
-      @confirm="store.dispatch('deleteTask', task.task), toggleDeleteModal()"
-    />
+      @close="toggleDeleteModal()" @confirm="taskS.deleteTask(task.id), toggleDeleteModal()" />
   </BModal>
 </template>
 
-<script>
-import { computed, ref } from 'vue';
-import { useStore } from 'vuex';
+<script setup lang="ts">
+import { ref } from 'vue';
 
 import BModal from '../components/b-modal.vue';
-import BTaskExpanded from '../components/b-task-expanded.vue';
 import BText from '../components/b-text.vue';
 
 import FConfirmation from '../forms/f-confirmation.vue';
+import { taskStore } from '@/stores';
+import { squadSchemas } from '@briefly/apidef';
 
-export default {
-  name: 'BTask',
+withDefaults(defineProps<{
+  task: squadSchemas.ListTasksSchemaRes[number]
+  active?: boolean
+}>(), { active: true });
 
-  components: {
-    BModal,
-    BTaskExpanded,
-    BText,
-    FConfirmation,
-  },
+const taskS = taskStore();
 
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      default: true,
-    },
-  },
-};
-</script>
-
-<script setup>
-const store = useStore();
-
-const squadId = computed(() => store.getters.getActiveId);
-
-const taskId = ref(null);
-
-const expandedTaskModal = ref(false);
-
-function toggleExpandedTaskModal(task, refresh) {
-  taskId.value = task;
-  if (refresh) {
-    store.dispatch('gatherTasks', squadId.value);
-  }
-
-  expandedTaskModal.value = !expandedTaskModal.value;
-}
+const deleteModal = ref(false);
 
 const archiveModal = ref(false);
 
 function toggleArchiveModal() {
   archiveModal.value = !archiveModal.value;
 }
-
-const deleteModal = ref(false);
 
 function toggleDeleteModal() {
   deleteModal.value = !deleteModal.value;

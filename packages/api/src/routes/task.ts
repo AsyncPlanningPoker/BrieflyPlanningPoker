@@ -1,116 +1,107 @@
-import { CustomError } from '../middlewares/error/error';
-import { NextFunction, Request, Response } from 'express';
-import { randomUUID } from 'crypto';
+import prisma from '@briefly/prisma';
+import { type ZodiosRequestHandler } from '@zodios/express';
+import type { Method, ZodiosPathsByMethod } from '@zodios/core';
+import { tasksAPI, type TasksAPI } from '@briefly/apidef';
+import context, { type Context } from '../context'
+import { mustAuth } from '../middlewares/authorization';
+import * as sse from 'sse';
 
-async function create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    id: randomUUID(),
-    squad: req.params.squadId,
-    name: req.body.name,
-    description: req.body.description,
-  };
+type TasksHandler<M extends Method, Path extends ZodiosPathsByMethod<TasksAPI, M>> =
+  ZodiosRequestHandler<TasksAPI, Context, M, Path>;
 
-  const db = req.app.get('taskDbStore');
+const tasksRouter = context.router(tasksAPI);
 
+const find: TasksHandler<"get", "/:taskId"> = async (req, res, next) => {
+  const { taskId } = req.params;
   try {
-    await db
-      .create(task)
-      .then(() => {
-        return res.status(201).json({ id: task.id });
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const task = await prisma.task.findUniqueOrThrow({
+      where: { id: taskId },
+      include: {
+        messages: { select: { createdAt: true, message: true, round: true, user: { select: { email: true }}}},
+        votes: { select: { createdAt: true, points: true, round: true, user: { select: { email: true }}}}
+      }
+    });
+    return res.status(200).json(task);
+  } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function deactive(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    id: req.params.taskId,
-    squad: req.params.squadId,
-  };
-
-  const db = req.app.get('taskDbStore');
-
+const deactivate: TasksHandler<"put", "/:taskId"> = async (req, res, next) => {
+  const { taskId } = req.params;
   try {
-    await db
-      .deactive(task)
-      .then(() => {
-        return res.sendStatus(200);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const task = await prisma.task.update({
+      where: { id: taskId },
+      data: { active: false },
+      include: {
+        messages: { select: { createdAt: true, message: true, round: true, user: { select: { email: true }}}},
+        votes: { select: { createdAt: true, points: true, round: true, user: { select: { email: true }}}}
+      }
+    });
+
+    const channel = sse.getChannel(task.squadId);
+    if(channel) channel.broadcast(task, "taskUpdated");
+
+    return res.status(200).json(task);
+  } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function deleteTask(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const task = {
-    id: req.params.taskId,
-    squad: req.params.squadId,
-  };
-
-  const db = req.app.get('taskDbStore');
-
+const del: TasksHandler<"delete", "/:taskId"> = async (req, res, next) => {
+  const { taskId } = req.params;
   try {
-    await db
-      .delete(task)
-      .then(() => {
-        return res.sendStatus(200);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const task = await prisma.task.delete({
+      where: { id: taskId },
+      include: {
+        messages: { select: { createdAt: true, message: true, round: true, user: { select: { email: true }}}},
+        votes: { select: { createdAt: true, points: true, round: true, user: { select: { email: true }}}}
+      }
+    });
+    return res.status(200).json(task);
+  } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const db = req.app.get('taskDbStore');
-
-  const task = {
-    squad: req.params.squadId,
-  };
-
+const vote: TasksHandler<"post", "/:taskId/votes"> = async (req, res, next) => {
+  const { taskId } = req.params;
+  const { email } = req.user;
+  const { points } = req.body;
   try {
-    await db
-      .findAll(task)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const task = await prisma.task.vote(taskId, email, points);
+
+    const channel = sse.getChannel(task.squadId);
+    if(channel) channel.broadcast(task, "taskUpdated");
+
+    return res.status(201).json(task);
+  } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-async function find(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-  const db = req.app.get('taskDbStore');
+const message: TasksHandler<"post", "/:taskId/messages"> = async (req, res, next) => {
 
-  const task = {
-    id: req.params.taskId,
-    squad: req.params.squadId,
-  };
-
+  const { taskId } = req.params;
+  const { email } = req.user;
+  const { message } = req.body;
   try {
-    await db
-      .find(task)
-      .then(async (result: any) => {
-        return res.status(200).json(result);
-      })
-      .catch(({ message }: any) => {
-        throw new CustomError(message);
-      });
-  } catch (error: any) {
+    const task = await prisma.task.comment(taskId, email, message);
+
+    const channel = sse.getChannel(task.squadId);
+    if(channel) channel.broadcast(task, "taskUpdated");
+
+    return res.status(201).json(task);
+  } catch (error: unknown) {
     next(error);
   }
-}
+};
 
-export { create, deactive, deleteTask, find, findAll };
+tasksRouter.use(mustAuth);
+tasksRouter.get("/:taskId", find);
+tasksRouter.put("/:taskId", deactivate);
+tasksRouter.delete("/:taskId", del);
+tasksRouter.post("/:taskId/votes", vote);
+tasksRouter.post("/:taskId/messages", message);
+
+export default tasksRouter;

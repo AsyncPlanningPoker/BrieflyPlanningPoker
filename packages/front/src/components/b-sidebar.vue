@@ -1,96 +1,42 @@
 <template>
   <div class="b-sidebar">
-    <div
-      class="b-sidebar__logo-wrapper"
-      @click="store.dispatch('addSquadActive', {}), $router.push({ name: 'Home' })"
-    >
-      <img
-        class="b-sidebar__image"
-        src="../assets/square-logo-80.png"
-        alt="brand-logo"
-      >
+    <div class="b-sidebar__logo-wrapper" @click="squadS.activeSquad = undefined, $router.push({ name: 'Home' })">
+      <img class="b-sidebar__image" src="../assets/images/square-logo-80.png" alt="brand-logo">
     </div>
-
     <BDivisor color="gray-30" />
-
     <div class="b-sidebar__squad-wrapper">
       <div class="b-sidebar__new-squad-wrapper">
-        <BButton
-          size="small"
-          value="+"
-          @click="toggleModal"
-        />
-
-        <BModal
-          color="gray-30"
-          :open="showModal"
-        >
+        <BButton size="small" value="+" @click="toggleModal" />
+        <BModal color="gray-30" :open="showModal">
           <FSquad @close="toggleModal" />
         </BModal>
       </div>
-
-      <BDivisor
-        v-if="squads?.length > 0"
-        color="gray-30"
-      />
-
-      <div
-        v-if="squads?.length > 0"
-        class="b-sidebar__squad-list"
-      >
-        <div
-          v-for="(squad, index) in squads.slice().reverse()"
-          :key="index"
-          class="b-sidebar__squad"
-        >
-          <BButton
-            size="small"
-            variant="transparent"
-            :value="`${index + 1}`"
-            @click="store.dispatch('gatherSquad', squad.id), $router.push({ name: 'Home' })"
-          />
+      <BDivisor v-if="squads?.length > 0" color="gray-30" />
+      <div v-if="squads?.length > 0" class="b-sidebar__squad-list">
+        <div v-for="(squad, index) in squads.slice().reverse()" :key="index" class="b-sidebar__squad">
+          <BButton size="small" variant="transparent" :value="`${index + 1}`"
+            @click="squadS.gatherSquad(squad.id), $router.push({ name: 'Home' })" />
         </div>
       </div>
     </div>
-
     <BDivisor color="gray-30" />
-
-    <div
-      class="b-sidebar__user-wrapper"
-      @click="$router.push({ name: 'user-profile' })"
-    >
-      <font-awesome-icon
-        class="b-sidebar__user-image"
-        icon="fa-regular fa-user"
-      />
+    <div class="b-sidebar__user-wrapper" @click="$router.push({ name: 'user-profile' })">
+      <font-awesome-icon class="b-sidebar__user-image" icon="fa-regular fa-user" />
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
 
 import BButton from '../components/b-button.vue';
 import BDivisor from '../components/b-divisor.vue';
 import BModal from '../components/b-modal.vue';
 import FSquad from '../forms/f-squad.vue';
+import { squadStore } from '@/stores';
 
-export default {
-  name: 'BSidebar',
-
-  components: {
-    BButton,
-    BDivisor,
-    BModal,
-    FSquad,
-  },
-};
-</script>
-
-<script setup>
-const store = useStore();
-const squads = computed(() => store.getters.getSquadList);
+const squadS = squadStore();
+const squads = computed(() => squadS.squadList);
 
 const showModal = ref(false);
 const toggleModal = () => {

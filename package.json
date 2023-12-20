@@ -1,21 +1,31 @@
 {
   "name": "briefly",
   "version": "1.0.0",
-  "packageManager": "yarn@3.2.0",
   "repository": "https://github.com/AsyncPlanningPoker/BrieflyPlanningPoker",
   "license": "GPL-3.0 License",
   "private": true,
   "engines": {
-    "node": "16.14.0"
+    "node": "18"
   },
   "scripts": {
-    "packageManager": "yarn@3.2.0",
-    "postinstall": "node productionScript.js"
+    "prep": "yarn install && yarn prisma:up",
+    "all": "yarn prep && yarn workspaces foreach install",
+    "test:integration": "./scripts/run-integration-tests.sh",
+    "test:unit": "vitest -c ./vitest.config.unit.ts",
+    "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui"
   },
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {
-    "dotenv": "^16.0.2"
+  "packageManager": "yarn@4.0.2",
+  "devDependencies": {
+    "@types/supertest": "^2.0.16",
+    "@vitest/coverage-istanbul": "^1.0.4",
+    "@vitest/coverage-v8": "^1.0.4",
+    "dotenv": "^16.3.1",
+    "dotenv-cli": "^7.3.0",
+    "supertest": "^6.3.3",
+    "vitest": "^1.0.4",
+    "wait-on": "^7.2.0"
   }
 }

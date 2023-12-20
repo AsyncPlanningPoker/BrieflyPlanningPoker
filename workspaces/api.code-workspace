@@ -6,8 +6,8 @@
 			"path": "../packages/api"
 		},
 		{
-			"name": "store",
-			"path": "../packages/store"
+			"name": "prisma",
+			"path": "../packages/prisma"
 		},
 	],
 	"settings": {}

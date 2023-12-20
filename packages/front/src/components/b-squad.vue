@@ -2,62 +2,27 @@
   <div class="b-squad">
     <div class="b-squad__container">
       <div class="b-squad__name">
-        <BText
-          class="b-squad__title"
-          color="white"
-          size="giant"
-          @click="toggleUpdateModal"
-        >
-          {{ squad.squad }}
+        <BText class="b-squad__title" color="white" size="giant" @click="toggleUpdateModal">
+          {{ squad.name }}
         </BText>
       </div>
-
-      <BDivisor
-        class="b-squad__divisor"
-        color="black"
-      />
-
+      <BDivisor class="b-squad__divisor" color="black" />
       <div class="b-squad__info">
         <div class="b-squad__max-rounds">
-          <font-awesome-icon
-            class="b-squad__icon"
-            icon="fa-solid fa-arrow-rotate-right"
-          />
-
-          <BText
-            color="white"
-            size="giant"
-          >
-            {{ squad.currentMaxRounds }}
+          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-arrow-rotate-right" />
+          <BText color="white" size="giant">
+            {{ squad.maxRounds }}
           </BText>
         </div>
-
         <div class="b-squad__percentual">
-          <font-awesome-icon
-            class="b-squad__icon"
-            icon="fa-solid fa-user-check"
-          />
-
-          <BText
-            color="white"
-            size="giant"
-          >
-            {{ squad.currentPercentual }}
+          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-user-check" />
+          <BText color="white" size="giant">
+            {{ squad.percentual }}
           </BText>
         </div>
-        <div
-          class="b-squad__leave"
-          @click="toggleLeaveModal('')"
-        >
-          <font-awesome-icon
-            class="b-squad__icon"
-            icon="fa-solid fa-right-from-bracket"
-          />
-
-          <BText
-            color="white"
-            size="giant"
-          >
+        <div class="b-squad__leave" @click="toggleLeaveModal('')">
+          <font-awesome-icon class="b-squad__icon" icon="fa-solid fa-right-from-bracket" />
+          <BText color="white" size="giant">
             Sair
           </BText>
         </div>
@@ -66,99 +31,51 @@
 
     <div v-if="moreInfo">
       <FAddUser />
-
       <div class="b-squad__users-container">
         <BBadge
-          v-for="(user, index) in squad.users.filter((x) => x.email !== actualUser)"
-          :key="index"
-          @action="toggleLeaveModal(user.email)"
-        >
+          v-for="({ user }, index) in squad.users.filter((x) => x.user.email !== actualUser)"
+            :key="index" @action="toggleLeaveModal(user.email)">
           {{ user.email }}
         </BBadge>
       </div>
     </div>
-
-    <BDivisor
-      v-if="squad.squad"
-      :button="true"
-      color="primary"
-      @action="toggleInfo"
-    />
+    <BDivisor v-if="squad" :button="true" color="primary" @action="toggleInfo" />
   </div>
-
-  <BModal
-    color="gray-30"
-    :open="updateModal"
-  >
-    <FSquad
-      :update="true"
-      @close="toggleUpdateModal"
-    />
+  <BModal color="gray-30" :open="updateModal">
+    <FSquad :update="true" @close="toggleUpdateModal" />
   </BModal>
-
-  <BModal
-    color="gray-30"
-    :open="leaveModal"
-  >
-    <FLeave
-      :email="email"
-      @close="toggleLeaveModal('')"
-    />
+  <BModal color="gray-30" :open="leaveModal">
+    <FLeave :email="email" @close="toggleLeaveModal('')" />
   </BModal>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
 
-import BBadge from '../components/b-badge.vue';
-import BDivisor from '../components/b-divisor.vue';
-import BModal from '../components/b-modal.vue';
-import BText from '../components/b-text.vue';
+import FAddUser from '@/forms/f-add-user.vue';
+import FLeave from '@/forms/f-leave.vue';
+import FSquad from '@/forms/f-squad.vue';
+import { userStore } from '@/stores';
+import BBadge from './b-badge.vue';
+import BDivisor from './b-divisor.vue';
+import BModal from './b-modal.vue';
+import BText from './b-text.vue';
+import type { squadSchemas } from '@briefly/apidef';
 
-import FAddUser from '../forms/f-add-user.vue';
-import FLeave from '../forms/f-leave.vue';
-import FSquad from '../forms/f-squad.vue';
+defineProps<{ squad: squadSchemas.FindSchemaRes }>();
 
-export default {
-  name: 'BSquad',
-
-  components: {
-    BBadge,
-    BDivisor,
-    BModal,
-    BText,
-    FAddUser,
-    FLeave,
-    FSquad,
-  },
-
-  props: {
-    squad: {
-      type: Object,
-      required: true,
-    },
-  },
-};
-</script>
-
-<script setup>
-const store = useStore();
-const actualUser = computed(() => store.getters.getUserEmail);
+const user = userStore();
+const actualUser = computed(() => user.email);
 
 const moreInfo = ref(false);
-const toggleInfo = () => {
-  moreInfo.value = !moreInfo.value;
-};
+const toggleInfo = () => { moreInfo.value = !moreInfo.value };
 
 const updateModal = ref(false);
-const toggleUpdateModal = () => {
-  updateModal.value = !updateModal.value;
-};
+const toggleUpdateModal = () => { updateModal.value = !updateModal.value };
 
-const email = ref(String);
+const email = ref("");
 const leaveModal = ref(false);
-const toggleLeaveModal = (user) => {
+const toggleLeaveModal = (user: string) => {
   (email.value = user), (leaveModal.value = !leaveModal.value);
 };
 </script>
@@ -265,3 +182,4 @@ const toggleLeaveModal = (user) => {
   row-gap: var(--unit-0200);
 }
 </style>
+../interfaces

@@ -1,8 +1,7 @@
 node_modules
-.env
-.env.test
 .env.dev
 .env.prod
+.env
 dist
 .DS_Store
 coverage
@@ -18,3 +17,4 @@ tsconfig.tsbuildinfo
 !/.yarn/plugins
 !/.yarn/sdks
 yarn-error.log
+.vscode
